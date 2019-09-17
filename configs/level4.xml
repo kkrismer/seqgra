@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<grammar xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<general id="g4">
+		<label>grammar level 4 - 3 cell types</label>
+		<description></description>
+		<sequencespace>DNA</sequencespace>
+	</general>
+	
+	<background>
+		<minlength>150</minlength>
+		<maxlength>150</maxlength>
+		<alphabetdistribution conditionindependent="true">
+			<letter probability="0.25">A</letter>
+			<letter probability="0.25">C</letter>
+			<letter probability="0.25">G</letter>
+			<letter probability="0.25">T</letter>
+		</alphabetdistribution>
+	</background>
+	
+	<datageneration>
+		<conditions>
+			<condition id="c1" samples="10000" />
+			<condition id="c2" samples="10000" />
+			<condition id="c3" samples="10000" />
+		</conditions>
+	<datageneration>
+	
+	<conditions>
+		<condition id="c1">
+			<label>cell type 1</label>
+			<description></description>
+			<grammar>
+				<rule>
+					<position>random</position>
+					<sequenceelements>
+						<sequenceelement id="se1" probability="1.0" />
+						<sequenceelement id="se2" probability="1.0" />
+					</sequenceelements>
+				</rule>
+			</grammar>
+		</condition>
+		<condition id="c2">
+			<label>cell type 2</label>
+			<description></description>
+			<grammar>
+				<rule>
+					<position>random</position>
+					<sequenceelements>
+						<sequenceelement id="se2" probability="1.0" />
+						<sequenceelement id="se3" probability="1.0" />
+					</sequenceelements>
+				</rule>
+			</grammar>
+		</condition>
+		<condition id="c3">
+			<label>cell type 3</label>
+			<description></description>
+			<grammar>
+				<rule>
+					<position>random</position>
+					<sequenceelements>
+						<sequenceelement id="se3" probability="1.0" />
+						<sequenceelement id="se1" probability="1.0" />
+					</sequenceelements>
+				</rule>
+			</grammar>
+		</condition>
+	</conditions>
+	
+	<sequenceelements>
+		<sequenceelement id="se1">
+			<kmerbased>
+				<kmer probability="0.4">ACGTACGT</kmer>
+				<kmer probability="0.4">ACGTACGG</kmer>
+				<kmer probability="0.1">ACGTAGGT</kmer>
+				<kmer probability="0.1">AGGTACGT</kmer>
+			</kmerbased>
+		</sequenceelement>
+		<sequenceelement id="se2">
+			<kmerbased>
+				<kmer probability="0.25">GGCCAAGG</kmer>
+				<kmer probability="0.25">GGGCAAGG</kmer>
+				<kmer probability="0.25">GGTCAAGG</kmer>
+				<kmer probability="0.25">GGACAAGG</kmer>
+			</kmerbased>
+		</sequenceelement>
+		<sequenceelement id="se3">
+			<kmerbased>
+				<kmer probability="0.7">TTTCACAT</kmer>
+				<kmer probability="0.2">TTTCACAA</kmer>
+				<kmer probability="0.05">TTTCACTT</kmer>
+				<kmer probability="0.05">TTTCACAC</kmer>
+			</kmerbased>
+		</sequenceelement>
+		<sequenceelement id="se4">
+			<kmerbased>
+				<kmer probability="0.8">GTCCCAGT</kmer>
+				<kmer probability="0.1">GTCCCAGG</kmer>
+				<kmer probability="0.05">GTTCCAGT</kmer>
+				<kmer probability="0.05">TTCCCAGT</kmer>
+			</kmerbased>
+		</sequenceelement>
+	</sequenceelements>
+</grammar>

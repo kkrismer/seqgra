@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<grammar xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<general id="">
+		<label></label>
+		<description></description>
+		<sequencespace>DNA</sequencespace>
+	</general>
+	
+	<background>
+		<minlength>150</minlength>
+		<maxlength>150</maxlength>
+		<alphabetdistribution conditionindependent="true">
+			<letter probability="0.25">A</letter>
+			<letter probability="0.25">C</letter>
+			<letter probability="0.25">G</letter>
+			<letter probability="0.25">T</letter>
+		</alphabetdistribution>
+	</background>
+	
+	<conditions>
+		<condition id="">
+			<label></label>
+			<description></description>
+		</condition>
+	</conditions>
+	
+	<sequenceelements>
+		<sequenceelement id="">
+			<kmerbased>
+				<kmer probability="0.5">AGCTGCAGTC</kmer>
+				<kmer probability="0.5">AGCTGCTC</kmer>
+			</kmerbased>
+		</sequenceelement>
+		<sequenceelement id="">
+			<matrixbased>
+				<position value="1">
+					<letter probability="0.2">A</letter>
+					<letter probability="0.3">C</letter>
+					<letter probability="0.2">G</letter>
+					<letter probability="0.3">T</letter>
+				</position>
+				<position value="2">
+					<letter probability="0.8">A</letter>
+					<letter probability="0.1">C</letter>
+					<letter probability="0.1">G</letter>
+					<letter probability="0">T</letter>
+				</position>
+				<position value="3">
+					<letter probability="0.8">A</letter>
+					<letter probability="0.1">C</letter>
+					<letter probability="0.1">G</letter>
+					<letter probability="0">T</letter>
+				</position>
+				<position value="4">
+					<letter probability="0.1">A</letter>
+					<letter probability="0">C</letter>
+					<letter probability="0">G</letter>
+					<letter probability="0.9">T</letter>
+				</position>
+			</matrixbased>
+		</sequenceelement>
+	</sequenceelements>
+</grammar>

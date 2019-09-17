@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<grammar xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<general id="g1">
+		<label>grammar level 1 - 2 cell types</label>
+		<description></description>
+		<sequencespace>DNA</sequencespace>
+	</general>
+	
+	<background>
+		<minlength>150</minlength>
+		<maxlength>150</maxlength>
+		<alphabetdistribution conditionindependent="true">
+			<letter probability="0.25">A</letter>
+			<letter probability="0.25">C</letter>
+			<letter probability="0.25">G</letter>
+			<letter probability="0.25">T</letter>
+		</alphabetdistribution>
+	</background>
+	
+	<datageneration>
+		<conditions>
+			<condition id="c1" samples="10000" />
+			<condition id="c2" samples="10000" />
+		</conditions>
+	<datageneration>
+	
+	<conditions>
+		<condition id="c1">
+			<label>cell type 1</label>
+			<description></description>
+			<grammar>
+				<rule>
+					<position>70</position>
+					<sequenceelements>
+						<sequenceelement id="se1" probability="1.0" />
+					</sequenceelements>
+				</rule>
+			</grammar>
+		</condition>
+		<condition id="c2">
+			<label>cell type 2</label>
+			<description></description>
+			<grammar>
+				<rule>
+					<position>70</position>
+					<sequenceelements>
+						<sequenceelement id="se2" probability="1.0" />
+					</sequenceelements>
+				</rule>
+			</grammar>
+		</condition>
+	</conditions>
+	
+	<sequenceelements>
+		<sequenceelement id="se1">
+			<kmerbased>
+				<kmer probability="1.0">ACGTACGT</kmer>
+			</kmerbased>
+		</sequenceelement>
+		<sequenceelement id="se2">
+			<kmerbased>
+				<kmer probability="1.0">GGCCAAGG</kmer>
+			</kmerbased>
+		</sequenceelement>
+	</sequenceelements>
+</grammar>
