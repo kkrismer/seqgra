@@ -4,7 +4,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="seq-grammar",
+    name="seqgra",
     version="0.0.1",
     author="Konstantin Krismer",
     author_email="krismer@mit.edu",
@@ -12,7 +12,7 @@ setuptools.setup(
     description="A small example package",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/kkrismer/seq-grammar",
+    url="https://github.com/kkrismer/seqgra",
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",

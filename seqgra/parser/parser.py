@@ -8,9 +8,9 @@ from typing import List
 
 from abc import ABC, abstractmethod
 from seqgra.model.background import Background
-from model.datageneration import DataGeneration
-from model.condition import Condition
-from model.sequenceelement import SequenceElement
+from seqgra.model.datageneration import DataGeneration
+from seqgra.model.condition import Condition
+from seqgra.model.sequenceelement import SequenceElement
 
 class Parser(ABC):
     @abstractmethod
