@@ -5,15 +5,10 @@
 
 from __future__ import annotations
 
-from typing import List
+from typing import List, Tuple
 
 class AlphabetDistribution:
-    def __init__(self, letters: List[Letter], condition: str = None) -> None:
-        self.letters = letters
-        self.condition = condition
-        self.condition_independent = condition is None
-
-class Letter:
-    def __init__(self, letter: str, probability: float) -> None:
-        self.letter = letter
-        self.probability = float(probability)
+    def __init__(self, letters: List[Tuple[str, float]], condition: str = None) -> None:
+        self.letters: List[Tuple[str, float]] = letters
+        self.condition: str = condition
+        self.condition_independent: bool = condition is None

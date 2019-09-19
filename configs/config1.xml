@@ -38,25 +38,25 @@
 		</sequenceelement>
 		<sequenceelement id="">
 			<matrixbased>
-				<position value="1">
+				<position>
 					<letter probability="0.2">A</letter>
 					<letter probability="0.3">C</letter>
 					<letter probability="0.2">G</letter>
 					<letter probability="0.3">T</letter>
 				</position>
-				<position value="2">
+				<position>
 					<letter probability="0.8">A</letter>
 					<letter probability="0.1">C</letter>
 					<letter probability="0.1">G</letter>
 					<letter probability="0">T</letter>
 				</position>
-				<position value="3">
+				<position>
 					<letter probability="0.8">A</letter>
 					<letter probability="0.1">C</letter>
 					<letter probability="0.1">G</letter>
 					<letter probability="0">T</letter>
 				</position>
-				<position value="4">
+				<position>
 					<letter probability="0.1">A</letter>
 					<letter probability="0">C</letter>
 					<letter probability="0">G</letter>

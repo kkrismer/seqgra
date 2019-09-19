@@ -20,6 +20,7 @@
 	</background>
 	
 	<datageneration>
+		<seed>0213213</seed>
 		<conditions>
 			<condition id="c1" samples="10000" />
 			<condition id="c2" samples="10000" />
