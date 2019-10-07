@@ -1,17 +1,21 @@
-"""Gifford Lab - seq-grammar
-Parser for XML configuration files (using Strategy design pattern)
+"""MIT - CSAIL - Gifford Lab - seqgra
+
+Implementation of Parser for XML configuration files (using Strategy design pattern)
 
 @author: Konstantin Krismer
 """
-
-from xml.dom.minidom import Document, parseString
-
+import io
+import logging
 from typing import Any, List, Tuple
 from abc import ABC, abstractmethod
 
+import pkg_resources
+from lxml import etree
+from xml.dom.minidom import Document, parseString
+
 from seqgra.parser.parser import Parser
 from seqgra.model.background import Background
-from seqgra.model.datageneration import DataGeneration
+from seqgra.model.datageneration import DataGeneration, ExampleSet
 from seqgra.model.condition import Condition
 from seqgra.model.sequenceelement import SequenceElement, KmerBasedSequenceElement, MatrixBasedSequenceElement
 from seqgra.model.alphabetdistribution import AlphabetDistribution
@@ -30,6 +34,15 @@ class XMLParser(Parser):
     def __init__(self, config: str) -> None:
         self._dom: Document = parseString(config)
         self._general_element: Any = self._dom.getElementsByTagName("general")[0]
+        self.validate(config)
+
+    def validate(self, xml_config: str) -> None:
+        xsd_path = pkg_resources.resource_filename("seqgra", "config.xsd")
+        xmlschema_doc = etree.parse(xsd_path)
+        xmlschema = etree.XMLSchema(xmlschema_doc)
+        xml_doc = etree.parse(io.BytesIO(xml_config.encode()))
+        xmlschema.assertValid(xml_doc)
+        logging.info("XML configuration file is well-formed and valid")
 
     @staticmethod
     def __read_text_node(parent_node, node_name) -> str:
@@ -63,22 +76,22 @@ class XMLParser(Parser):
     def get_sequence_space(self) -> str:
         return XMLParser.__read_text_node(self._general_element, "sequencespace")
 
-    def get_background(self) -> Background:
+    def get_background(self, valid_conditions: List[Condition]) -> Background:
         background_element: Any = self._dom.getElementsByTagName("background")[0]
         min_length: int = XMLParser.__read_int_node(background_element, "minlength")
         max_length: int = XMLParser.__read_int_node(background_element, "maxlength")
 
         distribution_elements: Any = background_element.getElementsByTagName("alphabetdistribution")
-        distributions: List[AlphabetDistribution] = [XMLParser.__parse_alphabet_distribution(distribution_element) for distribution_element in distribution_elements]
+        distributions: List[AlphabetDistribution] = [XMLParser.__parse_alphabet_distribution(distribution_element, valid_conditions) for distribution_element in distribution_elements]
         
-        self.background: Background = Background(min_length, max_length, distributions)
+        return Background(min_length, max_length, distributions)
     
     @staticmethod
-    def __parse_alphabet_distribution(alphabet_distribution_element) -> AlphabetDistribution:
-        if alphabet_distribution_element.hasAttribute("condition"):
-            condition: str = alphabet_distribution_element.getAttribute("condition")
+    def __parse_alphabet_distribution(alphabet_distribution_element, valid_conditions: List[Condition]) -> AlphabetDistribution:
+        if alphabet_distribution_element.hasAttribute("cid"):
+            condition: Condition = Condition.get_by_id(valid_conditions, alphabet_distribution_element.getAttribute("cid"))
         else:
-            condition: str = None
+            condition: Condition = None
 
         letter_elements: Any = alphabet_distribution_element.getElementsByTagName("letter")
         letters: List[Tuple[str, float]] = [XMLParser.__parse_letter(letter_element) for letter_element in letter_elements]
@@ -94,15 +107,24 @@ class XMLParser(Parser):
         data_generation_element: Any = self._dom.getElementsByTagName("datageneration")[0]
         seed: int = XMLParser.__read_int_node(data_generation_element, "seed")
 
-        conditions_element = data_generation_element.getElementsByTagName("conditions")[0]
-        condition_elements = conditions_element.getElementsByTagName("condition")
-        conditions: List[Tuple[Condition, int]] = [XMLParser.__parse_condition_generation(condition_element, valid_conditions) for condition_element in condition_elements]
+        sets_element = data_generation_element.getElementsByTagName("sets")[0]
+        set_elements = sets_element.getElementsByTagName("set")
+        sets: List[ExampleSet] = [XMLParser.__parse_set(set_element, valid_conditions) for set_element in set_elements]
 
-        return DataGeneration(seed, conditions)
+        return DataGeneration(seed, sets)
     
     @staticmethod
+    def __parse_set(set_element, valid_conditions: List[Condition]) -> ExampleSet:
+        name: str = set_element.getAttribute("name")
+        conditions_element: Any = set_element.getElementsByTagName("conditionrefs")[0]
+        condition_elements: Any = conditions_element.getElementsByTagName("conditionref")
+        conditions: List[Tuple[Condition, int]] = [XMLParser.__parse_condition_generation(condition_element, valid_conditions) for condition_element in condition_elements]
+
+        return ExampleSet(name, conditions)
+
+    @staticmethod
     def __parse_condition_generation(condition_element, valid_conditions: List[Condition]) -> Tuple[Condition, int]:
-        condition = Condition.get_by_id(valid_conditions, condition_element.getAttribute("id"))
+        condition: Condition = Condition.get_by_id(valid_conditions, condition_element.getAttribute("cid"))
         return tuple((condition,
                       int(condition_element.getAttribute("samples"))))
 
@@ -124,25 +146,23 @@ class XMLParser(Parser):
     @staticmethod
     def __parse_rule(rule_element, valid_sequence_elements: List[SequenceElement]) -> Rule:
         position: str = XMLParser.__read_text_node(rule_element, "position")
+        probability: float = XMLParser.__read_float_node(rule_element, "probability")
         
-        sequence_element_elements: Any = rule_element.getElementsByTagName("sequenceelements")[0].getElementsByTagName("sequenceelement")
-        sequence_elements: List[Tuple[SequenceElement, float]] = [XMLParser.__parse_sequence_element_generation(sequence_element_element, valid_sequence_elements) for sequence_element_element in sequence_element_elements]
+        sref_elements: Any = rule_element.getElementsByTagName("sequenceelementrefs")[0].getElementsByTagName("sequenceelementref")
+        sequence_elements: List[SequenceElement] = [SequenceElement.get_by_id(valid_sequence_elements, sref_element.getAttribute("sid")) for sref_element in sref_elements]
         
-        spacing_constraint_elements: Any = rule_element.getElementsByTagName("spacingconstraints")[0].getElementsByTagName("spacingconstraint")
-        spacing_constraints: List[SpacingConstraint] = [XMLParser.__parse_spacing_constraint(spacing_constraint_element, valid_sequence_elements) for spacing_constraint_element in spacing_constraint_elements]
+        if len(rule_element.getElementsByTagName("spacingconstraints")) == 1:
+            spacing_constraint_elements: Any = rule_element.getElementsByTagName("spacingconstraints")[0].getElementsByTagName("spacingconstraint")
+            spacing_constraints: List[SpacingConstraint] = [XMLParser.__parse_spacing_constraint(spacing_constraint_element, valid_sequence_elements) for spacing_constraint_element in spacing_constraint_elements]
+        else:
+            spacing_constraints: List[SpacingConstraint] = None
 
-        return Rule(position, sequence_elements, spacing_constraints)
-    
-    @staticmethod
-    def __parse_sequence_element_generation(sequence_element_element: Any, valid_sequence_elements: List[SequenceElement]) -> Tuple[SequenceElement, float]:
-        sequence_element = SequenceElement.get_by_id(valid_sequence_elements, sequence_element_element.getAttribute("id"))
-        return tuple((sequence_element,
-                      float(sequence_element_element.getAttribute("probability"))))
+        return Rule(position, probability, sequence_elements, spacing_constraints)
     
     @staticmethod
     def __parse_spacing_constraint(spacing_constraint_element: Any, valid_sequence_elements: List[SequenceElement]) -> SpacingConstraint:
-        sequence_element1: SequenceElement = SequenceElement.get_by_id(valid_sequence_elements, spacing_constraint_element.getAttribute("id1"))
-        sequence_element2: SequenceElement = SequenceElement.get_by_id(valid_sequence_elements, spacing_constraint_element.getAttribute("id2"))
+        sequence_element1: SequenceElement = SequenceElement.get_by_id(valid_sequence_elements, spacing_constraint_element.getAttribute("sid1"))
+        sequence_element2: SequenceElement = SequenceElement.get_by_id(valid_sequence_elements, spacing_constraint_element.getAttribute("sid2"))
         min_distance: int = int(spacing_constraint_element.getAttribute("mindistance"))
         max_distance: int = int(spacing_constraint_element.getAttribute("maxdistance"))
         direction: str = spacing_constraint_element.getAttribute("direction")
@@ -150,10 +170,14 @@ class XMLParser(Parser):
 
     def get_sequence_elements(self) -> List[SequenceElement]:
         sequence_elements_element: Any = self._dom.getElementsByTagName("sequenceelements")[0]
-        id: str = sequence_elements_element.getAttribute("id")
+        sequence_element_elements: List[Any] = sequence_elements_element.getElementsByTagName("sequenceelement")
+        return [XMLParser.__parse_sequence_element(sequence_element_element) for sequence_element_element in sequence_element_elements]
 
-        kmer_based_element = sequence_elements_element.getElementsByTagName("kmerbased")
-        matrix_based_element: Any = sequence_elements_element.getElementsByTagName("matrixbased")
+    @staticmethod
+    def __parse_sequence_element(sequence_element_element: Any) -> SequenceElement:
+        id: str = sequence_element_element.getAttribute("id")
+        kmer_based_element: Any = sequence_element_element.getElementsByTagName("kmerbased")
+        matrix_based_element: Any = sequence_element_element.getElementsByTagName("matrixbased")
         if len(kmer_based_element) == 1:
             kmer_elements: Any = kmer_based_element[0].getElementsByTagName("kmer")
             kmers: List[Tuple[str, float]] = [XMLParser.__parse_letter(kmer_element) for kmer_element in kmer_elements]

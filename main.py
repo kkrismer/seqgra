@@ -8,17 +8,19 @@ Gifford Lab - seq-grammar
 
 import sys
 import getopt
+import logging
 
 from seqgra.parser.parser import Parser
 from seqgra.parser.xmlparser import XMLParser
 from seqgra.simulator import Simulator
 
 def parse_config_file(file_name: str) -> str:
-    with open(file_name) as f:
+    with open(file_name.strip()) as f:
         config: str = f.read()
     return config
 
 def main(argv) -> None:
+    logging.basicConfig(level=logging.DEBUG)
     usage: str = "parse_hic_file.py -c <config file> -o <output directory>"
     config_file: str = ""
     output_dir: str = ""
@@ -40,12 +42,12 @@ def main(argv) -> None:
         elif opt in ("-c", "--configfile"):
             config_file = arg
         elif opt in ("-o", "--outputfile"):
-            output_file = arg
+            output_dir = arg
         else:
             print(usage)
             sys.exit(2)
 
-    if config_file != "" and output_file != "":
+    if config_file and output_dir:
         config = parse_config_file(config_file)
         parser: Parser = XMLParser(config)
         simulator = Simulator(parser)

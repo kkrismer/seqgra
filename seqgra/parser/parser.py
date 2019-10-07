@@ -1,5 +1,6 @@
-"""Gifford Lab - seq-grammar
-Abstract base class for parser for configuration files (using Strategy design pattern)
+"""MIT - CSAIL - Gifford Lab - seqgra
+
+Abstract base class for configuration file parser (using Strategy design pattern)
 
 @author: Konstantin Krismer
 """

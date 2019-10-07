@@ -1,34 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<grammar xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<seqgra xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="config.xsd">
 	<general id="g5">
 		<label>grammar level 5 - 4 cell types</label>
 		<description></description>
 		<sequencespace>DNA</sequencespace>
 	</general>
-	
+
 	<background>
 		<minlength>150</minlength>
 		<maxlength>150</maxlength>
-		<alphabetdistribution conditionindependent="true">
-			<letter probability="0.25">A</letter>
-			<letter probability="0.25">C</letter>
-			<letter probability="0.25">G</letter>
-			<letter probability="0.25">T</letter>
-		</alphabetdistribution>
+		<alphabetdistributions>
+			<alphabetdistribution>
+				<letter probability="0.25">A</letter>
+				<letter probability="0.25">C</letter>
+				<letter probability="0.25">G</letter>
+				<letter probability="0.25">T</letter>
+			</alphabetdistribution>
+		</alphabetdistributions>
 	</background>
-	
+
 	<datageneration>
 		<seed>0213213</seed>
-		<conditions>
-			<condition id="c1" samples="10000" />
-			<condition id="c2" samples="10000" />
-			<condition id="c3" samples="10000" />
-			<condition id="c4" samples="10000" />
-		</conditions>
+		<sets>
+			<set name="training">
+				<conditionrefs>
+					<conditionref cid="c1" samples="10000" />
+					<conditionref cid="c2" samples="10000" />
+					<conditionref cid="c3" samples="10000" />
+					<conditionref cid="c4" samples="10000" />
+				</conditionrefs>
+			</set>
+			<set name="validation">
+				<conditionrefs>
+					<conditionref cid="c1" samples="1000" />
+					<conditionref cid="c2" samples="1000" />
+					<conditionref cid="c3" samples="1000" />
+					<conditionref cid="c4" samples="1000" />
+				</conditionrefs>
+			</set>
+			<set name="test">
+				<conditionrefs>
+					<conditionref cid="c1" samples="5000" />
+					<conditionref cid="c2" samples="5000" />
+					<conditionref cid="c3" samples="5000" />
+					<conditionref cid="c4" samples="5000" />
+				</conditionrefs>
+			</set>
+		</sets>
 	</datageneration>
-	
+
 	<conditions>
 		<condition id="c1">
 			<label>cell type 1</label>
@@ -36,12 +57,13 @@
 			<grammar>
 				<rule>
 					<position>random</position>
-					<sequenceelements>
-						<sequenceelement id="se1" probability="1.0" />
-						<sequenceelement id="se2" probability="1.0" />
-					</sequenceelements>
+					<probability>1.0</probability>
+					<sequenceelementrefs>
+						<sequenceelementref sid="se1" />
+						<sequenceelementref sid="se2" />
+					</sequenceelementrefs>
 					<spacingconstraints>
-						<spacingconstraint id1="se1" id2="se2" mindistance="0" maxdistance="20" direction="bidirectional" />
+						<spacingconstraint sid1="se1" sid2="se2" mindistance="0" maxdistance="20" order="in-order" />
 					</spacingconstraints>
 				</rule>
 			</grammar>
@@ -52,12 +74,13 @@
 			<grammar>
 				<rule>
 					<position>random</position>
-					<sequenceelements>
-						<sequenceelement id="se2" probability="1.0" />
-						<sequenceelement id="se3" probability="1.0" />
-					</sequenceelements>
+					<probability>1.0</probability>
+					<sequenceelementrefs>
+						<sequenceelementref sid="se2" />
+						<sequenceelementref sid="se4" />
+					</sequenceelementrefs>
 					<spacingconstraints>
-						<spacingconstraint id1="se1" id2="se2" mindistance="21" maxdistance="40" direction="upstream" />
+						<spacingconstraint sid1="se2" sid2="se4" mindistance="21" maxdistance="40" order="random" />
 					</spacingconstraints>
 				</rule>
 			</grammar>
@@ -68,34 +91,36 @@
 			<grammar>
 				<rule>
 					<position>random</position>
-					<sequenceelements>
-						<sequenceelement id="se3" probability="1.0" />
-						<sequenceelement id="se1" probability="1.0" />
-					</sequenceelements>
+					<probability>1.0</probability>
+					<sequenceelementrefs>
+						<sequenceelementref sid="se3" />
+						<sequenceelementref sid="se1" />
+					</sequenceelementrefs>
 					<spacingconstraints>
-						<spacingconstraint id1="se3" id2="se1" mindistance="0" maxdistance="20" direction="bidirectional" />
+						<spacingconstraint sid1="se3" sid2="se1" mindistance="0" maxdistance="20" order="in-order" />
 					</spacingconstraints>
 				</rule>
 			</grammar>
 		</condition>
-		<condition id="c3">
+		<condition id="c4">
 			<label>cell type 4</label>
 			<description></description>
 			<grammar>
 				<rule>
 					<position>random</position>
-					<sequenceelements>
-						<sequenceelement id="se3" probability="1.0" />
-						<sequenceelement id="se1" probability="1.0" />
-					</sequenceelements>
+					<probability>1.0</probability>
+					<sequenceelementrefs>
+						<sequenceelementref sid="se4" />
+						<sequenceelementref sid="se1" />
+					</sequenceelementrefs>
 					<spacingconstraints>
-						<spacingconstraint id1="se3" id2="se1" mindistance="40" maxdistance="60" direction="bidirectional" />
+						<spacingconstraint sid1="se4" sid2="se1" mindistance="40" maxdistance="60" order="random" />
 					</spacingconstraints>
 				</rule>
 			</grammar>
 		</condition>
 	</conditions>
-	
+
 	<sequenceelements>
 		<sequenceelement id="se1">
 			<kmerbased>
@@ -130,4 +155,4 @@
 			</kmerbased>
 		</sequenceelement>
 	</sequenceelements>
-</grammar>
+</seqgra>

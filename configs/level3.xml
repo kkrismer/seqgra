@@ -1,31 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<grammar xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<seqgra xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="config.xsd">
 	<general id="g3">
 		<label>grammar level 3 - 2 cell types</label>
 		<description></description>
 		<sequencespace>DNA</sequencespace>
 	</general>
-	
+
 	<background>
 		<minlength>150</minlength>
 		<maxlength>150</maxlength>
-		<alphabetdistribution conditionindependent="true">
-			<letter probability="0.25">A</letter>
-			<letter probability="0.25">C</letter>
-			<letter probability="0.25">G</letter>
-			<letter probability="0.25">T</letter>
-		</alphabetdistribution>
+		<alphabetdistributions>
+			<alphabetdistribution>
+				<letter probability="0.25">A</letter>
+				<letter probability="0.25">C</letter>
+				<letter probability="0.25">G</letter>
+				<letter probability="0.25">T</letter>
+			</alphabetdistribution>
+		</alphabetdistributions>
 	</background>
-	
+
 	<datageneration>
-		<conditions>
-			<condition id="c1" samples="10000" />
-			<condition id="c2" samples="10000" />
-		</conditions>
-	<datageneration>
-	
+		<seed>02134324213</seed>
+		<sets>
+			<set name="training">
+				<conditionrefs>
+					<conditionref cid="c1" samples="10000" />
+					<conditionref cid="c2" samples="10000" />
+				</conditionrefs>
+			</set>
+			<set name="validation">
+				<conditionrefs>
+					<conditionref cid="c1" samples="1000" />
+					<conditionref cid="c2" samples="1000" />
+				</conditionrefs>
+			</set>
+			<set name="test">
+				<conditionrefs>
+					<conditionref cid="c1" samples="5000" />
+					<conditionref cid="c2" samples="5000" />
+				</conditionrefs>
+			</set>
+		</sets>
+	</datageneration>
+
 	<conditions>
 		<condition id="c1">
 			<label>cell type 1</label>
@@ -33,9 +51,10 @@
 			<grammar>
 				<rule>
 					<position>random</position>
-					<sequenceelements>
-						<sequenceelement id="se1" probability="1.0" />
-					</sequenceelements>
+					<probability>1.0</probability>
+					<sequenceelementrefs>
+						<sequenceelementref sid="se1" />
+					</sequenceelementrefs>
 				</rule>
 			</grammar>
 		</condition>
@@ -45,14 +64,15 @@
 			<grammar>
 				<rule>
 					<position>random</position>
-					<sequenceelements>
-						<sequenceelement id="se2" probability="1.0" />
-					</sequenceelements>
+					<probability>1.0</probability>
+					<sequenceelementrefs>
+						<sequenceelementref sid="se2" />
+					</sequenceelementrefs>
 				</rule>
 			</grammar>
 		</condition>
 	</conditions>
-	
+
 	<sequenceelements>
 		<sequenceelement id="se1">
 			<kmerbased>
@@ -71,4 +91,4 @@
 			</kmerbased>
 		</sequenceelement>
 	</sequenceelements>
-</grammar>
+</seqgra>

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<grammar xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<seqgra xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<general id="testid">
 		<label></label>
 		<description></description>
@@ -11,32 +10,75 @@
 	<background>
 		<minlength>150</minlength>
 		<maxlength>150</maxlength>
-		<alphabetdistribution conditionindependent="true">
+		<alphabetdistributions>
+			<alphabetdistribution>
 			<letter probability="0.25">A</letter>
 			<letter probability="0.25">C</letter>
 			<letter probability="0.25">G</letter>
 			<letter probability="0.25">T</letter>
-		</alphabetdistribution>
+			</alphabetdistribution>
+		</alphabetdistributions>
 	</background>
 	
 	<datageneration>
+		<seed>0</seed>
+		<sets>
+			<set name="training">
+				<conditionrefs>
+					<conditionref cid="c1" samples="10000" />
+					<conditionref cid="c2" samples="10000" />
+				</conditionrefs>
+			</set>
+			<set name="validation">
+				<conditionrefs>
+					<conditionref cid="c1" samples="1000" />
+					<conditionref cid="c2" samples="1000" />
+				</conditionrefs>
+			</set>
+			<set name="test">
+				<conditionrefs>
+					<conditionref cid="c1" samples="5000" />
+					<conditionref cid="c2" samples="5000" />
+				</conditionrefs>
+			</set>
+		</sets>
 	</datageneration>
 
 	<conditions>
-		<condition id="">
-			<label></label>
+		<condition id="c1">
+			<label>cell type 1</label>
 			<description></description>
+			<grammar>
+				<rule>
+					<position>70</position>
+					<sequenceelementrefs>
+						<sequenceelementref sid="se1" probability="1.0" />
+					</sequenceelementrefs>
+				</rule>
+			</grammar>
+		</condition>
+		<condition id="c2">
+			<label>cell type 2</label>
+			<description></description>
+			<grammar>
+				<rule>
+					<position>70</position>
+					<sequenceelementrefs>
+						<sequenceelementref sid="se2" probability="1.0" />
+					</sequenceelementrefs>
+				</rule>
+			</grammar>
 		</condition>
 	</conditions>
 	
 	<sequenceelements>
-		<sequenceelement id="">
+		<sequenceelement id="se1">
 			<kmerbased>
 				<kmer probability="0.5">AGCTGCAGTC</kmer>
 				<kmer probability="0.5">AGCTGCTC</kmer>
 			</kmerbased>
 		</sequenceelement>
-		<sequenceelement id="">
+		<sequenceelement id="se2">
 			<matrixbased>
 				<position>
 					<letter probability="0.2">A</letter>
@@ -65,4 +107,4 @@
 			</matrixbased>
 		</sequenceelement>
 	</sequenceelements>
-</grammar>
+</seqgra>
