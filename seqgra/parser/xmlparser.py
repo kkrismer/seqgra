@@ -8,10 +8,10 @@ import io
 import logging
 from typing import Any, List, Tuple
 from abc import ABC, abstractmethod
+from xml.dom.minidom import Document, parseString
 
 import pkg_resources
 from lxml import etree
-from xml.dom.minidom import Document, parseString
 
 from seqgra.parser.parser import Parser
 from seqgra.model.background import Background
