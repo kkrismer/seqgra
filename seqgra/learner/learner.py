@@ -1,4 +1,8 @@
 """
+MIT - CSAIL - Gifford Lab - seqgra
+
+Abstract base class for learners
+
 @author: Konstantin Krismer
 """
 

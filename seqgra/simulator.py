@@ -1,4 +1,7 @@
-"""MIT - CSAIL - Gifford Lab - seqgra
+"""
+MIT - CSAIL - Gifford Lab - seqgra
+
+Generates synthetic sequences based on grammar
 
 @author: Konstantin Krismer
 """

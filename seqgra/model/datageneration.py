@@ -1,4 +1,5 @@
-"""MIT - CSAIL - Gifford Lab - seqgra
+"""
+MIT - CSAIL - Gifford Lab - seqgra
 
 DataGeneration and Set class definitions, markup language agnostic
 

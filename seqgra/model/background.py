@@ -1,4 +1,5 @@
-"""MIT - CSAIL - Gifford Lab - seqgra
+"""
+MIT - CSAIL - Gifford Lab - seqgra
 
 Background class definition, markup language agnostic
 
