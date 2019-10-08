@@ -20,7 +20,7 @@ class AlphabetDistribution:
         self.letters: List[Tuple[str, float]] = letters
         self.l = [letter[0] for letter in self.letters]
         self.p = [letter[1] for letter in self.letters]
-        self.p = [prop / sum(self.p)  for prop in self.p]
+        self.p = [prop / sum(self.p) for prop in self.p]
         self.condition: Condition = condition
         self.condition_independent: bool = condition is None
 

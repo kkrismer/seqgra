@@ -90,7 +90,7 @@ class Simulator:
         random.seed(self.data_generation.seed)
         np.random.seed(self.data_generation.seed)
 
-    def __prepare_output_dir(self, output_dir) -> None:
+    def __prepare_output_dir(self, output_dir: str) -> None:
         if os.path.exists(output_dir):
             if os.path.isdir(output_dir):
                 if len(os.listdir(output_dir)) > 0:
