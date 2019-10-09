@@ -30,7 +30,12 @@ class BackgroundGenerator:
 
     @staticmethod
     def __select_alphabet_distribution(background: Background, condition: Condition) -> AlphabetDistribution:
-        for alphabet_distribution in background.alphabet_distributions:
-            if alphabet_distribution.condition_independent or alphabet_distribution.condition.id == condition.id:
-                return alphabet_distribution
-        raise Exception("no alphabet distribution found for condition " + condition.id + " [cid]")
+        if condition is None:
+            # pick random alphabet distribution
+            random_idx: int = np.random.randint(0, high=len(background.alphabet_distributions))
+            return background.alphabet_distributions[random_idx]
+        else:
+            for alphabet_distribution in background.alphabet_distributions:
+                if alphabet_distribution.condition_independent or alphabet_distribution.condition.id == condition.id:
+                    return alphabet_distribution
+            raise Exception("no alphabet distribution found for condition " + condition.id + " [cid]")

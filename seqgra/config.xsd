@@ -24,7 +24,7 @@
       <xs:field xpath="@cid"/>
     </xs:keyref>
     <xs:keyref name="datagenerationConditionRef" refer="conditionKey">
-      <xs:selector xpath="./datageneration/conditionrefs/conditionref"/>
+      <xs:selector xpath="./datageneration/example/conditionref"/>
       <xs:field xpath="@cid"/>
     </xs:keyref>
     <xs:keyref name="conditionsSequenceElementRef" refer="sequenceelementKey">
@@ -92,22 +92,22 @@
             <xs:element name="set" minOccurs="1" maxOccurs="unbounded">
               <xs:complexType>
                 <xs:sequence>
-                  <xs:element name="conditionrefs">
+                  <xs:element name="example" minOccurs="1" maxOccurs="unbounded">
                     <xs:complexType>
                       <xs:sequence>
-                        <xs:element name="conditionref" minOccurs="1" maxOccurs="unbounded">
+                        <xs:element name="conditionref" minOccurs="0" maxOccurs="unbounded">
                           <xs:complexType>
                             <xs:attribute name="cid" type="xs:string" use="required"/>
-                            <xs:attribute name="samples" use="required">
-                              <xs:simpleType>
-                                <xs:restriction base="xs:long">
-                                  <xs:minInclusive value="1"/>
-                                </xs:restriction>
-                              </xs:simpleType>
-                            </xs:attribute>
                           </xs:complexType>
                         </xs:element>
                       </xs:sequence>
+                      <xs:attribute name="samples" use="required">
+                        <xs:simpleType>
+                          <xs:restriction base="xs:long">
+                            <xs:minInclusive value="1"/>
+                          </xs:restriction>
+                        </xs:simpleType>
+                      </xs:attribute>
                     </xs:complexType>
                   </xs:element>
                 </xs:sequence>

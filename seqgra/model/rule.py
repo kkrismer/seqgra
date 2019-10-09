@@ -22,9 +22,9 @@ class Rule:
     def __str__(self):
         str_rep = ["Rule:\n",
         "\tPosition: ", self.position, "\n",
-        "\tProbability: ", self.probability, "\n",
+        "\tProbability: ", str(self.probability), "\n",
         "\tSequence elements:\n"]
-        str_rep += ["\t\t" + sequence_element[0].id + " [sid]" for sequence_element in self.sequence_elements]
+        str_rep += ["\t\t" + sequence_element.id + " [sid]" for sequence_element in self.sequence_elements]
         if self.spacing_constraints is not None and len(self.spacing_constraints) > 0:
             str_rep += ["\tSpacing constraints:\n"]
             spacing_constraints_string: List[str] = [str(spacing_constraint) for spacing_constraint in self.spacing_constraints]

@@ -69,11 +69,11 @@ class Simulator:
         for example_set in self.data_generation.sets:
             self.__process_set(example_set, output_dir)
             logging.info("generated " + example_set.name + " set")
-    
+
     def __process_set(self, example_set: ExampleSet, output_dir: str) -> None:
         condition_ids: List[str] = []
-        for condition in example_set.conditions:
-            condition_ids += [condition[0].id] * condition[1]
+        for example in example_set.examples:
+            condition_ids += [self.__serialize_example(example)] * example.samples
         random.shuffle(condition_ids)
 
         with open(output_dir + "/" + example_set.name + ".txt", "w") as data_file, \
@@ -81,10 +81,17 @@ class Simulator:
             data_file.write("x\ty\n")
             annotation_file.write("annotation\ty\n")
             for condition_id in condition_ids:
-                condition: Condition = Condition.get_by_id(self.conditions, condition_id)
-                example: Example = ExampleGenerator.generate_example(condition, self.background)
-                data_file.write(example.sequence + "\t" + condition.id + "\n")
-                annotation_file.write(example.annotation + "\t" + condition.id + "\n")
+                conditions: List[Condition] = self.__deserialize_example(condition_id)
+                example: Example = ExampleGenerator.generate_example(conditions, self.background)
+                data_file.write(example.sequence + "\t" + condition_id + "\n")
+                annotation_file.write(example.annotation + "\t" + condition_id + "\n")
+
+    def __serialize_example(self, example: Example) -> str:
+        return "|".join([condition.id for condition in example.conditions])
+
+    def __deserialize_example(self, example_str_rep: str) -> List[Condition]:
+        condition_ids: List[str] = example_str_rep.split("|")
+        return [Condition.get_by_id(self.conditions, condition_id) for condition_id in condition_ids]
 
     def __set_seed(self) -> None:
         random.seed(self.data_generation.seed)
@@ -125,8 +132,9 @@ class Simulator:
 
         used_condition_ids: Set[str] = set()
         for example_set in self.data_generation.sets:
-            for condition_sample in example_set.conditions:
-                used_condition_ids.add(condition_sample[0].id)
+            for example in example_set.examples:
+                for condition_sample in example.conditions:
+                    used_condition_ids.add(condition_sample.id)
 
         for condition in self.conditions:
             if condition.id not in used_condition_ids:

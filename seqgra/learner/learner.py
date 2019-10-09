@@ -21,6 +21,9 @@ from typing import List
 class Learner(ABC):
     @abstractmethod
     def __init__(self, output_dir: str) -> None:
+        output_dir = output_dir.replace("\\", "/")
+        if not output_dir.endswith("/"):
+            output_dir += "/"
         self.output_dir = output_dir
         self.__prepare_output_dir()
 
@@ -29,15 +32,19 @@ class Learner(ABC):
         pass
 
     @abstractmethod
-    def predict(self):
+    def create_model(self) -> None:
         pass
 
     @abstractmethod
-    def train_model(self):
+    def train_model(self) -> None:
         pass
 
     @abstractmethod
     def save_model(self, model_name: str):
+        pass
+
+    @abstractmethod
+    def print_model_summary(self) -> None:
         pass
 
     def __prepare_output_dir(self) -> None:
@@ -49,6 +56,10 @@ class Learner(ABC):
                 raise Exception("output directory cannot be created (file with same name exists)")
         else:    
             os.makedirs(self.output_dir)
+
+    @abstractmethod
+    def predict(self):
+        pass
 
 class MultiClassClassificationLearner(Learner):
     @abstractmethod

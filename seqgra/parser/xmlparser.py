@@ -16,7 +16,7 @@ from lxml import etree
 
 from seqgra.parser.parser import Parser
 from seqgra.model.background import Background
-from seqgra.model.datageneration import DataGeneration, ExampleSet
+from seqgra.model.datageneration import DataGeneration, ExampleSet, Example
 from seqgra.model.condition import Condition
 from seqgra.model.sequenceelement import SequenceElement, KmerBasedSequenceElement, MatrixBasedSequenceElement
 from seqgra.model.alphabetdistribution import AlphabetDistribution
@@ -84,7 +84,6 @@ class XMLParser(Parser):
 
         distribution_elements: Any = background_element.getElementsByTagName("alphabetdistribution")
         distributions: List[AlphabetDistribution] = [XMLParser.__parse_alphabet_distribution(distribution_element, valid_conditions) for distribution_element in distribution_elements]
-        
         return Background(min_length, max_length, distributions)
     
     @staticmethod
@@ -96,7 +95,6 @@ class XMLParser(Parser):
 
         letter_elements: Any = alphabet_distribution_element.getElementsByTagName("letter")
         letters: List[Tuple[str, float]] = [XMLParser.__parse_letter(letter_element) for letter_element in letter_elements]
-        
         return AlphabetDistribution(letters, condition)
     
     @staticmethod
@@ -111,23 +109,21 @@ class XMLParser(Parser):
         sets_element = data_generation_element.getElementsByTagName("sets")[0]
         set_elements = sets_element.getElementsByTagName("set")
         sets: List[ExampleSet] = [XMLParser.__parse_set(set_element, valid_conditions) for set_element in set_elements]
-
         return DataGeneration(seed, sets)
     
     @staticmethod
     def __parse_set(set_element, valid_conditions: List[Condition]) -> ExampleSet:
         name: str = set_element.getAttribute("name")
-        conditions_element: Any = set_element.getElementsByTagName("conditionrefs")[0]
-        condition_elements: Any = conditions_element.getElementsByTagName("conditionref")
-        conditions: List[Tuple[Condition, int]] = [XMLParser.__parse_condition_generation(condition_element, valid_conditions) for condition_element in condition_elements]
-
-        return ExampleSet(name, conditions)
-
+        example_elements: Any = set_element.getElementsByTagName("example")
+        examples: List[Example] = [XMLParser.__parse_example(example_element, valid_conditions) for example_element in example_elements]
+        return ExampleSet(name, examples)
+    
     @staticmethod
-    def __parse_condition_generation(condition_element, valid_conditions: List[Condition]) -> Tuple[Condition, int]:
-        condition: Condition = Condition.get_by_id(valid_conditions, condition_element.getAttribute("cid"))
-        return tuple((condition,
-                      int(condition_element.getAttribute("samples"))))
+    def __parse_example(example_element, valid_conditions: List[Condition]) -> Example:
+        samples: int = int(example_element.getAttribute("samples"))
+        condition_elements: Any = example_element.getElementsByTagName("conditionref")
+        conditions: List[Condition] = [Condition.get_by_id(valid_conditions, condition_element.getAttribute("cid")) for condition_element in condition_elements]
+        return Example(samples, conditions)
 
     def get_conditions(self, valid_sequence_elements: List[SequenceElement]) -> List[Condition]:
         conditions_element: Any = self._dom.getElementsByTagName("conditions")[0]
