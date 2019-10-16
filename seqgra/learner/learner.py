@@ -16,7 +16,7 @@ MIT - CSAIL - Gifford Lab - seqgra
 import os
 
 from abc import ABC, abstractmethod
-from typing import List
+from typing import List, Any
 
 class Learner(ABC):
     @abstractmethod
@@ -40,7 +40,11 @@ class Learner(ABC):
         pass
 
     @abstractmethod
-    def save_model(self, model_name: str):
+    def save_model(self, model_name: str = "final"):
+        pass
+
+    @abstractmethod
+    def load_model(self, model_name: str = "final"):
         pass
 
     @abstractmethod
@@ -51,14 +55,15 @@ class Learner(ABC):
         if os.path.exists(self.output_dir):
             if os.path.isdir(self.output_dir):
                 if len(os.listdir(self.output_dir)) > 0:
-                    raise Exception("output directory non-empty")
+                    pass
+                    # raise Exception("output directory non-empty")
             else:
                 raise Exception("output directory cannot be created (file with same name exists)")
         else:    
             os.makedirs(self.output_dir)
 
     @abstractmethod
-    def predict(self):
+    def predict(self, x: Any, encode: bool = True):
         pass
 
 class MultiClassClassificationLearner(Learner):
