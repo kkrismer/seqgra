@@ -5,7 +5,6 @@ Generates synthetic sequences based on grammar
 
 @author: Konstantin Krismer
 """
-
 import logging
 import os
 import random

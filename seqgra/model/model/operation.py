@@ -5,7 +5,6 @@ Operation class definition, markup language agnostic
 
 @author: Konstantin Krismer
 """
-
 from typing import Dict
 
 class Operation:

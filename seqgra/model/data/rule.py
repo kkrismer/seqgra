@@ -5,7 +5,6 @@ Rule class definition, markup language agnostic
 
 @author: Konstantin Krismer
 """
-
 from typing import List
 
 from seqgra.model.data.sequenceelement import SequenceElement

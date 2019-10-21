@@ -5,7 +5,6 @@ Background class definition, markup language agnostic
 
 @author: Konstantin Krismer
 """
-
 from typing import List
 
 import numpy as np

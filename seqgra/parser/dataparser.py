@@ -8,10 +8,10 @@ Abstract base class for configuration file parser (using Strategy design pattern
 from abc import ABC, abstractmethod
 from typing import List
 
-from seqgra.model.background import Background
-from seqgra.model.datageneration import DataGeneration
-from seqgra.model.condition import Condition
-from seqgra.model.sequenceelement import SequenceElement
+from seqgra.model.data.background import Background
+from seqgra.model.data.datageneration import DataGeneration
+from seqgra.model.data.condition import Condition
+from seqgra.model.data.sequenceelement import SequenceElement
 
 class DataParser(ABC):
     @abstractmethod

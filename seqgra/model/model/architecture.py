@@ -5,7 +5,6 @@ Architecture class definition, markup language agnostic
 
 @author: Konstantin Krismer
 """
-
 from typing import Dict, List
 
 from seqgra.model.model.operation import Operation

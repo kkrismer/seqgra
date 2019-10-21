@@ -5,7 +5,6 @@ AlphabetDistribution class definition, markup language agnostic
 
 @author: Konstantin Krismer
 """
-
 from __future__ import annotations
 
 from typing import List, Tuple
