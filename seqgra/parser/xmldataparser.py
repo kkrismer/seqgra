@@ -14,16 +14,17 @@ from xml.dom.minidom import Document, parseString
 import pkg_resources
 from lxml import etree
 
-from seqgra.parser.parser import Parser
-from seqgra.model.background import Background
-from seqgra.model.datageneration import DataGeneration, ExampleSet, Example
-from seqgra.model.condition import Condition
-from seqgra.model.sequenceelement import SequenceElement, KmerBasedSequenceElement, MatrixBasedSequenceElement
-from seqgra.model.alphabetdistribution import AlphabetDistribution
-from seqgra.model.rule import Rule
-from seqgra.model.spacingconstraint import SpacingConstraint
+from seqgra.parser.xmlhelper import XMLHelper
+from seqgra.parser.dataparser import DataParser
+from seqgra.model.data.background import Background
+from seqgra.model.data.datageneration import DataGeneration, ExampleSet, Example
+from seqgra.model.data.condition import Condition
+from seqgra.model.data.sequenceelement import SequenceElement, KmerBasedSequenceElement, MatrixBasedSequenceElement
+from seqgra.model.data.alphabetdistribution import AlphabetDistribution
+from seqgra.model.data.rule import Rule
+from seqgra.model.data.spacingconstraint import SpacingConstraint
 
-class XMLParser(Parser):
+class XMLDataParser(DataParser):
     """
     The Strategy interface declares operations common to all supported versions
     of some algorithm.
@@ -38,52 +39,32 @@ class XMLParser(Parser):
         self.validate(config)
 
     def validate(self, xml_config: str) -> None:
-        xsd_path = pkg_resources.resource_filename("seqgra", "config.xsd")
+        xsd_path = pkg_resources.resource_filename("seqgradata", "data-config.xsd")
         xmlschema_doc = etree.parse(xsd_path)
         xmlschema = etree.XMLSchema(xmlschema_doc)
         xml_doc = etree.parse(io.BytesIO(xml_config.encode()))
         xmlschema.assertValid(xml_doc)
         logging.info("XML configuration file is well-formed and valid")
 
-    @staticmethod
-    def __read_text_node(parent_node, node_name) -> str:
-        node: Any = parent_node.getElementsByTagName(node_name)
-        if len(node) == 0:
-            return ""
-        elif node[0].firstChild is None:
-            return ""
-        else:
-            return node[0].firstChild.nodeValue
-    
-    @staticmethod
-    def __read_int_node(parent_node, node_name) -> int:
-        node_value: str = XMLParser.__read_text_node(parent_node, node_name)
-        return int(node_value)
-    
-    @staticmethod
-    def __read_float_node(parent_node, node_name) -> float:
-        node_value: str = XMLParser.__read_text_node(parent_node, node_name)
-        return float(node_value)
-
     def get_id(self) -> str:
         return self._general_element.getAttribute("id")
     
     def get_label(self) -> str:
-        return XMLParser.__read_text_node(self._general_element, "label")
+        return XMLHelper.read_text_node(self._general_element, "label")
     
     def get_description(self) -> str:
-        return XMLParser.__read_text_node(self._general_element, "description")
+        return XMLHelper.read_text_node(self._general_element, "description")
     
     def get_sequence_space(self) -> str:
-        return XMLParser.__read_text_node(self._general_element, "sequencespace")
+        return XMLHelper.read_text_node(self._general_element, "sequencespace")
 
     def get_background(self, valid_conditions: List[Condition]) -> Background:
         background_element: Any = self._dom.getElementsByTagName("background")[0]
-        min_length: int = XMLParser.__read_int_node(background_element, "minlength")
-        max_length: int = XMLParser.__read_int_node(background_element, "maxlength")
+        min_length: int = XMLHelper.read_int_node(background_element, "minlength")
+        max_length: int = XMLHelper.read_int_node(background_element, "maxlength")
 
         distribution_elements: Any = background_element.getElementsByTagName("alphabetdistribution")
-        distributions: List[AlphabetDistribution] = [XMLParser.__parse_alphabet_distribution(distribution_element, valid_conditions) for distribution_element in distribution_elements]
+        distributions: List[AlphabetDistribution] = [XMLDataParser.__parse_alphabet_distribution(distribution_element, valid_conditions) for distribution_element in distribution_elements]
         return Background(min_length, max_length, distributions)
     
     @staticmethod
@@ -94,7 +75,7 @@ class XMLParser(Parser):
             condition: Condition = None
 
         letter_elements: Any = alphabet_distribution_element.getElementsByTagName("letter")
-        letters: List[Tuple[str, float]] = [XMLParser.__parse_letter(letter_element) for letter_element in letter_elements]
+        letters: List[Tuple[str, float]] = [XMLDataParser.__parse_letter(letter_element) for letter_element in letter_elements]
         return AlphabetDistribution(letters, condition)
     
     @staticmethod
@@ -104,18 +85,18 @@ class XMLParser(Parser):
 
     def get_data_generation(self, valid_conditions: List[Condition]) -> DataGeneration:
         data_generation_element: Any = self._dom.getElementsByTagName("datageneration")[0]
-        seed: int = XMLParser.__read_int_node(data_generation_element, "seed")
+        seed: int = XMLHelper.read_int_node(data_generation_element, "seed")
 
         sets_element = data_generation_element.getElementsByTagName("sets")[0]
         set_elements = sets_element.getElementsByTagName("set")
-        sets: List[ExampleSet] = [XMLParser.__parse_set(set_element, valid_conditions) for set_element in set_elements]
+        sets: List[ExampleSet] = [XMLDataParser.__parse_set(set_element, valid_conditions) for set_element in set_elements]
         return DataGeneration(seed, sets)
     
     @staticmethod
     def __parse_set(set_element, valid_conditions: List[Condition]) -> ExampleSet:
         name: str = set_element.getAttribute("name")
         example_elements: Any = set_element.getElementsByTagName("example")
-        examples: List[Example] = [XMLParser.__parse_example(example_element, valid_conditions) for example_element in example_elements]
+        examples: List[Example] = [XMLDataParser.__parse_example(example_element, valid_conditions) for example_element in example_elements]
         return ExampleSet(name, examples)
     
     @staticmethod
@@ -128,29 +109,29 @@ class XMLParser(Parser):
     def get_conditions(self, valid_sequence_elements: List[SequenceElement]) -> List[Condition]:
         conditions_element: Any = self._dom.getElementsByTagName("conditions")[0]
         condition_elements = conditions_element.getElementsByTagName("condition")
-        return [XMLParser.__parse_condition(condition_element, valid_sequence_elements) for condition_element in condition_elements]
+        return [XMLDataParser.__parse_condition(condition_element, valid_sequence_elements) for condition_element in condition_elements]
 
     @staticmethod
     def __parse_condition(condition_element, valid_sequence_elements: List[SequenceElement]) -> Condition:
         id: str = condition_element.getAttribute("id")
-        label: str = XMLParser.__read_text_node(condition_element, "label")
-        description: str = XMLParser.__read_text_node(condition_element, "description")
+        label: str = XMLHelper.read_text_node(condition_element, "label")
+        description: str = XMLHelper.read_text_node(condition_element, "description")
         grammar_element: Any = condition_element.getElementsByTagName("grammar")[0]
         rule_elements = grammar_element.getElementsByTagName("rule")
-        grammar: List[Rule] = [XMLParser.__parse_rule(rule_element, valid_sequence_elements) for rule_element in rule_elements]
+        grammar: List[Rule] = [XMLDataParser.__parse_rule(rule_element, valid_sequence_elements) for rule_element in rule_elements]
         return Condition(id, label, description, grammar)
 
     @staticmethod
     def __parse_rule(rule_element, valid_sequence_elements: List[SequenceElement]) -> Rule:
-        position: str = XMLParser.__read_text_node(rule_element, "position")
-        probability: float = XMLParser.__read_float_node(rule_element, "probability")
+        position: str = XMLHelper.read_text_node(rule_element, "position")
+        probability: float = XMLHelper.read_float_node(rule_element, "probability")
         
         sref_elements: Any = rule_element.getElementsByTagName("sequenceelementrefs")[0].getElementsByTagName("sequenceelementref")
         sequence_elements: List[SequenceElement] = [SequenceElement.get_by_id(valid_sequence_elements, sref_element.getAttribute("sid")) for sref_element in sref_elements]
         
         if len(rule_element.getElementsByTagName("spacingconstraints")) == 1:
             spacing_constraint_elements: Any = rule_element.getElementsByTagName("spacingconstraints")[0].getElementsByTagName("spacingconstraint")
-            spacing_constraints: List[SpacingConstraint] = [XMLParser.__parse_spacing_constraint(spacing_constraint_element, valid_sequence_elements) for spacing_constraint_element in spacing_constraint_elements]
+            spacing_constraints: List[SpacingConstraint] = [XMLDataParser.__parse_spacing_constraint(spacing_constraint_element, valid_sequence_elements) for spacing_constraint_element in spacing_constraint_elements]
         else:
             spacing_constraints: List[SpacingConstraint] = None
 
@@ -168,7 +149,7 @@ class XMLParser(Parser):
     def get_sequence_elements(self) -> List[SequenceElement]:
         sequence_elements_element: Any = self._dom.getElementsByTagName("sequenceelements")[0]
         sequence_element_elements: List[Any] = sequence_elements_element.getElementsByTagName("sequenceelement")
-        return [XMLParser.__parse_sequence_element(sequence_element_element) for sequence_element_element in sequence_element_elements]
+        return [XMLDataParser.__parse_sequence_element(sequence_element_element) for sequence_element_element in sequence_element_elements]
 
     @staticmethod
     def __parse_sequence_element(sequence_element_element: Any) -> SequenceElement:
@@ -177,11 +158,11 @@ class XMLParser(Parser):
         matrix_based_element: Any = sequence_element_element.getElementsByTagName("matrixbased")
         if len(kmer_based_element) == 1:
             kmer_elements: Any = kmer_based_element[0].getElementsByTagName("kmer")
-            kmers: List[Tuple[str, float]] = [XMLParser.__parse_letter(kmer_element) for kmer_element in kmer_elements]
+            kmers: List[Tuple[str, float]] = [XMLDataParser.__parse_letter(kmer_element) for kmer_element in kmer_elements]
             return KmerBasedSequenceElement(id, kmers)
         elif len(matrix_based_element) == 1:
             position_elements: Any = matrix_based_element[0].getElementsByTagName("position")
-            positions: List[List[Tuple[str, float]]] = [XMLParser.__parse_position(position_element) for position_element in position_elements]
+            positions: List[List[Tuple[str, float]]] = [XMLDataParser.__parse_position(position_element) for position_element in position_elements]
             return MatrixBasedSequenceElement(id, positions)
         else:
             raise Exception("sequence element is invalid")
@@ -189,4 +170,4 @@ class XMLParser(Parser):
     @staticmethod
     def __parse_position(position_element) -> List[Tuple[str, float]]:
         letter_elements: Any = position_element.getElementsByTagName("letter")
-        return [XMLParser.__parse_letter(letter_element) for letter_element in letter_elements]
+        return [XMLDataParser.__parse_letter(letter_element) for letter_element in letter_elements]

@@ -9,7 +9,7 @@ from __future__ import annotations
 
 from typing import List
 
-from seqgra.model.rule import Rule
+from seqgra.model.data.rule import Rule
 
 class Condition:
     def __init__(self, id: str, label: str,
@@ -28,7 +28,7 @@ class Condition:
             str_rep += ["\t", self.description, "\n"]
         str_rep += ["\tGrammar:\n"]
         rules_string: List[str] = [str(rule) for rule in self.grammar]
-        rules_str_rep = ''.join(rules_string)
+        rules_str_rep = "".join(rules_string)
         str_rep += ["\t\t" + s + "\n" for s in rules_str_rep.splitlines()]
         return "".join(str_rep)
 

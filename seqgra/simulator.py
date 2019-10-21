@@ -13,24 +13,25 @@ from typing import List, Tuple, Set
 
 import numpy as np
 
-from seqgra.parser.parser import Parser
-from seqgra.model.background import Background
-from seqgra.model.datageneration import DataGeneration, ExampleSet
-from seqgra.model.condition import Condition
-from seqgra.model.sequenceelement import SequenceElement
-from seqgra.model.spacingconstraint import SpacingConstraint
-from seqgra.model.rule import Rule
-from seqgra.model.example import Example
+from seqgra.parser.dataparser import DataParser
+from seqgra.model.data.background import Background
+from seqgra.model.data.datageneration import DataGeneration, ExampleSet
+from seqgra.model.data.condition import Condition
+from seqgra.model.data.sequenceelement import SequenceElement
+from seqgra.model.data.spacingconstraint import SpacingConstraint
+from seqgra.model.data.rule import Rule
+from seqgra.model.data.example import Example
 from seqgra.logic.examplegenerator import ExampleGenerator
 
 class Simulator:
-    def __init__(self, parser: Parser) -> None:
-        self._parser: Parser = parser
+    def __init__(self, parser: DataParser, output_dir: str) -> None:
+        self._parser: DataParser = parser
         self.__parse_config()
         self.check_grammar()
+        self.output_dir = output_dir.strip()
 
     def __str__(self):
-        str_rep = ["Grammar:\n",
+        str_rep = ["seqgra data configuration:\n",
         "\tID: ", self.id, "\n",
         "\tLabel: ", self.label, "\n",
         "\tDescription:\n"]
@@ -60,24 +61,24 @@ class Simulator:
         self.background: Background = self._parser.get_background(self.conditions)
         self.data_generation: DataGeneration = self._parser.get_data_generation(self.conditions)
 
-    def simulate_data(self, output_dir: str) -> None:
+    def simulate_data(self) -> None:
         logging.info("started data simulation")
-        output_dir = output_dir.strip()
+        
         self.__set_seed()
-        self.__prepare_output_dir(output_dir)
+        self.__prepare_output_dir()
 
         for example_set in self.data_generation.sets:
-            self.__process_set(example_set, output_dir)
+            self.__process_set(example_set)
             logging.info("generated " + example_set.name + " set")
 
-    def __process_set(self, example_set: ExampleSet, output_dir: str) -> None:
+    def __process_set(self, example_set: ExampleSet) -> None:
         condition_ids: List[str] = []
         for example in example_set.examples:
             condition_ids += [self.__serialize_example(example)] * example.samples
         random.shuffle(condition_ids)
 
-        with open(output_dir + "/" + example_set.name + ".txt", "w") as data_file, \
-             open(output_dir + "/" + example_set.name + "-annotation.txt", "w") as annotation_file:
+        with open(self.output_dir + "/" + example_set.name + ".txt", "w") as data_file, \
+             open(self.output_dir + "/" + example_set.name + "-annotation.txt", "w") as annotation_file:
             data_file.write("x\ty\n")
             annotation_file.write("annotation\ty\n")
             for condition_id in condition_ids:
@@ -97,15 +98,15 @@ class Simulator:
         random.seed(self.data_generation.seed)
         np.random.seed(self.data_generation.seed)
 
-    def __prepare_output_dir(self, output_dir: str) -> None:
-        if os.path.exists(output_dir):
-            if os.path.isdir(output_dir):
-                if len(os.listdir(output_dir)) > 0:
+    def __prepare_output_dir(self) -> None:
+        if os.path.exists(self.output_dir):
+            if os.path.isdir(self.output_dir):
+                if len(os.listdir(self.output_dir)) > 0:
                     raise Exception("output directory non-empty")
             else:
                 raise Exception("output directory cannot be created (file with same name exists)")
         else:    
-            os.makedirs(output_dir)
+            os.makedirs(self.output_dir)
 
     def check_grammar(self) -> bool:
         valid: bool = True

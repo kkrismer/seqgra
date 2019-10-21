@@ -19,7 +19,7 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    package_data={"": ["seqgra/config.xsd"]},
+    package_data={"": ["seqgra/data-config.xsd", "seqgra/model-config.xsd"]},
     install_requires=[
         "lxml>=4.4.1",
         "numpy>=1.14"

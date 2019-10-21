@@ -13,7 +13,7 @@ import random
 
 import numpy as np
 
-from seqgra.model.condition import Condition
+from seqgra.model.data.condition import Condition
 
 class AlphabetDistribution:
     def __init__(self, letters: List[Tuple[str, float]], condition: Condition = None) -> None:

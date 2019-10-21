@@ -8,7 +8,7 @@ DataGeneration and Set class definitions, markup language agnostic
 
 from typing import List, Tuple
 
-from seqgra.model.condition import Condition
+from seqgra.model.data.condition import Condition
 
 class Example:
     def __init__(self, samples: int, conditions: List[Condition]) -> None:

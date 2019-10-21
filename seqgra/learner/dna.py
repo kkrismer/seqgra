@@ -15,6 +15,7 @@ import logging
 import pandas as pd
 
 from seqgra.learner.learner import MultiClassClassificationLearner
+from seqgra.parser.modelparser import ModelParser
 
 # class TensorFlowEstimatorMultiClassClassificationLearner(MultiClassClassificationLearner):
 #     def __init__(self, output_dir: str) -> None:
@@ -67,8 +68,8 @@ from seqgra.learner.learner import MultiClassClassificationLearner
 
 
 class DNAMultiClassClassificationLearner(MultiClassClassificationLearner):
-    def __init__(self, output_dir: str) -> None:
-        super().__init__(output_dir)
+    def __init__(self, parser: ModelParser, output_dir: str) -> None:
+        super().__init__(parser, output_dir)
         self.labels: List[str] = None
         self.x_train: List[str] = None
         self.y_train: List[str] = None

@@ -10,7 +10,7 @@ from typing import List
 
 import numpy as np
 
-from seqgra.model.alphabetdistribution import AlphabetDistribution
+from seqgra.model.data.alphabetdistribution import AlphabetDistribution
 
 class Background:
     def __init__(self, min_length: int, max_length: int,

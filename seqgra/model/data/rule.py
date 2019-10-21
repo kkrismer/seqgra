@@ -8,8 +8,8 @@ Rule class definition, markup language agnostic
 
 from typing import List
 
-from seqgra.model.sequenceelement import SequenceElement
-from seqgra.model.spacingconstraint import SpacingConstraint
+from seqgra.model.data.sequenceelement import SequenceElement
+from seqgra.model.data.spacingconstraint import SpacingConstraint
 
 class Rule:
     def __init__(self, position: str, probability: float, sequence_elements: List[SequenceElement],
@@ -30,4 +30,4 @@ class Rule:
             spacing_constraints_string: List[str] = [str(spacing_constraint) for spacing_constraint in self.spacing_constraints]
             spacing_constraints_str_rep = ''.join(spacing_constraints_string)
             str_rep += ["\t\t" + s + "\n" for s in spacing_constraints_str_rep.splitlines()]
-        return ''.join(str_rep)
+        return "".join(str_rep)

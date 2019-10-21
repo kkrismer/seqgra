@@ -6,7 +6,7 @@ SpacingConstraint class definition, markup language agnostic
 @author: Konstantin Krismer
 """
 
-from seqgra.model.sequenceelement import SequenceElement
+from seqgra.model.data.sequenceelement import SequenceElement
 
 class SpacingConstraint:
     def __init__(self, sequence_element1: SequenceElement,
@@ -25,4 +25,4 @@ class SpacingConstraint:
         "\tMinimum distance: ", str(self.min_distance), "\n",
         "\tMaximum distance: ", str(self.max_distance), "\n",
         "\tDirection: ", self.direction, "\n"]
-        return ''.join(str_rep)
+        return "".join(str_rep)

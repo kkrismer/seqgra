@@ -14,4 +14,4 @@ class Example:
         str_rep = ["Example:\n",
         "\tSequence: ", self.sequence, "\n",
         "\tAnnotation: ", self.annotation, "\n"]
-        return ''.join(str_rep)
+        return "".join(str_rep)
