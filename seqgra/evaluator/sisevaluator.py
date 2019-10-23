@@ -8,8 +8,10 @@ MIT - CSAIL - Gifford Lab - seqgra
 from __future__ import annotations
 
 import os
+import logging
 from abc import ABC, abstractmethod
 from typing import List, Any, Dict, Tuple
+import random
 
 import numpy as np
 import pandas as pd
@@ -17,6 +19,7 @@ import pandas as pd
 from seqgra.learner.learner import Learner
 from seqgra.evaluator.evaluator import Evaluator
 from seqgra.sis import sis_collection, make_empty_boolean_mask_broadcast_over_axis, produce_masked_inputs
+
 
 class SISEvaluator(Evaluator):
     def __init__(self, learner: Learner, data_dir: str, output_dir: str) -> None:
@@ -26,37 +29,40 @@ class SISEvaluator(Evaluator):
         pass
 
     def select_random_n_examples(self, for_label, for_set, n):
-        pass
+        input_df, annotation_df = self.__select_examples(for_label, for_set)
+        
+        if n > len(input_df.index):
+            logging.warn("n is larger than number of examples in set")
+            n = len(input_df.index)
+        
+        idx: List[int] = list(range(len(input_df.index)))
+        random.shuffle(idx)
+        idx = idx[:n]
 
-    def select_first_n_examples(self, for_label, for_set, n):
-        if for_set == "training":
-            input_file = self.__get_valid_file(self.data_dir + "/training.txt")
-            annotation_file = self.__get_valid_file(
-                self.data_dir + "/training-annotation.txt")
-        elif for_set == "validation":
-            input_file = self.__get_valid_file(
-                self.data_dir + "/validation.txt")
-            annotation_file = self.__get_valid_file(
-                self.data_dir + "/validation-annotation.txt")
-        elif for_set == "test":
-            input_file = self.__get_valid_file(self.data_dir + "/test.txt")
-            annotation_file = self.__get_valid_file(
-                self.data_dir + "/test-annotation.txt")
-        else:
-            raise Exception("unsupported set: " + for_set)
-
-        input_df = pd.read_csv(input_file, sep="\t")
-        input_df = input_df[input_df.y == for_label]
-        input_df = input_df[:2]
-
-        annotation_df = pd.read_csv(annotation_file, sep="\t")
-        annotation_df = annotation_df[annotation_df.y == for_label]
-        annotation_df = annotation_df[:2]
+        input_df = input_df.iloc[idx]
+        annotation_df = annotation_df.iloc[idx]
 
         return (input_df["x"].tolist(), annotation_df["annotation"].tolist())
 
-    def find_sis(self, for_label, label_index, for_set, n=10, select_randomly=False):
-        examples = self.select_first_n_examples(for_label, for_set, n)
+    def select_first_n_examples(self, for_label, for_set, n):
+        input_df, annotation_df = self.__select_examples(for_label, for_set)
+        
+        if n > len(input_df.index):
+            logging.warn("n is larger than number of examples in set")
+            n = len(input_df.index)
+        
+        input_df = input_df.iloc[range(n)]
+        annotation_df = annotation_df.iloc[range(n)]
+
+        return (input_df["x"].tolist(), annotation_df["annotation"].tolist())
+
+    def find_sis(self, for_label, label_index, for_set, n=10,
+                 select_randomly=False,
+                 threshold=0.9):
+        if select_randomly:
+            examples = self.select_random_n_examples(for_label, for_set, n)
+        else:
+            examples = self.select_first_n_examples(for_label, for_set, n)
 
         decoded_examples = examples[0]
         annotations = examples[1]
@@ -69,7 +75,6 @@ class SISEvaluator(Evaluator):
         fully_masked_input = np.ones(input_shape) * 0.25
         initial_mask = make_empty_boolean_mask_broadcast_over_axis(
             input_shape, 1)
-        threshold = 0.9
 
         for i in range(len(encoded_examples)):
             encoded_example = encoded_examples[i]
@@ -93,3 +98,28 @@ class SISEvaluator(Evaluator):
             return data_file
         else:
             raise Exception("file does not exist: " + data_file)
+
+    def __select_examples(self, for_label, for_set):
+        if for_set == "training":
+            input_file = self.__get_valid_file(self.data_dir + "/training.txt")
+            annotation_file = self.__get_valid_file(
+                self.data_dir + "/training-annotation.txt")
+        elif for_set == "validation":
+            input_file = self.__get_valid_file(
+                self.data_dir + "/validation.txt")
+            annotation_file = self.__get_valid_file(
+                self.data_dir + "/validation-annotation.txt")
+        elif for_set == "test":
+            input_file = self.__get_valid_file(self.data_dir + "/test.txt")
+            annotation_file = self.__get_valid_file(
+                self.data_dir + "/test-annotation.txt")
+        else:
+            raise Exception("unsupported set: " + for_set)
+
+        input_df = pd.read_csv(input_file, sep="\t")
+        input_df = input_df[input_df.y == for_label]
+
+        annotation_df = pd.read_csv(annotation_file, sep="\t")
+        annotation_df = annotation_df[annotation_df.y == for_label]
+
+        return (input_df, annotation_df)
