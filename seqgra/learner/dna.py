@@ -70,7 +70,6 @@ from seqgra.parser.modelparser import ModelParser
 class DNAMultiClassClassificationLearner(MultiClassClassificationLearner):
     def __init__(self, parser: ModelParser, output_dir: str) -> None:
         super().__init__(parser, output_dir)
-        self.labels: List[str] = None
         self.x_train: List[str] = None
         self.y_train: List[str] = None
         self.x_val: List[str] = None
@@ -97,10 +96,10 @@ class DNAMultiClassClassificationLearner(MultiClassClassificationLearner):
                 densely_encoded_seq[i] = "T"
         return "".join(densely_encoded_seq)
 
-    def _encode_x(self, x: List[str]):
+    def encode_x(self, x: List[str]):
         return np.stack([self.__convert_dense_to_one_hot_encoding(seq) for seq in x])
 
-    def _decode_x(self, x):
+    def decode_x(self, x):
         return np.stack([self.__convert_one_hot_to_dense_encoding(seq) for seq in x])
     
     def __check_sequence(self, seqs: List[str]) -> None:
@@ -108,13 +107,13 @@ class DNAMultiClassClassificationLearner(MultiClassClassificationLearner):
             if not re.match("^[ACGT]*$", seq):
                 logging.warn("example with invalid sequence:" + seq)
         
-    def _encode_y(self, y: List[str]):
+    def encode_y(self, y: List[str]):
         if self.labels is None:
             raise Exception("unknown labels, call parse_data or load_model first")
         labels = np.array(self.labels)
         return np.vstack([np.array([label] * len(labels)) == labels for label in y])
         
-    def _decode_y(self, y):
+    def decode_y(self, y):
         pass
 
     def __discover_labels(self, training_set_y: List[str], validation_set_y: List[str]) -> List[str]:
@@ -133,15 +132,16 @@ class DNAMultiClassClassificationLearner(MultiClassClassificationLearner):
         x_val_plain: List[str] = validation_set_df["x"].tolist()
         y_val_plain: List[str] = validation_set_df["y"].tolist()
 
-        self.labels = self.__discover_labels(y_train_plain, y_val_plain)
+        # labels are now specified in model config XML
+        # self.labels = self.__discover_labels(y_train_plain, y_val_plain)
 
         self.__check_sequence(x_train_plain)
-        self.x_train = self._encode_x(x_train_plain)
-        self.y_train = self._encode_y(y_train_plain)
+        self.x_train = self.encode_x(x_train_plain)
+        self.y_train = self.encode_y(y_train_plain)
 
         self.__check_sequence(x_val_plain)
-        self.x_val = self._encode_x(x_val_plain)
-        self.y_val = self._encode_y(y_val_plain)
+        self.x_val = self.encode_x(x_val_plain)
+        self.y_val = self.encode_y(y_val_plain)
 
     def parse_test_data(self, test_set_file: str):
         if self.labels is None:
@@ -152,6 +152,6 @@ class DNAMultiClassClassificationLearner(MultiClassClassificationLearner):
         
         self.__check_sequence(x_test_plain)
         # TODO instead of using properties, return x and y, maybe tuple?
-        self.x_test = self._encode_x(x_test_plain)
-        self.y_test = self._encode_y(y_test_plain)
+        self.x_test = self.encode_x(x_test_plain)
+        self.y_test = self.encode_y(y_test_plain)
 

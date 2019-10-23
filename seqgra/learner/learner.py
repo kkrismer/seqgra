@@ -14,11 +14,8 @@ MIT - CSAIL - Gifford Lab - seqgra
 @author: Konstantin Krismer
 """
 import os
-import random
 from abc import ABC, abstractmethod
 from typing import List, Any, Dict
-
-import numpy as np
 
 from seqgra.parser.modelparser import ModelParser
 from seqgra.model.model.architecture import Architecture
@@ -33,7 +30,7 @@ class Learner(ABC):
         output_dir = output_dir.replace("\\", "/")
         if not output_dir.endswith("/"):
             output_dir += "/"
-        self.output_dir = output_dir
+        self.output_dir = output_dir + self.id + "/"
         self.__prepare_output_dir()
 
     def __str__(self):
@@ -67,18 +64,15 @@ class Learner(ABC):
         self.label: str = self._parser.get_label()
         self.description: str = self._parser.get_description()
         self.library: str = self._parser.get_library()
+        self.seed: int = self._parser.get_seed()
         self.learner_type: str = self._parser.get_learner_type()
         self.learner_implementation: str = self._parser.get_learner_implementation()
-        self.seed: int = self._parser.get_seed()
+        self.labels: List[str] = self._parser.get_labels()
         self.metrics: List[Metric] = self._parser.get_metrics()
         self.architecture: Architecture = self._parser.get_architecture()
         self.loss_hyperparameters: Dict[str, str] = self._parser.get_loss_hyperparameters()
         self.optimizer_hyperparameters: Dict[str, str] = self._parser.get_optimizer_hyperparameters()
         self.training_process_hyperparameters: Dict[str, str] = self._parser.get_training_process_hyperparameters()
-
-    def __set_seed(self) -> None:
-        random.seed(self.seed)
-        np.random.seed(self.seed)
 
     @abstractmethod
     def parse_data(self, training_file: str, validation_file: str) -> None:
@@ -89,11 +83,15 @@ class Learner(ABC):
         pass
 
     def train_model(self) -> None:
-        self.__set_seed()
-        self.__train_model()
+        self._set_seed()
+        self._train_model()
         
     @abstractmethod
-    def __train_model(self) -> None:
+    def _set_seed(self) -> None:
+        pass
+
+    @abstractmethod
+    def _train_model(self) -> None:
         pass
 
     @abstractmethod

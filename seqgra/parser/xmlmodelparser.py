@@ -35,7 +35,7 @@ class XMLModelParser(ModelParser):
         self.validate(config)
 
     def validate(self, xml_config: str) -> None:
-        xsd_path = pkg_resources.resource_filename("seqgradata", "model-config.xsd")
+        xsd_path = pkg_resources.resource_filename("seqgra", "model-config.xsd")
         xmlschema_doc = etree.parse(xsd_path)
         xmlschema = etree.XMLSchema(xmlschema_doc)
         xml_doc = etree.parse(io.BytesIO(xml_config.encode()))
@@ -54,6 +54,9 @@ class XMLModelParser(ModelParser):
     def get_library(self) -> str:
         return XMLHelper.read_text_node(self._general_element, "library")
     
+    def get_seed(self) -> str:
+        return XMLHelper.read_int_node(self._general_element, "seed")
+    
     def get_learner_type(self) -> str:
         learner_element: Any = self._general_element.getElementsByTagName("learner")[0]
         return XMLHelper.read_text_node(learner_element, "type")
@@ -62,8 +65,10 @@ class XMLModelParser(ModelParser):
         learner_element: Any = self._general_element.getElementsByTagName("learner")[0]
         return XMLHelper.read_text_node(learner_element, "implementation")
     
-    def get_seed(self) -> str:
-        return XMLHelper.read_int_node(self._general_element, "seed")
+    def get_labels(self) -> List[str]:
+        labels_element: Any = self._general_element.getElementsByTagName("labels")[0]
+        label_elements = labels_element.getElementsByTagName("label")
+        return [XMLHelper.read_immediate_text_node(label_element) for label_element in label_elements]
 
     def get_metrics(self) -> List[Metric]:
         metrics_element: Any = self._dom.getElementsByTagName("metrics")[0]
@@ -77,14 +82,14 @@ class XMLModelParser(ModelParser):
     def get_architecture(self) -> Architecture:
         sequential_element = self._dom.getElementsByTagName("sequential")
         if len(sequential_element) > 0:
-            operation_elements: Any = sequential_element.getElementsByTagName("operation")
+            operation_elements: Any = sequential_element[0].getElementsByTagName("operation")
             operations = [self.__parse_operation(operation_element) for operation_element in operation_elements]
         else:
             operations = None
 
         hyperparameters_element = self._dom.getElementsByTagName("hyperparameters")
         if len(hyperparameters_element) > 0:
-            hyperparameter_elements: Any = hyperparameters_element.getElementsByTagName("hyperparameter")
+            hyperparameter_elements: Any = hyperparameters_element[0].getElementsByTagName("hyperparameter")
             hyperparameters = self.__parse_hyperparameters(hyperparameter_elements)
         else:
             hyperparameters = None

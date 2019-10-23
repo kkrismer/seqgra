@@ -5,9 +5,12 @@ Abstract base class for learners
 @author: Konstantin Krismer
 """
 from typing import List, Any
-import tensorflow as tf
 import os
 from ast import literal_eval
+import random
+
+import numpy as np
+import tensorflow as tf
 
 from seqgra.learner.dna import DNAMultiClassClassificationLearner
 from seqgra.parser.modelparser import ModelParser
@@ -35,6 +38,92 @@ class TensorFlowKerasSequentialLearner(DNAMultiClassClassificationLearner):
             metrics=self.__get_metrics("training")
         )
 
+    def print_model_summary(self):
+        self.model.summary()
+
+    def _set_seed(self) -> None:
+        random.seed(self.seed)
+        np.random.seed(self.seed)
+        tf.random.set_seed(self.seed)
+
+    def _train_model(self) -> None:
+        if self.x_train is None or self.y_train is None or self.x_val is None or self.y_val is None:
+            raise Exception(
+                "training and / or validation data has not been loaded")
+
+        if self.model is None:
+            self.create_model()
+
+        # checkpoint callback
+        checkpoint_path = self.output_dir + "training/cp.ckpt"
+        cp_callback = tf.keras.callbacks.ModelCheckpoint(
+            filepath=checkpoint_path,
+            save_weights_only=True,
+            verbose=0
+        )
+
+        # TensorBoard callback
+        log_dir = self.output_dir + "logs/run"
+        os.makedirs(log_dir)
+        log_dir = log_dir.replace("/", "\\")
+        tensorboard_callback = tf.keras.callbacks.TensorBoard(
+            log_dir=log_dir,
+            histogram_freq=0,
+            write_graph=True,
+            write_images=True
+        )
+
+        # early stopping callback
+        es_callback = tf.keras.callbacks.EarlyStopping(monitor="val_loss",
+                                                       mode="min", verbose=1, patience=2, min_delta=1)
+
+        if bool(self.training_process_hyperparameters["early_stopping"]):
+            callbacks = [cp_callback, tensorboard_callback, es_callback]
+        else:
+            callbacks = [cp_callback, tensorboard_callback]
+
+        self.model.fit(
+            self.x_train,
+            self.y_train,
+            batch_size=int(
+                self.training_process_hyperparameters["batch_size"]),
+            epochs=int(self.training_process_hyperparameters["epochs"]),
+            verbose=1,
+            callbacks=callbacks,
+            validation_data=(self.x_val, self.y_val),
+            shuffle=bool(self.training_process_hyperparameters["shuffle"])
+        )
+
+    def save_model(self, model_name: str = "") -> None:
+        #self.model.save_weights(self.output_dir + model_name)
+        if model_name != "":
+            os.makedirs(self.output_dir + model_name)
+        self.model.save(self.output_dir + model_name, save_format='tf')
+
+    def load_model(self, model_name: str = "") -> None:
+        self.model = tf.keras.models.load_model(self.output_dir + model_name)
+        # self.create_model()
+        # latest_checkpoint = tf.train.latest_checkpoint(
+        #     self.output_dir + model_name)
+        # print(self.output_dir + model_name)
+        # print(latest_checkpoint)
+        # self.model.load_weights(latest_checkpoint)
+
+    def evaluate_model(self, x: List[str], y: List[str]):
+        val_loss, val_acc = self.model.evaluate(
+            self.x_val,  self.y_val, verbose=2)
+        print(val_loss)
+        print(val_acc)
+
+    def predict(self, x: Any, encode: bool = True):
+        """ This is the forward calculation from x to y
+        Returns:
+            softmax_linear: Output tensor with the computed logits.
+        """
+        if encode:
+            x = self.encode_x(x)
+        return self.model.predict(x)
+
     def __get_keras_layer(self, operation):
         if "input_shape" in operation.parameters:
             input_shape = literal_eval(
@@ -44,7 +133,10 @@ class TensorFlowKerasSequentialLearner(DNAMultiClassClassificationLearner):
 
         name = operation.name.strip().lower()
         if name == "flatten":
-            return(tf.keras.layers.Flatten(input_shape=input_shape))
+            if input_shape is None:
+                return(tf.keras.layers.Flatten())
+            else:
+                return(tf.keras.layers.Flatten(input_shape=input_shape))
         elif name == "dense":
             units = int(operation.parameters["units"].strip())
 
@@ -88,29 +180,25 @@ class TensorFlowKerasSequentialLearner(DNAMultiClassClassificationLearner):
             else:
                 activity_regularizer = None
 
-            if "kernel_constraint" in operation.parameters:
-                kernel_constraint = eval(operation.parameters["kernel_constraint"].strip(
-                ))
+            if input_shape is None:
+                return(tf.keras.layers.Dense(units,
+                                             activation=activation,
+                                             use_bias=use_bias,
+                                             kernel_initializer=kernel_initializer,
+                                             bias_initializer=bias_initializer,
+                                             kernel_regularizer=kernel_regularizer,
+                                             bias_regularizer=bias_regularizer,
+                                             activity_regularizer=activity_regularizer))
             else:
-                kernel_constraint = None
-
-            if "bias_constraint" in operation.parameters:
-                bias_constraint = eval(operation.parameters["bias_constraint"].strip(
-                ))
-            else:
-                bias_constraint = None
-
-            return(tf.keras.layers.Dense(units,
-                                         activation=activation,
-                                         use_bias=use_bias,
-                                         kernel_initializer=kernel_initializer,
-                                         bias_initializer=bias_initializer,
-                                         kernel_regularizer=kernel_regularizer,
-                                         bias_regularizer=bias_regularizer,
-                                         activity_regularizer=activity_regularizer,
-                                         kernel_constraint=kernel_constraint,
-                                         bias_constraint=bias_constraint,
-                                         input_shape=input_shape))
+                return(tf.keras.layers.Dense(units,
+                                             activation=activation,
+                                             use_bias=use_bias,
+                                             kernel_initializer=kernel_initializer,
+                                             bias_initializer=bias_initializer,
+                                             kernel_regularizer=kernel_regularizer,
+                                             bias_regularizer=bias_regularizer,
+                                             activity_regularizer=activity_regularizer,
+                                             input_shape=input_shape))
         elif name == "conv2d":
             filters = int(operation.parameters["filters"].strip())
             kernel_size = operation.parameters["kernel_size"].strip()
@@ -175,34 +263,35 @@ class TensorFlowKerasSequentialLearner(DNAMultiClassClassificationLearner):
             else:
                 activity_regularizer = None
 
-            if "kernel_constraint" in operation.parameters:
-                kernel_constraint = eval(operation.parameters["kernel_constraint"].strip(
-                ))
+            if input_shape is None:
+                return(tf.keras.layers.Conv2D(filters,
+                                              kernel_size,
+                                              strides=strides,
+                                              padding=padding,
+                                              data_format=data_format,
+                                              dilation_rate=dilation_rate,
+                                              activation=activation,
+                                              use_bias=use_bias,
+                                              kernel_initializer=kernel_initializer,
+                                              bias_initializer=bias_initializer,
+                                              kernel_regularizer=kernel_regularizer,
+                                              bias_regularizer=bias_regularizer,
+                                              activity_regularizer=activity_regularizer))
             else:
-                kernel_constraint = None
-
-            if "bias_constraint" in operation.parameters:
-                bias_constraint = eval(operation.parameters["bias_constraint"].strip(
-                ))
-            else:
-                bias_constraint = None
-
-            return(tf.keras.layers.Conv2D(filters,
-                                          kernel_size,
-                                          strides=strides,
-                                          padding=padding,
-                                          data_format=data_format,
-                                          dilation_rate=dilation_rate,
-                                          activation=activation,
-                                          use_bias=use_bias,
-                                          kernel_initializer=kernel_initializer,
-                                          bias_initializer=bias_initializer,
-                                          kernel_regularizer=kernel_regularizer,
-                                          bias_regularizer=bias_regularizer,
-                                          activity_regularizer=activity_regularizer,
-                                          kernel_constraint=kernel_constraint,
-                                          bias_constraint=bias_constraint,
-                                          input_shape=input_shape))
+                return(tf.keras.layers.Conv2D(filters,
+                                              kernel_size,
+                                              strides=strides,
+                                              padding=padding,
+                                              data_format=data_format,
+                                              dilation_rate=dilation_rate,
+                                              activation=activation,
+                                              use_bias=use_bias,
+                                              kernel_initializer=kernel_initializer,
+                                              bias_initializer=bias_initializer,
+                                              kernel_regularizer=kernel_regularizer,
+                                              bias_regularizer=bias_regularizer,
+                                              activity_regularizer=activity_regularizer,
+                                              input_shape=input_shape))
 
     def __get_optimizer(self):
         if "optimizer" in self.optimizer_hyperparameters:
@@ -443,32 +532,32 @@ class TensorFlowKerasSequentialLearner(DNAMultiClassClassificationLearner):
 
     def __get_loss(self):
         if "loss" in self.loss_hyperparameters:
-            loss = self.optimizer_hyperparameters["loss"].lower().replace(
+            loss = self.loss_hyperparameters["loss"].lower().replace(
                 "_", "").strip()
             if loss == "binarycrossentropy":
-                if "from_logits" in self.optimizer_hyperparameters:
+                if "from_logits" in self.loss_hyperparameters:
                     from_logits = bool(
-                        self.optimizer_hyperparameters["from_logits"].strip())
+                        self.loss_hyperparameters["from_logits"].strip())
                 else:
                     from_logits = False
 
-                if "label_smoothing" in self.optimizer_hyperparameters:
+                if "label_smoothing" in self.loss_hyperparameters:
                     label_smoothing = float(
-                        self.optimizer_hyperparameters["label_smoothing"].strip())
+                        self.loss_hyperparameters["label_smoothing"].strip())
                 else:
                     label_smoothing = 0.0
                 return tf.keras.losses.BinaryCrossentropy(from_logits=from_logits,
                                                           label_smoothing=label_smoothing)
             elif loss == "categoricalcrossentropy":
-                if "from_logits" in self.optimizer_hyperparameters:
+                if "from_logits" in self.loss_hyperparameters:
                     from_logits = bool(
-                        self.optimizer_hyperparameters["from_logits"].strip())
+                        self.loss_hyperparameters["from_logits"].strip())
                 else:
                     from_logits = False
 
-                if "label_smoothing" in self.optimizer_hyperparameters:
+                if "label_smoothing" in self.loss_hyperparameters:
                     label_smoothing = float(
-                        self.optimizer_hyperparameters["label_smoothing"].strip())
+                        self.loss_hyperparameters["label_smoothing"].strip())
                 else:
                     label_smoothing = 0.0
                 return tf.keras.losses.CategoricalCrossentropy(from_logits=from_logits,
@@ -476,17 +565,17 @@ class TensorFlowKerasSequentialLearner(DNAMultiClassClassificationLearner):
             elif loss == "categoricalhinge":
                 return tf.keras.losses.CategoricalHinge()
             elif loss == "cosinesimilarity":
-                if "axis" in self.optimizer_hyperparameters:
-                    axis = int(self.optimizer_hyperparameters["axis"].strip())
+                if "axis" in self.loss_hyperparameters:
+                    axis = int(self.loss_hyperparameters["axis"].strip())
                 else:
                     axis = -1
                 return tf.keras.losses.CosineSimilarity(axis=axis)
             elif loss == "hinge":
                 return tf.keras.losses.Hinge()
             elif loss == "huber":
-                if "delta" in self.optimizer_hyperparameters:
+                if "delta" in self.loss_hyperparameters:
                     delta = float(
-                        self.optimizer_hyperparameters["delta"].strip())
+                        self.loss_hyperparameters["delta"].strip())
                 else:
                     delta = 1.0
                 return tf.keras.losses.Huber(delta=delta)
@@ -505,9 +594,9 @@ class TensorFlowKerasSequentialLearner(DNAMultiClassClassificationLearner):
             elif loss == "poisson":
                 return tf.keras.losses.Poisson()
             elif loss == "sparsecategoricalcrossentropy":
-                if "from_logits" in self.optimizer_hyperparameters:
+                if "from_logits" in self.loss_hyperparameters:
                     from_logits = bool(
-                        self.optimizer_hyperparameters["from_logits"].strip())
+                        self.loss_hyperparameters["from_logits"].strip())
                 else:
                     from_logits = False
                 return tf.keras.losses.SparseCategoricalCrossentropy(from_logits=from_logits)
@@ -520,83 +609,3 @@ class TensorFlowKerasSequentialLearner(DNAMultiClassClassificationLearner):
 
     def __get_metrics(self, set_name):
         return [metric.name for metric in self.metrics if metric.set_name == set_name]
-
-    def print_model_summary(self):
-        self.model.summary()
-
-    def __train_model(self):
-        if self.x_train is None or self.y_train is None or self.x_val is None or self.y_val is None:
-            raise Exception(
-                "training and / or validation data has not been loaded")
-
-        if self.model is None:
-            self.create_model()
-
-        # checkpoint callback
-        checkpoint_path = self.output_dir + "training/cp.ckpt"
-        cp_callback = tf.keras.callbacks.ModelCheckpoint(
-            filepath=checkpoint_path,
-            save_weights_only=True,
-            verbose=0
-        )
-
-        # TensorBoard callback
-        log_dir = self.output_dir + "logs/run"
-        os.makedirs(log_dir)
-        log_dir = log_dir.replace("/", "\\")
-        tensorboard_callback = tf.keras.callbacks.TensorBoard(
-            log_dir=log_dir,
-            histogram_freq=0,
-            write_graph=True,
-            write_images=True
-        )
-
-        # early stopping callback
-        es_callback = tf.keras.callbacks.EarlyStopping(monitor="val_loss",
-                                                       mode="min", verbose=1, patience=2, min_delta=1)
-
-        if bool(self.training_process_hyperparameters["early_stopping"]):
-            callbacks = [cp_callback, tensorboard_callback, es_callback]
-        else:
-            callbacks = [cp_callback, tensorboard_callback]
-
-        self.model.fit(
-            self.x_train,
-            self.y_train,
-            batch_size=int(
-                self.training_process_hyperparameters["batch_size"]),
-            epochs=int(self.training_process_hyperparameters["epochs"]),
-            verbose=1,
-            callbacks=callbacks,
-            validation_data=(self.x_val, self.y_val),
-            shuffle=bool(self.training_process_hyperparameters["shuffle"])
-        )
-
-    def save_model(self, model_name: str = "final") -> None:
-        self.model.save_weights(self.output_dir + model_name)
-
-    def load_model(self, model_name: str = "final") -> None:
-        latest_checkpoint = tf.train.latest_checkpoint(
-            self.output_dir + model_name)
-
-        self.__load_hyperparameters()
-        self.create_model()
-        self.model.load_weights(latest_checkpoint)
-
-    def __load_hyperparameters(self):
-        pass
-
-    def evaluate_model(self, x: List[str], y: List[str]):
-        val_loss, val_acc = self.model.evaluate(
-            self.x_val,  self.y_val, verbose=2)
-        print(val_loss)
-        print(val_acc)
-
-    def predict(self, x: Any, encode: bool = True):
-        """ This is the forward calculation from x to y
-        Returns:
-            softmax_linear: Output tensor with the computed logits.
-        """
-        if encode:
-            x = self._encode_x(x)
-        return self.model.predict(x)

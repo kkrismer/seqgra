@@ -15,6 +15,13 @@ class XMLHelper():
             return ""
         else:
             return node[0].firstChild.nodeValue
+
+    @staticmethod
+    def read_immediate_text_node(node) -> str:
+        if node.firstChild is None:
+            return ""
+        else:
+            return node.firstChild.nodeValue
     
     @staticmethod
     def read_int_node(parent_node, node_name) -> int:

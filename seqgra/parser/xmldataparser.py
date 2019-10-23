@@ -39,7 +39,7 @@ class XMLDataParser(DataParser):
         self.validate(config)
 
     def validate(self, xml_config: str) -> None:
-        xsd_path = pkg_resources.resource_filename("seqgradata", "data-config.xsd")
+        xsd_path = pkg_resources.resource_filename("seqgra", "data-config.xsd")
         xmlschema_doc = etree.parse(xsd_path)
         xmlschema = etree.XMLSchema(xmlschema_doc)
         xml_doc = etree.parse(io.BytesIO(xml_config.encode()))
