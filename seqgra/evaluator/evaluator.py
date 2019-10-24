@@ -28,11 +28,7 @@ class Evaluator(ABC):
 
     def __prepare_output_dir(self) -> None:
         if os.path.exists(self.output_dir):
-            if os.path.isdir(self.output_dir):
-                if len(os.listdir(self.output_dir)) > 0:
-                    pass
-                    # raise Exception("output directory non-empty")
-            else:
+            if not os.path.isdir(self.output_dir):
                 raise Exception("output directory cannot be created (file with same name exists)")
         else:    
             os.makedirs(self.output_dir)

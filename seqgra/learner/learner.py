@@ -27,7 +27,7 @@ class Learner(ABC):
     def __init__(self, parser: ModelParser, output_dir: str) -> None:
         self._parser: ModelParser = parser
         self.__parse_config()
-        output_dir = output_dir.replace("\\", "/")
+        output_dir = output_dir.strip().replace("\\", "/")
         if not output_dir.endswith("/"):
             output_dir += "/"
         self.output_dir = output_dir + self.id + "/"
@@ -59,6 +59,45 @@ class Learner(ABC):
 
         return "".join(str_rep)
 
+    def train_model(self) -> None:
+        if len(os.listdir(self.output_dir)) > 0:
+            raise Exception("output directory non-empty")
+        
+        self._set_seed()
+        self._train_model()
+
+    @abstractmethod
+    def parse_data(self, training_file: str, validation_file: str) -> None:
+        pass
+
+    @abstractmethod
+    def create_model(self) -> None:
+        pass
+
+    @abstractmethod
+    def save_model(self, model_name: str = "final"):
+        pass
+
+    @abstractmethod
+    def load_model(self, model_name: str = "final"):
+        pass
+
+    @abstractmethod
+    def print_model_summary(self) -> None:
+        pass
+
+    @abstractmethod
+    def predict(self, x: Any, encode: bool = True):
+        pass
+        
+    @abstractmethod
+    def _set_seed(self) -> None:
+        pass
+
+    @abstractmethod
+    def _train_model(self) -> None:
+        pass
+
     def __parse_config(self):
         self.id: str = self._parser.get_id()
         self.label: str = self._parser.get_label()
@@ -74,52 +113,12 @@ class Learner(ABC):
         self.optimizer_hyperparameters: Dict[str, str] = self._parser.get_optimizer_hyperparameters()
         self.training_process_hyperparameters: Dict[str, str] = self._parser.get_training_process_hyperparameters()
 
-    @abstractmethod
-    def parse_data(self, training_file: str, validation_file: str) -> None:
-        pass
-
-    @abstractmethod
-    def create_model(self) -> None:
-        pass
-
-    def train_model(self) -> None:
-        self._set_seed()
-        self._train_model()
-        
-    @abstractmethod
-    def _set_seed(self) -> None:
-        pass
-
-    @abstractmethod
-    def _train_model(self) -> None:
-        pass
-
-    @abstractmethod
-    def save_model(self, model_name: str = "final"):
-        pass
-
-    @abstractmethod
-    def load_model(self, model_name: str = "final"):
-        pass
-
-    @abstractmethod
-    def print_model_summary(self) -> None:
-        pass
-
     def __prepare_output_dir(self) -> None:
         if os.path.exists(self.output_dir):
-            if os.path.isdir(self.output_dir):
-                if len(os.listdir(self.output_dir)) > 0:
-                    pass
-                    # raise Exception("output directory non-empty")
-            else:
+            if not os.path.isdir(self.output_dir):
                 raise Exception("output directory cannot be created (file with same name exists)")
         else:    
             os.makedirs(self.output_dir)
-
-    @abstractmethod
-    def predict(self, x: Any, encode: bool = True):
-        pass
 
 class MultiClassClassificationLearner(Learner):
     @abstractmethod

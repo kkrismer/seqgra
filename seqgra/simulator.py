@@ -27,7 +27,11 @@ class Simulator:
         self._parser: DataParser = parser
         self.__parse_config()
         self.check_grammar()
-        self.output_dir = output_dir.strip()
+        output_dir = output_dir.strip().replace("\\", "/")
+        if not output_dir.endswith("/"):
+            output_dir += "/"
+        self.output_dir = output_dir + self.id + "/"
+        self.__prepare_output_dir()
 
     def __str__(self):
         str_rep = ["seqgra data configuration:\n",
@@ -63,8 +67,10 @@ class Simulator:
     def simulate_data(self) -> None:
         logging.info("started data simulation")
         
+        if len(os.listdir(self.output_dir)) > 0:
+            raise Exception("output directory non-empty")
+
         self.__set_seed()
-        self.__prepare_output_dir()
 
         for example_set in self.data_generation.sets:
             self.__process_set(example_set)
@@ -99,10 +105,7 @@ class Simulator:
 
     def __prepare_output_dir(self) -> None:
         if os.path.exists(self.output_dir):
-            if os.path.isdir(self.output_dir):
-                if len(os.listdir(self.output_dir)) > 0:
-                    raise Exception("output directory non-empty")
-            else:
+            if not os.path.isdir(self.output_dir):
                 raise Exception("output directory cannot be created (file with same name exists)")
         else:    
             os.makedirs(self.output_dir)
