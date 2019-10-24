@@ -44,7 +44,7 @@ class XMLDataParser(DataParser):
         xmlschema = etree.XMLSchema(xmlschema_doc)
         xml_doc = etree.parse(io.BytesIO(xml_config.encode()))
         xmlschema.assertValid(xml_doc)
-        logging.info("XML configuration file is well-formed and valid")
+        logging.info("seqgra data configuration XML file is well-formed and valid")
 
     def get_id(self) -> str:
         return self._general_element.getAttribute("id")
