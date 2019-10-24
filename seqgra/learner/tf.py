@@ -22,12 +22,6 @@ class TensorFlowKerasSequentialLearner(DNAMultiClassClassificationLearner):
         self.model = None
 
     def create_model(self) -> None:
-        # self.model = tf.keras.Sequential([
-        #     tf.keras.layers.Flatten(input_shape=(150, 4)),
-        #     tf.keras.layers.Dense(2, activation="relu"),
-        #     tf.keras.layers.Dense(2, activation="softmax")
-        # ])
-
         self.model = tf.keras.Sequential(
             [self.__get_keras_layer(operation) for operation in self.architecture.operations])
 
@@ -35,7 +29,7 @@ class TensorFlowKerasSequentialLearner(DNAMultiClassClassificationLearner):
             optimizer=self.__get_optimizer(),
             # use categorical_crossentropy for multi-class and binary_crossentropy for multi-label
             loss=self.__get_loss(),
-            metrics=self.__get_metrics("training")
+            metrics=self.metrics
         )
 
     def print_model_summary(self):
@@ -46,10 +40,14 @@ class TensorFlowKerasSequentialLearner(DNAMultiClassClassificationLearner):
         np.random.seed(self.seed)
         tf.random.set_seed(self.seed)
 
-    def _train_model(self) -> None:
-        if self.x_train is None or self.y_train is None or self.x_val is None or self.y_val is None:
-            raise Exception(
-                "training and / or validation data has not been loaded")
+    def _train_model(self,
+                     x_train: List[str], y_train: List[str],
+                     x_val: List[str], y_val: List[str]) -> None:
+        # one hot encode input and labels
+        encoded_x_train = self.encode_x(x_train)
+        encoded_y_train = self.encode_y(y_train)
+        encoded_x_val = self.encode_x(x_val)
+        encoded_y_val = self.encode_y(y_val)
 
         if self.model is None:
             self.create_model()
@@ -75,22 +73,26 @@ class TensorFlowKerasSequentialLearner(DNAMultiClassClassificationLearner):
 
         # early stopping callback
         es_callback = tf.keras.callbacks.EarlyStopping(monitor="val_loss",
-                                                       mode="min", verbose=1, patience=2, min_delta=1)
+                                                       mode="min",
+                                                       verbose=1,
+                                                       patience=2,
+                                                       min_delta=1)
 
         if bool(self.training_process_hyperparameters["early_stopping"]):
             callbacks = [cp_callback, tensorboard_callback, es_callback]
         else:
             callbacks = [cp_callback, tensorboard_callback]
 
+        # training loop
         self.model.fit(
-            self.x_train,
-            self.y_train,
+            encoded_x_train,
+            encoded_y_train,
             batch_size=int(
                 self.training_process_hyperparameters["batch_size"]),
             epochs=int(self.training_process_hyperparameters["epochs"]),
             verbose=1,
             callbacks=callbacks,
-            validation_data=(self.x_val, self.y_val),
+            validation_data=(encoded_x_val, encoded_y_val),
             shuffle=bool(self.training_process_hyperparameters["shuffle"])
         )
 
@@ -102,18 +104,6 @@ class TensorFlowKerasSequentialLearner(DNAMultiClassClassificationLearner):
 
     def load_model(self, model_name: str = "") -> None:
         self.model = tf.keras.models.load_model(self.output_dir + model_name)
-        # self.create_model()
-        # latest_checkpoint = tf.train.latest_checkpoint(
-        #     self.output_dir + model_name)
-        # print(self.output_dir + model_name)
-        # print(latest_checkpoint)
-        # self.model.load_weights(latest_checkpoint)
-
-    def evaluate_model(self, x: List[str], y: List[str]):
-        val_loss, val_acc = self.model.evaluate(
-            self.x_val,  self.y_val, verbose=2)
-        print(val_loss)
-        print(val_acc)
 
     def predict(self, x: Any, encode: bool = True):
         """ This is the forward calculation from x to y
@@ -123,6 +113,12 @@ class TensorFlowKerasSequentialLearner(DNAMultiClassClassificationLearner):
         if encode:
             x = self.encode_x(x)
         return self.model.predict(x)
+
+    def _evaluate_model(self, x: List[str], y: List[str]):
+        # one hot encode input and labels
+        encoded_x = self.encode_x(x)
+        encoded_y = self.encode_y(y)
+        return self.model.evaluate(encoded_x,  encoded_y, verbose=0)
 
     def __get_keras_layer(self, operation):
         if "input_shape" in operation.parameters:
@@ -181,24 +177,28 @@ class TensorFlowKerasSequentialLearner(DNAMultiClassClassificationLearner):
                 activity_regularizer = None
 
             if input_shape is None:
-                return(tf.keras.layers.Dense(units,
-                                             activation=activation,
-                                             use_bias=use_bias,
-                                             kernel_initializer=kernel_initializer,
-                                             bias_initializer=bias_initializer,
-                                             kernel_regularizer=kernel_regularizer,
-                                             bias_regularizer=bias_regularizer,
-                                             activity_regularizer=activity_regularizer))
+                return(tf.keras.layers.Dense(
+                    units,
+                    activation=activation,
+                    use_bias=use_bias,
+                    kernel_initializer=kernel_initializer,
+                    bias_initializer=bias_initializer,
+                    kernel_regularizer=kernel_regularizer,
+                    bias_regularizer=bias_regularizer,
+                    activity_regularizer=activity_regularizer
+                ))
             else:
-                return(tf.keras.layers.Dense(units,
-                                             activation=activation,
-                                             use_bias=use_bias,
-                                             kernel_initializer=kernel_initializer,
-                                             bias_initializer=bias_initializer,
-                                             kernel_regularizer=kernel_regularizer,
-                                             bias_regularizer=bias_regularizer,
-                                             activity_regularizer=activity_regularizer,
-                                             input_shape=input_shape))
+                return(tf.keras.layers.Dense(
+                    units,
+                    activation=activation,
+                    use_bias=use_bias,
+                    kernel_initializer=kernel_initializer,
+                    bias_initializer=bias_initializer,
+                    kernel_regularizer=kernel_regularizer,
+                    bias_regularizer=bias_regularizer,
+                    activity_regularizer=activity_regularizer,
+                    input_shape=input_shape
+                ))
         elif name == "conv2d":
             filters = int(operation.parameters["filters"].strip())
             kernel_size = operation.parameters["kernel_size"].strip()
@@ -264,34 +264,38 @@ class TensorFlowKerasSequentialLearner(DNAMultiClassClassificationLearner):
                 activity_regularizer = None
 
             if input_shape is None:
-                return(tf.keras.layers.Conv2D(filters,
-                                              kernel_size,
-                                              strides=strides,
-                                              padding=padding,
-                                              data_format=data_format,
-                                              dilation_rate=dilation_rate,
-                                              activation=activation,
-                                              use_bias=use_bias,
-                                              kernel_initializer=kernel_initializer,
-                                              bias_initializer=bias_initializer,
-                                              kernel_regularizer=kernel_regularizer,
-                                              bias_regularizer=bias_regularizer,
-                                              activity_regularizer=activity_regularizer))
+                return(tf.keras.layers.Conv2D(
+                    filters,
+                    kernel_size,
+                    strides=strides,
+                    padding=padding,
+                    data_format=data_format,
+                    dilation_rate=dilation_rate,
+                    activation=activation,
+                    use_bias=use_bias,
+                    kernel_initializer=kernel_initializer,
+                    bias_initializer=bias_initializer,
+                    kernel_regularizer=kernel_regularizer,
+                    bias_regularizer=bias_regularizer,
+                    activity_regularizer=activity_regularizer
+                ))
             else:
-                return(tf.keras.layers.Conv2D(filters,
-                                              kernel_size,
-                                              strides=strides,
-                                              padding=padding,
-                                              data_format=data_format,
-                                              dilation_rate=dilation_rate,
-                                              activation=activation,
-                                              use_bias=use_bias,
-                                              kernel_initializer=kernel_initializer,
-                                              bias_initializer=bias_initializer,
-                                              kernel_regularizer=kernel_regularizer,
-                                              bias_regularizer=bias_regularizer,
-                                              activity_regularizer=activity_regularizer,
-                                              input_shape=input_shape))
+                return(tf.keras.layers.Conv2D(
+                    filters,
+                    kernel_size,
+                    strides=strides,
+                    padding=padding,
+                    data_format=data_format,
+                    dilation_rate=dilation_rate,
+                    activation=activation,
+                    use_bias=use_bias,
+                    kernel_initializer=kernel_initializer,
+                    bias_initializer=bias_initializer,
+                    kernel_regularizer=kernel_regularizer,
+                    bias_regularizer=bias_regularizer,
+                    activity_regularizer=activity_regularizer,
+                    input_shape=input_shape
+                ))
 
     def __get_optimizer(self):
         if "optimizer" in self.optimizer_hyperparameters:
@@ -606,6 +610,3 @@ class TensorFlowKerasSequentialLearner(DNAMultiClassClassificationLearner):
                 raise Exception("unknown loss specified: " + loss)
         else:
             raise Exception("no loss specified")
-
-    def __get_metrics(self, set_name):
-        return [metric.name for metric in self.metrics if metric.set_name == set_name]

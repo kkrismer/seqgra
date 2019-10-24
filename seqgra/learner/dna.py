@@ -70,10 +70,6 @@ from seqgra.parser.modelparser import ModelParser
 class DNAMultiClassClassificationLearner(MultiClassClassificationLearner):
     def __init__(self, parser: ModelParser, output_dir: str) -> None:
         super().__init__(parser, output_dir)
-        self.x_train: List[str] = None
-        self.y_train: List[str] = None
-        self.x_val: List[str] = None
-        self.y_val: List[str] = None
 
     def __convert_dense_to_one_hot_encoding(self, seq: str):
         seq = seq.replace("A", "0").replace("C", "1").replace("G", "2").replace("T", "3")
@@ -116,42 +112,10 @@ class DNAMultiClassClassificationLearner(MultiClassClassificationLearner):
     def decode_y(self, y):
         pass
 
-    def __discover_labels(self, training_set_y: List[str], validation_set_y: List[str]) -> List[str]:
-        label_set: Set[str] = set(training_set_y)
-        label_set.update(validation_set_y)
-        labels: List[str] = list(label_set)
-        labels.sort()
-        return labels
+    def parse_data(self, file_name: str) -> None:
+        df = pd.read_csv(file_name, sep="\t")
+        x: List[str] = df["x"].tolist()
+        y: List[str] = df["y"].tolist()
 
-    def parse_data(self, training_set_file: str, validation_set_file: str) -> None:
-        training_set_df = pd.read_csv(training_set_file, sep="\t")
-        x_train_plain: List[str] = training_set_df["x"].tolist()
-        y_train_plain: List[str] = training_set_df["y"].tolist()
-
-        validation_set_df = pd.read_csv(validation_set_file, sep="\t")
-        x_val_plain: List[str] = validation_set_df["x"].tolist()
-        y_val_plain: List[str] = validation_set_df["y"].tolist()
-
-        # labels are now specified in model config XML
-        # self.labels = self.__discover_labels(y_train_plain, y_val_plain)
-
-        self.__check_sequence(x_train_plain)
-        self.x_train = self.encode_x(x_train_plain)
-        self.y_train = self.encode_y(y_train_plain)
-
-        self.__check_sequence(x_val_plain)
-        self.x_val = self.encode_x(x_val_plain)
-        self.y_val = self.encode_y(y_val_plain)
-
-    def parse_test_data(self, test_set_file: str):
-        if self.labels is None:
-            raise Exception("unknown labels, call parse_data or load_model first")
-        test_set_df = pd.read_csv(test_set_file, sep="\t")
-        x_test_plain: List[str] = test_set_df["x"].tolist()
-        y_test_plain: List[str] = test_set_df["y"].tolist()
-        
-        self.__check_sequence(x_test_plain)
-        # TODO instead of using properties, return x and y, maybe tuple?
-        self.x_test = self.encode_x(x_test_plain)
-        self.y_test = self.encode_y(y_test_plain)
-
+        self.__check_sequence(x)
+        return (x, y)
