@@ -27,6 +27,25 @@ class SISEvaluator(Evaluator):
 
     def evaluate(self, for_set="training") -> None:
         pass
+    
+    def save_results(self, results, name: str) -> None:
+        tmp = results.copy()
+        for i in range(len(tmp)):
+            result = tmp[i]
+            tmp[i] = (result[0], result[1], ";".join(result[2]))
+
+        df = pd.DataFrame(tmp, columns=["input", "annotation", "sis"]) 
+
+        df.to_csv(self.output_dir + name + ".txt", sep = "\t", index=False)
+    
+    def load_results(self, name: str):
+        df = pd.read_csv(self.output_dir + name + ".txt", sep = "\t")
+
+        results = [tuple(x) for x in df.values]
+        for i in range(len(results)):
+            result = results[i]
+            results[i] = (result[0], result[1], result[2].split(";"))
+        return results
 
     def select_random_n_examples(self, for_label, for_set, n):
         input_df, annotation_df = self.__select_examples(for_label, for_set)

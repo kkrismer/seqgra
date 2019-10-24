@@ -25,6 +25,14 @@ class Evaluator(ABC):
     @abstractmethod
     def evaluate(self, set = "training") -> None:
         pass
+    
+    @abstractmethod
+    def save_results(self, results, name: str) -> None:
+        pass
+    
+    @abstractmethod
+    def load_results(self, name: str):
+        pass
 
     def __prepare_output_dir(self) -> None:
         if os.path.exists(self.output_dir):
