@@ -18,7 +18,6 @@ from seqgra.parser.xmlhelper import XMLHelper
 from seqgra.parser.modelparser import ModelParser
 from seqgra.model.model.architecture import Architecture
 from seqgra.model.model.operation import Operation
-from seqgra.model.model.metric import Metric
 
 class XMLModelParser(ModelParser):
     """
@@ -70,14 +69,10 @@ class XMLModelParser(ModelParser):
         label_elements = labels_element.getElementsByTagName("label")
         return [XMLHelper.read_immediate_text_node(label_element) for label_element in label_elements]
 
-    def get_metrics(self) -> List[Metric]:
+    def get_metrics(self) -> List[str]:
         metrics_element: Any = self._dom.getElementsByTagName("metrics")[0]
         metric_elements: Any = metrics_element.getElementsByTagName("metric")
-        return [self.__parse_metric(metric_element) for metric_element in metric_elements]
-
-    def __parse_metric(self, metric_element) -> Metric:
-        return Metric(metric_element.firstChild.nodeValue,
-                      metric_element.getAttribute("set"))
+        return [metric_element.firstChild.nodeValue for metric_element in metric_elements]
     
     def get_architecture(self) -> Architecture:
         sequential_element = self._dom.getElementsByTagName("sequential")

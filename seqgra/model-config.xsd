@@ -39,15 +39,7 @@
         <xs:element name="metrics">
           <xs:complexType>
             <xs:sequence>
-              <xs:element name="metric" minOccurs="1" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:simpleContent>
-                    <xs:extension base="xs:string">
-                      <xs:attribute name="set" type="xs:string" use="required"/>
-                    </xs:extension>
-                  </xs:simpleContent>
-                </xs:complexType>
-              </xs:element>
+              <xs:element name="metric" minOccurs="1" maxOccurs="unbounded"/>
             </xs:sequence>
           </xs:complexType>
         </xs:element>

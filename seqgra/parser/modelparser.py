@@ -9,7 +9,6 @@ from abc import ABC, abstractmethod
 from typing import List, Dict
 
 from seqgra.model.model.architecture import Architecture
-from seqgra.model.model.metric import Metric
 
 class ModelParser(ABC):
     @abstractmethod
@@ -45,7 +44,7 @@ class ModelParser(ABC):
         pass
 
     @abstractmethod
-    def get_metrics(self) -> List[Metric]:
+    def get_metrics(self) -> List[str]:
         pass
     
     @abstractmethod
