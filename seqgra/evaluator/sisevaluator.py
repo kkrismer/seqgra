@@ -30,11 +30,11 @@ class SISEvaluator(Evaluator):
 
     def select_random_n_examples(self, for_label, for_set, n):
         input_df, annotation_df = self.__select_examples(for_label, for_set)
-        
+
         if n > len(input_df.index):
             logging.warn("n is larger than number of examples in set")
             n = len(input_df.index)
-        
+
         idx: List[int] = list(range(len(input_df.index)))
         random.shuffle(idx)
         idx = idx[:n]
@@ -46,11 +46,11 @@ class SISEvaluator(Evaluator):
 
     def select_first_n_examples(self, for_label, for_set, n):
         input_df, annotation_df = self.__select_examples(for_label, for_set)
-        
+
         if n > len(input_df.index):
             logging.warn("n is larger than number of examples in set")
             n = len(input_df.index)
-        
+
         input_df = input_df.iloc[range(n)]
         annotation_df = annotation_df.iloc[range(n)]
 
@@ -76,21 +76,90 @@ class SISEvaluator(Evaluator):
         initial_mask = make_empty_boolean_mask_broadcast_over_axis(
             input_shape, 1)
 
-        for i in range(len(encoded_examples)):
-            encoded_example = encoded_examples[i]
-            print(decoded_examples[i])
-            print(annotations[i])
-            collection = sis_collection(sis_predict, threshold, encoded_example,
-                                        fully_masked_input,
-                                        initial_mask=initial_mask)
+        return [(decoded_examples[i],
+                 annotations[i],
+                 self.__produce_masked_inputs(encoded_examples[i],
+                                              sis_predict,
+                                              threshold,
+                                              fully_masked_input,
+                                              initial_mask))
+                for i in range(len(encoded_examples))]
 
-            if len(collection) > 0:
-                sis_masked_inputs = produce_masked_inputs(encoded_example,
-                                                          fully_masked_input,
-                                                          [sr.mask for sr in collection])
-                print(self.learner.decode_x(sis_masked_inputs))
-            else:
-                print("(no SIS)")
+    def calculate_precision(self, x, grammar_letter="G", background_letter="_", masked_letter="N") -> List[float]:
+        precision_values: List[float] = [self.__calculate_precision(sis,
+                                                                    grammar_letter=grammar_letter,
+                                                                    background_letter=background_letter,
+                                                                    masked_letter=masked_letter) for sis in x]
+        return precision_values
+
+    def calculate_recall(self, x, grammar_letter="G", background_letter="_", masked_letter="N") -> List[float]:
+        recall_values: List[float] = [self.__calculate_recall(sis,
+                                                              grammar_letter=grammar_letter,
+                                                              background_letter=background_letter,
+                                                              masked_letter=masked_letter) for sis in x]
+        return recall_values
+
+    def __calculate_precision(self, x, grammar_letter="G", background_letter="_", masked_letter="N") -> float:
+        annotation: str = x[1]
+        sis: str = self.__collapse_sis(x[2], masked_letter=masked_letter)
+
+        if sis == "":
+            return 1.0
+        else:
+            num_selected: int = 0
+            num_selected_relevant: int = 0
+            for i, c in enumerate(sis):
+                if c != masked_letter:
+                    num_selected += 1
+                    if annotation[i] == grammar_letter:
+                        num_selected_relevant += 1
+            return num_selected_relevant / num_selected
+
+    def __calculate_recall(self, x, grammar_letter="G", background_letter="_", masked_letter="N") -> float:
+        annotation: str = x[1]
+        sis: str = self.__collapse_sis(x[2], masked_letter=masked_letter)
+
+        if sis == "":
+            return 0.0
+        else:
+            num_relevent: int = 0
+            num_relevant_selected: int = 0
+            for i, c in enumerate(annotation):
+                if c == grammar_letter:
+                    num_relevent += 1
+                    if sis[i] != masked_letter:
+                        num_relevant_selected += 1
+
+            return num_relevant_selected / num_relevent
+
+    def __collapse_sis(self, sis: List[str], masked_letter: str = "N") -> str:
+        if len(sis) == 0:
+            return ""
+        elif len(sis) == 1:
+            return sis[0]
+        else:
+            collapsed_sis: str = sis[0]
+            sis.pop(0)
+            for i, c in enumerate(collapsed_sis):
+                if c == masked_letter:
+                    for s in sis:
+                        if s[i] != masked_letter:
+                            collapsed_sis = collapsed_sis[:i] + \
+                                s[i] + collapsed_sis[(i + 1):]
+            return collapsed_sis
+
+    def __produce_masked_inputs(self, x, sis_predict, threshold, fully_masked_input, initial_mask) -> List[str]:
+        collection = sis_collection(sis_predict, threshold, x,
+                                    fully_masked_input,
+                                    initial_mask=initial_mask)
+
+        if len(collection) > 0:
+            sis_masked_inputs = produce_masked_inputs(x,
+                                                      fully_masked_input,
+                                                      [sr.mask for sr in collection])
+            return self.learner.decode_x(sis_masked_inputs).tolist()
+        else:
+            return list()
 
     def __get_valid_file(self, data_file: str) -> str:
         data_file = data_file.replace("\\", "/").replace("//", "/").strip()
