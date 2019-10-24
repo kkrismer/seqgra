@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:element name="seqgra">
+  <xs:element name="seqgradata">
     <xs:complexType>
       <xs:sequence>
         <xs:element name="general" type="generalType"/>
@@ -47,7 +47,13 @@
       <xs:element name="description" type="xs:string"/>
       <xs:element name="sequencespace" type="xs:string"/>
     </xs:sequence>
-    <xs:attribute name="id" type="xs:string" use="required"/>
+    <xs:attribute name="id" use="required">
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:pattern value="[A-Za-z0-9_-]+"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
   </xs:complexType>
 
   <xs:complexType name="backgroundType">
@@ -74,7 +80,13 @@
                 <xs:sequence>
                   <xs:element name="letter" type="probabilityType" minOccurs="1" maxOccurs="unbounded"/>
                 </xs:sequence>
-                <xs:attribute name="cid" type="xs:string" use="optional"/>
+                <xs:attribute name="cid" use="optional">
+                  <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                      <xs:pattern value="[A-Za-z0-9_-]+"/>
+                    </xs:restriction>
+                  </xs:simpleType>
+                </xs:attribute>
               </xs:complexType>
             </xs:element>
           </xs:sequence>
@@ -97,7 +109,13 @@
                       <xs:sequence>
                         <xs:element name="conditionref" minOccurs="0" maxOccurs="unbounded">
                           <xs:complexType>
-                            <xs:attribute name="cid" type="xs:string" use="required"/>
+                            <xs:attribute name="cid" use="required">
+                              <xs:simpleType>
+                                <xs:restriction base="xs:string">
+                                  <xs:pattern value="[A-Za-z0-9_-]+"/>
+                                </xs:restriction>
+                              </xs:simpleType>
+                            </xs:attribute>
                           </xs:complexType>
                         </xs:element>
                       </xs:sequence>
@@ -153,7 +171,13 @@
                             <xs:sequence>
                               <xs:element name="sequenceelementref" minOccurs="1" maxOccurs="unbounded">
                                 <xs:complexType>
-                                  <xs:attribute name="sid" type="xs:string" use="required"/>
+                                  <xs:attribute name="sid" use="required">
+                                    <xs:simpleType>
+                                      <xs:restriction base="xs:string">
+                                        <xs:pattern value="[A-Za-z0-9_-]+"/>
+                                      </xs:restriction>
+                                    </xs:simpleType>
+                                  </xs:attribute>
                                 </xs:complexType>
                               </xs:element>
                             </xs:sequence>
@@ -164,8 +188,20 @@
                             <xs:sequence>
                               <xs:element name="spacingconstraint" minOccurs="1" maxOccurs="unbounded">
                                 <xs:complexType>
-                                  <xs:attribute name="sid1" type="xs:string" use="required"/>
-                                  <xs:attribute name="sid2" type="xs:string" use="required"/>
+                                  <xs:attribute name="sid1" use="required">
+                                    <xs:simpleType>
+                                      <xs:restriction base="xs:string">
+                                        <xs:pattern value="[A-Za-z0-9_-]+"/>
+                                      </xs:restriction>
+                                    </xs:simpleType>
+                                  </xs:attribute>
+                                  <xs:attribute name="sid2" use="required">
+                                    <xs:simpleType>
+                                      <xs:restriction base="xs:string">
+                                        <xs:pattern value="[A-Za-z0-9_-]+"/>
+                                      </xs:restriction>
+                                    </xs:simpleType>
+                                  </xs:attribute>
                                   <xs:attribute name="mindistance" use="required">
                                     <xs:simpleType>
                                       <xs:restriction base="xs:int">
@@ -200,7 +236,13 @@
               </xs:complexType>
             </xs:element>
           </xs:sequence>
-          <xs:attribute name="id" type="xs:string" use="required"/>
+          <xs:attribute name="id" use="required">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:pattern value="[A-Za-z0-9_-]+"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
         </xs:complexType>
       </xs:element>
     </xs:sequence>
@@ -232,7 +274,13 @@
               </xs:complexType>
             </xs:element>
           </xs:choice>
-          <xs:attribute name="id" type="xs:string" use="required"/>
+          <xs:attribute name="id" use="required">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:pattern value="[A-Za-z0-9_-]+"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
         </xs:complexType>
       </xs:element>
     </xs:sequence>
