@@ -76,7 +76,7 @@ class TensorFlowKerasSequentialLearner(DNAMultiClassClassificationLearner):
                                                        mode="min",
                                                        verbose=1,
                                                        patience=2,
-                                                       min_delta=1)
+                                                       min_delta=0)
 
         if bool(self.training_process_hyperparameters["early_stopping"]):
             callbacks = [cp_callback, tensorboard_callback, es_callback]
@@ -113,6 +113,11 @@ class TensorFlowKerasSequentialLearner(DNAMultiClassClassificationLearner):
         if encode:
             x = self.encode_x(x)
         return self.model.predict(x)
+
+    def get_num_params(self):
+        if self.model is None:
+            self.create_model()
+        return 0
 
     def _evaluate_model(self, x: List[str], y: List[str]):
         # one hot encode input and labels
