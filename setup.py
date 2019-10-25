@@ -22,7 +22,11 @@ setuptools.setup(
     package_data={"": ["seqgra/data-config.xsd", "seqgra/model-config.xsd"]},
     install_requires=[
         "lxml>=4.4.1",
-        "numpy>=1.14"
+        "numpy>=1.14",
+        "scikit-learn>=0.21.3",
+        "matplotlib>=3.1.1",
+        "scipy>=1.3.1",
+        "pandas>=0.25.2"
     ],
     python_requires=">=3"
 )

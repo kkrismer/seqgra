@@ -17,6 +17,14 @@ import os
 from abc import ABC, abstractmethod
 from typing import List, Any, Dict
 
+from sklearn.metrics import precision_recall_curve
+from sklearn.metrics import average_precision_score
+from sklearn.metrics import roc_curve, auc
+import matplotlib.pyplot as plt
+import numpy as np
+from itertools import cycle
+from scipy import interp
+
 from seqgra.parser.modelparser import ModelParser
 from seqgra.model.model.architecture import Architecture
 from seqgra.model.model.operation import Operation
@@ -163,6 +171,117 @@ class MultiClassClassificationLearner(Learner):
         else:
             return self._evaluate_model(x, y)
 
+    def create_roc_curve(self, y_true, y_hat, file_name) -> None:
+        fpr = dict()
+        tpr = dict()
+        roc_auc = dict()
+        n_classes = len(self.labels)
+        for i in range(n_classes):
+            fpr[i], tpr[i], _ = roc_curve(y_true[:, i], y_hat[:, i])
+            roc_auc[i] = auc(fpr[i], tpr[i])
+
+        # Compute micro-average ROC curve and ROC area
+        fpr["micro"], tpr["micro"], _ = roc_curve(y_true.ravel(), y_hat.ravel())
+        roc_auc["micro"] = auc(fpr["micro"], tpr["micro"])
+
+        # Compute macro-average ROC curve and ROC area
+
+        # First aggregate all false positive rates
+        all_fpr = np.unique(np.concatenate([fpr[i] for i in range(n_classes)]))
+
+        # Then interpolate all ROC curves at this points
+        mean_tpr = np.zeros_like(all_fpr)
+        for i in range(n_classes):
+            mean_tpr += interp(all_fpr, fpr[i], tpr[i])
+
+        # Finally average it and compute AUC
+        mean_tpr /= n_classes
+
+        fpr["macro"] = all_fpr
+        tpr["macro"] = mean_tpr
+        roc_auc["macro"] = auc(fpr["macro"], tpr["macro"])
+
+        # Plot all ROC curves
+        plt.figure()
+        plt.plot(fpr["micro"], tpr["micro"],
+                label='micro-average (area = {0:0.2f})'
+                    ''.format(roc_auc["micro"]),
+                color='deeppink', linestyle=':', linewidth=4)
+
+        plt.plot(fpr["macro"], tpr["macro"],
+                label='macro-average (area = {0:0.2f})'
+                    ''.format(roc_auc["macro"]),
+                color='navy', linestyle=':', linewidth=4)
+
+        colors = cycle(['aqua', 'darkorange', 'cornflowerblue'])
+        for i, color in zip(range(n_classes), colors):
+            plt.plot(fpr[i], tpr[i], color=color, lw=2,
+                    label='condition {0} (area = {1:0.2f})'
+                    ''.format(self.labels[i], roc_auc[i]))
+
+        plt.plot([0, 1], [0, 1], 'k--', lw=2)
+        plt.xlim([0.0, 1.0])
+        plt.ylim([0.0, 1.05])
+        plt.xlabel('False Positive Rate')
+        plt.ylabel('True Positive Rate')
+        plt.title('ROC curve')
+        plt.legend(loc="lower right")
+        plt.savefig(file_name, bbox_inches="tight")
+
+    def create_precision_recall_curve(self, y_true, y_hat, file_name) -> None:
+        precision = dict()
+        recall = dict()
+        average_precision = dict()
+        n_classes = len(self.labels)
+        for i in range(n_classes):
+            precision[i], recall[i], _ = precision_recall_curve(y_true[:, i],
+                                                                y_hat[:, i])
+            average_precision[i] = average_precision_score(
+                y_true[:, i], y_hat[:, i])
+
+        # A "micro-average": quantifying score on all classes jointly
+        precision["micro"], recall["micro"], _ = precision_recall_curve(y_true.ravel(),
+                                                                        y_hat.ravel())
+        average_precision["micro"] = average_precision_score(y_true, y_hat,
+                                                             average="micro")
+
+        colors = cycle(["navy", "turquoise", "darkorange",
+                        "cornflowerblue", "teal"])
+
+        plt.figure(figsize=(7, 8))
+        f_scores = np.linspace(0.2, 0.8, num=4)
+        lines = []
+        labels = []
+        for f_score in f_scores:
+            x = np.linspace(0.01, 1)
+            y = f_score * x / (2 * x - f_score)
+            l, = plt.plot(x[y >= 0], y[y >= 0], color="gray", alpha=0.2)
+            plt.annotate(r"$F_1 = {0:0.1f}$".format(
+                f_score), xy=(0.89, y[45] + 0.02))
+
+        lines.append(l)
+        labels.append(r"iso-$F_1$ curves")
+        l, = plt.plot(recall["micro"], precision["micro"], color="gold", lw=2)
+        lines.append(l)
+        labels.append("micro-average (area = {0:0.2f})"
+                      "".format(average_precision["micro"]))
+
+        for i, color in zip(range(n_classes), colors):
+            l, = plt.plot(recall[i], precision[i], color=color, lw=2)
+            lines.append(l)
+            labels.append("condition {0} (area = {1:0.2f})"
+                          "".format(self.labels[i], average_precision[i]))
+
+        fig = plt.gcf()
+        fig.subplots_adjust(bottom=0.25)
+        plt.xlim([0.0, 1.0])
+        plt.ylim([0.0, 1.05])
+        plt.xlabel("Recall")
+        plt.ylabel("Precision")
+        plt.title("Precision-Recall curve")
+        plt.legend(lines, labels, bbox_to_anchor=(1.04,1), loc="upper left", prop=dict(size=14))
+        plt.savefig(file_name, bbox_inches="tight")
+
     @abstractmethod
     def _evaluate_model(self, x: List[str], y: List[str]):
         pass
@@ -187,6 +306,12 @@ class MultiLabelClassificationLearner(Learner):
                 "specify either file_name or x and y")
         else:
             return self._evaluate_model(x, y)
+
+    def create_roc_curve(self, y_true, y_hat, file_name) -> None:
+        pass
+
+    def create_precision_recall_curve(self, y_true, y_hat, file_name) -> None:
+        pass
 
     @abstractmethod
     def _evaluate_model(self, x: List[str], y: List[List[str]]):
@@ -213,6 +338,12 @@ class MultipleRegressionLearner(Learner):
         else:
             return self._evaluate_model(x, y)
 
+    def create_roc_curve(self, y_true, y_hat, file_name) -> None:
+        pass
+
+    def create_precision_recall_curve(self, y_true, y_hat, file_name) -> None:
+        pass
+
     @abstractmethod
     def _evaluate_model(self, x: List[str], y: List[float]):
         pass
@@ -237,6 +368,12 @@ class MultivariateRegressionLearner(Learner):
                 "specify either file_name or x and y")
         else:
             return self._evaluate_model(x, y)
+
+    def create_roc_curve(self, y_true, y_hat, file_name) -> None:
+        pass
+
+    def create_precision_recall_curve(self, y_true, y_hat, file_name) -> None:
+        pass
 
     @abstractmethod
     def _evaluate_model(self, x: List[str], y: List[float]):
