@@ -6,9 +6,9 @@ MIT - CSAIL - Gifford Lab - seqgra
   for data where the class labels are mututally exclusive
 - abstract class for multi-label classification learners, i.e., learners
   for data where the class labels are not mututally exclusive
-- abstract class for multiple regression learners, i.e., learners with 
+- abstract class for multiple regression learners, i.e., learners with
   multiple independent variables and one dependent variable
-- abstract class for multivariate regression learners, i.e., learners with 
+- abstract class for multivariate regression learners, i.e., learners with
   multiple independent variables and multiple dependent variables
 
 @author: Konstantin Krismer
@@ -115,6 +115,10 @@ class Learner(ABC):
         pass
 
     @abstractmethod
+    def get_num_params(self):
+        pass
+
+    @abstractmethod
     def _set_seed(self) -> None:
         pass
 
@@ -181,7 +185,8 @@ class MultiClassClassificationLearner(Learner):
             roc_auc[i] = auc(fpr[i], tpr[i])
 
         # Compute micro-average ROC curve and ROC area
-        fpr["micro"], tpr["micro"], _ = roc_curve(y_true.ravel(), y_hat.ravel())
+        fpr["micro"], tpr["micro"], _ = roc_curve(
+            y_true.ravel(), y_hat.ravel())
         roc_auc["micro"] = auc(fpr["micro"], tpr["micro"])
 
         # Compute macro-average ROC curve and ROC area
@@ -203,29 +208,35 @@ class MultiClassClassificationLearner(Learner):
 
         # Plot all ROC curves
         plt.figure()
-        plt.plot(fpr["micro"], tpr["micro"],
-                label='micro-average (area = {0:0.2f})'
-                    ''.format(roc_auc["micro"]),
-                color='deeppink', linestyle=':', linewidth=4)
+        lines = []
+        labels = []
 
-        plt.plot(fpr["macro"], tpr["macro"],
-                label='macro-average (area = {0:0.2f})'
-                    ''.format(roc_auc["macro"]),
-                color='navy', linestyle=':', linewidth=4)
+        l, = plt.plot(fpr["micro"], tpr["micro"],
+                      color="gold", linestyle=":", linewidth=2)
+        lines.append(l)
+        labels.append("micro-average (area = {0:0.2f})"
+                      "".format(roc_auc["micro"]))
 
-        colors = cycle(['aqua', 'darkorange', 'cornflowerblue'])
-        for i, color in zip(range(n_classes), colors):
-            plt.plot(fpr[i], tpr[i], color=color, lw=2,
-                    label='condition {0} (area = {1:0.2f})'
-                    ''.format(self.labels[i], roc_auc[i]))
+        l, = plt.plot(fpr["macro"], tpr["macro"],
+                      color="darkorange", linestyle=":", linewidth=2)
+        lines.append(l)
+        labels.append("macro-average (area = {0:0.2f})"
+                      "".format(roc_auc["macro"]))
 
-        plt.plot([0, 1], [0, 1], 'k--', lw=2)
+        for i in range(n_classes):
+            l, = plt.plot(fpr[i], tpr[i], linewidth=2)
+            lines.append(l)
+            labels.append("condition {0} (area = {1:0.2f})"
+                          "".format(self.labels[i], roc_auc[i]))
+
+        plt.plot([0, 1], [0, 1], "k--", linewidth=2)
         plt.xlim([0.0, 1.0])
         plt.ylim([0.0, 1.05])
-        plt.xlabel('False Positive Rate')
-        plt.ylabel('True Positive Rate')
-        plt.title('ROC curve')
-        plt.legend(loc="lower right")
+        plt.xlabel("False Positive Rate")
+        plt.ylabel("True Positive Rate")
+        plt.title("ROC curve")
+        plt.legend(lines, labels, bbox_to_anchor=(1.04, 1),
+                   loc="upper left", prop=dict(size=14))
         plt.savefig(file_name, bbox_inches="tight")
 
     def create_precision_recall_curve(self, y_true, y_hat, file_name) -> None:
@@ -240,18 +251,16 @@ class MultiClassClassificationLearner(Learner):
                 y_true[:, i], y_hat[:, i])
 
         # A "micro-average": quantifying score on all classes jointly
-        precision["micro"], recall["micro"], _ = precision_recall_curve(y_true.ravel(),
-                                                                        y_hat.ravel())
+        precision["micro"], recall["micro"], _ = precision_recall_curve(
+            y_true.ravel(), y_hat.ravel())
         average_precision["micro"] = average_precision_score(y_true, y_hat,
                                                              average="micro")
 
-        colors = cycle(["navy", "turquoise", "darkorange",
-                        "cornflowerblue", "teal"])
-
         plt.figure(figsize=(7, 8))
-        f_scores = np.linspace(0.2, 0.8, num=4)
         lines = []
         labels = []
+
+        f_scores = np.linspace(0.2, 0.8, num=4)
         for f_score in f_scores:
             x = np.linspace(0.01, 1)
             y = f_score * x / (2 * x - f_score)
@@ -261,13 +270,14 @@ class MultiClassClassificationLearner(Learner):
 
         lines.append(l)
         labels.append(r"iso-$F_1$ curves")
-        l, = plt.plot(recall["micro"], precision["micro"], color="gold", lw=2)
+        l, = plt.plot(recall["micro"], precision["micro"],
+                      linestyle=":", color="gold", linewidth=2)
         lines.append(l)
         labels.append("micro-average (area = {0:0.2f})"
                       "".format(average_precision["micro"]))
 
-        for i, color in zip(range(n_classes), colors):
-            l, = plt.plot(recall[i], precision[i], color=color, lw=2)
+        for i in range(n_classes):
+            l, = plt.plot(recall[i], precision[i], linewidth=2)
             lines.append(l)
             labels.append("condition {0} (area = {1:0.2f})"
                           "".format(self.labels[i], average_precision[i]))
@@ -279,7 +289,8 @@ class MultiClassClassificationLearner(Learner):
         plt.xlabel("Recall")
         plt.ylabel("Precision")
         plt.title("Precision-Recall curve")
-        plt.legend(lines, labels, bbox_to_anchor=(1.04,1), loc="upper left", prop=dict(size=14))
+        plt.legend(lines, labels, bbox_to_anchor=(1.04, 1),
+                   loc="upper left", prop=dict(size=14))
         plt.savefig(file_name, bbox_inches="tight")
 
     @abstractmethod
