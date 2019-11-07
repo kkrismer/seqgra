@@ -204,9 +204,106 @@ class TensorFlowKerasSequentialLearner(DNAMultiClassClassificationLearner):
                     activity_regularizer=activity_regularizer,
                     input_shape=input_shape
                 ))
+        elif name == "conv1d":
+            filters = int(operation.parameters["filters"].strip())
+            kernel_size = literal_eval(operation.parameters["kernel_size"].strip())
+
+            if "strides" in operation.parameters:
+                strides = literal_eval(operation.parameters["strides"].strip())
+            else:
+                strides = 1
+
+            if "padding" in operation.parameters:
+                padding = operation.parameters["padding"].strip()
+            else:
+                padding = "valid"
+
+            if "data_format" in operation.parameters:
+                data_format = operation.parameters["data_format"].strip()
+            else:
+                data_format = "channels_last"
+
+            if "dilation_rate" in operation.parameters:
+                dilation_rate = operation.parameters["dilation_rate"].strip()
+            else:
+                dilation_rate = 1
+
+            if "activation" in operation.parameters:
+                activation = operation.parameters["activation"].strip()
+            else:
+                activation = None
+
+            if "use_bias" in operation.parameters:
+                use_bias = bool(operation.parameters["use_bias"].strip())
+            else:
+                use_bias = True
+
+            if "kernel_initializer" in operation.parameters:
+                kernel_initializer = eval(operation.parameters["kernel_initializer"].strip(
+                ))
+            else:
+                kernel_initializer = "glorot_uniform"
+
+            if "bias_initializer" in operation.parameters:
+                bias_initializer = eval(operation.parameters["bias_initializer"].strip(
+                ))
+            else:
+                bias_initializer = "zeros"
+
+            if "kernel_regularizer" in operation.parameters:
+                kernel_regularizer = eval(operation.parameters["kernel_regularizer"].strip(
+                ))
+            else:
+                kernel_regularizer = None
+
+            if "bias_regularizer" in operation.parameters:
+                bias_regularizer = eval(operation.parameters["bias_regularizer"].strip(
+                ))
+            else:
+                bias_regularizer = None
+
+            if "activity_regularizer" in operation.parameters:
+                activity_regularizer = eval(operation.parameters["activity_regularizer"].strip(
+                ))
+            else:
+                activity_regularizer = None
+
+            if input_shape is None:
+                return(tf.keras.layers.Conv1D(
+                    filters,
+                    kernel_size,
+                    strides=strides,
+                    padding=padding,
+                    data_format=data_format,
+                    dilation_rate=dilation_rate,
+                    activation=activation,
+                    use_bias=use_bias,
+                    kernel_initializer=kernel_initializer,
+                    bias_initializer=bias_initializer,
+                    kernel_regularizer=kernel_regularizer,
+                    bias_regularizer=bias_regularizer,
+                    activity_regularizer=activity_regularizer
+                ))
+            else:
+                return(tf.keras.layers.Conv1D(
+                    filters,
+                    kernel_size,
+                    strides=strides,
+                    padding=padding,
+                    data_format=data_format,
+                    dilation_rate=dilation_rate,
+                    activation=activation,
+                    use_bias=use_bias,
+                    kernel_initializer=kernel_initializer,
+                    bias_initializer=bias_initializer,
+                    kernel_regularizer=kernel_regularizer,
+                    bias_regularizer=bias_regularizer,
+                    activity_regularizer=activity_regularizer,
+                    input_shape=input_shape
+                ))
         elif name == "conv2d":
             filters = int(operation.parameters["filters"].strip())
-            kernel_size = operation.parameters["kernel_size"].strip()
+            kernel_size = literal_eval(operation.parameters["kernel_size"].strip())
 
             if "strides" in operation.parameters:
                 strides = literal_eval(operation.parameters["strides"].strip())
