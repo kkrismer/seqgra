@@ -398,6 +398,8 @@ class TensorFlowKerasSequentialLearner(DNAMultiClassClassificationLearner):
                     activity_regularizer=activity_regularizer,
                     input_shape=input_shape
                 ))
+        elif name == "globalmaxpool1d":
+            return(tf.keras.layers.GlobalMaxPool1D())
 
     def __get_optimizer(self):
         if "optimizer" in self.optimizer_hyperparameters:
