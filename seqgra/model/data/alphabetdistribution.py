@@ -15,13 +15,15 @@ import numpy as np
 from seqgra.model.data.condition import Condition
 
 class AlphabetDistribution:
-    def __init__(self, letters: List[Tuple[str, float]], condition: Condition = None) -> None:
+    def __init__(self, letters: List[Tuple[str, float]], condition: Condition = None, set_name: str = None) -> None:
         self.letters: List[Tuple[str, float]] = letters
         self.l = [letter[0] for letter in self.letters]
         self.p = [letter[1] for letter in self.letters]
         self.p = [prop / sum(self.p) for prop in self.p]
         self.condition: Condition = condition
+        self.set_name: str = set_name
         self.condition_independent: bool = condition is None
+        self.set_independent: bool = set_name is None
 
     def __str__(self):
         config = ["Alphabet distribution:\n"]
@@ -29,6 +31,10 @@ class AlphabetDistribution:
             config += ["\tcondition: all\n"]
         else:
             config += ["\tcondition: ", self.condition.id, "[cid]\n"]
+        if self.set_independent:
+            config += ["\tset: all\n"]
+        else:
+            config += ["\tset: ", self.set_name, "[setname]\n"]
         config += ["\tletters:\n"]
         letters_string: List[str] = [("\t\t" + letter[0] + ": " + str(round(letter[1], 3)) + "\n") for letter in self.letters]
         config += letters_string

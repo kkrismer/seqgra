@@ -8,7 +8,7 @@ Generates synthetic sequences based on grammar
 import logging
 import os
 import random
-from typing import List, Tuple, Set
+from typing import List, Tuple, Set, Dict
 
 import numpy as np
 
@@ -115,17 +115,13 @@ class Simulator:
 
         c1: bool = self.check_unused_conditions()
         c2: bool = self.check_unused_sequence_elements()
-        c3: bool = self.check_invalid_alphabet_distributions()
-        if c3:
-            c4: bool = self.check_missing_alphabet_distributions()
-        else:
-            c4: bool = False
-        c5: bool = self.check_invalid_positions()
-        c6: bool = self.check_invalid_distances()
-        c7: bool = self.check_invalid_sequence_elements()
-        c8: bool = self.check_spacing_contraint_se_refs()
+        c3: bool = self.check_missing_alphabet_distributions()
+        c4: bool = self.check_invalid_positions()
+        c5: bool = self.check_invalid_distances()
+        c6: bool = self.check_invalid_sequence_elements()
+        c7: bool = self.check_spacing_contraint_se_refs()
 
-        valid = c1 and c2 and c3 and c4 and c5 and c6 and c7 and c8
+        valid = c1 and c2 and c3 and c4 and c5 and c6 and c7
         if valid:
             logging.info("semantic analysis of grammar completed: no issues detected")
         return valid
@@ -162,31 +158,41 @@ class Simulator:
         
         return valid
 
-    def check_invalid_alphabet_distributions(self) -> bool:
-        valid: bool = True
-        
-        if len(self.background.alphabet_distributions) > 1:
-            for alphabet_distribution in self.background.alphabet_distributions:
-                if alphabet_distribution.condition_independent:
-                    valid = False
-                    logging.warn("invalid definition of alphabet distributions: both condition-independent and condition-dependent distributions specified")
-
-        return valid
-
     def check_missing_alphabet_distributions(self) -> bool:
         valid: bool = True
 
-        if len(self.background.alphabet_distributions) == 1 and self.background.alphabet_distributions[0].condition_independent:
-            return True
-        else:
-            specified_alphabets: Set[str] = set()
-            for alphabet in self.background.alphabet_distributions:
-                specified_alphabets.add(alphabet.condition.id)
-        
-            for condition in self.conditions:
-                if condition.id not in specified_alphabets:
+        set_condition_combinations: Dict[str, Dict[str, str]] = dict()
+
+        for example_set in self.data_generation.sets:
+            for example in example_set.examples:
+                for condition_sample in example.conditions:
+                    if example_set.name in set_condition_combinations:
+                        set_condition_combinations[example_set.name][condition_sample.id] = "unspecified"
+                    else:
+                        set_condition_combinations[example_set.name] = {condition_sample.id: "unspecified"}
+
+        for alphabet in self.background.alphabet_distributions:
+            if alphabet.set_independent and alphabet.condition_independent:
+                return True
+            elif alphabet.condition_independent:
+                tmp_dict = set_condition_combinations[alphabet.set_name]
+                for condition_id in tmp_dict.keys():
+                    tmp_dict[condition_id] = "condition-independent"
+            elif alphabet.set_independent:
+                for set_name in set_condition_combinations.keys():
+                    set_condition_combinations[set_name][alphabet.condition.id] = "set-independent"
+            else:
+                if set_condition_combinations[alphabet.set_name][alphabet.condition.id] == "specified":
                     valid = False
-                    logging.warn("no alphabet definition found for condition " + condition.id + " [cid]")
+                    logging.warn("duplicate alphabet definition found for set name " + example_set.name + " and condition " + condition_sample.id + " [cid]")
+                else:
+                    set_condition_combinations[alphabet.set_name][alphabet.condition.id] = "specified"
+
+        for set_name, tmp_dict in set_condition_combinations.items():
+            for condition_id, value in tmp_dict.items():
+                if value == "unspecified":
+                    valid = False
+                    logging.warn("no alphabet definition found for set name " + set_name + " and condition " + condition_id + " [cid]")
 
         return valid
 

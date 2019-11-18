@@ -11,6 +11,10 @@
         <xs:element name="sequenceelements" type="sequenceelementsType"/>
       </xs:sequence>
     </xs:complexType>
+    <xs:key name="setKey">
+      <xs:selector xpath="./datageneration/sets/set"/>
+      <xs:field xpath="@name"/>
+    </xs:key>
     <xs:key name="conditionKey">
       <xs:selector xpath="./conditions/condition"/>
       <xs:field xpath="@id"/>
@@ -19,6 +23,10 @@
       <xs:selector xpath="./sequenceelements/sequenceelement"/>
       <xs:field xpath="@id"/>
     </xs:key>
+    <xs:keyref name="alphabetdistributionSetRef" refer="setKey">
+      <xs:selector xpath="./background/alphabetdistributions/alphabetdistribution"/>
+      <xs:field xpath="@setname"/>
+    </xs:keyref>
     <xs:keyref name="alphabetdistributionConditionRef" refer="conditionKey">
       <xs:selector xpath="./background/alphabetdistributions/alphabetdistribution"/>
       <xs:field xpath="@cid"/>
@@ -80,6 +88,13 @@
                 <xs:sequence>
                   <xs:element name="letter" type="probabilityType" minOccurs="1" maxOccurs="unbounded"/>
                 </xs:sequence>
+                <xs:attribute name="setname" use="optional">
+                  <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                      <xs:pattern value="[A-Za-z0-9_-]+"/>
+                    </xs:restriction>
+                  </xs:simpleType>
+                </xs:attribute>
                 <xs:attribute name="cid" use="optional">
                   <xs:simpleType>
                     <xs:restriction base="xs:string">

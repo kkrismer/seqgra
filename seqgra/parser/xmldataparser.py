@@ -74,9 +74,14 @@ class XMLDataParser(DataParser):
         else:
             condition: Condition = None
 
+        if alphabet_distribution_element.hasAttribute("setname"):
+            set_name: str = alphabet_distribution_element.getAttribute("setname")
+        else:
+            set_name: str = None
+
         letter_elements: Any = alphabet_distribution_element.getElementsByTagName("letter")
         letters: List[Tuple[str, float]] = [XMLDataParser.__parse_letter(letter_element) for letter_element in letter_elements]
-        return AlphabetDistribution(letters, condition)
+        return AlphabetDistribution(letters, condition, set_name)
     
     @staticmethod
     def __parse_letter(letter_element) -> Tuple[str, float]:
