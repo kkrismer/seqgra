@@ -22,6 +22,7 @@ class TensorFlowKerasSequentialLearner(DNAMultiClassClassificationLearner):
         self.model = None
 
     def create_model(self) -> None:
+        self.set_seed()
         self.model = tf.keras.Sequential(
             [self.__get_keras_layer(operation) for operation in self.architecture.operations])
 
@@ -35,7 +36,7 @@ class TensorFlowKerasSequentialLearner(DNAMultiClassClassificationLearner):
     def print_model_summary(self):
         self.model.summary()
 
-    def _set_seed(self) -> None:
+    def set_seed(self) -> None:
         random.seed(self.seed)
         np.random.seed(self.seed)
         tf.random.set_seed(self.seed)

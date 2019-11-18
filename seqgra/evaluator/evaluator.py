@@ -21,9 +21,10 @@ class Evaluator(ABC):
             output_dir += "/"
         self.output_dir = output_dir
         self.__prepare_output_dir()
+        self.learner.set_seed()
 
     @abstractmethod
-    def evaluate(self, set = "training") -> None:
+    def evaluate_model(self, set_name: str = "training") -> None:
         pass
     
     @abstractmethod

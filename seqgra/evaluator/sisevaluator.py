@@ -25,7 +25,7 @@ class SISEvaluator(Evaluator):
     def __init__(self, learner: Learner, data_dir: str, output_dir: str) -> None:
         super().__init__(learner, data_dir, output_dir)
 
-    def evaluate(self, for_set="training") -> None:
+    def evaluate_model(self, set_name: str = "training") -> None:
         pass
     
     def save_results(self, results, name: str) -> None:

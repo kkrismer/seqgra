@@ -76,7 +76,7 @@ class Learner(ABC):
         if len(os.listdir(self.output_dir)) > 0:
             raise Exception("output directory non-empty")
 
-        self._set_seed()
+        self.set_seed()
 
         if training_file is not None:
             x_train, y_train = self.parse_data(training_file)
@@ -119,7 +119,7 @@ class Learner(ABC):
         pass
 
     @abstractmethod
-    def _set_seed(self) -> None:
+    def set_seed(self) -> None:
         pass
 
     @abstractmethod
