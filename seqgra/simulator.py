@@ -88,7 +88,7 @@ class Simulator:
             annotation_file.write("annotation\ty\n")
             for condition_id in condition_ids:
                 conditions: List[Condition] = self.__deserialize_example(condition_id)
-                example: Example = ExampleGenerator.generate_example(conditions, self.background)
+                example: Example = ExampleGenerator.generate_example(conditions, example_set.name, self.background)
                 data_file.write(example.sequence + "\t" + condition_id + "\n")
                 annotation_file.write(example.annotation + "\t" + condition_id + "\n")
 
@@ -173,14 +173,29 @@ class Simulator:
 
         for alphabet in self.background.alphabet_distributions:
             if alphabet.set_independent and alphabet.condition_independent:
-                return True
+                for set_name in set_condition_combinations.keys():
+                    tmp_dict = set_condition_combinations[set_name]
+                    for condition_id in tmp_dict.keys():
+                        if set_condition_combinations[set_name][condition_id] == "global":
+                            valid = False
+                            logging.warn("more than one global alphabet definition found")
+                        else:
+                            set_condition_combinations[set_name][condition_id] = "global"
             elif alphabet.condition_independent:
                 tmp_dict = set_condition_combinations[alphabet.set_name]
                 for condition_id in tmp_dict.keys():
-                    tmp_dict[condition_id] = "condition-independent"
+                    if tmp_dict[condition_id] == "condition-independent":
+                        valid = False
+                        logging.warn("more than one condition-independent alphabet definition found for set " + alphabet.set_name)
+                    else:
+                        tmp_dict[condition_id] = "condition-independent"
             elif alphabet.set_independent:
                 for set_name in set_condition_combinations.keys():
-                    set_condition_combinations[set_name][alphabet.condition.id] = "set-independent"
+                    if set_condition_combinations[set_name][alphabet.condition.id] == "set-independent":
+                        valid = False
+                        logging.warn("more than one set-independent alphabet definition found for condition " + alphabet.condition.id + " [cid]")
+                    else:
+                        set_condition_combinations[set_name][alphabet.condition.id] = "set-independent"
             else:
                 if set_condition_combinations[alphabet.set_name][alphabet.condition.id] == "specified":
                     valid = False

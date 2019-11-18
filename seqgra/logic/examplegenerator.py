@@ -21,16 +21,16 @@ from seqgra.logic.backgroundgenerator import BackgroundGenerator
 
 class ExampleGenerator:    
     @staticmethod
-    def generate_example(conditions: List[Condition], background: Background, background_character: str = "_") -> Example:
+    def generate_example(conditions: List[Condition], set_name: str, background: Background, background_character: str = "_") -> Example:
         if conditions is None:
-            background: str = BackgroundGenerator.generate_background(background, None)
+            background: str = BackgroundGenerator.generate_background(background, None, set_name)
             annotation: str = "".join([background_character] * len(background))
             example: Example = Example(background, annotation)
         else:
             # randomly shuffle the order of the conditions, which determines in what order the condition rules are applied
             random.shuffle(conditions)
             # pick the background distribution of the first condition (after random shuffle)
-            background: str = BackgroundGenerator.generate_background(background, conditions[0])
+            background: str = BackgroundGenerator.generate_background(background, conditions[0], set_name)
             annotation: str = "".join([background_character] * len(background))
             example: Example = Example(background, annotation)
 
