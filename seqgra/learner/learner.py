@@ -160,7 +160,7 @@ class MultiClassClassificationLearner(Learner):
     def __init__(self, parser: ModelParser, output_dir: str) -> None:
         super().__init__(parser, output_dir)
 
-        if self.learner_type != "multi-class classification learner":
+        if self.learner_type != "multi-class classification":
             raise Exception(
                 "model definition must specify multi-class classification learner type, but learner type is '" + self.learner_type, "'")
 
@@ -303,7 +303,7 @@ class MultiLabelClassificationLearner(Learner):
     def __init__(self, parser: ModelParser, output_dir: str) -> None:
         super().__init__(parser, output_dir)
 
-        if self.learner_type != "multi-label classification learner":
+        if self.learner_type != "multi-label classification":
             raise Exception(
                 "model definition must specify multi-label classification learner type, but learner type is '" + self.learner_type, "'")
 
@@ -334,7 +334,7 @@ class MultipleRegressionLearner(Learner):
     def __init__(self, parser: ModelParser, output_dir: str) -> None:
         super().__init__(parser, output_dir)
 
-        if self.learner_type != "multiple regression learner":
+        if self.learner_type != "multiple regression":
             raise Exception(
                 "model definition must specify multiple regression learner type, but learner type is '" + self.learner_type, "'")
 
@@ -365,7 +365,7 @@ class MultivariateRegressionLearner(Learner):
     def __init__(self, parser: ModelParser, output_dir: str) -> None:
         super().__init__(parser, output_dir)
 
-        if self.learner_type != "multivariate regression learner":
+        if self.learner_type != "multivariate regression":
             raise Exception(
                 "model definition must specify multivariate regression learner type, but learner type is '" + self.learner_type, "'")
 
