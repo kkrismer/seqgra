@@ -29,6 +29,10 @@ class DataParser(ABC):
     @abstractmethod
     def get_sequence_space(self) -> str:
         pass
+    
+    @abstractmethod
+    def get_type(self) -> str:
+        pass
 
     @abstractmethod
     def get_background(self) -> Background:

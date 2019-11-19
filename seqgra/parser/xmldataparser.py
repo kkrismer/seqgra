@@ -57,6 +57,9 @@ class XMLDataParser(DataParser):
     
     def get_sequence_space(self) -> str:
         return XMLHelper.read_text_node(self._general_element, "sequencespace")
+    
+    def get_type(self) -> str:
+        return XMLHelper.read_text_node(self._general_element, "type")
 
     def get_background(self, valid_conditions: List[Condition]) -> Background:
         background_element: Any = self._dom.getElementsByTagName("background")[0]
