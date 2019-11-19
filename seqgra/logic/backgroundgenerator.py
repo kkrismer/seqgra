@@ -53,7 +53,7 @@ class BackgroundGenerator:
                     global_alphabet_distribution = alphabet_distribution
                 elif alphabet_distribution.condition_independent and alphabet_distribution.set_name == set_name:
                     set_alphabet_distribution = alphabet_distribution
-                elif alphabet_distribution.set_independent and alphabet_distribution.condition == condition.id:
+                elif alphabet_distribution.set_independent and alphabet_distribution.condition.id == condition.id:
                     condition_alphabet_distribution = alphabet_distribution
                 elif alphabet_distribution.set_name == set_name and alphabet_distribution.condition.id == condition.id:
                     return alphabet_distribution
@@ -65,4 +65,4 @@ class BackgroundGenerator:
             elif global_alphabet_distribution is not None:
                 return global_alphabet_distribution
             
-            raise Exception("no alphabet distribution found for set + ", set_name, " and condition " + condition.id + " [cid]")
+            raise Exception("no alphabet distribution found for set " + set_name + " and condition " + condition.id + " [cid]")
