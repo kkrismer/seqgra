@@ -7,10 +7,12 @@ Generates synthetic sequences based on grammar
 """
 import logging
 import os
+import sys
 import random
 from typing import List, Tuple, Set, Dict
 
 import numpy as np
+import pkg_resources
 
 from seqgra.parser.dataparser import DataParser
 from seqgra.model.data.background import Background
@@ -70,11 +72,20 @@ class Simulator:
         if len(os.listdir(self.output_dir)) > 0:
             raise Exception("output directory non-empty")
 
+        # write session info to file
+        self.write_session_info()
+
         self.__set_seed()
 
         for example_set in self.data_generation.sets:
             self.__process_set(example_set)
             logging.info("generated " + example_set.name + " set")
+
+    def write_session_info(self) -> None:
+        with open(self.output_dir + "session-info.txt", "w") as session_file:
+            session_file.write("seqgra package version: " + pkg_resources.require("seqgra")[0].version + "\n")
+            session_file.write("NumPy version: " + np.version.version + "\n")
+            session_file.write("Python version: " + sys.version + "\n")
 
     def __process_set(self, example_set: ExampleSet) -> None:
         condition_ids: List[str] = []

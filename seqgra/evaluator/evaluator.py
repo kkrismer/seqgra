@@ -6,8 +6,12 @@ MIT - CSAIL - Gifford Lab - seqgra
 @author: Konstantin Krismer
 """
 import os
+import sys
 from abc import ABC, abstractmethod
 from typing import List, Any, Dict
+
+import pkg_resources
+import numpy as np
 
 from seqgra.learner.learner import Learner
 
@@ -34,6 +38,12 @@ class Evaluator(ABC):
     @abstractmethod
     def load_results(self, name: str):
         pass
+
+    def write_session_info(self) -> None:
+        with open(self.output_dir + "session-info.txt", "w") as session_file:
+            session_file.write("seqgra package version: " + pkg_resources.require("seqgra")[0].version + "\n")
+            session_file.write("NumPy version: " + np.version.version + "\n")
+            session_file.write("Python version: " + sys.version + "\n")
 
     def __prepare_output_dir(self) -> None:
         if os.path.exists(self.output_dir):

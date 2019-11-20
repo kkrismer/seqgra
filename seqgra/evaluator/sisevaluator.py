@@ -47,6 +47,7 @@ class SISEvaluator(Evaluator):
             df = pd.DataFrame(tmp, columns=["input", "annotation", "sis"])
 
         df.to_csv(self.output_dir + name + ".txt", sep = "\t", index=False)
+        self.write_session_info()
     
     def load_results(self, name: str):
         df = pd.read_csv(self.output_dir + name + ".txt", sep = "\t")

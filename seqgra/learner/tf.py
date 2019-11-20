@@ -6,11 +6,13 @@ Abstract base class for learners
 """
 from typing import List, Any
 import os
+import sys
 from ast import literal_eval
 import random
 
 import numpy as np
 import tensorflow as tf
+import pkg_resources
 
 from seqgra.learner.dna import DNAMultiClassClassificationLearner
 from seqgra.parser.modelparser import ModelParser
@@ -98,10 +100,17 @@ class TensorFlowKerasSequentialLearner(DNAMultiClassClassificationLearner):
         )
 
     def save_model(self, model_name: str = "") -> None:
-        #self.model.save_weights(self.output_dir + model_name)
         if model_name != "":
             os.makedirs(self.output_dir + model_name)
         self.model.save(self.output_dir + model_name, save_format='tf')
+        self.write_session_info()
+
+    def write_session_info(self) -> None:
+        with open(self.output_dir + "session-info.txt", "w") as session_file:
+            session_file.write("seqgra package version: " + pkg_resources.require("seqgra")[0].version + "\n")
+            session_file.write("TensorFlow version: " + tf.__version__ + "\n")
+            session_file.write("NumPy version: " + np.version.version + "\n")
+            session_file.write("Python version: " + sys.version + "\n")
 
     def load_model(self, model_name: str = "") -> None:
         self.model = tf.keras.models.load_model(self.output_dir + model_name)

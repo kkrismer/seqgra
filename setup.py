@@ -26,7 +26,8 @@ setuptools.setup(
         "scikit-learn>=0.21.3",
         "matplotlib>=3.1.1",
         "scipy>=1.3.1",
-        "pandas>=0.25.2"
+        "pandas>=0.25.2",
+        "setuptools>=41.6.0"
     ],
     python_requires=">=3"
 )
