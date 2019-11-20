@@ -115,6 +115,22 @@ class Learner(ABC):
         pass
 
     @abstractmethod
+    def encode_x(self, x):
+        pass
+
+    @abstractmethod
+    def decode_x(self, x):
+        pass
+    
+    @abstractmethod
+    def encode_y(self, y):
+        pass
+        
+    @abstractmethod
+    def decode_y(self, y):
+        pass
+
+    @abstractmethod
     def get_num_params(self):
         pass
 
