@@ -18,8 +18,7 @@ class Example:
         str_rep: List[str] = ["Example:\n",
         "\tNumber of samples drawn: ", str(self.samples), "\n",
         "\tInstance of the following conditions:\n"]
-        conditions_string: List[str] = ["\t\t" + "condition " + condition.id + " [cid]\n" for condition in self.conditions]
-        str_rep += conditions_string
+        str_rep += ["\t\t" + "condition " + condition.id + " [cid]\n" for condition in self.conditions]
         return "".join(str_rep)
     
 class ExampleSet:
@@ -32,14 +31,15 @@ class ExampleSet:
         "\tName: ", self.name, "\n",
         "\tExamples:\n"]
         examples_string: List[str] = [str(example) for example in self.examples]
-        examples_str_rep = ''.join(examples_string)
+        examples_str_rep = "".join(examples_string)
         str_rep += ["\t\t" + s + "\n" for s in examples_str_rep.splitlines()]
         return "".join(str_rep)
 
 class DataGeneration:
-    def __init__(self, seed: int, sets: List[ExampleSet]) -> None:
+    def __init__(self, seed: int, sets: List[ExampleSet], postprocessing: List[str] = None) -> None:
         self.seed: int = int(seed)
         self.sets: List[ExampleSet] = sets
+        self.postprocessing: List[str] = postprocessing
         
     def __str__(self):
         str_rep = ["Data generation:\n",
@@ -47,5 +47,8 @@ class DataGeneration:
         sets_string: List[str] = [str(example_set) for example_set in self.sets]
         sets_str_rep = ''.join(sets_string)
         str_rep += ["\t\t" + s + "\n" for s in sets_str_rep.splitlines()]
+        if self.postprocessing is not None:
+            str_rep += ["\tPostprocessing:\n"]
+            str_rep += ["\t\t" + operation + "\n" for operation in self.postprocessing]
         return "".join(str_rep)
 

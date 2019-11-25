@@ -151,6 +151,13 @@
           </xs:sequence>
         </xs:complexType>
       </xs:element>
+      <xs:element name="postprocessing" minOccurs="0" maxOccurs="1">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="operation" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
     </xs:sequence>
   </xs:complexType>
 

@@ -94,11 +94,18 @@ class XMLDataParser(DataParser):
     def get_data_generation(self, valid_conditions: List[Condition]) -> DataGeneration:
         data_generation_element: Any = self._dom.getElementsByTagName("datageneration")[0]
         seed: int = XMLHelper.read_int_node(data_generation_element, "seed")
+        postprocessing_element: Any = data_generation_element.getElementsByTagName("postprocessing")
+        if len(postprocessing_element) == 1:
+            postprocessing_element = postprocessing_element[0]
+            operation_elements = postprocessing_element.getElementsByTagName("operation")
+            postprocessing: List[str] = [XMLHelper.read_immediate_text_node(operation_element) for operation_element in operation_elements]
+        else:
+            postprocessing: List[str] = None
 
         sets_element = data_generation_element.getElementsByTagName("sets")[0]
         set_elements = sets_element.getElementsByTagName("set")
         sets: List[ExampleSet] = [XMLDataParser.__parse_set(set_element, valid_conditions) for set_element in set_elements]
-        return DataGeneration(seed, sets)
+        return DataGeneration(seed, sets, postprocessing)
     
     @staticmethod
     def __parse_set(set_element, valid_conditions: List[Condition]) -> ExampleSet:
