@@ -88,7 +88,7 @@ class XMLDataParser(DataParser):
     
     @staticmethod
     def __parse_letter(letter_element) -> Tuple[str, float]:
-        return tuple((letter_element.firstChild.nodeValue,
+        return tuple((XMLHelper.read_immediate_text_node(letter_element),
                       float(letter_element.getAttribute("probability"))))
 
     def get_data_generation(self, valid_conditions: List[Condition]) -> DataGeneration:
@@ -98,14 +98,19 @@ class XMLDataParser(DataParser):
         if len(postprocessing_element) == 1:
             postprocessing_element = postprocessing_element[0]
             operation_elements = postprocessing_element.getElementsByTagName("operation")
-            postprocessing: List[str] = [XMLHelper.read_immediate_text_node(operation_element) for operation_element in operation_elements]
+            postprocessing: List[Tuple[str, str]] = [XMLDataParser.__parse_operation(operation_element) for operation_element in operation_elements]
         else:
-            postprocessing: List[str] = None
+            postprocessing: List[Tuple[str, str]] = None
 
         sets_element = data_generation_element.getElementsByTagName("sets")[0]
         set_elements = sets_element.getElementsByTagName("set")
         sets: List[ExampleSet] = [XMLDataParser.__parse_set(set_element, valid_conditions) for set_element in set_elements]
         return DataGeneration(seed, sets, postprocessing)
+
+    @staticmethod
+    def __parse_operation(operation_element) -> Tuple[str, str]:
+        return tuple((XMLHelper.read_immediate_text_node(operation_element),
+                      operation_element.getAttribute("labels")))
     
     @staticmethod
     def __parse_set(set_element, valid_conditions: List[Condition]) -> ExampleSet:

@@ -36,10 +36,10 @@ class ExampleSet:
         return "".join(str_rep)
 
 class DataGeneration:
-    def __init__(self, seed: int, sets: List[ExampleSet], postprocessing: List[str] = None) -> None:
+    def __init__(self, seed: int, sets: List[ExampleSet], postprocessing: List[Tuple[str, str]] = None) -> None:
         self.seed: int = int(seed)
         self.sets: List[ExampleSet] = sets
-        self.postprocessing: List[str] = postprocessing
+        self.postprocessing: List[Tuple[str, str]] = postprocessing
         
     def __str__(self):
         str_rep = ["Data generation:\n",
@@ -49,6 +49,6 @@ class DataGeneration:
         str_rep += ["\t\t" + s + "\n" for s in sets_str_rep.splitlines()]
         if self.postprocessing is not None:
             str_rep += ["\tPostprocessing:\n"]
-            str_rep += ["\t\t" + operation + "\n" for operation in self.postprocessing]
+            str_rep += ["\t\t" + operation[0] + " (labels: " + operation[1] + ")" + "\n" for operation in self.postprocessing]
         return "".join(str_rep)
 
