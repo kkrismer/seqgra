@@ -148,6 +148,13 @@ class TensorFlowKerasSequentialLearner(DNAMultiClassClassificationLearner):
                 return(tf.keras.layers.Flatten())
             else:
                 return(tf.keras.layers.Flatten(input_shape=input_shape))
+        elif name == "reshape":
+            target_shape = literal_eval(operation.parameters["target_shape"].strip())
+            if input_shape is None:
+                return(tf.keras.layers.Reshape(target_shape = target_shape))
+            else:
+                return(tf.keras.layers.Reshape(target_shape = target_shape,
+                                               input_shape=input_shape))
         elif name == "dense":
             units = int(operation.parameters["units"].strip())
 
@@ -212,6 +219,165 @@ class TensorFlowKerasSequentialLearner(DNAMultiClassClassificationLearner):
                     kernel_regularizer=kernel_regularizer,
                     bias_regularizer=bias_regularizer,
                     activity_regularizer=activity_regularizer,
+                    input_shape=input_shape
+                ))
+        elif name == "lstm":
+            units = int(operation.parameters["units"].strip())
+
+            if "activation" in operation.parameters:
+                activation = operation.parameters["activation"].strip()
+            else:
+                activation = "tanh"
+
+            if "recurrent_activation" in operation.parameters:
+                recurrent_activation = operation.parameters["recurrent_activation"].strip()
+            else:
+                recurrent_activation = "sigmoid"
+
+            if "use_bias" in operation.parameters:
+                use_bias = bool(operation.parameters["use_bias"].strip())
+            else:
+                use_bias = True
+
+            if "kernel_initializer" in operation.parameters:
+                kernel_initializer = eval(operation.parameters["kernel_initializer"].strip(
+                ))
+            else:
+                kernel_initializer = "glorot_uniform"
+
+            if "recurrent_initializer" in operation.parameters:
+                recurrent_initializer = eval(operation.parameters["recurrent_initializer"].strip(
+                ))
+            else:
+                recurrent_initializer = "orthogonal"
+
+            if "bias_initializer" in operation.parameters:
+                bias_initializer = eval(operation.parameters["bias_initializer"].strip(
+                ))
+            else:
+                bias_initializer = "zeros"
+
+            if "unit_forget_bias" in operation.parameters:
+                unit_forget_bias = bool(operation.parameters["unit_forget_bias"].strip())
+            else:
+                unit_forget_bias = True
+
+            if "kernel_regularizer" in operation.parameters:
+                kernel_regularizer = eval(operation.parameters["kernel_regularizer"].strip(
+                ))
+            else:
+                kernel_regularizer = None
+
+            if "recurrent_regularizer" in operation.parameters:
+                recurrent_regularizer = eval(operation.parameters["recurrent_regularizer"].strip(
+                ))
+            else:
+                recurrent_regularizer = None
+
+            if "bias_regularizer" in operation.parameters:
+                bias_regularizer = eval(operation.parameters["bias_regularizer"].strip(
+                ))
+            else:
+                bias_regularizer = None
+
+            if "activity_regularizer" in operation.parameters:
+                activity_regularizer = eval(operation.parameters["activity_regularizer"].strip(
+                ))
+            else:
+                activity_regularizer = None
+
+            if "dropout" in operation.parameters:
+                dropout = float(operation.parameters["dropout"].strip())
+            else:
+                dropout = 0.0
+
+            if "recurrent_dropout" in operation.parameters:
+                recurrent_dropout = float(operation.parameters["recurrent_dropout"].strip())
+            else:
+                recurrent_dropout = 0.0
+
+            if "implementation" in operation.parameters:
+                implementation = int(operation.parameters["implementation"].strip())
+            else:
+                implementation = 2
+
+            if "return_sequences" in operation.parameters:
+                return_sequences = bool(operation.parameters["return_sequences"].strip())
+            else:
+                return_sequences = False
+
+            if "return_state" in operation.parameters:
+                return_state = bool(operation.parameters["return_state"].strip())
+            else:
+                return_state = False
+
+            if "go_backwards" in operation.parameters:
+                go_backwards = bool(operation.parameters["go_backwards"].strip())
+            else:
+                go_backwards = False
+
+            if "stateful" in operation.parameters:
+                stateful = bool(operation.parameters["stateful"].strip())
+            else:
+                stateful = False
+
+            if "time_major" in operation.parameters:
+                time_major = bool(operation.parameters["time_major"].strip())
+            else:
+                time_major = False
+
+            if "unroll" in operation.parameters:
+                unroll = bool(operation.parameters["unroll"].strip())
+            else:
+                unroll = False
+
+            if input_shape is None:
+                return(tf.keras.layers.LSTM(
+                    units,
+                    activation=activation,
+                    recurrent_activation=recurrent_activation,
+                    use_bias=use_bias,
+                    kernel_initializer=kernel_initializer,
+                    recurrent_initializer=recurrent_initializer,
+                    bias_initializer=bias_initializer,
+                    unit_forget_bias=unit_forget_bias,
+                    kernel_regularizer=kernel_regularizer,
+                    recurrent_regularizer=recurrent_regularizer,
+                    bias_regularizer=bias_regularizer,
+                    activity_regularizer=activity_regularizer,
+                    dropout=dropout,
+                    recurrent_dropout=recurrent_dropout,
+                    implementation=implementation,
+                    return_sequences=return_sequences,
+                    return_state=return_state,
+                    go_backwards=go_backwards,
+                    stateful=stateful,
+                    time_major=time_major,
+                    unroll=unroll
+                ))
+            else:
+                return(tf.keras.layers.LSTM(
+                    units,
+                    activation=activation,
+                    recurrent_activation=recurrent_activation,
+                    use_bias=use_bias,
+                    kernel_initializer=kernel_initializer,
+                    recurrent_initializer=recurrent_initializer,
+                    bias_initializer=bias_initializer,
+                    unit_forget_bias=unit_forget_bias,
+                    kernel_regularizer=kernel_regularizer,
+                    recurrent_regularizer=recurrent_regularizer,
+                    bias_regularizer=bias_regularizer,
+                    activity_regularizer=activity_regularizer,
+                    dropout=dropout,
+                    recurrent_dropout=recurrent_dropout,
+                    implementation=implementation,
+                    return_sequences=return_sequences,
+                    return_state=return_state,
+                    go_backwards=go_backwards,
+                    stateful=stateful,
+                    time_major=time_major,
+                    unroll=unroll,
                     input_shape=input_shape
                 ))
         elif name == "conv1d":
