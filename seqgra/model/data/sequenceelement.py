@@ -52,7 +52,7 @@ class MatrixBasedSequenceElement(SequenceElement):
 
     def __generate_letter(self, position: List[Tuple[str, float]]) -> str:
         letters = [letter[0] for letter in position]
-        p = [letter[1] for letter in letters]
+        p = [letter[1] for letter in position]
         p = [prop / sum(p) for prop in p]
         return np.random.choice(letters, p=p)
 
