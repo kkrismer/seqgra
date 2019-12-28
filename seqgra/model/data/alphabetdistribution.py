@@ -15,7 +15,8 @@ import numpy as np
 from seqgra.model.data.condition import Condition
 
 class AlphabetDistribution:
-    def __init__(self, letters: List[Tuple[str, float]], condition: Condition = None, set_name: str = None) -> None:
+    def __init__(self, letters: List[Tuple[str, float]], 
+                 condition: Condition = None, set_name: str = None) -> None:
         self.letters: List[Tuple[str, float]] = letters
         self.l = [letter[0] for letter in self.letters]
         self.p = [letter[1] for letter in self.letters]
@@ -36,7 +37,8 @@ class AlphabetDistribution:
         else:
             config += ["\tset: ", self.set_name, "[setname]\n"]
         config += ["\tletters:\n"]
-        letters_string: List[str] = [("\t\t" + letter[0] + ": " + str(round(letter[1], 3)) + "\n") for letter in self.letters]
+        letters_string: List[str] = [("\t\t" + letter[0] + ": " +
+            str(round(letter[1], 3)) + "\n") for letter in self.letters]
         config += letters_string
         return "".join(config)
     

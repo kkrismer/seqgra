@@ -1,7 +1,8 @@
 """
 MIT - CSAIL - Gifford Lab - seqgra
 
-Implementation of Parser for XML configuration files (using Strategy design pattern)
+Implementation of Parser for XML configuration files 
+(using Strategy design pattern)
 
 @author: Konstantin Krismer
 """
@@ -44,7 +45,8 @@ class XMLDataParser(DataParser):
         xmlschema = etree.XMLSchema(xmlschema_doc)
         xml_doc = etree.parse(io.BytesIO(xml_config.encode()))
         xmlschema.assertValid(xml_doc)
-        logging.info("seqgra data configuration XML file is well-formed and valid")
+        logging.info("seqgra data configuration XML "
+                     "file is well-formed and valid")
 
     def get_id(self) -> str:
         return self._general_element.getAttribute("id")
@@ -67,11 +69,15 @@ class XMLDataParser(DataParser):
         max_length: int = XMLHelper.read_int_node(background_element, "maxlength")
 
         distribution_elements: Any = background_element.getElementsByTagName("alphabetdistribution")
-        distributions: List[AlphabetDistribution] = [XMLDataParser.__parse_alphabet_distribution(distribution_element, valid_conditions) for distribution_element in distribution_elements]
+        distributions: List[AlphabetDistribution] = \
+            [XMLDataParser.__parse_alphabet_distribution(distribution_element, valid_conditions) 
+             for distribution_element in distribution_elements]
         return Background(min_length, max_length, distributions)
     
     @staticmethod
-    def __parse_alphabet_distribution(alphabet_distribution_element, valid_conditions: List[Condition]) -> AlphabetDistribution:
+    def __parse_alphabet_distribution(
+        alphabet_distribution_element,
+        valid_conditions: List[Condition]) -> AlphabetDistribution:
         if alphabet_distribution_element.hasAttribute("cid"):
             condition: Condition = Condition.get_by_id(valid_conditions, alphabet_distribution_element.getAttribute("cid"))
         else:
@@ -83,7 +89,9 @@ class XMLDataParser(DataParser):
             set_name: str = None
 
         letter_elements: Any = alphabet_distribution_element.getElementsByTagName("letter")
-        letters: List[Tuple[str, float]] = [XMLDataParser.__parse_letter(letter_element) for letter_element in letter_elements]
+        letters: List[Tuple[str, float]] = \
+            [XMLDataParser.__parse_letter(letter_element) 
+             for letter_element in letter_elements]
         return AlphabetDistribution(letters, condition, set_name)
     
     @staticmethod
@@ -98,13 +106,17 @@ class XMLDataParser(DataParser):
         if len(postprocessing_element) == 1:
             postprocessing_element = postprocessing_element[0]
             operation_elements = postprocessing_element.getElementsByTagName("operation")
-            postprocessing: List[Tuple[str, str]] = [XMLDataParser.__parse_operation(operation_element) for operation_element in operation_elements]
+            postprocessing: List[Tuple[str, str]] = \
+                [XMLDataParser.__parse_operation(operation_element)
+                 for operation_element in operation_elements]
         else:
             postprocessing: List[Tuple[str, str]] = None
 
         sets_element = data_generation_element.getElementsByTagName("sets")[0]
         set_elements = sets_element.getElementsByTagName("set")
-        sets: List[ExampleSet] = [XMLDataParser.__parse_set(set_element, valid_conditions) for set_element in set_elements]
+        sets: List[ExampleSet] = \
+            [XMLDataParser.__parse_set(set_element, valid_conditions) 
+             for set_element in set_elements]
         return DataGeneration(seed, sets, postprocessing)
 
     @staticmethod
@@ -116,20 +128,24 @@ class XMLDataParser(DataParser):
     def __parse_set(set_element, valid_conditions: List[Condition]) -> ExampleSet:
         name: str = set_element.getAttribute("name")
         example_elements: Any = set_element.getElementsByTagName("example")
-        examples: List[Example] = [XMLDataParser.__parse_example(example_element, valid_conditions) for example_element in example_elements]
+        examples: List[Example] = \
+            [XMLDataParser.__parse_example(example_element, valid_conditions)
+             for example_element in example_elements]
         return ExampleSet(name, examples)
     
     @staticmethod
     def __parse_example(example_element, valid_conditions: List[Condition]) -> Example:
         samples: int = int(example_element.getAttribute("samples"))
         condition_elements: Any = example_element.getElementsByTagName("conditionref")
-        conditions: List[Condition] = [Condition.get_by_id(valid_conditions, condition_element.getAttribute("cid")) for condition_element in condition_elements]
+        conditions: List[Condition] = [Condition.get_by_id(valid_conditions, condition_element.getAttribute("cid")) 
+                                       for condition_element in condition_elements]
         return Example(samples, conditions)
 
     def get_conditions(self, valid_sequence_elements: List[SequenceElement]) -> List[Condition]:
         conditions_element: Any = self._dom.getElementsByTagName("conditions")[0]
         condition_elements = conditions_element.getElementsByTagName("condition")
-        return [XMLDataParser.__parse_condition(condition_element, valid_sequence_elements) for condition_element in condition_elements]
+        return [XMLDataParser.__parse_condition(condition_element, valid_sequence_elements) 
+                for condition_element in condition_elements]
 
     @staticmethod
     def __parse_condition(condition_element, valid_sequence_elements: List[SequenceElement]) -> Condition:
@@ -138,7 +154,8 @@ class XMLDataParser(DataParser):
         description: str = XMLHelper.read_text_node(condition_element, "description")
         grammar_element: Any = condition_element.getElementsByTagName("grammar")[0]
         rule_elements = grammar_element.getElementsByTagName("rule")
-        grammar: List[Rule] = [XMLDataParser.__parse_rule(rule_element, valid_sequence_elements) for rule_element in rule_elements]
+        grammar: List[Rule] = [XMLDataParser.__parse_rule(rule_element, valid_sequence_elements)
+                               for rule_element in rule_elements]
         return Condition(id, label, description, grammar)
 
     @staticmethod
@@ -147,11 +164,15 @@ class XMLDataParser(DataParser):
         probability: float = XMLHelper.read_float_node(rule_element, "probability")
         
         sref_elements: Any = rule_element.getElementsByTagName("sequenceelementrefs")[0].getElementsByTagName("sequenceelementref")
-        sequence_elements: List[SequenceElement] = [SequenceElement.get_by_id(valid_sequence_elements, sref_element.getAttribute("sid")) for sref_element in sref_elements]
+        sequence_elements: List[SequenceElement] = \
+            [SequenceElement.get_by_id(valid_sequence_elements, sref_element.getAttribute("sid"))
+             for sref_element in sref_elements]
         
         if len(rule_element.getElementsByTagName("spacingconstraints")) == 1:
             spacing_constraint_elements: Any = rule_element.getElementsByTagName("spacingconstraints")[0].getElementsByTagName("spacingconstraint")
-            spacing_constraints: List[SpacingConstraint] = [XMLDataParser.__parse_spacing_constraint(spacing_constraint_element, valid_sequence_elements) for spacing_constraint_element in spacing_constraint_elements]
+            spacing_constraints: List[SpacingConstraint] = \
+                [XMLDataParser.__parse_spacing_constraint(spacing_constraint_element, valid_sequence_elements)
+                 for spacing_constraint_element in spacing_constraint_elements]
         else:
             spacing_constraints: List[SpacingConstraint] = None
 
@@ -169,7 +190,8 @@ class XMLDataParser(DataParser):
     def get_sequence_elements(self) -> List[SequenceElement]:
         sequence_elements_element: Any = self._dom.getElementsByTagName("sequenceelements")[0]
         sequence_element_elements: List[Any] = sequence_elements_element.getElementsByTagName("sequenceelement")
-        return [XMLDataParser.__parse_sequence_element(sequence_element_element) for sequence_element_element in sequence_element_elements]
+        return [XMLDataParser.__parse_sequence_element(sequence_element_element) 
+                for sequence_element_element in sequence_element_elements]
 
     @staticmethod
     def __parse_sequence_element(sequence_element_element: Any) -> SequenceElement:
@@ -178,11 +200,15 @@ class XMLDataParser(DataParser):
         matrix_based_element: Any = sequence_element_element.getElementsByTagName("matrixbased")
         if len(kmer_based_element) == 1:
             kmer_elements: Any = kmer_based_element[0].getElementsByTagName("kmer")
-            kmers: List[Tuple[str, float]] = [XMLDataParser.__parse_letter(kmer_element) for kmer_element in kmer_elements]
+            kmers: List[Tuple[str, float]] = \
+                [XMLDataParser.__parse_letter(kmer_element)
+                 for kmer_element in kmer_elements]
             return KmerBasedSequenceElement(id, kmers)
         elif len(matrix_based_element) == 1:
             position_elements: Any = matrix_based_element[0].getElementsByTagName("position")
-            positions: List[List[Tuple[str, float]]] = [XMLDataParser.__parse_position(position_element) for position_element in position_elements]
+            positions: List[List[Tuple[str, float]]] = \
+                [XMLDataParser.__parse_position(position_element)
+                 for position_element in position_elements]
             return MatrixBasedSequenceElement(id, positions)
         else:
             raise Exception("sequence element is invalid")

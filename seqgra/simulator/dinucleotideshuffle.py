@@ -3,7 +3,8 @@ MIT - CSAIL - Gifford Lab - seqgra
 
 Shuffles DNA sequence while preserving dinucleotide frequencies
 
-Adapted from Peter Clote, Oct 2003 (https://github.com/wassermanlab/BiasAway/blob/master/altschulEriksonDinuclShuffle.py)
+Adapted from Peter Clote, Oct 2003
+(https://github.com/wassermanlab/BiasAway/blob/master/altschulEriksonDinuclShuffle.py)
 
 @author: Peter Clote
 @author: Konstantin Krismer
@@ -121,7 +122,8 @@ class DinucleotideShuffle:
             if x != last_ch:
                 edge_list.append(
                     [x, DinucleotideShuffle.choose_edge(x, dinucl_cnt)])
-        ok = DinucleotideShuffle.connected_to_last(edge_list, nucl_list, last_ch)
+        ok = DinucleotideShuffle.connected_to_last(edge_list, nucl_list, 
+                                                   last_ch)
         return ok, edge_list, nucl_list, last_ch
 
     @staticmethod

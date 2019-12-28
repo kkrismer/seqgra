@@ -64,14 +64,15 @@ class Simulator:
         self.label: str = self._parser.get_label()
         self.description: str = self._parser.get_description()
         self.sequence_space: str = self._parser.get_sequence_space()
-        self.sequence_elements: List[SequenceElement] = self._parser.get_sequence_elements(
+        self.sequence_elements: List[SequenceElement] = \
+            self._parser.get_sequence_elements(
         )
         self.conditions: List[Condition] = self._parser.get_conditions(
             self.sequence_elements)
         self.background: Background = self._parser.get_background(
             self.conditions)
-        self.data_generation: DataGeneration = self._parser.get_data_generation(
-            self.conditions)
+        self.data_generation: DataGeneration = \
+            self._parser.get_data_generation(self.conditions)
 
     def simulate_data(self) -> None:
         logging.info("started data simulation")
@@ -98,7 +99,10 @@ class Simulator:
                         self.__add_shuffled_examples(
                             example_set.name, False, labels_value)
 
-    def __add_shuffled_examples(self, set_name: str, preserve_dimer_frequencies: bool, labels_value: str, background_character: str = "_") -> None:
+    def __add_shuffled_examples(self, set_name: str,
+                                preserve_dimer_frequencies: bool,
+                                labels_value: str,
+                                background_character: str = "_") -> None:
         # write shuffled examples
         with open(self.output_dir + "/" + set_name + ".txt", "r") as data_file:
             with open(self.output_dir + "/" + set_name + "-shuffled.txt", "w") as shuffled_data_file:
@@ -106,7 +110,8 @@ class Simulator:
                 for line in data_file:
                     columns = line.split("\t")
                     shuffled_data_file.write(self.__shuffle_example(
-                        columns[0], preserve_dimer_frequencies) + "\t" + labels_value + "\n")
+                        columns[0], preserve_dimer_frequencies) + "\t" + \
+                            labels_value + "\n")
 
         # write annotations for shuffled examples (all background)
         with open(self.output_dir + "/" + set_name + "-annotation.txt", "r") as annotation_file:
@@ -115,7 +120,8 @@ class Simulator:
                 for line in annotation_file:
                     columns = line.split("\t")
                     shuffled_annotation_file.write(
-                        "".join([background_character] * len(columns[0])) + "\t" + labels_value + "\n")
+                        "".join([background_character] * len(columns[0])) + \
+                            "\t" + labels_value + "\n")
 
         # merge files
         with open(self.output_dir + "/" + set_name + ".txt", "a") as data_file:
@@ -132,7 +138,8 @@ class Simulator:
         os.remove(self.output_dir + "/" + set_name +
                   "-annotation-shuffled.txt")
 
-    def __shuffle_example(self, example: str, preserve_dimer_frequencies: bool) -> str:
+    def __shuffle_example(self, example: str,
+                          preserve_dimer_frequencies: bool) -> str:
         if preserve_dimer_frequencies:
             return DinucleotideShuffle.shuffle(example)
         else:
@@ -172,7 +179,8 @@ class Simulator:
 
     def __deserialize_example(self, example_str_rep: str) -> List[Condition]:
         condition_ids: List[str] = example_str_rep.split("|")
-        return [Condition.get_by_id(self.conditions, condition_id) for condition_id in condition_ids]
+        return [Condition.get_by_id(self.conditions, condition_id)
+                for condition_id in condition_ids]
 
     def __set_seed(self) -> None:
         random.seed(self.data_generation.seed)
@@ -182,7 +190,8 @@ class Simulator:
         if os.path.exists(self.output_dir):
             if not os.path.isdir(self.output_dir):
                 raise Exception(
-                    "output directory cannot be created (file with same name exists)")
+                    "output directory cannot be created (file "
+                    "with same name exists)")
         else:
             os.makedirs(self.output_dir)
 
@@ -258,8 +267,8 @@ class Simulator:
                     for condition_id in tmp_dict.keys():
                         if set_condition_combinations[set_name][condition_id] == "global":
                             valid = False
-                            logging.warn(
-                                "more than one global alphabet definition found")
+                            logging.warn("more than one global alphabet "
+                                         "definition found")
                         else:
                             set_condition_combinations[set_name][condition_id] = "global"
             elif alphabet.condition_independent:
@@ -267,23 +276,27 @@ class Simulator:
                 for condition_id in tmp_dict.keys():
                     if tmp_dict[condition_id] == "condition-independent":
                         valid = False
-                        logging.warn(
-                            "more than one condition-independent alphabet definition found for set " + alphabet.set_name)
+                        logging.warn("more than one condition-independent "
+                                     "alphabet definition found for set " +
+                                     alphabet.set_name)
                     else:
                         tmp_dict[condition_id] = "condition-independent"
             elif alphabet.set_independent:
                 for set_name in set_condition_combinations.keys():
                     if set_condition_combinations[set_name][alphabet.condition.id] == "set-independent":
                         valid = False
-                        logging.warn(
-                            "more than one set-independent alphabet definition found for condition " + alphabet.condition.id + " [cid]")
+                        logging.warn("more than one set-independent alphabet "
+                                     "definition found for condition " +
+                                     alphabet.condition.id + " [cid]")
                     else:
                         set_condition_combinations[set_name][alphabet.condition.id] = "set-independent"
             else:
                 if set_condition_combinations[alphabet.set_name][alphabet.condition.id] == "specified":
                     valid = False
-                    logging.warn("duplicate alphabet definition found for set name " +
-                                 example_set.name + " and condition " + condition_sample.id + " [cid]")
+                    logging.warn("duplicate alphabet definition found for "
+                                 "set name " + example_set.name + 
+                                 " and condition " + condition_sample.id + 
+                                 " [cid]")
                 else:
                     set_condition_combinations[alphabet.set_name][alphabet.condition.id] = "specified"
 
@@ -292,7 +305,8 @@ class Simulator:
                 if value == "unspecified":
                     valid = False
                     logging.warn("no alphabet definition found for set name " +
-                                 set_name + " and condition " + condition_id + " [cid]")
+                                 set_name + " and condition " + 
+                                 condition_id + " [cid]")
 
         return valid
 
@@ -301,15 +315,20 @@ class Simulator:
         for condition in self.conditions:
             for i in range(len(condition.grammar)):
                 rule = condition.grammar[i]
-                if rule.position != "random" and rule.position != "start" and rule.position != "end" and rule.position != "center":
+                if rule.position != "random" and rule.position != "start" \
+                    and rule.position != "end" and rule.position != "center":
                     if int(rule.position) > self.background.min_length:
                         valid = False
-                        logging.warn("condition " + condition.id + " [cid], rule " + str(
-                            i + 1) + ": position exceeds minimum sequence length")
+                        logging.warn("condition " + condition.id + 
+                                     " [cid], rule " + str(i + 1) +
+                                     ": position exceeds minimum "
+                                     "sequence length")
                     elif int(rule.probability) + self.__get_longest_sequence_element_length(rule) > self.background.min_length:
                         valid = False
-                        logging.warn("condition " + condition.id + " [cid], rule " + str(
-                            i + 1) + ": position plus sequence element length exceeds minimum sequence length")
+                        logging.warn("condition " + condition.id + 
+                                     " [cid], rule " + str(i + 1) + 
+                                     ": position plus sequence element "
+                                     "length exceeds minimum sequence length")
         return valid
 
     def check_invalid_distances(self) -> bool:
@@ -318,17 +337,25 @@ class Simulator:
         for condition in self.conditions:
             for i in range(len(condition.grammar)):
                 rule: Rule = condition.grammar[i]
-                if rule.spacing_constraints is not None and len(rule.spacing_constraints) > 0:
+                if rule.spacing_constraints is not None and \
+                    len(rule.spacing_constraints) > 0:
                     for j in range(len(rule.spacing_constraints)):
                         spacing_constraint: SpacingConstraint = rule.spacing_constraints[j]
                         if spacing_constraint.min_distance > self.background.min_length:
                             valid = False
-                            logging.warn("condition " + condition.id + " [cid], rule " + str(
-                                i + 1) + ", spacing constraint " + str(j + 1) + ": minimum distance exceeds minimum sequence length")
+                            logging.warn("condition " + condition.id + 
+                                         " [cid], rule " + str(i + 1) + 
+                                         ", spacing constraint " + str(j + 1) + 
+                                         ": minimum distance exceeds minimum "
+                                         "sequence length")
                         elif spacing_constraint.min_distance + spacing_constraint.sequence_element1.get_max_length() + spacing_constraint.sequence_element2.get_max_length() > self.background.min_length:
                             valid = False
-                            logging.warn("condition " + condition.id + " [cid], rule " + str(i + 1) + ", spacing constraint " + str(
-                                j + 1) + ": minimum distance plus sequence element lengths exceeds minimum sequence length")
+                            logging.warn("condition " + condition.id + 
+                                         " [cid], rule " + str(i + 1) + 
+                                         ", spacing constraint " + str(j + 1) +
+                                         ": minimum distance plus sequence "
+                                         "element lengths exceeds minimum "
+                                         "sequence length")
 
         return valid
 
@@ -339,7 +366,8 @@ class Simulator:
             if sequence_element.get_max_length() > self.background.min_length:
                 valid = False
                 logging.warn("sequence element " + sequence_element.id +
-                             ": maximum sequence element length exceeds minimum sequence length")
+                             ": maximum sequence element length exceeds "
+                             "minimum sequence length")
 
         return valid
 
@@ -358,14 +386,22 @@ class Simulator:
                         spacing_constraint: SpacingConstraint = rule.spacing_constraints[j]
                         if spacing_constraint.sequence_element1.id not in valid_sequence_element_ids:
                             valid = False
-                            logging.error("condition " + condition.id + " [cid], rule " + str(i + 1) +
-                                          ", spacing constraint " + str(j + 1) + ": sequence element " +
-                                          spacing_constraint.sequence_element1.id + " [sid] not among sequence elements of rule")
+                            logging.error("condition " + condition.id + 
+                                          " [cid], rule " + str(i + 1) +
+                                          ", spacing constraint " + 
+                                          str(j + 1) + ": sequence element " +
+                                          spacing_constraint.sequence_element1.id + 
+                                          " [sid] not among sequence elements "
+                                          "of rule")
                         if spacing_constraint.sequence_element2.id not in valid_sequence_element_ids:
                             valid = False
-                            logging.error("condition " + condition.id + " [cid], rule " + str(i + 1) +
-                                          ", spacing constraint " + str(j + 1) + ": sequence element " +
-                                          spacing_constraint.sequence_element2.id + " [sid] not among sequence elements of rule")
+                            logging.error("condition " + condition.id + 
+                                          " [cid], rule " + str(i + 1) +
+                                          ", spacing constraint " + 
+                                          str(j + 1) + ": sequence element " +
+                                          spacing_constraint.sequence_element2.id + 
+                                          " [sid] not among sequence elements "
+                                          "of rule")
 
         return valid
 

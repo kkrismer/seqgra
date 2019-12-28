@@ -17,7 +17,8 @@ from seqgra.learner.learner import Learner
 
 class Evaluator(ABC):
     @abstractmethod
-    def __init__(self, learner: Learner, data_dir: str, output_dir: str) -> None:
+    def __init__(self, learner: Learner, data_dir: str, 
+                 output_dir: str) -> None:
         self.learner: Learner = learner
         self.data_dir: str = data_dir
         output_dir = output_dir.replace("\\", "/")
@@ -41,13 +42,15 @@ class Evaluator(ABC):
 
     def write_session_info(self) -> None:
         with open(self.output_dir + "session-info.txt", "w") as session_file:
-            session_file.write("seqgra package version: " + pkg_resources.require("seqgra")[0].version + "\n")
+            session_file.write("seqgra package version: " +
+                pkg_resources.require("seqgra")[0].version + "\n")
             session_file.write("NumPy version: " + np.version.version + "\n")
             session_file.write("Python version: " + sys.version + "\n")
 
     def __prepare_output_dir(self) -> None:
         if os.path.exists(self.output_dir):
             if not os.path.isdir(self.output_dir):
-                raise Exception("output directory cannot be created (file with same name exists)")
+                raise Exception("output directory cannot be created "
+                                "(file with same name exists)")
         else:    
             os.makedirs(self.output_dir)

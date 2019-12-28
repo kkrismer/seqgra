@@ -26,11 +26,14 @@ class TensorFlowKerasSequentialLearner(DNAMultiClassClassificationLearner):
     def create_model(self) -> None:
         self.set_seed()
         self.model = tf.keras.Sequential(
-            [self.__get_keras_layer(operation) for operation in self.architecture.operations])
+            [self.__get_keras_layer(operation)
+             for operation
+             in self.architecture.operations])
 
         self.model.compile(
             optimizer=self.__get_optimizer(),
-            # use categorical_crossentropy for multi-class and binary_crossentropy for multi-label
+            # use categorical_crossentropy for multi-class and 
+            # binary_crossentropy for multi-label
             loss=self.__get_loss(),
             metrics=self.metrics
         )
@@ -107,7 +110,8 @@ class TensorFlowKerasSequentialLearner(DNAMultiClassClassificationLearner):
 
     def write_session_info(self) -> None:
         with open(self.output_dir + "session-info.txt", "w") as session_file:
-            session_file.write("seqgra package version: " + pkg_resources.require("seqgra")[0].version + "\n")
+            session_file.write("seqgra package version: " +
+                pkg_resources.require("seqgra")[0].version + "\n")
             session_file.write("TensorFlow version: " + tf.__version__ + "\n")
             session_file.write("NumPy version: " + np.version.version + "\n")
             session_file.write("Python version: " + sys.version + "\n")
@@ -169,32 +173,32 @@ class TensorFlowKerasSequentialLearner(DNAMultiClassClassificationLearner):
                 use_bias = True
 
             if "kernel_initializer" in operation.parameters:
-                kernel_initializer = eval(operation.parameters["kernel_initializer"].strip(
-                ))
+                kernel_initializer = \
+                    eval(operation.parameters["kernel_initializer"].strip())
             else:
                 kernel_initializer = "glorot_uniform"
 
             if "bias_initializer" in operation.parameters:
-                bias_initializer = eval(operation.parameters["bias_initializer"].strip(
-                ))
+                bias_initializer = \
+                    eval(operation.parameters["bias_initializer"].strip())
             else:
                 bias_initializer = "zeros"
 
             if "kernel_regularizer" in operation.parameters:
-                kernel_regularizer = eval(operation.parameters["kernel_regularizer"].strip(
-                ))
+                kernel_regularizer = \
+                    eval(operation.parameters["kernel_regularizer"].strip())
             else:
                 kernel_regularizer = None
 
             if "bias_regularizer" in operation.parameters:
-                bias_regularizer = eval(operation.parameters["bias_regularizer"].strip(
-                ))
+                bias_regularizer = \
+                    eval(operation.parameters["bias_regularizer"].strip())
             else:
                 bias_regularizer = None
 
             if "activity_regularizer" in operation.parameters:
-                activity_regularizer = eval(operation.parameters["activity_regularizer"].strip(
-                ))
+                activity_regularizer = \
+                    eval(operation.parameters["activity_regularizer"].strip())
             else:
                 activity_regularizer = None
 
@@ -230,7 +234,8 @@ class TensorFlowKerasSequentialLearner(DNAMultiClassClassificationLearner):
                 activation = "tanh"
 
             if "recurrent_activation" in operation.parameters:
-                recurrent_activation = operation.parameters["recurrent_activation"].strip()
+                recurrent_activation = \
+                    operation.parameters["recurrent_activation"].strip()
             else:
                 recurrent_activation = "sigmoid"
 
@@ -240,49 +245,50 @@ class TensorFlowKerasSequentialLearner(DNAMultiClassClassificationLearner):
                 use_bias = True
 
             if "kernel_initializer" in operation.parameters:
-                kernel_initializer = eval(operation.parameters["kernel_initializer"].strip(
-                ))
+                kernel_initializer = \
+                    eval(operation.parameters["kernel_initializer"].strip())
             else:
                 kernel_initializer = "glorot_uniform"
 
             if "recurrent_initializer" in operation.parameters:
-                recurrent_initializer = eval(operation.parameters["recurrent_initializer"].strip(
-                ))
+                recurrent_initializer = \
+                    eval(operation.parameters["recurrent_initializer"].strip())
             else:
                 recurrent_initializer = "orthogonal"
 
             if "bias_initializer" in operation.parameters:
-                bias_initializer = eval(operation.parameters["bias_initializer"].strip(
-                ))
+                bias_initializer = \
+                    eval(operation.parameters["bias_initializer"].strip())
             else:
                 bias_initializer = "zeros"
 
             if "unit_forget_bias" in operation.parameters:
-                unit_forget_bias = bool(operation.parameters["unit_forget_bias"].strip())
+                unit_forget_bias = \
+                    bool(operation.parameters["unit_forget_bias"].strip())
             else:
                 unit_forget_bias = True
 
             if "kernel_regularizer" in operation.parameters:
-                kernel_regularizer = eval(operation.parameters["kernel_regularizer"].strip(
-                ))
+                kernel_regularizer = \
+                    eval(operation.parameters["kernel_regularizer"].strip())
             else:
                 kernel_regularizer = None
 
             if "recurrent_regularizer" in operation.parameters:
-                recurrent_regularizer = eval(operation.parameters["recurrent_regularizer"].strip(
-                ))
+                recurrent_regularizer = \
+                    eval(operation.parameters["recurrent_regularizer"].strip())
             else:
                 recurrent_regularizer = None
 
             if "bias_regularizer" in operation.parameters:
-                bias_regularizer = eval(operation.parameters["bias_regularizer"].strip(
-                ))
+                bias_regularizer = \
+                    eval(operation.parameters["bias_regularizer"].strip())
             else:
                 bias_regularizer = None
 
             if "activity_regularizer" in operation.parameters:
-                activity_regularizer = eval(operation.parameters["activity_regularizer"].strip(
-                ))
+                activity_regularizer = \
+                    eval(operation.parameters["activity_regularizer"].strip())
             else:
                 activity_regularizer = None
 
@@ -292,27 +298,32 @@ class TensorFlowKerasSequentialLearner(DNAMultiClassClassificationLearner):
                 dropout = 0.0
 
             if "recurrent_dropout" in operation.parameters:
-                recurrent_dropout = float(operation.parameters["recurrent_dropout"].strip())
+                recurrent_dropout = \
+                    float(operation.parameters["recurrent_dropout"].strip())
             else:
                 recurrent_dropout = 0.0
 
             if "implementation" in operation.parameters:
-                implementation = int(operation.parameters["implementation"].strip())
+                implementation = \
+                    int(operation.parameters["implementation"].strip())
             else:
                 implementation = 2
 
             if "return_sequences" in operation.parameters:
-                return_sequences = bool(operation.parameters["return_sequences"].strip())
+                return_sequences = \
+                    bool(operation.parameters["return_sequences"].strip())
             else:
                 return_sequences = False
 
             if "return_state" in operation.parameters:
-                return_state = bool(operation.parameters["return_state"].strip())
+                return_state = \
+                    bool(operation.parameters["return_state"].strip())
             else:
                 return_state = False
 
             if "go_backwards" in operation.parameters:
-                go_backwards = bool(operation.parameters["go_backwards"].strip())
+                go_backwards = \
+                    bool(operation.parameters["go_backwards"].strip())
             else:
                 go_backwards = False
 
@@ -382,7 +393,8 @@ class TensorFlowKerasSequentialLearner(DNAMultiClassClassificationLearner):
                 ))
         elif name == "conv1d":
             filters = int(operation.parameters["filters"].strip())
-            kernel_size = literal_eval(operation.parameters["kernel_size"].strip())
+            kernel_size = \
+                literal_eval(operation.parameters["kernel_size"].strip())
 
             if "strides" in operation.parameters:
                 strides = literal_eval(operation.parameters["strides"].strip())
@@ -415,32 +427,32 @@ class TensorFlowKerasSequentialLearner(DNAMultiClassClassificationLearner):
                 use_bias = True
 
             if "kernel_initializer" in operation.parameters:
-                kernel_initializer = eval(operation.parameters["kernel_initializer"].strip(
-                ))
+                kernel_initializer = \
+                    eval(operation.parameters["kernel_initializer"].strip())
             else:
                 kernel_initializer = "glorot_uniform"
 
             if "bias_initializer" in operation.parameters:
-                bias_initializer = eval(operation.parameters["bias_initializer"].strip(
-                ))
+                bias_initializer = \
+                    eval(operation.parameters["bias_initializer"].strip())
             else:
                 bias_initializer = "zeros"
 
             if "kernel_regularizer" in operation.parameters:
-                kernel_regularizer = eval(operation.parameters["kernel_regularizer"].strip(
-                ))
+                kernel_regularizer = \
+                    eval(operation.parameters["kernel_regularizer"].strip())
             else:
                 kernel_regularizer = None
 
             if "bias_regularizer" in operation.parameters:
-                bias_regularizer = eval(operation.parameters["bias_regularizer"].strip(
-                ))
+                bias_regularizer = \
+                    eval(operation.parameters["bias_regularizer"].strip())
             else:
                 bias_regularizer = None
 
             if "activity_regularizer" in operation.parameters:
-                activity_regularizer = eval(operation.parameters["activity_regularizer"].strip(
-                ))
+                activity_regularizer = \
+                    eval(operation.parameters["activity_regularizer"].strip())
             else:
                 activity_regularizer = None
 
@@ -479,7 +491,8 @@ class TensorFlowKerasSequentialLearner(DNAMultiClassClassificationLearner):
                 ))
         elif name == "conv2d":
             filters = int(operation.parameters["filters"].strip())
-            kernel_size = literal_eval(operation.parameters["kernel_size"].strip())
+            kernel_size = \
+                literal_eval(operation.parameters["kernel_size"].strip())
 
             if "strides" in operation.parameters:
                 strides = literal_eval(operation.parameters["strides"].strip())
@@ -512,32 +525,32 @@ class TensorFlowKerasSequentialLearner(DNAMultiClassClassificationLearner):
                 use_bias = True
 
             if "kernel_initializer" in operation.parameters:
-                kernel_initializer = eval(operation.parameters["kernel_initializer"].strip(
-                ))
+                kernel_initializer = \
+                    eval(operation.parameters["kernel_initializer"].strip())
             else:
                 kernel_initializer = "glorot_uniform"
 
             if "bias_initializer" in operation.parameters:
-                bias_initializer = eval(operation.parameters["bias_initializer"].strip(
-                ))
+                bias_initializer = \
+                    eval(operation.parameters["bias_initializer"].strip())
             else:
                 bias_initializer = "zeros"
 
             if "kernel_regularizer" in operation.parameters:
-                kernel_regularizer = eval(operation.parameters["kernel_regularizer"].strip(
-                ))
+                kernel_regularizer = \
+                    eval(operation.parameters["kernel_regularizer"].strip())
             else:
                 kernel_regularizer = None
 
             if "bias_regularizer" in operation.parameters:
-                bias_regularizer = eval(operation.parameters["bias_regularizer"].strip(
-                ))
+                bias_regularizer = \
+                    eval(operation.parameters["bias_regularizer"].strip())
             else:
                 bias_regularizer = None
 
             if "activity_regularizer" in operation.parameters:
-                activity_regularizer = eval(operation.parameters["activity_regularizer"].strip(
-                ))
+                activity_regularizer = \
+                    eval(operation.parameters["activity_regularizer"].strip())
             else:
                 activity_regularizer = None
 
@@ -579,8 +592,8 @@ class TensorFlowKerasSequentialLearner(DNAMultiClassClassificationLearner):
 
     def __get_optimizer(self):
         if "optimizer" in self.optimizer_hyperparameters:
-            optimizer = self.optimizer_hyperparameters["optimizer"].lower(
-            ).strip()
+            optimizer = \
+                self.optimizer_hyperparameters["optimizer"].lower().strip()
             if optimizer == "adadelta":
                 if "learning_rate" in self.optimizer_hyperparameters:
                     learning_rate = float(
@@ -598,9 +611,10 @@ class TensorFlowKerasSequentialLearner(DNAMultiClassClassificationLearner):
                         self.optimizer_hyperparameters["epsilon"].strip())
                 else:
                     epsilon = 1e-07
-                return tf.keras.optimizers.Adadelta(learning_rate=learning_rate,
-                                                    rho=rho,
-                                                    epsilon=epsilon)
+                return tf.keras.optimizers.Adadelta(
+                    learning_rate=learning_rate,
+                    rho=rho,
+                    epsilon=epsilon)
             elif optimizer == "adagrad":
                 if "learning_rate" in self.optimizer_hyperparameters:
                     learning_rate = float(
@@ -619,9 +633,10 @@ class TensorFlowKerasSequentialLearner(DNAMultiClassClassificationLearner):
                         self.optimizer_hyperparameters["epsilon"].strip())
                 else:
                     epsilon = 1e-07
-                return tf.keras.optimizers.Adagrad(learning_rate=learning_rate,
-                                                   initial_accumulator_value=initial_accumulator_value,
-                                                   epsilon=epsilon)
+                return tf.keras.optimizers.Adagrad(
+                    learning_rate=learning_rate,
+                    initial_accumulator_value=initial_accumulator_value,
+                    epsilon=epsilon)
             elif optimizer == "adam":
                 if "learning_rate" in self.optimizer_hyperparameters:
                     learning_rate = float(
@@ -721,12 +736,13 @@ class TensorFlowKerasSequentialLearner(DNAMultiClassClassificationLearner):
                         self.optimizer_hyperparameters["l2_shrinkage_regularization_strength"].strip())
                 else:
                     l2_shrinkage_regularization_strength = 0.0
-                return tf.keras.optimizers.Ftrl(learning_rate=learning_rate,
-                                                learning_rate_power=learning_rate_power,
-                                                initial_accumulator_value=initial_accumulator_value,
-                                                l1_regularization_strength=l1_regularization_strength,
-                                                l2_regularization_strength=l2_regularization_strength,
-                                                l2_shrinkage_regularization_strength=l2_shrinkage_regularization_strength)
+                return tf.keras.optimizers.Ftrl(
+                    learning_rate=learning_rate,
+                    learning_rate_power=learning_rate_power,
+                    initial_accumulator_value=initial_accumulator_value,
+                    l1_regularization_strength=l1_regularization_strength,
+                    l2_regularization_strength=l2_regularization_strength,
+                    l2_shrinkage_regularization_strength=l2_shrinkage_regularization_strength)
             elif optimizer == "nadam":
                 if "learning_rate" in self.optimizer_hyperparameters:
                     learning_rate = float(
@@ -830,8 +846,9 @@ class TensorFlowKerasSequentialLearner(DNAMultiClassClassificationLearner):
                         self.loss_hyperparameters["label_smoothing"].strip())
                 else:
                     label_smoothing = 0.0
-                return tf.keras.losses.BinaryCrossentropy(from_logits=from_logits,
-                                                          label_smoothing=label_smoothing)
+                return tf.keras.losses.BinaryCrossentropy(
+                    from_logits=from_logits,
+                    label_smoothing=label_smoothing)
             elif loss == "categoricalcrossentropy":
                 if "from_logits" in self.loss_hyperparameters:
                     from_logits = bool(
@@ -844,8 +861,9 @@ class TensorFlowKerasSequentialLearner(DNAMultiClassClassificationLearner):
                         self.loss_hyperparameters["label_smoothing"].strip())
                 else:
                     label_smoothing = 0.0
-                return tf.keras.losses.CategoricalCrossentropy(from_logits=from_logits,
-                                                               label_smoothing=label_smoothing)
+                return tf.keras.losses.CategoricalCrossentropy(
+                    from_logits=from_logits,
+                    label_smoothing=label_smoothing)
             elif loss == "categoricalhinge":
                 return tf.keras.losses.CategoricalHinge()
             elif loss == "cosinesimilarity":
@@ -883,7 +901,8 @@ class TensorFlowKerasSequentialLearner(DNAMultiClassClassificationLearner):
                         self.loss_hyperparameters["from_logits"].strip())
                 else:
                     from_logits = False
-                return tf.keras.losses.SparseCategoricalCrossentropy(from_logits=from_logits)
+                return tf.keras.losses.SparseCategoricalCrossentropy(
+                    from_logits=from_logits)
             elif loss == "squaredhinge":
                 return tf.keras.losses.SquaredHinge()
             else:

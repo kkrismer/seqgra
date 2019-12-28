@@ -31,14 +31,16 @@ class SequenceElement(ABC):
         pass
     
     @staticmethod
-    def get_by_id(sequence_elements: List[SequenceElement], id: str) -> SequenceElement:
+    def get_by_id(sequence_elements: List[SequenceElement],
+                  id: str) -> SequenceElement:
         for sequence_element in sequence_elements:
             if sequence_element.id == id:
                 return sequence_element
         return None
 
 class MatrixBasedSequenceElement(SequenceElement):
-    def __init__(self, id: str, positions: List[List[Tuple[str, float]]]) -> None:
+    def __init__(self, id: str,
+                 positions: List[List[Tuple[str, float]]]) -> None:
         self.id: str = id
         self.positions: List[List[Tuple[str, float]]] = positions
 
@@ -57,7 +59,8 @@ class MatrixBasedSequenceElement(SequenceElement):
         return np.random.choice(letters, p=p)
 
     def generate(self) -> str:
-        return "".join([self.__generate_letter(position) for position in self.positions])
+        return "".join([self.__generate_letter(position)
+                        for position in self.positions])
 
     def get_max_length(self) -> int:
         return len(self.positions)
@@ -74,7 +77,8 @@ class KmerBasedSequenceElement(SequenceElement):
         str_rep = ["Sequence element (k-mer-based):\n",
         "\tID: ", self.id, "\n",
         "\tk-mers:\n"]
-        str_rep += ["\t\t" + kmer[0] + ": " + str(round(kmer[1], 3)) + "\n" for kmer in self.kmers]
+        str_rep += ["\t\t" + kmer[0] + ": " + str(round(kmer[1], 3)) + "\n" 
+                    for kmer in self.kmers]
         return "".join(str_rep)
 
     def generate(self) -> str:

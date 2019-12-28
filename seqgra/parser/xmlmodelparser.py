@@ -1,7 +1,8 @@
 """
 MIT - CSAIL - Gifford Lab - seqgra
 
-Implementation of Parser for XML configuration files (using Strategy design pattern)
+Implementation of Parser for XML configuration files 
+(using Strategy design pattern)
 
 @author: Konstantin Krismer
 """
@@ -30,16 +31,19 @@ class XMLModelParser(ModelParser):
 
     def __init__(self, config: str) -> None:
         self._dom: Document = parseString(config)
-        self._general_element: Any = self._dom.getElementsByTagName("general")[0]
+        self._general_element: Any = \
+            self._dom.getElementsByTagName("general")[0]
         self.validate(config)
 
     def validate(self, xml_config: str) -> None:
-        xsd_path = pkg_resources.resource_filename("seqgra", "model-config.xsd")
+        xsd_path = pkg_resources.resource_filename("seqgra",
+                                                   "model-config.xsd")
         xmlschema_doc = etree.parse(xsd_path)
         xmlschema = etree.XMLSchema(xmlschema_doc)
         xml_doc = etree.parse(io.BytesIO(xml_config.encode()))
         xmlschema.assertValid(xml_doc)
-        logging.info("seqgra model configuration XML file is well-formed and valid")
+        logging.info("seqgra model configuration XML file "
+                     "is well-formed and valid")
 
     def get_id(self) -> str:
         return self._general_element.getAttribute("id")
@@ -57,35 +61,45 @@ class XMLModelParser(ModelParser):
         return XMLHelper.read_int_node(self._general_element, "seed")
     
     def get_learner_type(self) -> str:
-        learner_element: Any = self._general_element.getElementsByTagName("learner")[0]
+        learner_element: Any = \
+            self._general_element.getElementsByTagName("learner")[0]
         return XMLHelper.read_text_node(learner_element, "type")
     
     def get_learner_implementation(self) -> str:
-        learner_element: Any = self._general_element.getElementsByTagName("learner")[0]
+        learner_element: Any = \
+            self._general_element.getElementsByTagName("learner")[0]
         return XMLHelper.read_text_node(learner_element, "implementation")
     
     def get_labels(self) -> List[str]:
-        labels_element: Any = self._general_element.getElementsByTagName("labels")[0]
+        labels_element: Any = \
+            self._general_element.getElementsByTagName("labels")[0]
         label_elements = labels_element.getElementsByTagName("label")
-        return [XMLHelper.read_immediate_text_node(label_element) for label_element in label_elements]
+        return [XMLHelper.read_immediate_text_node(label_element) 
+                for label_element in label_elements]
 
     def get_metrics(self) -> List[str]:
         metrics_element: Any = self._dom.getElementsByTagName("metrics")[0]
         metric_elements: Any = metrics_element.getElementsByTagName("metric")
-        return [metric_element.firstChild.nodeValue for metric_element in metric_elements]
+        return [metric_element.firstChild.nodeValue 
+                for metric_element in metric_elements]
     
     def get_architecture(self) -> Architecture:
         sequential_element = self._dom.getElementsByTagName("sequential")
         if len(sequential_element) > 0:
-            operation_elements: Any = sequential_element[0].getElementsByTagName("operation")
-            operations = [self.__parse_operation(operation_element) for operation_element in operation_elements]
+            operation_elements: Any = \
+                sequential_element[0].getElementsByTagName("operation")
+            operations = [self.__parse_operation(operation_element) 
+                          for operation_element in operation_elements]
         else:
             operations = None
 
-        hyperparameters_element = self._dom.getElementsByTagName("hyperparameters")
+        hyperparameters_element = \
+            self._dom.getElementsByTagName("hyperparameters")
         if len(hyperparameters_element) > 0:
-            hyperparameter_elements: Any = hyperparameters_element[0].getElementsByTagName("hyperparameter")
-            hyperparameters = self.__parse_hyperparameters(hyperparameter_elements)
+            hyperparameter_elements: Any = \
+                hyperparameters_element[0].getElementsByTagName("hyperparameter")
+            hyperparameters = \
+                self.__parse_hyperparameters(hyperparameter_elements)
         else:
             hyperparameters = None
 
@@ -98,24 +112,29 @@ class XMLModelParser(ModelParser):
 
     def get_loss_hyperparameters(self) -> Dict[str, str]:
         loss_element: Any = self._dom.getElementsByTagName("loss")[0]
-        hyperparameter_elements: Any = loss_element.getElementsByTagName("hyperparameter")
+        hyperparameter_elements: Any = \
+            loss_element.getElementsByTagName("hyperparameter")
         return self.__parse_hyperparameters(hyperparameter_elements)
     
     def get_optimizer_hyperparameters(self) -> Dict[str, str]:
         optimizer_element: Any = self._dom.getElementsByTagName("optimizer")[0]
-        hyperparameter_elements: Any = optimizer_element.getElementsByTagName("hyperparameter")
+        hyperparameter_elements: Any = \
+            optimizer_element.getElementsByTagName("hyperparameter")
         return self.__parse_hyperparameters(hyperparameter_elements)
     
     def get_training_process_hyperparameters(self) -> Dict[str, str]:
-        training_process_element: Any = self._dom.getElementsByTagName("trainingprocess")[0]
-        hyperparameter_elements: Any = training_process_element.getElementsByTagName("hyperparameter")
+        training_process_element: Any = \
+            self._dom.getElementsByTagName("trainingprocess")[0]
+        hyperparameter_elements: Any = \
+            training_process_element.getElementsByTagName("hyperparameter")
         return self.__parse_hyperparameters(hyperparameter_elements)
 
-    def __parse_hyperparameters(self, hyperparameter_elements) -> Dict[str, str]:
+    def __parse_hyperparameters(self, 
+                                hyperparameter_elements) -> Dict[str, str]:
         hyperparams: Dict[str, str] = dict()
 
         for hyperparameter_element in hyperparameter_elements:
-            hyperparams[hyperparameter_element.getAttribute("name")] = hyperparameter_element.firstChild.nodeValue
+            hyperparams[hyperparameter_element.getAttribute("name")] = \
+                hyperparameter_element.firstChild.nodeValue
 
         return hyperparams
-

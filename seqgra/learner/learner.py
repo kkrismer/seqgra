@@ -84,9 +84,10 @@ class Learner(ABC):
         if validation_file is not None:
             x_val, y_val = self.parse_data(validation_file)
 
-        if x_train is None or y_train is None or x_val is None or y_val is None:
-            raise Exception(
-                "specify either training_file and validation_file or x_train, y_train, x_val, y_val")
+        if x_train is None or y_train is None or \
+           x_val is None or y_val is None:
+            raise Exception("specify either training_file and validation_file"
+                            " or x_train, y_train, x_val, y_val")
         else:
             self._train_model(x_train, y_train, x_val, y_val)
 
@@ -151,22 +152,23 @@ class Learner(ABC):
         self.library: str = self._parser.get_library()
         self.seed: int = self._parser.get_seed()
         self.learner_type: str = self._parser.get_learner_type()
-        self.learner_implementation: str = self._parser.get_learner_implementation()
+        self.learner_implementation: str = \
+            self._parser.get_learner_implementation()
         self.labels: List[str] = self._parser.get_labels()
         self.metrics: List[str] = self._parser.get_metrics()
         self.architecture: Architecture = self._parser.get_architecture()
-        self.loss_hyperparameters: Dict[str,
-                                        str] = self._parser.get_loss_hyperparameters()
-        self.optimizer_hyperparameters: Dict[str,
-                                             str] = self._parser.get_optimizer_hyperparameters()
-        self.training_process_hyperparameters: Dict[str,
-                                                    str] = self._parser.get_training_process_hyperparameters()
+        self.loss_hyperparameters: Dict[str, str] = \
+            self._parser.get_loss_hyperparameters()
+        self.optimizer_hyperparameters: Dict[str, str] = \
+            self._parser.get_optimizer_hyperparameters()
+        self.training_process_hyperparameters: Dict[str, str] = \
+            self._parser.get_training_process_hyperparameters()
 
     def __prepare_output_dir(self) -> None:
         if os.path.exists(self.output_dir):
             if not os.path.isdir(self.output_dir):
-                raise Exception(
-                    "output directory cannot be created (file with same name exists)")
+                raise Exception("output directory cannot be created "
+                                "(file with same name exists)")
         else:
             os.makedirs(self.output_dir)
 
@@ -177,8 +179,9 @@ class MultiClassClassificationLearner(Learner):
         super().__init__(parser, output_dir)
 
         if self.learner_type != "multi-class classification":
-            raise Exception(
-                "model definition must specify multi-class classification learner type, but learner type is '" + self.learner_type, "'")
+            raise Exception("model definition must specify multi-class "
+                            "classification learner type, but learner type "
+                            "is '" + self.learner_type, "'")
 
     def evaluate_model(self, file_name: str = None,
                        x: List[str] = None, y: List[str] = None):
@@ -320,8 +323,9 @@ class MultiLabelClassificationLearner(Learner):
         super().__init__(parser, output_dir)
 
         if self.learner_type != "multi-label classification":
-            raise Exception(
-                "model definition must specify multi-label classification learner type, but learner type is '" + self.learner_type, "'")
+            raise Exception("model definition must specify multi-label "
+                            "classification learner type, but learner type "
+                            "is '" + self.learner_type, "'")
 
     def evaluate_model(self, file_name: str = None,
                        x: List[str] = None, y: List[List[str]] = None):
@@ -351,8 +355,9 @@ class MultipleRegressionLearner(Learner):
         super().__init__(parser, output_dir)
 
         if self.learner_type != "multiple regression":
-            raise Exception(
-                "model definition must specify multiple regression learner type, but learner type is '" + self.learner_type, "'")
+            raise Exception("model definition must specify multiple "
+                            "regression learner type, but learner type "
+                            "is '" + self.learner_type, "'")
 
     def evaluate_model(self, file_name: str = None,
                        x: List[str] = None, y: List[float] = None):
@@ -382,8 +387,9 @@ class MultivariateRegressionLearner(Learner):
         super().__init__(parser, output_dir)
 
         if self.learner_type != "multivariate regression":
-            raise Exception(
-                "model definition must specify multivariate regression learner type, but learner type is '" + self.learner_type, "'")
+            raise Exception("model definition must specify multivariate "
+                            "regression learner type, but learner type "
+                            "is '" + self.learner_type, "'")
 
     def evaluate_model(self, file_name: str = None,
                        x: List[str] = None, y: List[List[float]] = None):

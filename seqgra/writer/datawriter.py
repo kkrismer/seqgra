@@ -14,5 +14,12 @@ from seqgra.model.data.condition import Condition
 from seqgra.model.data.sequenceelement import SequenceElement
 
 class DataWriter(ABC):
+    @staticmethod
     @abstractmethod
-    def write_data_config(self, file_name: str, id: str, label: str, description: str, sequence_space: str, type: str, background: Background, data_generation: DataGeneration, conditions: List[Condition], sequence_elements: List[SequenceElement])
+    def write_data_config(self, file_name: str, id: str, label: str, 
+                          description: str, sequence_space: str, type: str, 
+                          background: Background, 
+                          data_generation: DataGeneration, 
+                          conditions: List[Condition], 
+                          sequence_elements: List[SequenceElement]):
+        pass

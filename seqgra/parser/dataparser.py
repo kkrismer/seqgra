@@ -1,7 +1,8 @@
 """
 MIT - CSAIL - Gifford Lab - seqgra
 
-Abstract base class for configuration file parser (using Strategy design pattern)
+Abstract base class for configuration file parser
+(using Strategy design pattern)
 
 @author: Konstantin Krismer
 """
@@ -39,11 +40,15 @@ class DataParser(ABC):
         pass
     
     @abstractmethod
-    def get_data_generation(self, valid_conditions: List[Condition]) -> DataGeneration:
+    def get_data_generation(
+        self,
+        valid_conditions: List[Condition]) -> DataGeneration:
         pass
     
     @abstractmethod
-    def get_conditions(self, valid_sequence_elements: List[SequenceElement]) -> List[Condition]:
+    def get_conditions(
+        self, 
+        valid_sequence_elements: List[SequenceElement]) -> List[Condition]:
         pass
     
     @abstractmethod

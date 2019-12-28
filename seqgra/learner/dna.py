@@ -94,10 +94,12 @@ class DNAMultiClassClassificationLearner(MultiClassClassificationLearner):
         return "".join(densely_encoded_seq)
 
     def encode_x(self, x: List[str]):
-        return np.stack([self.__convert_dense_to_one_hot_encoding(seq) for seq in x])
+        return np.stack([self.__convert_dense_to_one_hot_encoding(seq)
+                         for seq in x])
 
     def decode_x(self, x):
-        return np.stack([self.__convert_one_hot_to_dense_encoding(seq) for seq in x])
+        return np.stack([self.__convert_one_hot_to_dense_encoding(seq)
+                         for seq in x])
     
     def __check_sequence(self, seqs: List[str]) -> None:
         for seq in seqs:
@@ -106,9 +108,11 @@ class DNAMultiClassClassificationLearner(MultiClassClassificationLearner):
         
     def encode_y(self, y: List[str]):
         if self.labels is None:
-            raise Exception("unknown labels, call parse_data or load_model first")
+            raise Exception("unknown labels, call parse_data or "
+                            "load_model first")
         labels = np.array(self.labels)
-        return np.vstack([np.array([label] * len(labels)) == labels for label in y])
+        return np.vstack([np.array([label] * len(labels)) == labels 
+                          for label in y])
         
     def decode_y(self, y):
         # TODO
@@ -149,10 +153,12 @@ class DNAMultiLabelClassificationLearner(MultiLabelClassificationLearner):
         return "".join(densely_encoded_seq)
 
     def encode_x(self, x: List[str]):
-        return np.stack([self.__convert_dense_to_one_hot_encoding(seq) for seq in x])
+        return np.stack([self.__convert_dense_to_one_hot_encoding(seq) 
+                         for seq in x])
 
     def decode_x(self, x):
-        return np.stack([self.__convert_one_hot_to_dense_encoding(seq) for seq in x])
+        return np.stack([self.__convert_one_hot_to_dense_encoding(seq)
+                         for seq in x])
     
     def __check_sequence(self, seqs: List[str]) -> None:
         for seq in seqs:

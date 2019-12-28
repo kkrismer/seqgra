@@ -1,7 +1,8 @@
 """
 MIT - CSAIL - Gifford Lab - seqgra
 
-Abstract base class for configuration file parser (using Strategy design pattern)
+Abstract base class for configuration file parser 
+(using Strategy design pattern)
 
 @author: Konstantin Krismer
 """
