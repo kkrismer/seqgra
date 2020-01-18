@@ -27,7 +27,8 @@ setuptools.setup(
         "matplotlib>=3.1.1",
         "scipy>=1.3.1",
         "pandas>=0.25.2",
-        "setuptools>=41.6.0"
+        "setuptools>=41.6.0",
+        "tensorflow>=2.1.0"
     ],
     python_requires=">=3"
 )
