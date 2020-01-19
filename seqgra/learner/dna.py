@@ -9,6 +9,7 @@ from __future__ import annotations
 from typing import List, Set
 import re
 import itertools
+import warnings
 
 import tensorflow as tf
 import numpy as np
@@ -127,9 +128,13 @@ class DNAMultiLabelClassificationLearner(MultiLabelClassificationLearner):
         if self.labels is None:
             raise Exception("unknown labels, call parse_data or "
                             "load_model first")
+
         y = [ex.split("|") for ex in y]
         mlb = MultiLabelBinarizer(classes = self.labels)
-        y = mlb.fit_transform(y).astype(bool)
+        
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            y = mlb.fit_transform(y).astype(bool)
         return y
         
     def decode_y(self, y):
@@ -145,7 +150,7 @@ class DNAMultiLabelClassificationLearner(MultiLabelClassificationLearner):
     def parse_data(self, file_name: str) -> None:
         df = pd.read_csv(file_name, sep="\t")
         x: List[str] = df["x"].tolist()
-        y: List[str] = df["y"].tolist()
+        y: List[str] = df["y"].replace(np.nan, "", regex=True).tolist()
 
         self.__check_sequence(x)
         return (x, y)
