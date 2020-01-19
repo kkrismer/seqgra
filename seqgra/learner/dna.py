@@ -8,64 +8,17 @@ from __future__ import annotations
 
 from typing import List, Set
 import re
+import itertools
 
 import tensorflow as tf
 import numpy as np
 import logging
 import pandas as pd
+from sklearn.preprocessing import MultiLabelBinarizer
 
 from seqgra.learner.learner import MultiClassClassificationLearner
 from seqgra.learner.learner import MultiLabelClassificationLearner
 from seqgra.parser.modelparser import ModelParser
-
-# class TensorFlowEstimatorMultiClassClassificationLearner(MultiClassClassificationLearner):
-#     def __init__(self, output_dir: str) -> None:
-#         super().__init__(output_dir)
-
-#     @staticmethod
-#     def __bytes_feature(value):
-#         if isinstance(value, type(tf.constant(0))):
-#             value = value.numpy() # BytesList won't unpack a string from an EagerTensor.
-#         return tf.train.Feature(bytes_list = tf.train.BytesList(value = [value]))
-
-#     @staticmethod
-#     def __serialize_example(sequence_feature, label):
-#         """
-#         Creates a tf.Example message ready to be written to a file.
-#         """
-#         # Create a dictionary mapping the feature name to the tf.Example-compatible
-#         # data type.
-#         feature = {
-#             "sequence": TensorFlowMultiClassClassificationLearner.__bytes_feature(sequence_feature.tostring()),
-#             "label": TensorFlowMultiClassClassificationLearner.__bytes_feature(label.tostring())
-#         }
-#         example_proto = tf.train.Example(features=tf.train.Features(feature=feature))
-#         return example_proto.SerializeToString()
-
-#     def __parse_data_file(self, data_file_path: str, set_name: str):
-#         tfrecord_file_name: str = self.output_dir + "/" + set_name + ".tfrecord"
-#         with open(data_file_path, "r") as reader, tf.io.TFRecordWriter(tfrecord_file_name) as writer:
-#             # skip header
-#             next(reader)
-
-#             for line in reader:
-#                 cells = line.split("\t")
-#                 seq = cells[0].strip()
-#                 is_condition1 = cells[1].strip() == "c1"
-#                 is_condition2 = not is_condition1
-#                 label = np.array([is_condition1, is_condition2], dtype = bool)
-#                 if re.match("^[ACGT]*$", seq):
-#                     seq = seq.replace("A", "0").replace("C", "1").replace("G", "2").replace("T", "3")
-#                     seq = np.array(list(seq), dtype = int)
-#                     example = TensorFlowMultiClassClassificationLearner.__serialize_example(seq, label)
-#                     writer.write(example)
-#                 else:
-#                     logging.warn("skipped invalid example:" + seq + " (label: " + str(label) + ")")
-#         return tfrecord_file_name
-
-#     def parse_data(self, training_set_file: str, validation_set_file: str) -> None:
-#         tfrecord_file_name = self.__parse_data_file(training_set_file, "training")
-#         tfrecord_file_name = self.__parse_data_file(validation_set_file, "validation")
 
 
 class DNAMultiClassClassificationLearner(MultiClassClassificationLearner):
@@ -111,12 +64,17 @@ class DNAMultiClassClassificationLearner(MultiClassClassificationLearner):
             raise Exception("unknown labels, call parse_data or "
                             "load_model first")
         labels = np.array(self.labels)
-        return np.vstack([np.array([label] * len(labels)) == labels 
-                          for label in y])
+        return np.vstack([ex == labels for ex in y])
         
     def decode_y(self, y):
-        # TODO
-        pass
+        if self.labels is None:
+            raise Exception("unknown labels, call parse_data or "
+                            "load_model first")
+        labels = np.array(self.labels)
+
+        decoded_y = np.vstack([labels[ex] for ex in y])
+        decoded_y = list(itertools.chain(*decoded_y))
+        return decoded_y
 
     def parse_data(self, file_name: str) -> None:
         df = pd.read_csv(file_name, sep="\t")
@@ -166,12 +124,23 @@ class DNAMultiLabelClassificationLearner(MultiLabelClassificationLearner):
                 logging.warn("example with invalid sequence:" + seq)
         
     def encode_y(self, y: List[str]):
-        # TODO
-        pass
+        if self.labels is None:
+            raise Exception("unknown labels, call parse_data or "
+                            "load_model first")
+        y = [ex.split("|") for ex in y]
+        mlb = MultiLabelBinarizer(classes = self.labels)
+        y = mlb.fit_transform(y).astype(bool)
+        return y
         
     def decode_y(self, y):
-        # TODO
-        pass
+        if self.labels is None:
+            raise Exception("unknown labels, call parse_data or "
+                            "load_model first")
+        labels = np.array(self.labels)
+
+        decoded_y = [labels[ex] for ex in y]
+        decoded_y = ["|".join(ex) for ex in decoded_y]
+        return decoded_y
 
     def parse_data(self, file_name: str) -> None:
         df = pd.read_csv(file_name, sep="\t")
