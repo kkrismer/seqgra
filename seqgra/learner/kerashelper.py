@@ -467,119 +467,173 @@ class KerasHelper:
         if "optimizer" in optimizer_hyperparameters:
             optimizer = \
                 optimizer_hyperparameters["optimizer"].lower().strip()
-            if optimizer == "adadelta":
-                if "learning_rate" in optimizer_hyperparameters:
-                    learning_rate = float(
-                        optimizer_hyperparameters["learning_rate"].strip())
-                else:
-                    learning_rate = 0.001
+            
+            if "learning_rate" in optimizer_hyperparameters:
+                learning_rate = float(
+                    optimizer_hyperparameters["learning_rate"].strip())
+            else:
+                learning_rate = 0.001
 
+            if "beta_1" in optimizer_hyperparameters:
+                beta_1 = float(
+                    optimizer_hyperparameters["beta_1"].strip())
+            else:
+                beta_1 = 0.9
+
+            if "beta_2" in optimizer_hyperparameters:
+                beta_2 = float(
+                    optimizer_hyperparameters["beta_2"].strip())
+            else:
+                beta_2 = 0.999
+
+            if "epsilon" in optimizer_hyperparameters:
+                epsilon = float(
+                    optimizer_hyperparameters["epsilon"].strip())
+            else:
+                epsilon = 1e-07
+
+            if "clipnorm" in optimizer_hyperparameters:
+                clipnorm = float(
+                    optimizer_hyperparameters["clipnorm"].strip())
+            else:
+                clipnorm = None
+
+            if "clipvalue" in optimizer_hyperparameters:
+                clipvalue = float(
+                    optimizer_hyperparameters["clipvalue"].strip())
+            else:
+                clipvalue = None
+
+            if optimizer == "adadelta":
                 if "rho" in optimizer_hyperparameters:
                     rho = float(optimizer_hyperparameters["rho"].strip())
                 else:
                     rho = 0.95
-
-                if "epsilon" in optimizer_hyperparameters:
-                    epsilon = float(
-                        optimizer_hyperparameters["epsilon"].strip())
+                
+                if clipnorm is None and clipvalue is None:
+                    return tf.keras.optimizers.Adadelta(
+                        learning_rate=learning_rate,
+                        rho=rho,
+                        epsilon=epsilon)
+                elif clipnorm is None and clipvalue is not None:
+                    return tf.keras.optimizers.Adadelta(
+                        learning_rate=learning_rate,
+                        rho=rho,
+                        epsilon=epsilon,
+                        clipvalue=clipvalue)
+                elif clipnorm is not None and clipvalue is None:
+                    return tf.keras.optimizers.Adadelta(
+                        learning_rate=learning_rate,
+                        rho=rho,
+                        epsilon=epsilon,
+                        clipnorm=clipnorm)
                 else:
-                    epsilon = 1e-07
-                return tf.keras.optimizers.Adadelta(
-                    learning_rate=learning_rate,
-                    rho=rho,
-                    epsilon=epsilon)
+                    return tf.keras.optimizers.Adadelta(
+                        learning_rate=learning_rate,
+                        rho=rho,
+                        epsilon=epsilon,
+                        clipnorm=clipnorm,
+                        clipvalue=clipvalue)
             elif optimizer == "adagrad":
-                if "learning_rate" in optimizer_hyperparameters:
-                    learning_rate = float(
-                        optimizer_hyperparameters["learning_rate"].strip())
-                else:
-                    learning_rate = 0.001
-
                 if "initial_accumulator_value" in optimizer_hyperparameters:
                     initial_accumulator_value = float(
                         optimizer_hyperparameters["initial_accumulator_value"].strip())
                 else:
                     initial_accumulator_value = 0.1
-
-                if "epsilon" in optimizer_hyperparameters:
-                    epsilon = float(
-                        optimizer_hyperparameters["epsilon"].strip())
+                
+                if clipnorm is None and clipvalue is None:
+                    return tf.keras.optimizers.Adagrad(
+                        learning_rate=learning_rate,
+                        initial_accumulator_value=initial_accumulator_value,
+                        epsilon=epsilon)
+                elif clipnorm is None and clipvalue is not None:
+                    return tf.keras.optimizers.Adagrad(
+                        learning_rate=learning_rate,
+                        initial_accumulator_value=initial_accumulator_value,
+                        epsilon=epsilon,
+                        clipvalue=clipvalue)
+                elif clipnorm is not None and clipvalue is None:
+                    return tf.keras.optimizers.Adagrad(
+                        learning_rate=learning_rate,
+                        initial_accumulator_value=initial_accumulator_value,
+                        epsilon=epsilon,
+                        clipnorm=clipnorm)
                 else:
-                    epsilon = 1e-07
-                return tf.keras.optimizers.Adagrad(
-                    learning_rate=learning_rate,
-                    initial_accumulator_value=initial_accumulator_value,
-                    epsilon=epsilon)
+                    return tf.keras.optimizers.Adagrad(
+                        learning_rate=learning_rate,
+                        initial_accumulator_value=initial_accumulator_value,
+                        epsilon=epsilon,
+                        clipnorm=clipnorm,
+                        clipvalue=clipvalue)
             elif optimizer == "adam":
-                if "learning_rate" in optimizer_hyperparameters:
-                    learning_rate = float(
-                        optimizer_hyperparameters["learning_rate"].strip())
-                else:
-                    learning_rate = 0.001
-
-                if "beta_1" in optimizer_hyperparameters:
-                    beta_1 = float(
-                        optimizer_hyperparameters["beta_1"].strip())
-                else:
-                    beta_1 = 0.9
-
-                if "beta_2" in optimizer_hyperparameters:
-                    beta_2 = float(
-                        optimizer_hyperparameters["beta_2"].strip())
-                else:
-                    beta_2 = 0.999
-
-                if "epsilon" in optimizer_hyperparameters:
-                    epsilon = float(
-                        optimizer_hyperparameters["epsilon"].strip())
-                else:
-                    epsilon = 1e-07
-
                 if "amsgrad" in optimizer_hyperparameters:
                     amsgrad = bool(
                         optimizer_hyperparameters["amsgrad"].strip())
                 else:
                     amsgrad = False
-                return tf.keras.optimizers.Adam(learning_rate=learning_rate,
-                                                beta_1=beta_1,
-                                                beta_2=beta_2,
-                                                epsilon=epsilon,
-                                                amsgrad=amsgrad)
+                
+                if clipnorm is None and clipvalue is None:
+                    return tf.keras.optimizers.Adam(
+                        learning_rate=learning_rate,
+                        beta_1=beta_1,
+                        beta_2=beta_2,
+                        epsilon=epsilon,
+                        amsgrad=amsgrad)
+                elif clipnorm is None and clipvalue is not None:
+                    return tf.keras.optimizers.Adam(
+                        learning_rate=learning_rate,
+                        beta_1=beta_1,
+                        beta_2=beta_2,
+                        epsilon=epsilon,
+                        amsgrad=amsgrad,
+                        clipvalue=clipvalue)
+                elif clipnorm is not None and clipvalue is None:
+                    return tf.keras.optimizers.Adam(
+                        learning_rate=learning_rate,
+                        beta_1=beta_1,
+                        beta_2=beta_2,
+                        epsilon=epsilon,
+                        amsgrad=amsgrad,
+                        clipnorm=clipnorm)
+                else:
+                    return tf.keras.optimizers.Adam(
+                        learning_rate=learning_rate,
+                        beta_1=beta_1,
+                        beta_2=beta_2,
+                        epsilon=epsilon,
+                        amsgrad=amsgrad,
+                        clipnorm=clipnorm,
+                        clipvalue=clipvalue)
             elif optimizer == "adamax":
-                if "learning_rate" in optimizer_hyperparameters:
-                    learning_rate = float(
-                        optimizer_hyperparameters["learning_rate"].strip())
+                if clipnorm is None and clipvalue is None:
+                    return tf.keras.optimizers.Adamax(
+                        learning_rate=learning_rate,
+                        beta_1=beta_1,
+                        beta_2=beta_2,
+                        epsilon=epsilon)
+                elif clipnorm is None and clipvalue is not None:
+                    return tf.keras.optimizers.Adamax(
+                        learning_rate=learning_rate,
+                        beta_1=beta_1,
+                        beta_2=beta_2,
+                        epsilon=epsilon,
+                        clipvalue=clipvalue)
+                elif clipnorm is not None and clipvalue is None:
+                    return tf.keras.optimizers.Adamax(
+                        learning_rate=learning_rate,
+                        beta_1=beta_1,
+                        beta_2=beta_2,
+                        epsilon=epsilon,
+                        clipnorm=clipnorm)
                 else:
-                    learning_rate = 0.001
-
-                if "beta_1" in optimizer_hyperparameters:
-                    beta_1 = float(
-                        optimizer_hyperparameters["beta_1"].strip())
-                else:
-                    beta_1 = 0.9
-
-                if "beta_2" in optimizer_hyperparameters:
-                    beta_2 = float(
-                        optimizer_hyperparameters["beta_2"].strip())
-                else:
-                    beta_2 = 0.999
-
-                if "epsilon" in optimizer_hyperparameters:
-                    epsilon = float(
-                        optimizer_hyperparameters["epsilon"].strip())
-                else:
-                    epsilon = 1e-07
-                return tf.keras.optimizers.Adamax(learning_rate=learning_rate,
-                                                  beta_1=beta_1,
-                                                  beta_2=beta_2,
-                                                  epsilon=epsilon)
+                    return tf.keras.optimizers.Adamax(
+                        learning_rate=learning_rate,
+                        beta_1=beta_1,
+                        beta_2=beta_2,
+                        epsilon=epsilon,
+                        clipnorm=clipnorm,
+                        clipvalue=clipvalue)
             elif optimizer == "ftrl":
-                if "learning_rate" in optimizer_hyperparameters:
-                    learning_rate = float(
-                        optimizer_hyperparameters["learning_rate"].strip())
-                else:
-                    learning_rate = 0.001
-
                 if "learning_rate_power" in optimizer_hyperparameters:
                     learning_rate_power = float(
                         optimizer_hyperparameters["learning_rate_power"].strip())
@@ -609,48 +663,73 @@ class KerasHelper:
                         optimizer_hyperparameters["l2_shrinkage_regularization_strength"].strip())
                 else:
                     l2_shrinkage_regularization_strength = 0.0
-                return tf.keras.optimizers.Ftrl(
-                    learning_rate=learning_rate,
-                    learning_rate_power=learning_rate_power,
-                    initial_accumulator_value=initial_accumulator_value,
-                    l1_regularization_strength=l1_regularization_strength,
-                    l2_regularization_strength=l2_regularization_strength,
-                    l2_shrinkage_regularization_strength=l2_shrinkage_regularization_strength)
+                
+                if clipnorm is None and clipvalue is None:
+                    return tf.keras.optimizers.Ftrl(
+                        learning_rate=learning_rate,
+                        learning_rate_power=learning_rate_power,
+                        initial_accumulator_value=initial_accumulator_value,
+                        l1_regularization_strength=l1_regularization_strength,
+                        l2_regularization_strength=l2_regularization_strength,
+                        l2_shrinkage_regularization_strength=l2_shrinkage_regularization_strength)
+                elif clipnorm is None and clipvalue is not None:
+                    return tf.keras.optimizers.Ftrl(
+                        learning_rate=learning_rate,
+                        learning_rate_power=learning_rate_power,
+                        initial_accumulator_value=initial_accumulator_value,
+                        l1_regularization_strength=l1_regularization_strength,
+                        l2_regularization_strength=l2_regularization_strength,
+                        l2_shrinkage_regularization_strength=l2_shrinkage_regularization_strength,
+                        clipvalue=clipvalue)
+                elif clipnorm is not None and clipvalue is None:
+                    return tf.keras.optimizers.Ftrl(
+                        learning_rate=learning_rate,
+                        learning_rate_power=learning_rate_power,
+                        initial_accumulator_value=initial_accumulator_value,
+                        l1_regularization_strength=l1_regularization_strength,
+                        l2_regularization_strength=l2_regularization_strength,
+                        l2_shrinkage_regularization_strength=l2_shrinkage_regularization_strength,
+                        clipnorm=clipnorm)
+                else:
+                    return tf.keras.optimizers.Ftrl(
+                        learning_rate=learning_rate,
+                        learning_rate_power=learning_rate_power,
+                        initial_accumulator_value=initial_accumulator_value,
+                        l1_regularization_strength=l1_regularization_strength,
+                        l2_regularization_strength=l2_regularization_strength,
+                        l2_shrinkage_regularization_strength=l2_shrinkage_regularization_strength,
+                        clipnorm=clipnorm,
+                        clipvalue=clipvalue)
             elif optimizer == "nadam":
-                if "learning_rate" in optimizer_hyperparameters:
-                    learning_rate = float(
-                        optimizer_hyperparameters["learning_rate"].strip())
+                if clipnorm is None and clipvalue is None:
+                    return tf.keras.optimizers.Nadam(
+                        learning_rate=learning_rate,
+                        beta_1=beta_1,
+                        beta_2=beta_2,
+                        epsilon=epsilon)
+                elif clipnorm is None and clipvalue is not None:
+                    return tf.keras.optimizers.Nadam(
+                        learning_rate=learning_rate,
+                        beta_1=beta_1,
+                        beta_2=beta_2,
+                        epsilon=epsilon,
+                        clipvalue=clipvalue)
+                elif clipnorm is not None and clipvalue is None:
+                    return tf.keras.optimizers.Nadam(
+                        learning_rate=learning_rate,
+                        beta_1=beta_1,
+                        beta_2=beta_2,
+                        epsilon=epsilon,
+                        clipnorm=clipnorm)
                 else:
-                    learning_rate = 0.001
-
-                if "beta_1" in optimizer_hyperparameters:
-                    beta_1 = float(
-                        optimizer_hyperparameters["beta_1"].strip())
-                else:
-                    beta_1 = 0.9
-
-                if "beta_2" in optimizer_hyperparameters:
-                    beta_2 = float(
-                        optimizer_hyperparameters["beta_2"].strip())
-                else:
-                    beta_2 = 0.999
-
-                if "epsilon" in optimizer_hyperparameters:
-                    epsilon = float(
-                        optimizer_hyperparameters["epsilon"].strip())
-                else:
-                    epsilon = 1e-07
-                return tf.keras.optimizers.Nadam(learning_rate=learning_rate,
-                                                 beta_1=beta_1,
-                                                 beta_2=beta_2,
-                                                 epsilon=epsilon)
+                    return tf.keras.optimizers.Nadam(
+                        learning_rate=learning_rate,
+                        beta_1=beta_1,
+                        beta_2=beta_2,
+                        epsilon=epsilon,
+                        clipnorm=clipnorm,
+                        clipvalue=clipvalue)
             elif optimizer == "rmsprop":
-                if "learning_rate" in optimizer_hyperparameters:
-                    learning_rate = float(
-                        optimizer_hyperparameters["learning_rate"].strip())
-                else:
-                    learning_rate = 0.001
-
                 if "rho" in optimizer_hyperparameters:
                     rho = float(optimizer_hyperparameters["rho"].strip())
                 else:
@@ -662,28 +741,41 @@ class KerasHelper:
                 else:
                     momentum = 0.0
 
-                if "epsilon" in optimizer_hyperparameters:
-                    epsilon = float(
-                        optimizer_hyperparameters["epsilon"].strip())
-                else:
-                    epsilon = 1e-07
-
                 if "centered" in optimizer_hyperparameters:
                     centered = bool(
                         optimizer_hyperparameters["centered"].strip())
                 else:
                     centered = False
-                return tf.keras.optimizers.RMSprop(learning_rate=learning_rate,
-                                                   momentum=momentum,
-                                                   epsilon=epsilon,
-                                                   centered=centered)
-            elif optimizer == "sgd":
-                if "learning_rate" in optimizer_hyperparameters:
-                    learning_rate = float(
-                        optimizer_hyperparameters["learning_rate"].strip())
+                
+                if clipnorm is None and clipvalue is None:
+                    return tf.keras.optimizers.RMSprop(
+                        learning_rate=learning_rate,
+                        momentum=momentum,
+                        epsilon=epsilon,
+                        centered=centered)
+                elif clipnorm is None and clipvalue is not None:
+                    return tf.keras.optimizers.RMSprop(
+                        learning_rate=learning_rate,
+                        momentum=momentum,
+                        epsilon=epsilon,
+                        centered=centered,
+                        clipvalue=clipvalue)
+                elif clipnorm is not None and clipvalue is None:
+                    return tf.keras.optimizers.RMSprop(
+                        learning_rate=learning_rate,
+                        momentum=momentum,
+                        epsilon=epsilon,
+                        centered=centered,
+                        clipnorm=clipnorm)
                 else:
-                    learning_rate = 0.001
-
+                    return tf.keras.optimizers.RMSprop(
+                        learning_rate=learning_rate,
+                        momentum=momentum,
+                        epsilon=epsilon,
+                        centered=centered,
+                        clipnorm=clipnorm,
+                        clipvalue=clipvalue)
+            elif optimizer == "sgd":
                 if "momentum" in optimizer_hyperparameters:
                     momentum = float(
                         optimizer_hyperparameters["momentum"].strip())
@@ -695,9 +787,32 @@ class KerasHelper:
                         optimizer_hyperparameters["nesterov"].strip())
                 else:
                     nesterov = False
-                return tf.keras.optimizers.SGD(learning_rate=learning_rate,
-                                               momentum=momentum,
-                                               nesterov=nesterov)
+                
+                if clipnorm is None and clipvalue is None:
+                    return tf.keras.optimizers.SGD(
+                        learning_rate=learning_rate,
+                        momentum=momentum,
+                        nesterov=nesterov,
+                        centered=centered)
+                elif clipnorm is None and clipvalue is not None:
+                    return tf.keras.optimizers.SGD(
+                        learning_rate=learning_rate,
+                        momentum=momentum,
+                        nesterov=nesterov,
+                        clipvalue=clipvalue)
+                elif clipnorm is not None and clipvalue is None:
+                    return tf.keras.optimizers.SGD(
+                        learning_rate=learning_rate,
+                        momentum=momentum,
+                        nesterov=nesterov,
+                        clipnorm=clipnorm)
+                else:
+                    return tf.keras.optimizers.SGD(
+                        learning_rate=learning_rate,
+                        momentum=momentum,
+                        nesterov=nesterov,
+                        clipnorm=clipnorm,
+                        clipvalue=clipvalue)
             else:
                 raise Exception("unknown optimizer specified: " + optimizer)
         else:
