@@ -121,7 +121,10 @@ class ExampleGenerator:
         element1: str,
         element2: str,
         rule_position: str) -> Example:
-        distance: int = ExampleGenerator.get_distance(example, spacing_constraint, element1, element2, rule_position)
+        distance: int = ExampleGenerator.get_distance(example, 
+                                                      spacing_constraint, 
+                                                      element1, element2, 
+                                                      rule_position)
 
         if spacing_constraint.direction == "random":
             if random.uniform(0, 1) <= 0.5:

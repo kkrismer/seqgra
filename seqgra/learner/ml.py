@@ -30,6 +30,10 @@ class KerasSequentialMultiLabelClassificationLearner(DNAMultiLabelClassification
             [KerasHelper.get_keras_layer(operation)
              for operation
              in self.architecture.operations])
+        
+        for i in range(len(self.architecture.operations)):
+            KerasHelper.set_custom_weights(self.model.get_layer(i), 
+                                           self.architecture.operations[i])
 
         self.model.compile(
             optimizer=KerasHelper.get_optimizer(self.optimizer_hyperparameters),

@@ -5,8 +5,10 @@ Abstract base class for learners
 @author: Konstantin Krismer
 """
 from ast import literal_eval
+import os
 
 import tensorflow as tf
+import numpy as np
 
 
 class KerasHelper:
@@ -21,16 +23,16 @@ class KerasHelper:
         name = operation.name.strip().lower()
         if name == "flatten":
             if input_shape is None:
-                return(tf.keras.layers.Flatten())
+                return tf.keras.layers.Flatten()
             else:
-                return(tf.keras.layers.Flatten(input_shape=input_shape))
+                return tf.keras.layers.Flatten(input_shape=input_shape)
         elif name == "reshape":
             target_shape = literal_eval(operation.parameters["target_shape"].strip())
             if input_shape is None:
-                return(tf.keras.layers.Reshape(target_shape = target_shape))
+                return tf.keras.layers.Reshape(target_shape = target_shape)
             else:
-                return(tf.keras.layers.Reshape(target_shape = target_shape,
-                                               input_shape=input_shape))
+                return tf.keras.layers.Reshape(target_shape = target_shape,
+                                               input_shape=input_shape)
         elif name == "dense":
             units = int(operation.parameters["units"].strip())
 
@@ -75,7 +77,7 @@ class KerasHelper:
                 activity_regularizer = None
 
             if input_shape is None:
-                return(tf.keras.layers.Dense(
+                return tf.keras.layers.Dense(
                     units,
                     activation=activation,
                     use_bias=use_bias,
@@ -84,9 +86,9 @@ class KerasHelper:
                     kernel_regularizer=kernel_regularizer,
                     bias_regularizer=bias_regularizer,
                     activity_regularizer=activity_regularizer
-                ))
+                )
             else:
-                return(tf.keras.layers.Dense(
+                return tf.keras.layers.Dense(
                     units,
                     activation=activation,
                     use_bias=use_bias,
@@ -96,7 +98,7 @@ class KerasHelper:
                     bias_regularizer=bias_regularizer,
                     activity_regularizer=activity_regularizer,
                     input_shape=input_shape
-                ))
+                )
         elif name == "lstm":
             units = int(operation.parameters["units"].strip())
 
@@ -215,7 +217,7 @@ class KerasHelper:
                 unroll = False
 
             if input_shape is None:
-                return(tf.keras.layers.LSTM(
+                return tf.keras.layers.LSTM(
                     units,
                     activation=activation,
                     recurrent_activation=recurrent_activation,
@@ -237,9 +239,9 @@ class KerasHelper:
                     stateful=stateful,
                     time_major=time_major,
                     unroll=unroll
-                ))
+                )
             else:
-                return(tf.keras.layers.LSTM(
+                return tf.keras.layers.LSTM(
                     units,
                     activation=activation,
                     recurrent_activation=recurrent_activation,
@@ -262,7 +264,7 @@ class KerasHelper:
                     time_major=time_major,
                     unroll=unroll,
                     input_shape=input_shape
-                ))
+                )
         elif name == "conv1d":
             filters = int(operation.parameters["filters"].strip())
             kernel_size = \
@@ -329,7 +331,7 @@ class KerasHelper:
                 activity_regularizer = None
 
             if input_shape is None:
-                return(tf.keras.layers.Conv1D(
+                return tf.keras.layers.Conv1D(
                     filters,
                     kernel_size,
                     strides=strides,
@@ -343,9 +345,9 @@ class KerasHelper:
                     kernel_regularizer=kernel_regularizer,
                     bias_regularizer=bias_regularizer,
                     activity_regularizer=activity_regularizer
-                ))
+                )
             else:
-                return(tf.keras.layers.Conv1D(
+                return tf.keras.layers.Conv1D(
                     filters,
                     kernel_size,
                     strides=strides,
@@ -360,7 +362,7 @@ class KerasHelper:
                     bias_regularizer=bias_regularizer,
                     activity_regularizer=activity_regularizer,
                     input_shape=input_shape
-                ))
+                )
         elif name == "conv2d":
             filters = int(operation.parameters["filters"].strip())
             kernel_size = \
@@ -427,7 +429,7 @@ class KerasHelper:
                 activity_regularizer = None
 
             if input_shape is None:
-                return(tf.keras.layers.Conv2D(
+                return tf.keras.layers.Conv2D(
                     filters,
                     kernel_size,
                     strides=strides,
@@ -441,9 +443,9 @@ class KerasHelper:
                     kernel_regularizer=kernel_regularizer,
                     bias_regularizer=bias_regularizer,
                     activity_regularizer=activity_regularizer
-                ))
+                )
             else:
-                return(tf.keras.layers.Conv2D(
+                return tf.keras.layers.Conv2D(
                     filters,
                     kernel_size,
                     strides=strides,
@@ -458,10 +460,33 @@ class KerasHelper:
                     bias_regularizer=bias_regularizer,
                     activity_regularizer=activity_regularizer,
                     input_shape=input_shape
-                ))
+                )
         elif name == "globalmaxpool1d":
-            return(tf.keras.layers.GlobalMaxPool1D())
+            return tf.keras.layers.GlobalMaxPool1D()
 
+    @staticmethod
+    def set_custom_weights(layer, operation):
+            if "trainable" in operation.parameters:
+                trainable = bool(operation.parameters["trainable"].strip())
+            else:
+                trainable = None
+
+            if "weights_file" in operation.parameters:
+                weights_file = operation.parameters["weights_file"].strip()
+            else:
+                weights_file = None
+
+            if trainable is not None:
+                layer.trainable = trainable
+
+            if weights_file is not None:
+                # check if file exists
+                if os.path.isfile(custom_weights):
+                    custom_weights = np.load(weights_file, allow_pickle=True)
+                    layer.set_weights(custom_weights)
+                else:
+                    raise Exception("weights_file (" + weights_file + ") not "
+                                    "found")
     @staticmethod
     def get_optimizer(optimizer_hyperparameters):
         if "optimizer" in optimizer_hyperparameters:
