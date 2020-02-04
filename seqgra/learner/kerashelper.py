@@ -13,12 +13,29 @@ import numpy as np
 
 class KerasHelper:
     @staticmethod
+    def to_bool(x: str) -> bool:
+        x = x.strip()
+        if x == "True":
+            return True
+        elif x == "False":
+            return False
+        else:
+            raise Exception("'" + str(x) + 
+                            "' must be either 'True' or 'False'")
+
+    @staticmethod
     def get_keras_layer(operation):
         if "input_shape" in operation.parameters:
             input_shape = literal_eval(
                 operation.parameters["input_shape"].strip())
         else:
             input_shape = None
+        
+        if "trainable" in operation.parameters:
+            trainable = KerasHelper.to_bool(
+                operation.parameters["trainable"])
+        else:
+            trainable = True
 
         name = operation.name.strip().lower()
         if name == "flatten":
@@ -42,7 +59,8 @@ class KerasHelper:
                 activation = None
 
             if "use_bias" in operation.parameters:
-                use_bias = bool(operation.parameters["use_bias"].strip())
+                use_bias = KerasHelper.to_bool(
+                    operation.parameters["use_bias"])
             else:
                 use_bias = True
 
@@ -85,7 +103,8 @@ class KerasHelper:
                     bias_initializer=bias_initializer,
                     kernel_regularizer=kernel_regularizer,
                     bias_regularizer=bias_regularizer,
-                    activity_regularizer=activity_regularizer
+                    activity_regularizer=activity_regularizer,
+                    trainable=trainable
                 )
             else:
                 return tf.keras.layers.Dense(
@@ -97,6 +116,7 @@ class KerasHelper:
                     kernel_regularizer=kernel_regularizer,
                     bias_regularizer=bias_regularizer,
                     activity_regularizer=activity_regularizer,
+                    trainable=trainable,
                     input_shape=input_shape
                 )
         elif name == "lstm":
@@ -114,7 +134,8 @@ class KerasHelper:
                 recurrent_activation = "sigmoid"
 
             if "use_bias" in operation.parameters:
-                use_bias = bool(operation.parameters["use_bias"].strip())
+                use_bias = KerasHelper.to_bool(
+                    operation.parameters["use_bias"])
             else:
                 use_bias = True
 
@@ -138,7 +159,7 @@ class KerasHelper:
 
             if "unit_forget_bias" in operation.parameters:
                 unit_forget_bias = \
-                    bool(operation.parameters["unit_forget_bias"].strip())
+                    KerasHelper.to_bool(operation.parameters["unit_forget_bias"])
             else:
                 unit_forget_bias = True
 
@@ -185,34 +206,36 @@ class KerasHelper:
 
             if "return_sequences" in operation.parameters:
                 return_sequences = \
-                    bool(operation.parameters["return_sequences"].strip())
+                    KerasHelper.to_bool(operation.parameters["return_sequences"])
             else:
                 return_sequences = False
 
             if "return_state" in operation.parameters:
                 return_state = \
-                    bool(operation.parameters["return_state"].strip())
+                    KerasHelper.to_bool(operation.parameters["return_state"])
             else:
                 return_state = False
 
             if "go_backwards" in operation.parameters:
                 go_backwards = \
-                    bool(operation.parameters["go_backwards"].strip())
+                    KerasHelper.to_bool(operation.parameters["go_backwards"])
             else:
                 go_backwards = False
 
             if "stateful" in operation.parameters:
-                stateful = bool(operation.parameters["stateful"].strip())
+                stateful = KerasHelper.to_bool(
+                    operation.parameters["stateful"])
             else:
                 stateful = False
 
             if "time_major" in operation.parameters:
-                time_major = bool(operation.parameters["time_major"].strip())
+                time_major = KerasHelper.to_bool(
+                    operation.parameters["time_major"])
             else:
                 time_major = False
 
             if "unroll" in operation.parameters:
-                unroll = bool(operation.parameters["unroll"].strip())
+                unroll = KerasHelper.to_bool(operation.parameters["unroll"])
             else:
                 unroll = False
 
@@ -238,7 +261,8 @@ class KerasHelper:
                     go_backwards=go_backwards,
                     stateful=stateful,
                     time_major=time_major,
-                    unroll=unroll
+                    unroll=unroll,
+                    trainable=trainable
                 )
             else:
                 return tf.keras.layers.LSTM(
@@ -263,6 +287,7 @@ class KerasHelper:
                     stateful=stateful,
                     time_major=time_major,
                     unroll=unroll,
+                    trainable=trainable,
                     input_shape=input_shape
                 )
         elif name == "conv1d":
@@ -296,7 +321,8 @@ class KerasHelper:
                 activation = None
 
             if "use_bias" in operation.parameters:
-                use_bias = bool(operation.parameters["use_bias"].strip())
+                use_bias = KerasHelper.to_bool(
+                    operation.parameters["use_bias"])
             else:
                 use_bias = True
 
@@ -344,7 +370,8 @@ class KerasHelper:
                     bias_initializer=bias_initializer,
                     kernel_regularizer=kernel_regularizer,
                     bias_regularizer=bias_regularizer,
-                    activity_regularizer=activity_regularizer
+                    activity_regularizer=activity_regularizer,
+                    trainable=trainable
                 )
             else:
                 return tf.keras.layers.Conv1D(
@@ -361,6 +388,7 @@ class KerasHelper:
                     kernel_regularizer=kernel_regularizer,
                     bias_regularizer=bias_regularizer,
                     activity_regularizer=activity_regularizer,
+                    trainable=trainable,
                     input_shape=input_shape
                 )
         elif name == "conv2d":
@@ -394,7 +422,8 @@ class KerasHelper:
                 activation = None
 
             if "use_bias" in operation.parameters:
-                use_bias = bool(operation.parameters["use_bias"].strip())
+                use_bias = KerasHelper.to_bool(
+                    operation.parameters["use_bias"])
             else:
                 use_bias = True
 
@@ -442,7 +471,8 @@ class KerasHelper:
                     bias_initializer=bias_initializer,
                     kernel_regularizer=kernel_regularizer,
                     bias_regularizer=bias_regularizer,
-                    activity_regularizer=activity_regularizer
+                    activity_regularizer=activity_regularizer,
+                    trainable=trainable
                 )
             else:
                 return tf.keras.layers.Conv2D(
@@ -459,34 +489,25 @@ class KerasHelper:
                     kernel_regularizer=kernel_regularizer,
                     bias_regularizer=bias_regularizer,
                     activity_regularizer=activity_regularizer,
+                    trainable=trainable,
                     input_shape=input_shape
                 )
         elif name == "globalmaxpool1d":
             return tf.keras.layers.GlobalMaxPool1D()
 
     @staticmethod
-    def set_custom_weights(layer, operation):
-            if "trainable" in operation.parameters:
-                trainable = bool(operation.parameters["trainable"].strip())
-            else:
-                trainable = None
+    def load_custom_weights(operation):
+        if "weights_file" in operation.parameters:
+            weights_file = operation.parameters["weights_file"].strip()
+        else:
+            return None
 
-            if "weights_file" in operation.parameters:
-                weights_file = operation.parameters["weights_file"].strip()
-            else:
-                weights_file = None
-
-            if trainable is not None:
-                layer.trainable = trainable
-
-            if weights_file is not None:
-                # check if file exists
-                if os.path.isfile(custom_weights):
-                    custom_weights = np.load(weights_file, allow_pickle=True)
-                    layer.set_weights(custom_weights)
-                else:
-                    raise Exception("weights_file (" + weights_file + ") not "
-                                    "found")
+        # check if file exists
+        if os.path.isfile(weights_file):
+            return np.load(weights_file, allow_pickle=True)
+        else:
+            raise Exception("weights_file (" + weights_file + ") not "
+                                "found")
     @staticmethod
     def get_optimizer(optimizer_hyperparameters):
         if "optimizer" in optimizer_hyperparameters:
@@ -592,8 +613,8 @@ class KerasHelper:
                         clipvalue=clipvalue)
             elif optimizer == "adam":
                 if "amsgrad" in optimizer_hyperparameters:
-                    amsgrad = bool(
-                        optimizer_hyperparameters["amsgrad"].strip())
+                    amsgrad = KerasHelper.to_bool(
+                        optimizer_hyperparameters["amsgrad"])
                 else:
                     amsgrad = False
                 
@@ -767,8 +788,8 @@ class KerasHelper:
                     momentum = 0.0
 
                 if "centered" in optimizer_hyperparameters:
-                    centered = bool(
-                        optimizer_hyperparameters["centered"].strip())
+                    centered = KerasHelper.to_bool(
+                        optimizer_hyperparameters["centered"])
                 else:
                     centered = False
                 
@@ -808,8 +829,8 @@ class KerasHelper:
                     momentum = 0.0
 
                 if "nesterov" in optimizer_hyperparameters:
-                    nesterov = bool(
-                        optimizer_hyperparameters["nesterov"].strip())
+                    nesterov = KerasHelper.to_bool(
+                        optimizer_hyperparameters["nesterov"])
                 else:
                     nesterov = False
                 
@@ -850,8 +871,8 @@ class KerasHelper:
                 "_", "").strip()
             if loss == "binarycrossentropy":
                 if "from_logits" in loss_hyperparameters:
-                    from_logits = bool(
-                        loss_hyperparameters["from_logits"].strip())
+                    from_logits = KerasHelper.to_bool(
+                        loss_hyperparameters["from_logits"])
                 else:
                     from_logits = False
 
@@ -865,8 +886,8 @@ class KerasHelper:
                     label_smoothing=label_smoothing)
             elif loss == "categoricalcrossentropy":
                 if "from_logits" in loss_hyperparameters:
-                    from_logits = bool(
-                        loss_hyperparameters["from_logits"].strip())
+                    from_logits = KerasHelper.to_bool(
+                        loss_hyperparameters["from_logits"])
                 else:
                     from_logits = False
 
@@ -911,8 +932,8 @@ class KerasHelper:
                 return tf.keras.losses.Poisson()
             elif loss == "sparsecategoricalcrossentropy":
                 if "from_logits" in loss_hyperparameters:
-                    from_logits = bool(
-                        loss_hyperparameters["from_logits"].strip())
+                    from_logits = KerasHelper.to_bool(
+                        loss_hyperparameters["from_logits"])
                 else:
                     from_logits = False
                 return tf.keras.losses.SparseCategoricalCrossentropy(

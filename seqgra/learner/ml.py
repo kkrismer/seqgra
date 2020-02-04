@@ -32,9 +32,11 @@ class KerasSequentialMultiLabelClassificationLearner(DNAMultiLabelClassification
              in self.architecture.operations])
         
         for i in range(len(self.architecture.operations)):
-            KerasHelper.set_custom_weights(self.model.get_layer(i), 
-                                           self.architecture.operations[i])
-
+            custom_weights = KerasHelper.load_custom_weights(
+                self.architecture.operations[i])
+            if custom_weights is not None:
+                self.model.layers[i].set_weights(custom_weights)
+            
         self.model.compile(
             optimizer=KerasHelper.get_optimizer(self.optimizer_hyperparameters),
             # use categorical_crossentropy for multi-class and 
