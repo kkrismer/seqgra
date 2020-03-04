@@ -78,10 +78,13 @@ class XMLModelParser(ModelParser):
                 for label_element in label_elements]
 
     def get_metrics(self) -> List[str]:
-        metrics_element: Any = self._dom.getElementsByTagName("metrics")[0]
-        metric_elements: Any = metrics_element.getElementsByTagName("metric")
-        return [XMLHelper.read_immediate_text_node(metric_element)
-                for metric_element in metric_elements]
+        metrics_element: Any = self._dom.getElementsByTagName("metrics")
+        if len(metrics_element) == 1:
+            metric_elements: Any = metrics_element[0].getElementsByTagName("metric")
+            return [XMLHelper.read_immediate_text_node(metric_element)
+                    for metric_element in metric_elements]
+        else:
+            return None
     
     def get_architecture(self) -> Architecture:
         sequential_element = self._dom.getElementsByTagName("sequential")
@@ -122,16 +125,22 @@ class XMLModelParser(ModelParser):
 
 
     def get_loss_hyperparameters(self) -> Dict[str, str]:
-        loss_element: Any = self._dom.getElementsByTagName("loss")[0]
-        hyperparameter_elements: Any = \
-            loss_element.getElementsByTagName("hyperparameter")
-        return self.__parse_hyperparameters(hyperparameter_elements)
+        loss_element: Any = self._dom.getElementsByTagName("loss")
+        if len(loss_element) == 1:
+            hyperparameter_elements: Any = \
+                loss_element[0].getElementsByTagName("hyperparameter")
+            return self.__parse_hyperparameters(hyperparameter_elements)
+        else:
+            return None
     
     def get_optimizer_hyperparameters(self) -> Dict[str, str]:
-        optimizer_element: Any = self._dom.getElementsByTagName("optimizer")[0]
-        hyperparameter_elements: Any = \
-            optimizer_element.getElementsByTagName("hyperparameter")
-        return self.__parse_hyperparameters(hyperparameter_elements)
+        optimizer_element: Any = self._dom.getElementsByTagName("optimizer")
+        if len(optimizer_element) == 1:
+            hyperparameter_elements: Any = \
+                optimizer_element[0].getElementsByTagName("hyperparameter")
+            return self.__parse_hyperparameters(hyperparameter_elements)
+        else:
+            return None
     
     def get_training_process_hyperparameters(self) -> Dict[str, str]:
         training_process_element: Any = \

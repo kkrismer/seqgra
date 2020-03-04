@@ -45,22 +45,34 @@ class KerasHelper:
                 if custom_weights is not None:
                     learner.model.layers[i].set_weights(custom_weights)
         elif learner.architecture.external_model_path is not None:
-            if os.path.exists(learner.architecture.external_model_path):
-                if learner.architecture.external_model_format == "keras-h5-whole-model":
+            if learner.architecture.external_model_format == "keras-h5-whole-model":
+                if os.path.isfile(learner.architecture.external_model_path):
                     learner.model = tf.keras.models.load_model(learner.architecture.external_model_path)
-                elif learner.architecture.external_model_format == "keras-tf-whole-model":
+                else:
+                    raise Exception(".h5 file does not exist: " + 
+                                    learner.architecture.external_model_path)
+            elif learner.architecture.external_model_format == "keras-tf-whole-model":
+                if os.path.isdir(learner.architecture.external_model_path):
                     learner.model = tf.keras.models.load_model(learner.architecture.external_model_path)
-                elif learner.architecture.external_model_format == "keras-json-architecture-only":
+                else:
+                    raise Exception("TF saved model directory does not exist: " + 
+                                    learner.architecture.external_model_path)
+            elif learner.architecture.external_model_format == "keras-json-architecture-only":
+                if os.path.isfile(learner.architecture.external_model_path):
                     with open(learner.architecture.external_model_path, "r") as json_config_file:
                         json_config = json_config_file.read()
                         learner.model = tf.keras.models.model_from_json(json_config)
-                elif learner.architecture.external_model_format == "keras-yaml-architecture-only":
+                else:
+                    raise Exception(".json file does not exist: " + 
+                                    learner.architecture.external_model_path)
+            elif learner.architecture.external_model_format == "keras-yaml-architecture-only":
+                if os.path.isfile(learner.architecture.external_model_path):
                     with open(learner.architecture.external_model_path, "r") as yaml_config_file:
                         yaml_config = yaml_config_file.read()
                         learner.model = tf.keras.models.model_from_yaml(yaml_config)
-            else:
-                raise Exception("file or directory does not exist: " + 
-                                learner.architecture.external_model_path)
+                else:
+                    raise Exception(".yaml file does not exist: " + 
+                                    learner.architecture.external_model_path)
         else:
             raise Exception("neither internal nor external architecture "
                             "definition provided")
@@ -152,7 +164,25 @@ class KerasHelper:
     def save_model(learner: Learner, model_name: str = "") -> None:
         if model_name != "":
             os.makedirs(learner.output_dir + model_name)
+
+        # save whole model (TensorFlow format)
         learner.model.save(learner.output_dir + model_name, save_format="tf")
+
+        # save whole model (HDF5)
+        learner.model.save(learner.output_dir + model_name + "/saved_model.h5",
+                           save_format="h5")
+        
+        # save architecture only (YAML)
+        yaml_model = learner.model.to_yaml()
+        with open(learner.output_dir + model_name + "/model-architecture.yaml", "w") as yaml_file:
+            yaml_file.write(yaml_model)
+
+        # save architecture only (JSON)
+        json_model = learner.model.to_json()
+        with open(learner.output_dir + model_name + "/model-architecture.json", "w") as json_file:
+            json_file.write(json_model)
+
+        # save session info
         learner.write_session_info()
 
     @staticmethod
