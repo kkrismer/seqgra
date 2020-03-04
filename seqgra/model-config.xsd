@@ -36,7 +36,7 @@
             </xs:attribute>
           </xs:complexType>
         </xs:element>
-        <xs:element name="metrics">
+        <xs:element name="metrics" minOccurs="0" maxOccurs="1">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="metric" minOccurs="1" maxOccurs="unbounded"/>
@@ -45,28 +45,39 @@
         </xs:element>
         <xs:element name="architecture">
           <xs:complexType>
-            <xs:sequence>
-              <xs:element name="sequential" minOccurs="0" maxOccurs="1">
+            <xs:choice>
+              <xs:sequence>
+                <xs:element name="sequential" minOccurs="0" maxOccurs="1">
+                  <xs:complexType>
+                    <xs:sequence>
+                      <xs:element name="operation" minOccurs="0" maxOccurs="unbounded">
+                        <xs:complexType>
+                          <xs:simpleContent>
+                            <xs:extension base="xs:string">
+                              <xs:anyAttribute processContents="lax"/>
+                            </xs:extension>
+                          </xs:simpleContent>
+                        </xs:complexType>
+                      </xs:element>
+                    </xs:sequence>
+                  </xs:complexType>
+                </xs:element>
+                <xs:element name="hyperparameters" type="hyperparametersType" minOccurs="0" maxOccurs="1"/>
+              </xs:sequence>
+              <xs:element name="external">
                 <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="operation" minOccurs="0" maxOccurs="unbounded">
-                      <xs:complexType>
-                        <xs:simpleContent>
-                          <xs:extension base="xs:string">
-                            <xs:anyAttribute processContents="lax"/>
-                          </xs:extension>
-                        </xs:simpleContent>
-                      </xs:complexType>
-                    </xs:element>
-                  </xs:sequence>
+                  <xs:simpleContent>
+                    <xs:extension base="xs:string">
+                      <xs:attribute name="format" type="xs:string" use="required"/>
+                    </xs:extension>
+                  </xs:simpleContent>
                 </xs:complexType>
               </xs:element>
-              <xs:element name="hyperparameters" type="hyperparametersType" minOccurs="0" maxOccurs="1"/>
-            </xs:sequence>
+            </xs:choice>
           </xs:complexType>
         </xs:element>
-        <xs:element name="loss" type="hyperparametersType"/>
-        <xs:element name="optimizer" type="hyperparametersType"/>
+        <xs:element name="loss" type="hyperparametersType" minOccurs="0" maxOccurs="1"/>
+        <xs:element name="optimizer" type="hyperparametersType" minOccurs="0" maxOccurs="1"/>
         <xs:element name="trainingprocess" type="hyperparametersType"/>
       </xs:sequence>
     </xs:complexType>

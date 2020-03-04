@@ -5,10 +5,16 @@ Abstract base class for learners
 @author: Konstantin Krismer
 """
 from ast import literal_eval
+from typing import List, Any
 import os
+import sys
+import random
+import pkg_resources
 
 import tensorflow as tf
 import numpy as np
+
+from seqgra.learner.learner import Learner
 
 
 class KerasHelper:
@@ -22,6 +28,168 @@ class KerasHelper:
         else:
             raise Exception("'" + str(x) + 
                             "' must be either 'True' or 'False'")
+
+    @staticmethod
+    def create_model(learner: Learner) -> None:
+        learner.set_seed()
+
+        if learner.architecture.operations is not None:
+            learner.model = tf.keras.Sequential(
+                [KerasHelper.get_keras_layer(operation)
+                for operation
+                in learner.architecture.operations])
+            
+            for i in range(len(learner.architecture.operations)):
+                custom_weights = KerasHelper.load_custom_weights(
+                    learner.architecture.operations[i])
+                if custom_weights is not None:
+                    learner.model.layers[i].set_weights(custom_weights)
+        elif learner.architecture.external_model_path is not None:
+            if os.path.exists(learner.architecture.external_model_path):
+                if learner.architecture.external_model_format == "keras-h5-whole-model":
+                    learner.model = tf.keras.models.load_model(learner.architecture.external_model_path)
+                elif learner.architecture.external_model_format == "keras-tf-whole-model":
+                    learner.model = tf.keras.models.load_model(learner.architecture.external_model_path)
+                elif learner.architecture.external_model_format == "keras-json-architecture-only":
+                    with open(learner.architecture.external_model_path, "r") as json_config_file:
+                        json_config = json_config_file.read()
+                        learner.model = tf.keras.models.model_from_json(json_config)
+                elif learner.architecture.external_model_format == "keras-yaml-architecture-only":
+                    with open(learner.architecture.external_model_path, "r") as yaml_config_file:
+                        yaml_config = yaml_config_file.read()
+                        learner.model = tf.keras.models.model_from_yaml(yaml_config)
+            else:
+                raise Exception("file or directory does not exist: " + 
+                                learner.architecture.external_model_path)
+        else:
+            raise Exception("neither internal nor external architecture "
+                            "definition provided")
+        
+        if learner.architecture.external_model_format is None or \
+           learner.architecture.external_model_format == "keras-yaml-architecture-only" or \
+           learner.architecture.external_model_format == "keras-json-architecture-only":
+            if learner.optimizer_hyperparameters is not None and \
+               learner.loss_hyperparameters is not None and \
+               learner.metrics is not None:
+                learner.model.compile(
+                    optimizer=KerasHelper.get_optimizer(learner.optimizer_hyperparameters),
+                    # use categorical_crossentropy for multi-class and 
+                    # binary_crossentropy for multi-label
+                    loss=KerasHelper.get_loss(learner.loss_hyperparameters),
+                    metrics=learner.metrics
+                )
+            else:
+                raise Exception("optimizer, loss or metrics undefined")
+
+    @staticmethod
+    def print_model_summary(learner: Learner):
+        learner.model.summary()
+
+    @staticmethod
+    def set_seed(learner: Learner) -> None:
+        random.seed(learner.seed)
+        np.random.seed(learner.seed)
+        tf.random.set_seed(learner.seed)
+
+    @staticmethod
+    def train_model(learner: Learner,
+                     x_train: List[str], y_train: List[str],
+                     x_val: List[str], y_val: List[str]) -> None:
+        # one hot encode input and labels
+        encoded_x_train = learner.encode_x(x_train)
+        encoded_y_train = learner.encode_y(y_train)
+        encoded_x_val = learner.encode_x(x_val)
+        encoded_y_val = learner.encode_y(y_val)
+
+        if learner.model is None:
+            learner.create_model()
+
+        # checkpoint callback
+        checkpoint_path = learner.output_dir + "training/cp.ckpt"
+        cp_callback = tf.keras.callbacks.ModelCheckpoint(
+            filepath=checkpoint_path,
+            save_weights_only=True,
+            verbose=0
+        )
+
+        # TensorBoard callback
+        log_dir = learner.output_dir + "logs/run"
+        os.makedirs(log_dir)
+        log_dir = log_dir.replace("/", "\\")
+        tensorboard_callback = tf.keras.callbacks.TensorBoard(
+            log_dir=log_dir,
+            histogram_freq=0,
+            write_graph=True,
+            write_images=True
+        )
+
+        # early stopping callback
+        es_callback = tf.keras.callbacks.EarlyStopping(monitor="val_loss",
+                                                       mode="min",
+                                                       verbose=1,
+                                                       patience=2,
+                                                       min_delta=0)
+
+        if bool(learner.training_process_hyperparameters["early_stopping"]):
+            callbacks = [cp_callback, tensorboard_callback, es_callback]
+        else:
+            callbacks = [cp_callback, tensorboard_callback]
+
+        # training loop
+        learner.model.fit(
+            encoded_x_train,
+            encoded_y_train,
+            batch_size=int(
+                learner.training_process_hyperparameters["batch_size"]),
+            epochs=int(learner.training_process_hyperparameters["epochs"]),
+            verbose=1,
+            callbacks=callbacks,
+            validation_data=(encoded_x_val, encoded_y_val),
+            shuffle=bool(learner.training_process_hyperparameters["shuffle"])
+        )
+
+    @staticmethod
+    def save_model(learner: Learner, model_name: str = "") -> None:
+        if model_name != "":
+            os.makedirs(learner.output_dir + model_name)
+        learner.model.save(learner.output_dir + model_name, save_format="tf")
+        learner.write_session_info()
+
+    @staticmethod
+    def write_session_info(learner: Learner) -> None:
+        with open(learner.output_dir + "session-info.txt", "w") as session_file:
+            session_file.write("seqgra package version: " +
+                pkg_resources.require("seqgra")[0].version + "\n")
+            session_file.write("TensorFlow version: " + tf.__version__ + "\n")
+            session_file.write("NumPy version: " + np.version.version + "\n")
+            session_file.write("Python version: " + sys.version + "\n")
+
+    @staticmethod
+    def load_model(learner: Learner, model_name: str = "") -> None:
+        learner.model = tf.keras.models.load_model(learner.output_dir + model_name)
+
+    @staticmethod
+    def predict(learner: Learner, x: Any, encode: bool = True):
+        """ This is the forward calculation from x to y
+        Returns:
+            softmax_linear: Output tensor with the computed logits.
+        """
+        if encode:
+            x = learner.encode_x(x)
+        return learner.model.predict(x)
+        
+    @staticmethod
+    def get_num_params(learner: Learner):
+        if learner.model is None:
+            learner.create_model()
+        return 0
+
+    @staticmethod
+    def evaluate_model(learner: Learner, x: List[str], y: List[str]):
+        # one hot encode input and labels
+        encoded_x = learner.encode_x(x)
+        encoded_y = learner.encode_y(y)
+        return learner.model.evaluate(encoded_x,  encoded_y, verbose=0)
 
     @staticmethod
     def get_keras_layer(operation):

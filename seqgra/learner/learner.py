@@ -40,6 +40,7 @@ class Learner(ABC):
             output_dir += "/"
         self.output_dir = output_dir + self.id + "/"
         self.__prepare_output_dir()
+        self.model = None
 
     def __str__(self):
         str_rep = ["seqgra model configuration:\n",

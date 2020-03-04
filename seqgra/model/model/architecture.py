@@ -10,10 +10,14 @@ from typing import Dict, List
 from seqgra.model.model.operation import Operation
 
 class Architecture:
-    def __init__(self, operations: List[Operation],
-                 hyperparameters: Dict[str, str]) -> None:
+    def __init__(self, operations: List[Operation] = None,
+                 hyperparameters: Dict[str, str] = None,
+                 external_model_path: str = None,
+                 external_model_format: str = None) -> None:
         self.operations: List[Operation] = operations
         self.hyperparameters: Dict[str, str] = hyperparameters
+        self.external_model_path: str = external_model_path
+        self.external_model_format: str = external_model_format
 
     def __str__(self):
         str_rep = ["Architecture:\n"]
@@ -29,5 +33,12 @@ class Architecture:
         if self.hyperparameters is not None and len(self.hyperparameters) > 0:
             str_rep += ["\tHyperparameters:\n", "\t\t", 
                         str(self.hyperparameters)]
+                        
+        if self.external_model_path is not None:
+            str_rep += ["\tExternal model path:\n", "\t\t", 
+                        self.external_model_path]
+        if self.external_model_path is not None:
+            str_rep += ["\tExternal model format:\n", "\t\t", 
+                        self.external_model_format]
 
         return "".join(str_rep)

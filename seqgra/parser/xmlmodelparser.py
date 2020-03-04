@@ -80,12 +80,12 @@ class XMLModelParser(ModelParser):
     def get_metrics(self) -> List[str]:
         metrics_element: Any = self._dom.getElementsByTagName("metrics")[0]
         metric_elements: Any = metrics_element.getElementsByTagName("metric")
-        return [metric_element.firstChild.nodeValue 
+        return [XMLHelper.read_immediate_text_node(metric_element)
                 for metric_element in metric_elements]
     
     def get_architecture(self) -> Architecture:
         sequential_element = self._dom.getElementsByTagName("sequential")
-        if len(sequential_element) > 0:
+        if len(sequential_element) == 1:
             operation_elements: Any = \
                 sequential_element[0].getElementsByTagName("operation")
             operations = [self.__parse_operation(operation_element) 
@@ -95,15 +95,26 @@ class XMLModelParser(ModelParser):
 
         hyperparameters_element = \
             self._dom.getElementsByTagName("hyperparameters")
-        if len(hyperparameters_element) > 0:
+        if len(hyperparameters_element) == 1:
             hyperparameter_elements: Any = \
                 hyperparameters_element[0].getElementsByTagName("hyperparameter")
             hyperparameters = \
                 self.__parse_hyperparameters(hyperparameter_elements)
         else:
             hyperparameters = None
+            
+        external_element = self._dom.getElementsByTagName("external")
+        if len(external_element) == 1:
+            external_model_path: str = \
+                XMLHelper.read_immediate_text_node(external_element[0])
+            external_model_format: str = \
+                external_element[0].getAttribute("format")
+        else:
+            external_model_path = None
+            external_model_format = None
 
-        return Architecture(operations, hyperparameters)
+        return Architecture(operations, hyperparameters, 
+                            external_model_path, external_model_format)
     
     def __parse_operation(self, operation_element) -> Operation:
         return Operation(operation_element.firstChild.nodeValue,
