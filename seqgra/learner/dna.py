@@ -6,59 +6,30 @@ Abstract base class for learners
 """
 from __future__ import annotations
 
-from typing import List, Set
-import re
+from typing import List
 import itertools
 import warnings
 
-import tensorflow as tf
 import numpy as np
-import logging
 import pandas as pd
 from sklearn.preprocessing import MultiLabelBinarizer
 
 from seqgra.learner.learner import MultiClassClassificationLearner
 from seqgra.learner.learner import MultiLabelClassificationLearner
 from seqgra.parser.modelparser import ModelParser
-
+from seqgra.dna.dnahelper import DNAHelper
 
 class DNAMultiClassClassificationLearner(MultiClassClassificationLearner):
     def __init__(self, parser: ModelParser, output_dir: str) -> None:
         super().__init__(parser, output_dir)
 
-    def __convert_dense_to_one_hot_encoding(self, seq: str):
-        seq = seq.replace("A", "0").replace("C", "1").replace("G", "2").replace("T", "3")
-        seq = np.array(list(seq), dtype = int)
-
-        one_hot_encoded_seq = np.zeros((len(seq), 4))
-        one_hot_encoded_seq[np.arange(len(seq)), seq] = 1
-        return one_hot_encoded_seq
-
-    def __convert_one_hot_to_dense_encoding(self, seq: str):
-        densely_encoded_seq = ["N"] * seq.shape[0]
-        for i in range(seq.shape[0]):
-            if all(seq[i, :] == [1, 0, 0, 0]):
-                densely_encoded_seq[i] = "A"
-            elif all(seq[i, :] == [0, 1, 0, 0]):
-                densely_encoded_seq[i] = "C"
-            elif all(seq[i, :] == [0, 0, 1, 0]):
-                densely_encoded_seq[i] = "G"
-            elif all(seq[i, :] == [0, 0, 0, 1]):
-                densely_encoded_seq[i] = "T"
-        return "".join(densely_encoded_seq)
-
     def encode_x(self, x: List[str]):
-        return np.stack([self.__convert_dense_to_one_hot_encoding(seq)
+        return np.stack([DNAHelper.convert_dense_to_one_hot_encoding(seq)
                          for seq in x])
 
     def decode_x(self, x):
-        return np.stack([self.__convert_one_hot_to_dense_encoding(seq)
+        return np.stack([DNAHelper.convert_one_hot_to_dense_encoding(seq)
                          for seq in x])
-    
-    def __check_sequence(self, seqs: List[str]) -> None:
-        for seq in seqs:
-            if not re.match("^[ACGT]*$", seq):
-                logging.warn("example with invalid sequence:" + seq)
         
     def encode_y(self, y: List[str]):
         if self.labels is None:
@@ -82,7 +53,7 @@ class DNAMultiClassClassificationLearner(MultiClassClassificationLearner):
         x: List[str] = df["x"].tolist()
         y: List[str] = df["y"].tolist()
 
-        self.__check_sequence(x)
+        DNAHelper.check_sequence(x)
         return (x, y)
 
 
@@ -90,39 +61,13 @@ class DNAMultiLabelClassificationLearner(MultiLabelClassificationLearner):
     def __init__(self, parser: ModelParser, output_dir: str) -> None:
         super().__init__(parser, output_dir)
 
-    def __convert_dense_to_one_hot_encoding(self, seq: str):
-        seq = seq.replace("A", "0").replace("C", "1").replace("G", "2").replace("T", "3")
-        seq = np.array(list(seq), dtype = int)
-
-        one_hot_encoded_seq = np.zeros((len(seq), 4))
-        one_hot_encoded_seq[np.arange(len(seq)), seq] = 1
-        return one_hot_encoded_seq
-
-    def __convert_one_hot_to_dense_encoding(self, seq: str):
-        densely_encoded_seq = ["N"] * seq.shape[0]
-        for i in range(seq.shape[0]):
-            if all(seq[i, :] == [1, 0, 0, 0]):
-                densely_encoded_seq[i] = "A"
-            elif all(seq[i, :] == [0, 1, 0, 0]):
-                densely_encoded_seq[i] = "C"
-            elif all(seq[i, :] == [0, 0, 1, 0]):
-                densely_encoded_seq[i] = "G"
-            elif all(seq[i, :] == [0, 0, 0, 1]):
-                densely_encoded_seq[i] = "T"
-        return "".join(densely_encoded_seq)
-
     def encode_x(self, x: List[str]):
-        return np.stack([self.__convert_dense_to_one_hot_encoding(seq) 
+        return np.stack([DNAHelper.convert_dense_to_one_hot_encoding(seq) 
                          for seq in x])
 
     def decode_x(self, x):
-        return np.stack([self.__convert_one_hot_to_dense_encoding(seq)
+        return np.stack([DNAHelper.convert_one_hot_to_dense_encoding(seq)
                          for seq in x])
-    
-    def __check_sequence(self, seqs: List[str]) -> None:
-        for seq in seqs:
-            if not re.match("^[ACGT]*$", seq):
-                logging.warn("example with invalid sequence:" + seq)
         
     def encode_y(self, y: List[str]):
         if self.labels is None:
@@ -152,5 +97,5 @@ class DNAMultiLabelClassificationLearner(MultiLabelClassificationLearner):
         x: List[str] = df["x"].tolist()
         y: List[str] = df["y"].replace(np.nan, "", regex=True).tolist()
 
-        self.__check_sequence(x)
+        DNAHelper.check_sequence(x)
         return (x, y)

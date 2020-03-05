@@ -1,6 +1,6 @@
 """MIT - CSAIL - Gifford Lab - seqgra
 
-Abstract base class for learners
+TensorFlow Keras learner helper class
 
 @author: Konstantin Krismer
 """
