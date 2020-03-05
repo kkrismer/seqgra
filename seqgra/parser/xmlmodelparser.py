@@ -112,12 +112,19 @@ class XMLModelParser(ModelParser):
                 XMLHelper.read_immediate_text_node(external_element[0])
             external_model_format: str = \
                 external_element[0].getAttribute("format")
+            if external_element[0].hasAttribute("classname"):
+                external_model_class_name: str = \
+                    external_element[0].getAttribute("classname")
+            else:
+                external_model_class_name: str = None
         else:
-            external_model_path = None
-            external_model_format = None
+            external_model_path: str = None
+            external_model_format: str = None
+            external_model_class_name: str = None
 
         return Architecture(operations, hyperparameters, 
-                            external_model_path, external_model_format)
+                            external_model_path, external_model_format,
+                            external_model_class_name)
     
     def __parse_operation(self, operation_element) -> Operation:
         return Operation(operation_element.firstChild.nodeValue,

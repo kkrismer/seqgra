@@ -13,11 +13,13 @@ class Architecture:
     def __init__(self, operations: List[Operation] = None,
                  hyperparameters: Dict[str, str] = None,
                  external_model_path: str = None,
-                 external_model_format: str = None) -> None:
+                 external_model_format: str = None,
+                 external_model_class_name: str = None) -> None:
         self.operations: List[Operation] = operations
         self.hyperparameters: Dict[str, str] = hyperparameters
         self.external_model_path: str = external_model_path
         self.external_model_format: str = external_model_format
+        self.external_model_class_name: str = external_model_class_name
 
     def __str__(self):
         str_rep = ["Architecture:\n"]
@@ -40,5 +42,8 @@ class Architecture:
         if self.external_model_path is not None:
             str_rep += ["\tExternal model format:\n", "\t\t", 
                         self.external_model_format]
+        if self.external_model_class_name is not None:
+            str_rep += ["\tExternal model class name:\n", "\t\t", 
+                        self.external_model_class_name]
 
         return "".join(str_rep)
