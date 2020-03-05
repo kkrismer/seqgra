@@ -1,6 +1,6 @@
 """MIT - CSAIL - Gifford Lab - seqgra
 
-Abstract base class for learners
+TensorFlow Keras learners
 
 @author: Konstantin Krismer
 """
@@ -12,7 +12,7 @@ from seqgra.parser.modelparser import ModelParser
 from seqgra.learner.kerashelper import KerasHelper
 
 
-class KerasSequentialMultiClassClassificationLearner(
+class KerasMultiClassClassificationLearner(
     DNAMultiClassClassificationLearner):
     def __init__(self, parser: ModelParser, output_dir: str) -> None:
         super().__init__(parser, output_dir)
@@ -50,7 +50,7 @@ class KerasSequentialMultiClassClassificationLearner(
         return KerasHelper.evaluate_model(self, x, y)
 
 
-class KerasSequentialMultiLabelClassificationLearner(
+class KerasMultiLabelClassificationLearner(
     DNAMultiLabelClassificationLearner):
     def __init__(self, parser: ModelParser, output_dir: str) -> None:
         super().__init__(parser, output_dir)
