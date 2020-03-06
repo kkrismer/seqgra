@@ -43,10 +43,6 @@ class ModelParser(ABC):
     @abstractmethod
     def get_labels(self) -> List[str]:
         pass
-
-    @abstractmethod
-    def get_metrics(self) -> List[str]:
-        pass
     
     @abstractmethod
     def get_architecture(self) -> Architecture:

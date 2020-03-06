@@ -88,7 +88,7 @@ class KerasHelper:
                     # use categorical_crossentropy for multi-class and 
                     # binary_crossentropy for multi-label
                     loss=KerasHelper.get_loss(learner.loss_hyperparameters),
-                    metrics=learner.metrics
+                    metrics=learner.metrics[learner.metrics != "loss"]
                 )
             else:
                 raise Exception("optimizer, loss or metrics undefined")

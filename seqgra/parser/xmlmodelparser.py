@@ -76,15 +76,6 @@ class XMLModelParser(ModelParser):
         label_elements = labels_element.getElementsByTagName("label")
         return [XMLHelper.read_immediate_text_node(label_element) 
                 for label_element in label_elements]
-
-    def get_metrics(self) -> List[str]:
-        metrics_element: Any = self._dom.getElementsByTagName("metrics")
-        if len(metrics_element) == 1:
-            metric_elements: Any = metrics_element[0].getElementsByTagName("metric")
-            return [XMLHelper.read_immediate_text_node(metric_element)
-                    for metric_element in metric_elements]
-        else:
-            return None
     
     def get_architecture(self) -> Architecture:
         sequential_element = self._dom.getElementsByTagName("sequential")

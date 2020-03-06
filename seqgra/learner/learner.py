@@ -43,6 +43,7 @@ class Learner(ABC):
         self.model = None
         self.optimizer = None
         self.criterion = None
+        self.metrics = ["loss", "accuracy"]
 
     def __str__(self):
         str_rep = ["seqgra model configuration:\n",
@@ -55,7 +56,8 @@ class Learner(ABC):
                     "\tLearner type: ", self.learner_type, "\t",
                     "\tLearner implementation", self.learner_implementation]
 
-        str_rep += ["\tMetrics:\n", str(self.metrics)]
+        if self.metrics is not None:
+            str_rep += ["\tMetrics:\n", str(self.metrics)]
 
         str_rep += ["\t" + s +
                     "\n" for s in str(self.architecture).splitlines()]
@@ -158,7 +160,6 @@ class Learner(ABC):
         self.learner_implementation: str = \
             self._parser.get_learner_implementation()
         self.labels: List[str] = self._parser.get_labels()
-        self.metrics: List[str] = self._parser.get_metrics()
         self.architecture: Architecture = self._parser.get_architecture()
         self.loss_hyperparameters: Dict[str, str] = \
             self._parser.get_loss_hyperparameters()

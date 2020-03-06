@@ -121,17 +121,11 @@ class TorchHelper:
                                             learner.criterion, device=device)
         train_evaluator = create_supervised_evaluator(
             learner.model,
-            metrics={
-                "accuracy": Accuracy(),
-                "loss": Loss(learner.criterion),
-            },
+            metrics=TorchHelper.get_metrics(learner),
             device=device)
         val_evaluator = create_supervised_evaluator(
             learner.model,
-            metrics={
-                "accuracy": Accuracy(),
-                "loss": Loss(learner.criterion),
-            },
+            metrics=TorchHelper.get_metrics(learner),
             device=device)
 
         logging.getLogger("ignite.engine.engine.Engine").setLevel(logging.WARNING)
@@ -143,46 +137,52 @@ class TorchHelper:
             print("epoch {}/{}".format(trainer.state.epoch, num_epochs))
             train_evaluator.run(training_loader)
             metrics = train_evaluator.state.metrics
-            print(
-                f"training   - loss: {metrics['loss']:.3f}, "
-                f"accuracy: {metrics['accuracy']:.3f} "
-            )
+            print(TorchHelper._format_metrics_output(metrics, "training set"))
             
         @trainer.on(Events.EPOCH_COMPLETED)
         def log_validation_results(trainer):
             val_evaluator.run(validation_loader)
             metrics = val_evaluator.state.metrics
-            print(
-                f"validation - loss: {metrics['loss']:.3f}, "
-                f"accuracy: {metrics['accuracy']:.3f} "
-            )
+            print(TorchHelper._format_metrics_output(metrics,
+                                                     "validation set"))
 
         # save best model
-        def score_function(engine):
-            return engine.state.metrics["accuracy"]
+        def score_fn(engine):
+            if "loss" in learner.metrics:
+                score = engine.state.metrics["loss"]
+                score = -score
+            elif "accuracy" in learner.metrics:
+                score = engine.state.metrics["accuracy"]
+            else:
+                raise Exception("no metric to track performance")
+            return score
         
-        best_model_saver_handler = ModelCheckpoint(learner.output_dir + "training/models",
-                                           score_function=score_function,
-                                           filename_prefix="best",
-                                           n_saved=1,
-                                           create_dir=True)
+        best_model_saver_handler = ModelCheckpoint(
+            learner.output_dir + "training/models",
+            score_function=score_fn,
+            filename_prefix="best",
+            n_saved=1,
+            create_dir=True)
         val_evaluator.add_event_handler(Events.COMPLETED,
                                         best_model_saver_handler,
                                         {"model": learner.model}) 
 
         # early stopping callback
         if bool(learner.training_process_hyperparameters["early_stopping"]):
-            def score_fn(engine):
-                score = engine.state.metrics["loss"]
-                return -score
-
             es_handler = EarlyStopping(patience=2,
                                        score_function=score_fn,
                                        trainer=trainer,
-                                       min_delta=0.1)
+                                       min_delta=0)
             val_evaluator.add_event_handler(Events.COMPLETED, es_handler)
 
         trainer.run(training_loader, max_epochs=num_epochs)
+
+    @staticmethod
+    def _format_metrics_output(metrics, set_label):
+        message: List[str] = [set_label + " metrics:\n"]
+        message += [" - " + metric + ": " + str(metrics[metric]) + "\n" 
+                    for metric in metrics]
+        return "".join(message).rstrip()
 
     @staticmethod
     def train_model_basic(learner: Learner,
@@ -306,16 +306,16 @@ class TorchHelper:
 
                 raw_logits = learner.model(x)
                 if final_activation_function is None:
-                    preds = preds + raw_logits.tolist()
+                    preds += raw_logits.tolist()
                 elif final_activation_function == "softmax":
-                    preds = preds + \
+                    preds += \
                         torch.nn.functional.softmax(raw_logits, dim=1).tolist()
                 elif final_activation_function == "sigmoid":
-                    preds = preds + \
+                    preds += \
                         torch.nn.functional.sigmoid(raw_logits, dim=1).tolist()
                 
         return np.array(preds)
-        
+ 
     @staticmethod
     def get_num_params(learner: Learner):
         if learner.model is None:
@@ -333,6 +333,9 @@ class TorchHelper:
         device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
         learner.model = learner.model.to(device)
 
+        running_loss: float = 0.0
+        running_correct: int = 0
+
         learner.model.eval()
         with torch.no_grad():
             for x, y in data_loader:
@@ -341,10 +344,17 @@ class TorchHelper:
                 y = y.to(device)
 
                 outputs = learner.model(x)
-                y_hat = torch.argmax(outputs, dim=1)
                 loss = learner.criterion(outputs, y)
 
-        return [0.0, 0.0]
+                # statistics
+                y_hat = torch.argmax(outputs, dim=1)
+                running_loss += loss.item() * x.size(0)
+                running_correct += torch.sum(y_hat == y)
+        
+        overall_loss = running_loss / len(data_loader.dataset)
+        overall_accuracy = running_correct.float().item() / len(data_loader.dataset)
+
+        return {"loss": overall_loss, "accuracy": overall_accuracy}
 
     @staticmethod
     def get_optimizer(optimizer_hyperparameters, model_parameters):
@@ -387,3 +397,17 @@ class TorchHelper:
                 raise Exception("unknown loss specified: " + loss)
         else:
             raise Exception("no loss specified")
+
+    @staticmethod
+    def get_metrics(learner: Learner):
+        is_multilabel = learner.learner_type == "multi-label classification"
+        metrics_dict = dict()
+        for metric in learner.metrics:
+            metric = metric.lower().strip()
+            if metric == "loss":
+                metrics_dict[metric] = Loss(learner.criterion)
+            elif metric == "accuracy":
+                metrics_dict[metric] = Accuracy(is_multilabel=is_multilabel)
+            else:
+                logging.warn("unknown metric: " + metric)
+        return metrics_dict
