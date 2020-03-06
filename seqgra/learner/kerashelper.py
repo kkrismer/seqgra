@@ -83,12 +83,15 @@ class KerasHelper:
             if learner.optimizer_hyperparameters is not None and \
                learner.loss_hyperparameters is not None and \
                learner.metrics is not None:
+                local_metrics = learner.metrics[learner.metrics != "loss"]
+                if type(local_metrics) != "list":
+                    local_metrics = [local_metrics]
                 learner.model.compile(
                     optimizer=KerasHelper.get_optimizer(learner.optimizer_hyperparameters),
                     # use categorical_crossentropy for multi-class and 
                     # binary_crossentropy for multi-label
                     loss=KerasHelper.get_loss(learner.loss_hyperparameters),
-                    metrics=learner.metrics[learner.metrics != "loss"]
+                    metrics=local_metrics
                 )
             else:
                 raise Exception("optimizer, loss or metrics undefined")
@@ -219,7 +222,9 @@ class KerasHelper:
         # one hot encode input and labels
         encoded_x = learner.encode_x(x)
         encoded_y = learner.encode_y(y)
-        return learner.model.evaluate(encoded_x,  encoded_y, verbose=0)
+        loss, accuracy = learner.model.evaluate(encoded_x,  encoded_y,
+                                                verbose=0)
+        return {"loss": loss, "accuracy": accuracy}
 
     @staticmethod
     def get_keras_layer(operation):
