@@ -42,7 +42,7 @@ class Learner(ABC):
         self.__prepare_output_dir()
         self.model = None
         self.optimizer = None
-        self.loss = None
+        self.criterion = None
 
     def __str__(self):
         str_rep = ["seqgra model configuration:\n",

@@ -72,7 +72,7 @@ class TorchHelper:
         if learner.loss_hyperparameters is None:
             raise Exception("loss undefined")
         else:
-            learner.loss = TorchHelper.get_loss(learner.loss_hyperparameters)
+            learner.criterion = TorchHelper.get_loss(learner.loss_hyperparameters)
             
         if learner.metrics is None:
             raise Exception("metrics undefined")
@@ -130,8 +130,8 @@ class TorchHelper:
                     learner.model.eval()
                     data_loader = validation_loader
 
-                running_loss = 0.0
-                running_corrects = 0
+                running_loss: float = 0.0
+                running_correct: int = 0
 
                 for x, y in data_loader:
                     # transfer to device
@@ -145,24 +145,24 @@ class TorchHelper:
                     # track history if only in train
                     with torch.set_grad_enabled(phase == "training"):
                         outputs = learner.model(x.float())
-                        y_hat = torch.argmax(outputs, dim=1)
-                        loss_op = learner.loss(outputs,
-                                               torch.argmax(y.float(), dim=1))
+                        loss = learner.criterion(outputs,
+                                                 torch.argmax(y.float(), dim=1))
 
                         # backward + optimize only if in training phase
                         if phase == "training":
-                            loss_op.backward()
+                            loss.backward()
                             learner.optimizer.step()
 
-                    # statistics
-                    # running_loss += loss_op.item() * inputs.size(0)
-                    # running_corrects += torch.sum(y_hat == y)
+                        # statistics
+                        y_hat = torch.argmax(outputs, dim=1)
+                        running_loss += loss.item() * x.size(0)
+                        running_correct += torch.sum(y_hat == torch.argmax(y.float(), dim=1))
 
-                # epoch_loss = running_loss / dataset_sizes[phase]
-                # epoch_acc = running_corrects.double() / dataset_sizes[phase]
+                epoch_loss = running_loss / len(data_loader.dataset)
+                epoch_acc = running_correct.float() / len(data_loader.dataset)
 
-                #print('{} Loss: {:.4f} Acc: {:.4f}'.format(
-                #    phase, epoch_loss, epoch_acc))
+                print("{} loss: {:.4f} accuracy: {:.4f}".format(
+                      phase, epoch_loss, epoch_acc))
 
                 # deep copy the model
                 #if phase == "validation" and epoch_acc > best_acc:
@@ -208,8 +208,8 @@ class TorchHelper:
             batch_size=int(learner.training_process_hyperparameters["batch_size"]),
             shuffle=False)
     
-        learner.model.eval()
         preds = []
+        learner.model.eval()
         with torch.no_grad():
             for x in data_loader:
                 raw_logits = learner.model(x.float())
@@ -238,12 +238,11 @@ class TorchHelper:
             shuffle=False)
 
         learner.model.eval()
-
         with torch.no_grad():
             for x, y in data_loader:
                 outputs = learner.model(x.float())
                 y_hat = torch.argmax(outputs, dim=1)
-                loss_op = learner.loss(outputs,
+                loss = learner.criterion(outputs,
                                        torch.argmax(y.float(), dim=1))
 
         return [0.0, 0.0]
