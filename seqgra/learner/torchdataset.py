@@ -46,13 +46,14 @@ class DNAMultiClassDataSet(torch.utils.data.Dataset):
 
     def __encode_x(self, x: List[str]):
         return np.stack([DNAHelper.convert_dense_to_one_hot_encoding(seq)
-                         for seq in x])
+                         for seq in x]).astype(np.float32)
         
     def __encode_y(self, y: List[str]):
         if self.labels is None:
             raise Exception("labels not specified")
         labels = np.array(self.labels)
-        return np.vstack([ex == labels for ex in y])
+        y = np.vstack([ex == labels for ex in y]).astype(np.int64)
+        return np.argmax(y, axis=1)
 
 
 class DNAMultiLabelDataSet(torch.utils.data.Dataset):
@@ -84,7 +85,7 @@ class DNAMultiLabelDataSet(torch.utils.data.Dataset):
 
     def __encode_x(self, x: List[str]):
         return np.stack([DNAHelper.convert_dense_to_one_hot_encoding(seq) 
-                         for seq in x])
+                         for seq in x]).astype(np.float32)
         
     def __encode_y(self, y: List[str]):
         if self.labels is None:

@@ -11,9 +11,14 @@ import sys
 import random
 import pkg_resources
 import importlib
+import logging
 
 import torch
 import numpy as np
+from ignite.engine import Events
+from ignite.engine import create_supervised_trainer, create_supervised_evaluator
+from ignite.metrics import Accuracy, Loss
+from ignite.handlers import EarlyStopping, ModelCheckpoint
 
 from seqgra.learner.learner import Learner
 
@@ -112,10 +117,99 @@ class TorchHelper:
         learner.model = learner.model.to(device)
 
         # training loop
+        trainer = create_supervised_trainer(learner.model, learner.optimizer,
+                                            learner.criterion, device=device)
+        train_evaluator = create_supervised_evaluator(
+            learner.model,
+            metrics={
+                "accuracy": Accuracy(),
+                "loss": Loss(learner.criterion),
+            },
+            device=device)
+        val_evaluator = create_supervised_evaluator(
+            learner.model,
+            metrics={
+                "accuracy": Accuracy(),
+                "loss": Loss(learner.criterion),
+            },
+            device=device)
+
+        logging.getLogger("ignite.engine.engine.Engine").setLevel(logging.WARNING)
+
         num_epochs: int = int(learner.training_process_hyperparameters["epochs"])
 
-        #best_model_wts = copy.deepcopy(learner.model.state_dict())
-        #best_acc: float = 0.0
+        @trainer.on(Events.EPOCH_COMPLETED)
+        def log_training_results(trainer):
+            print("epoch {}/{}".format(trainer.state.epoch, num_epochs))
+            train_evaluator.run(training_loader)
+            metrics = train_evaluator.state.metrics
+            print(
+                f"training   - loss: {metrics['loss']:.3f}, "
+                f"accuracy: {metrics['accuracy']:.3f} "
+            )
+            
+        @trainer.on(Events.EPOCH_COMPLETED)
+        def log_validation_results(trainer):
+            val_evaluator.run(validation_loader)
+            metrics = val_evaluator.state.metrics
+            print(
+                f"validation - loss: {metrics['loss']:.3f}, "
+                f"accuracy: {metrics['accuracy']:.3f} "
+            )
+
+        # save best model
+        def score_function(engine):
+            return engine.state.metrics["accuracy"]
+        
+        best_model_saver_handler = ModelCheckpoint(learner.output_dir + "training/models",
+                                           score_function=score_function,
+                                           filename_prefix="best",
+                                           n_saved=1,
+                                           create_dir=True)
+        val_evaluator.add_event_handler(Events.COMPLETED,
+                                        best_model_saver_handler,
+                                        {"model": learner.model}) 
+
+        # early stopping callback
+        if bool(learner.training_process_hyperparameters["early_stopping"]):
+            def score_fn(engine):
+                score = engine.state.metrics["loss"]
+                return -score
+
+            es_handler = EarlyStopping(patience=2,
+                                       score_function=score_fn,
+                                       trainer=trainer,
+                                       min_delta=0.1)
+            val_evaluator.add_event_handler(Events.COMPLETED, es_handler)
+
+        trainer.run(training_loader, max_epochs=num_epochs)
+
+    @staticmethod
+    def train_model_basic(learner: Learner,
+                    training_dataset: torch.utils.data.Dataset,
+                    validation_dataset: torch.utils.data.Dataset) -> None:
+        if learner.model is None:
+            learner.create_model()
+        
+        batch_size = int(learner.training_process_hyperparameters["batch_size"])
+
+        # init data loaders
+        training_loader = torch.utils.data.DataLoader(
+            training_dataset,
+            batch_size=batch_size,
+            shuffle=bool(learner.training_process_hyperparameters["shuffle"]))
+            
+        validation_loader = torch.utils.data.DataLoader(
+            validation_dataset,
+            batch_size=batch_size,
+            shuffle=False)
+
+        # GPU or CPU?
+        device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+        learner.model = learner.model.to(device)
+
+        # training loop
+        num_epochs: int = int(learner.training_process_hyperparameters["epochs"])
 
         for epoch in range(num_epochs):
             print("epoch {}/{}".format(epoch + 1, num_epochs))
@@ -142,9 +236,8 @@ class TorchHelper:
                     # forward
                     # track history if only in train
                     with torch.set_grad_enabled(phase == "training"):
-                        outputs = learner.model(x.float())
-                        loss = learner.criterion(outputs,
-                                                 torch.argmax(y.float(), dim=1))
+                        outputs = learner.model(x)
+                        loss = learner.criterion(outputs, y)
 
                         # backward + optimize only if in training phase
                         if phase == "training":
@@ -154,18 +247,13 @@ class TorchHelper:
                         # statistics
                         y_hat = torch.argmax(outputs, dim=1)
                         running_loss += loss.item() * x.size(0)
-                        running_correct += torch.sum(y_hat == torch.argmax(y.float(), dim=1))
+                        running_correct += torch.sum(y_hat == y)
 
                 epoch_loss = running_loss / len(data_loader.dataset)
                 epoch_acc = running_correct.float() / len(data_loader.dataset)
 
-                print("{} loss: {:.4f} accuracy: {:.4f}".format(
+                print("{} - loss: {:.3f}, accuracy: {:.3f}".format(
                       phase, epoch_loss, epoch_acc))
-
-                # deep copy the model
-                #if phase == "validation" and epoch_acc > best_acc:
-                #    best_acc = epoch_acc
-                #    best_model_wts = copy.deepcopy(model.state_dict())
 
     @staticmethod
     def save_model(learner: Learner, model_name: str = "") -> None:
@@ -216,7 +304,7 @@ class TorchHelper:
                 # transfer to device
                 x = x.to(device)
 
-                raw_logits = learner.model(x.float())
+                raw_logits = learner.model(x)
                 if final_activation_function is None:
                     preds = preds + raw_logits.tolist()
                 elif final_activation_function == "softmax":
@@ -252,10 +340,9 @@ class TorchHelper:
                 x = x.to(device)
                 y = y.to(device)
 
-                outputs = learner.model(x.float())
+                outputs = learner.model(x)
                 y_hat = torch.argmax(outputs, dim=1)
-                loss = learner.criterion(outputs,
-                                       torch.argmax(y.float(), dim=1))
+                loss = learner.criterion(outputs, y)
 
         return [0.0, 0.0]
 
