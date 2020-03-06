@@ -108,10 +108,8 @@ class TorchHelper:
             shuffle=False)
 
         # GPU or CPU?
-        #use_cuda = torch.cuda.is_available()
-        #device = torch.device("cuda:0" if use_cuda else "cpu")
-        device = "cpu"
-        #cudnn.benchmark = True
+        device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+        learner.model = learner.model.to(device)
 
         # training loop
         num_epochs: int = int(learner.training_process_hyperparameters["epochs"])
@@ -169,7 +167,6 @@ class TorchHelper:
                 #    best_acc = epoch_acc
                 #    best_model_wts = copy.deepcopy(model.state_dict())
 
-
     @staticmethod
     def save_model(learner: Learner, model_name: str = "") -> None:
         if model_name != "":
@@ -208,10 +205,17 @@ class TorchHelper:
             batch_size=int(learner.training_process_hyperparameters["batch_size"]),
             shuffle=False)
     
+        # GPU or CPU?
+        device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+        learner.model = learner.model.to(device)
+
         preds = []
         learner.model.eval()
         with torch.no_grad():
             for x in data_loader:
+                # transfer to device
+                x = x.to(device)
+
                 raw_logits = learner.model(x.float())
                 if final_activation_function is None:
                     preds = preds + raw_logits.tolist()
@@ -237,9 +241,17 @@ class TorchHelper:
             batch_size=int(learner.training_process_hyperparameters["batch_size"]),
             shuffle=False)
 
+        # GPU or CPU?
+        device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+        learner.model = learner.model.to(device)
+
         learner.model.eval()
         with torch.no_grad():
             for x, y in data_loader:
+                # transfer to device
+                x = x.to(device)
+                y = y.to(device)
+
                 outputs = learner.model(x.float())
                 y_hat = torch.argmax(outputs, dim=1)
                 loss = learner.criterion(outputs,
