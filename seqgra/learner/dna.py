@@ -17,7 +17,7 @@ from sklearn.preprocessing import MultiLabelBinarizer
 from seqgra.learner.learner import MultiClassClassificationLearner
 from seqgra.learner.learner import MultiLabelClassificationLearner
 from seqgra.parser.modelparser import ModelParser
-from seqgra.dna.dnahelper import DNAHelper
+from seqgra.learner.dnahelper import DNAHelper
 
 class DNAMultiClassClassificationLearner(MultiClassClassificationLearner):
     def __init__(self, parser: ModelParser, output_dir: str) -> None:
