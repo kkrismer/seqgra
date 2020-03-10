@@ -19,7 +19,7 @@ For now, download this seqgra repository and call the following pip command
 inside the seqgra root directory:
 
 ```
-pip install .
+pip install -e .
 ```
 
 ## Usage
