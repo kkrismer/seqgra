@@ -29,7 +29,7 @@ class Evaluator(ABC):
         self.learner.set_seed()
 
     @abstractmethod
-    def evaluate_model(self, set_name: str = "training") -> None:
+    def evaluate_model(self, set_name: str = "test") -> None:
         pass
     
     @abstractmethod

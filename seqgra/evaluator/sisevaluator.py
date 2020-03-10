@@ -29,8 +29,19 @@ class SISEvaluator(Evaluator):
     def __init__(self, learner: Learner, data_dir: str, output_dir: str) -> None:
         super().__init__(learner, data_dir, output_dir)
 
-    def evaluate_model(self, set_name: str = "training") -> None:
-        pass
+    def evaluate_model(self, set_name: str = "test") -> None:
+        labels: List[str] = self.learner.labels
+
+        for i in range(len(labels)):
+            sis_results = self.find_sis(
+                labels[i], i, set_name, n=10,
+                select_randomly=True, threshold=0.5)
+            self.save_results(sis_results, set_name + "-" + labels[i])
+            print(labels[i])
+            print("precision:")
+            print(self.calculate_precision(sis_results))
+            print("recall:")
+            print(self.calculate_recall(sis_results))
     
     def save_results(self, results, name: str) -> None:
         if results is None:
