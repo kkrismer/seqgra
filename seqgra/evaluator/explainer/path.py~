@@ -1,0 +1,54 @@
+def dijkstra(u,v,distances,indices):
+    sptset = np.zeros((indices.shape[0]))
+    sptset[u] = 1.0
+    prev_i = [u]
+    dists = np.zeros((indices.shape[0]))
+    preds = np.zeros((indices.shape[0]))
+    while True:
+        next_i = [(j,indices[j,:]) for j in prev_i]
+        for ind in next_i:
+            min_ind = None
+            min_min = None
+            if not sptset[ind]:
+                if min_ind == None:
+                    min_ind = ind
+                    min_min = dists[ind[0]]+distances[ind[0],ind[1]]
+                    preds[ind[1]] = ind[0]
+                elif min_min < (dists[ind[0]]+distances[ind[0],ind[1]]):
+                    min_ind = ind
+                    min_min = dists[ind[0]]+distances[ind[0],ind[1]]
+                    preds[ind[1]] = ind[0]
+                    
+        sptset[min_ind] = 1.0
+        dists[min_ind] = min_min
+        prev_i = [j for j in range(indices.shape[0]) if sptset[j] == 1.0]
+        if min_ind == v:
+            break
+        if sum(sptset) == indices.shape[0]:
+            break
+    return dists,pred
+
+def shortest_path(start,end,distances,indices):
+    dists,preds = dijkstra(start,end,distances,indices)
+    v = end
+    path = [v]
+    while v != start:
+        v = pred[v]
+        path.append(v)
+    path.reverse()
+    return path
+
+def sequence_path(args,data,k):
+    start,end = args
+    X = np.concatenate([data.reshape((data.shape[0],-1)),
+                        start.reshape((1,-1)),
+                        end.reshape((1,-1))],axis=1)
+    bt = BallTree(X,leaf_size=30,metric='hamming')
+    
+    distances,indices = bt.query(X,k=k,return_distance=True)
+    path = shortest_path(-2,-1,distances,indices)
+    return [data[p,:,:] for p in path]
+    
+                                        
+    
+    
