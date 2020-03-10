@@ -30,5 +30,8 @@ setuptools.setup(
         "setuptools>=41.6.0",
         "tensorflow>=2.1.0"
     ],
-    python_requires=">=3"
+    python_requires=">=3",
+    entry_points = {
+        "console_scripts": ["seqgra=seqgra.seqgra:main"],
+    }
 )
