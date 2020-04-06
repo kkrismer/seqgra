@@ -393,6 +393,8 @@ class TorchHelper:
                 return torch.nn.CrossEntropyLoss()
             elif loss == "nllloss":
                 return torch.nn.NLLLoss()
+            elif loss == "bcewithlogitsloss":
+                return torch.nn.BCEWithLogitsLoss()
             else:
                 raise Exception("unknown loss specified: " + loss)
         else:
