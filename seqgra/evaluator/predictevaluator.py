@@ -6,7 +6,6 @@ predict evaluator: writes model predictions of all examples in set to file
 @author: Konstantin Krismer
 """
 import os
-import logging
 
 import pandas as pd
 
@@ -20,13 +19,11 @@ class PredictEvaluator(Evaluator):
 
     def evaluate_model(self, set_name: str = "test") -> None:
         # load data
-        set_file: str = Evaluator.get_valid_file(self.data_dir + "/" + \
+        set_file: str = Evaluator.get_valid_file(self.data_dir + "/" +
                                                  set_name + ".txt")
         x, _ = self.learner.parse_data(set_file)
 
         y_hat = self.learner.predict(x)
-        logging.info("set predictions calculated")
-
         self.__save_results(y_hat, set_name)
 
     def __save_results(self, results, set_name: str) -> None:
@@ -37,4 +34,3 @@ class PredictEvaluator(Evaluator):
 
         df.to_csv(self.output_dir + set_name + "-y-hat.txt", sep="\t",
                   index=False)
-        logging.info("set predictions saved")

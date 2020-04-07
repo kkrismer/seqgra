@@ -8,7 +8,6 @@ calculates accuracy and loss for training, validation and test set
 @author: Konstantin Krismer
 """
 import os
-import logging
 
 import pandas as pd
 
@@ -27,7 +26,6 @@ class MetricsEvaluator(Evaluator):
         x, y = self.learner.parse_data(set_file)
 
         metrics = self.learner.evaluate_model(x=x, y=y)
-        logging.info("metrics computed")
 
         self.__save_results(metrics, set_name)
 
@@ -41,4 +39,3 @@ class MetricsEvaluator(Evaluator):
 
         df.to_csv(self.output_dir + set_name + "-metrics.txt", sep="\t",
                   index=False)
-        logging.info("metrics saved")
