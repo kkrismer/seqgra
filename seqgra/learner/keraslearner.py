@@ -13,9 +13,10 @@ from seqgra.learner.kerashelper import KerasHelper
 
 
 class KerasMultiClassClassificationLearner(
-    DNAMultiClassClassificationLearner):
-    def __init__(self, parser: ModelParser, output_dir: str) -> None:
-        super().__init__(parser, output_dir)
+        DNAMultiClassClassificationLearner):
+    def __init__(self, parser: ModelParser, data_dir: str,
+                 output_dir: str) -> None:
+        super().__init__(parser, data_dir, output_dir)
 
     def create_model(self) -> None:
         KerasHelper.create_model(self)
@@ -51,9 +52,10 @@ class KerasMultiClassClassificationLearner(
 
 
 class KerasMultiLabelClassificationLearner(
-    DNAMultiLabelClassificationLearner):
-    def __init__(self, parser: ModelParser, output_dir: str) -> None:
-        super().__init__(parser, output_dir)
+        DNAMultiLabelClassificationLearner):
+    def __init__(self, parser: ModelParser, data_dir: str,
+                 output_dir: str) -> None:
+        super().__init__(parser, data_dir, output_dir)
 
     def create_model(self) -> None:
         KerasHelper.create_model(self)

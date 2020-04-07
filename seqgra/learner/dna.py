@@ -19,9 +19,11 @@ from seqgra.learner.learner import MultiLabelClassificationLearner
 from seqgra.parser.modelparser import ModelParser
 from seqgra.learner.dnahelper import DNAHelper
 
+
 class DNAMultiClassClassificationLearner(MultiClassClassificationLearner):
-    def __init__(self, parser: ModelParser, output_dir: str) -> None:
-        super().__init__(parser, output_dir)
+    def __init__(self, parser: ModelParser, data_dir: str,
+                 output_dir: str) -> None:
+        super().__init__(parser, data_dir, output_dir)
 
     def encode_x(self, x: List[str]):
         return np.stack([DNAHelper.convert_dense_to_one_hot_encoding(seq)
@@ -30,14 +32,14 @@ class DNAMultiClassClassificationLearner(MultiClassClassificationLearner):
     def decode_x(self, x):
         return np.stack([DNAHelper.convert_one_hot_to_dense_encoding(seq)
                          for seq in x])
-        
+
     def encode_y(self, y: List[str]):
         if self.labels is None:
             raise Exception("unknown labels, call parse_data or "
                             "load_model first")
         labels = np.array(self.labels)
         return np.vstack([ex == labels for ex in y])
-        
+
     def decode_y(self, y):
         if self.labels is None:
             raise Exception("unknown labels, call parse_data or "
@@ -58,30 +60,31 @@ class DNAMultiClassClassificationLearner(MultiClassClassificationLearner):
 
 
 class DNAMultiLabelClassificationLearner(MultiLabelClassificationLearner):
-    def __init__(self, parser: ModelParser, output_dir: str) -> None:
-        super().__init__(parser, output_dir)
+    def __init__(self, parser: ModelParser, data_dir: str,
+                 output_dir: str) -> None:
+        super().__init__(parser, data_dir, output_dir)
 
     def encode_x(self, x: List[str]):
-        return np.stack([DNAHelper.convert_dense_to_one_hot_encoding(seq) 
+        return np.stack([DNAHelper.convert_dense_to_one_hot_encoding(seq)
                          for seq in x])
 
     def decode_x(self, x):
         return np.stack([DNAHelper.convert_one_hot_to_dense_encoding(seq)
                          for seq in x])
-        
+
     def encode_y(self, y: List[str]):
         if self.labels is None:
             raise Exception("unknown labels, call parse_data or "
                             "load_model first")
 
         y = [ex.split("|") for ex in y]
-        mlb = MultiLabelBinarizer(classes = self.labels)
-        
+        mlb = MultiLabelBinarizer(classes=self.labels)
+
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
             y = mlb.fit_transform(y).astype(bool)
         return y
-        
+
     def decode_y(self, y):
         if self.labels is None:
             raise Exception("unknown labels, call parse_data or "

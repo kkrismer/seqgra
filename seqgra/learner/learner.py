@@ -22,17 +22,19 @@ from sklearn.metrics import average_precision_score
 from sklearn.metrics import roc_curve, auc
 import matplotlib.pyplot as plt
 import numpy as np
-from itertools import cycle
 from scipy import interp
 
 from seqgra.parser.modelparser import ModelParser
 from seqgra.model.model.architecture import Architecture
 from seqgra.model.model.operation import Operation
+from seqgra.mischelper import MiscHelper
 
 
 class Learner(ABC):
     @abstractmethod
-    def __init__(self, parser: ModelParser, output_dir: str) -> None:
+    def __init__(self, parser: ModelParser, data_dir: str,
+                 output_dir: str) -> None:
+        # parse model definition
         self.id: str = parser.get_id()
         self.name: str = parser.get_name()
         self.description: str = parser.get_description()
@@ -50,11 +52,9 @@ class Learner(ABC):
         self.training_process_hyperparameters: Dict[str, str] = \
             parser.get_training_process_hyperparameters()
 
-        output_dir = output_dir.strip().replace("\\", "/")
-        if not output_dir.endswith("/"):
-            output_dir += "/"
-        self.output_dir = output_dir + self.id + "/"
-        self.__prepare_output_dir()
+        self.data_dir = MiscHelper.prepare_path(data_dir)
+        self.output_dir = MiscHelper.prepare_path(output_dir + "/" + self.id,
+                                                  allow_exists=False)
         self.model = None
         self.optimizer = None
         self.criterion = None
@@ -73,7 +73,7 @@ class Learner(ABC):
 
         if self.metrics is not None:
             str_rep += ["\tMetrics:\n", str(self.metrics)]
-            
+
         str_rep += ["\t" + s +
                     "\n" for s in str(self.architecture).splitlines()]
 
@@ -115,6 +115,23 @@ class Learner(ABC):
     def parse_data(self, file_name: str) -> None:
         pass
 
+    def get_examples_file(self, set_name: str = "test") -> str:
+        f: str = self.data_dir + "/" + set_name + ".txt"
+        f = f.replace("\\", "/").replace("//", "/").strip()
+        if os.path.isfile(f):
+            return f
+        else:
+            raise Exception("examples file does not exist for set " + set_name)
+
+    def get_annotations_file(self, set_name: str = "test") -> str:
+        f: str = self.data_dir + "/" + set_name + "-annotation.txt"
+        f = f.replace("\\", "/").replace("//", "/").strip()
+        if os.path.isfile(f):
+            return f
+        else:
+            raise Exception("annotations file does not exist for set " +
+                            set_name)
+
     @abstractmethod
     def create_model(self) -> None:
         pass
@@ -142,11 +159,11 @@ class Learner(ABC):
     @abstractmethod
     def decode_x(self, x):
         pass
-    
+
     @abstractmethod
     def encode_y(self, y):
         pass
-        
+
     @abstractmethod
     def decode_y(self, y):
         pass
@@ -165,19 +182,12 @@ class Learner(ABC):
                      x_val: List[str], y_val: List[str]) -> None:
         pass
 
-    def __prepare_output_dir(self) -> None:
-        if os.path.exists(self.output_dir):
-            if not os.path.isdir(self.output_dir):
-                raise Exception("output directory cannot be created "
-                                "(file with same name exists)")
-        else:
-            os.makedirs(self.output_dir)
-
 
 class MultiClassClassificationLearner(Learner):
     @abstractmethod
-    def __init__(self, parser: ModelParser, output_dir: str) -> None:
-        super().__init__(parser, output_dir)
+    def __init__(self, parser: ModelParser, data_dir: str,
+                 output_dir: str) -> None:
+        super().__init__(parser, data_dir, output_dir)
 
         if self.learner_type != "multi-class classification":
             raise Exception("model definition must specify multi-class "
@@ -320,8 +330,9 @@ class MultiClassClassificationLearner(Learner):
 
 class MultiLabelClassificationLearner(Learner):
     @abstractmethod
-    def __init__(self, parser: ModelParser, output_dir: str) -> None:
-        super().__init__(parser, output_dir)
+    def __init__(self, parser: ModelParser, data_dir: str,
+                 output_dir: str) -> None:
+        super().__init__(parser, data_dir, output_dir)
 
         if self.learner_type != "multi-label classification":
             raise Exception("model definition must specify multi-label "

@@ -26,8 +26,8 @@ from seqgra.sis import sis_collection, make_empty_boolean_mask_broadcast_over_ax
 
 
 class SISEvaluator(Evaluator):
-    def __init__(self, learner: Learner, data_dir: str, output_dir: str) -> None:
-        super().__init__(learner, data_dir, output_dir)
+    def __init__(self, learner: Learner, output_dir: str) -> None:
+        super().__init__("sis", learner, output_dir)
 
     def evaluate_model(self, set_name: str = "test") -> None:
         labels: List[str] = self.learner.labels
@@ -365,7 +365,7 @@ class SISEvaluator(Evaluator):
         else:
             raise Exception("file does not exist: " + data_file)
 
-    def __select_examples(self, for_label, for_set, threshold):
+    def __select_examples(self, for_label, set_name, threshold):
         """ 
         Returns all correctly classified examples for a specified label and
         set that exceed the threshold.
@@ -376,38 +376,25 @@ class SISEvaluator(Evaluator):
         Returns:
             TODO
         """
-        if for_set == "training":
-            input_file = self.__get_valid_file(self.data_dir + "/training.txt")
-            annotation_file = self.__get_valid_file(
-                self.data_dir + "/training-annotation.txt")
-        elif for_set == "validation":
-            input_file = self.__get_valid_file(
-                self.data_dir + "/validation.txt")
-            annotation_file = self.__get_valid_file(
-                self.data_dir + "/validation-annotation.txt")
-        elif for_set == "test":
-            input_file = self.__get_valid_file(self.data_dir + "/test.txt")
-            annotation_file = self.__get_valid_file(
-                self.data_dir + "/test-annotation.txt")
-        else:
-            raise Exception("unsupported set: " + for_set)
+        examples_file: str = self.learner.get_examples_file(set_name)
+        annotations_file: str = self.learner.get_annotations_file(set_name)
 
-        input_df = pd.read_csv(input_file, sep="\t")
-        input_df = input_df[input_df.y == for_label]
+        examples_df = pd.read_csv(examples_file, sep="\t")
+        examples_df = examples_df[examples_df.y == for_label]
 
-        annotation_df = pd.read_csv(annotation_file, sep="\t")
-        annotation_df = annotation_df[annotation_df.y == for_label]
+        annotations_df = pd.read_csv(annotations_file, sep="\t")
+        annotations_df = annotations_df[annotations_df.y == for_label]
 
         # predict with learner and discard misclassified / mislabelled examples
 
-        x = input_df["x"].tolist()
-        y = input_df["y"].tolist()
+        x = examples_df["x"].tolist()
+        y = examples_df["y"].tolist()
         encoded_y = self.learner.encode_y(y)
         y_hat = self.learner.predict(x)
 
         idx = [i for i in range(len(encoded_y)) if np.argmax(y_hat[i]) == np.argmax(encoded_y[i]) and np.max(y_hat[i]) > threshold]
 
-        input_df = input_df.iloc[idx]
-        annotation_df = annotation_df.iloc[idx]
+        examples_df = examples_df.iloc[idx]
+        annotations_df = annotations_df.iloc[idx]
 
-        return (input_df, annotation_df)
+        return (examples_df, annotations_df)

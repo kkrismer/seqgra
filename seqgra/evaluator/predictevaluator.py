@@ -14,13 +14,12 @@ from seqgra.evaluator.evaluator import Evaluator
 
 
 class PredictEvaluator(Evaluator):
-    def __init__(self, learner: Learner, data_dir: str, output_dir: str) -> None:
-        super().__init__("predict", learner, data_dir, output_dir)
+    def __init__(self, learner: Learner, output_dir: str) -> None:
+        super().__init__("predict", learner, output_dir)
 
     def evaluate_model(self, set_name: str = "test") -> None:
         # load data
-        set_file: str = Evaluator.get_valid_file(self.data_dir + "/" +
-                                                 set_name + ".txt")
+        set_file: str = self.learner.get_examples_file(set_name)
         x, _ = self.learner.parse_data(set_file)
 
         y_hat = self.learner.predict(x)

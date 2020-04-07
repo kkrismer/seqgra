@@ -45,7 +45,7 @@ def parse_config_file(file_name: str) -> str:
 
 
 def get_learner(model_parser: ModelParser, data_parser_type: str,
-                output_dir: str) -> Learner:
+                data_dir: str, output_dir: str) -> Learner:
     if data_parser_type is not None and \
        model_parser.get_learner_type() != data_parser_type:
         raise Exception("learner and data type incompatible (" +
@@ -53,34 +53,34 @@ def get_learner(model_parser: ModelParser, data_parser_type: str,
                         ", data type: " + data_parser_type + ")")
 
     if model_parser.get_learner_implementation() == "KerasMultiClassClassificationLearner":
-        return KerasMultiClassClassificationLearner(model_parser, output_dir)
+        return KerasMultiClassClassificationLearner(model_parser, data_dir, output_dir)
     elif model_parser.get_learner_implementation() == "KerasMultiLabelClassificationLearner":
-        return KerasMultiLabelClassificationLearner(model_parser, output_dir)
+        return KerasMultiLabelClassificationLearner(model_parser, data_dir, output_dir)
     elif model_parser.get_learner_implementation() == "TorchMultiClassClassificationLearner":
-        return TorchMultiClassClassificationLearner(model_parser, output_dir)
+        return TorchMultiClassClassificationLearner(model_parser, data_dir, output_dir)
     elif model_parser.get_learner_implementation() == "TorchMultiLabelClassificationLearner":
-        return TorchMultiLabelClassificationLearner(model_parser, output_dir)
+        return TorchMultiLabelClassificationLearner(model_parser, data_dir, output_dir)
     else:
         raise Exception("invalid learner ID")
 
 
 def get_evaluator(evaluator_id: str, learner: Learner,
-                  data_dir: str, output_dir: str) -> Evaluator:
+                  output_dir: str) -> Evaluator:
     evaluator_id = evaluator_id.lower().strip()
 
     if learner is None:
         raise Exception("no learner specified")
 
     if evaluator_id == "metrics":
-        return MetricsEvaluator(learner, data_dir, output_dir)
+        return MetricsEvaluator(learner, output_dir)
     elif evaluator_id == "predict":
-        return PredictEvaluator(learner, data_dir, output_dir)
+        return PredictEvaluator(learner, output_dir)
     elif evaluator_id == "roc":
-        return ROCEvaluator(learner, data_dir, output_dir)
+        return ROCEvaluator(learner, output_dir)
     elif evaluator_id == "pr":
-        return PREvaluator(learner, data_dir, output_dir)
+        return PREvaluator(learner, output_dir)
     elif evaluator_id == "sis":
-        return SISEvaluator(learner, data_dir, output_dir)
+        return SISEvaluator(learner, output_dir)
     else:
         raise Exception("invalid evaluator ID")
 
@@ -132,14 +132,12 @@ def run_seqgra(data_config_file: str,
         model_config = parse_config_file(model_config_file.strip())
         model_parser: ModelParser = XMLModelParser(model_config)
         learner: Learner = get_learner(model_parser, data_parser_type,
+                                       output_dir + "input/" + simulator_id,
                                        output_dir + "models/" + simulator_id)
 
         # load data
-        training_set_file: str = get_valid_file(
-            output_dir + "input/" + simulator_id + "/training.txt")
-        validation_set_file: str = get_valid_file(
-            output_dir + "input/" + simulator_id + "/validation.txt")
-
+        training_set_file: str = learner.get_examples_file("training")
+        validation_set_file: str = learner.get_examples_file("validation")
         x_train, y_train = learner.parse_data(training_set_file)
         x_val, y_val = learner.parse_data(validation_set_file)
 
@@ -158,13 +156,11 @@ def run_seqgra(data_config_file: str,
             learner.save_model()
 
         if evaluator_ids is not None and len(evaluator_ids) > 0:
-            data_dir: str = output_dir + "input/" + simulator_id
             evaluation_dir: str = output_dir + "evaluation/" + \
                 simulator_id + "/" + learner.id
 
             evaluators: List[Evaluator] = [get_evaluator(evaluator_id,
                                                          learner,
-                                                         data_dir,
                                                          evaluation_dir)
                                            for evaluator_id in evaluator_ids]
 
