@@ -32,6 +32,7 @@ from seqgra.learner.torchlearner import TorchMultiClassClassificationLearner
 from seqgra.learner.torchlearner import TorchMultiLabelClassificationLearner
 from seqgra.evaluator.evaluator import Evaluator
 from seqgra.evaluator.sisevaluator import SISEvaluator
+from seqgra.evalargs import ValidateEvaluatorArgs
 
 
 def parse_config_file(file_name: str) -> str:
@@ -159,6 +160,7 @@ def run_seqgra(data_config_file: str,
                                 x_val=x_val, y_val=y_val)
             learner.save_model()
 
+        # TODO refactor metrics evaluator
         # evaluate model using conventional performance metrics
         logging.info("evaluating model")
         training_set_metrics = learner.evaluate_model(x=x_train, y=y_train)
@@ -176,6 +178,7 @@ def run_seqgra(data_config_file: str,
                     evaluation_dir + "/metrics.txt")
         logging.info("training, validation, test set metrics saved")
 
+        # TODO refactor predict evaluator
         # save all predictions
         y_hat_train = learner.predict(x_train)
         y_hat_val = learner.predict(x_val)
@@ -190,6 +193,7 @@ def run_seqgra(data_config_file: str,
             evaluation_dir + "/y-hat-test.txt", sep="\t", index=False)
         logging.info("training, validation, test set predictions saved")
 
+        # TODO refactor roc evaluator
         # plot ROC and PR curves
         encoded_y_train = learner.encode_y(y_train)
         encoded_y_val = learner.encode_y(y_val)
@@ -203,6 +207,7 @@ def run_seqgra(data_config_file: str,
                                 evaluation_dir + "/roc-curve-test.pdf")
         logging.info("ROC curves generated")
 
+        # TODO refactor pr evaluator
         learner.create_precision_recall_curve(
             encoded_y_train, y_hat_train, evaluation_dir + "/pr-curve-train.pdf")
         learner.create_precision_recall_curve(
@@ -257,8 +262,9 @@ def main():
         "--evaluator",
         type=str,
         default=None,
-        choices=["sis"],
-        help="evaluator ID of interpretability method"
+        nargs="+",
+        action=ValidateEvaluatorArgs,
+        help="evaluator ID or IDs of interpretability method - valid evaluator IDs include metrics, roc, pr, sis"
     )
     parser.add_argument(
         "-o",
