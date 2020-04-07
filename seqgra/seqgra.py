@@ -34,6 +34,7 @@ from seqgra.evaluator.evaluator import Evaluator
 from seqgra.evaluator.metricsevaluator import MetricsEvaluator
 from seqgra.evaluator.predictevaluator import PredictEvaluator
 from seqgra.evaluator.rocevaluator import ROCEvaluator
+from seqgra.evaluator.prevaluator import PREvaluator
 from seqgra.evaluator.sisevaluator import SISEvaluator
 
 
@@ -77,7 +78,7 @@ def get_evaluator(evaluator_id: str, learner: Learner,
     elif evaluator_id == "roc":
         return ROCEvaluator(learner, data_dir, output_dir)
     elif evaluator_id == "pr":
-        return SISEvaluator(learner, data_dir, output_dir)
+        return PREvaluator(learner, data_dir, output_dir)
     elif evaluator_id == "sis":
         return SISEvaluator(learner, data_dir, output_dir)
     else:
@@ -138,12 +139,9 @@ def run_seqgra(data_config_file: str,
             output_dir + "input/" + simulator_id + "/training.txt")
         validation_set_file: str = get_valid_file(
             output_dir + "input/" + simulator_id + "/validation.txt")
-        test_set_file: str = get_valid_file(
-            output_dir + "input/" + simulator_id + "/test.txt")
 
         x_train, y_train = learner.parse_data(training_set_file)
         x_val, y_val = learner.parse_data(validation_set_file)
-        x_test, y_test = learner.parse_data(test_set_file)
 
         # train model on data
         trained_model_available: bool = len(os.listdir(learner.output_dir)) > 0
@@ -175,29 +173,6 @@ def run_seqgra(data_config_file: str,
                 evaluator.evaluate_model("training")
                 evaluator.evaluate_model("validation")
                 evaluator.evaluate_model("test")
-
-            # # TODO refactor roc evaluator
-            # # plot ROC and PR curves
-            # encoded_y_train = learner.encode_y(y_train)
-            # encoded_y_val = learner.encode_y(y_val)
-            # encoded_y_test = learner.encode_y(y_test)
-
-            # learner.create_roc_curve(encoded_y_train, y_hat_train,
-            #                         evaluation_dir + "/roc-curve-train.pdf")
-            # learner.create_roc_curve(encoded_y_val, y_hat_val,
-            #                         evaluation_dir + "/roc-curve-val.pdf")
-            # learner.create_roc_curve(encoded_y_test, y_hat_test,
-            #                         evaluation_dir + "/roc-curve-test.pdf")
-            # logging.info("ROC curves generated")
-
-            # # TODO refactor pr evaluator
-            # learner.create_precision_recall_curve(
-            #     encoded_y_train, y_hat_train, evaluation_dir + "/pr-curve-train.pdf")
-            # learner.create_precision_recall_curve(
-            #     encoded_y_val, y_hat_val, evaluation_dir + "/pr-curve-val.pdf")
-            # learner.create_precision_recall_curve(
-            #     encoded_y_test, y_hat_test, evaluation_dir + "/pr-curve-test.pdf")
-            # logging.info("PR curves generated")
 
             # # evaluate model with SIS
             # if evaluator_id is None:
