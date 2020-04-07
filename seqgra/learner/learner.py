@@ -33,8 +33,23 @@ from seqgra.model.model.operation import Operation
 class Learner(ABC):
     @abstractmethod
     def __init__(self, parser: ModelParser, output_dir: str) -> None:
-        self._parser: ModelParser = parser
-        self.__parse_config()
+        self.id: str = parser.get_id()
+        self.name: str = parser.get_name()
+        self.description: str = parser.get_description()
+        self.library: str = parser.get_library()
+        self.seed: int = parser.get_seed()
+        self.learner_type: str = parser.get_learner_type()
+        self.learner_implementation: str = \
+            parser.get_learner_implementation()
+        self.labels: List[str] = parser.get_labels()
+        self.architecture: Architecture = parser.get_architecture()
+        self.loss_hyperparameters: Dict[str, str] = \
+            parser.get_loss_hyperparameters()
+        self.optimizer_hyperparameters: Dict[str, str] = \
+            parser.get_optimizer_hyperparameters()
+        self.training_process_hyperparameters: Dict[str, str] = \
+            parser.get_training_process_hyperparameters()
+
         output_dir = output_dir.strip().replace("\\", "/")
         if not output_dir.endswith("/"):
             output_dir += "/"
@@ -48,7 +63,7 @@ class Learner(ABC):
     def __str__(self):
         str_rep = ["seqgra model configuration:\n",
                    "\tID: ", self.id, "\n",
-                   "\tLabel: ", self.label, "\n",
+                   "\tName: ", self.name, "\n",
                    "\tDescription:\n"]
         if self.description:
             str_rep += ["\t", self.description, "\n"]
@@ -58,7 +73,7 @@ class Learner(ABC):
 
         if self.metrics is not None:
             str_rep += ["\tMetrics:\n", str(self.metrics)]
-
+            
         str_rep += ["\t" + s +
                     "\n" for s in str(self.architecture).splitlines()]
 
@@ -149,24 +164,6 @@ class Learner(ABC):
                      x_train: List[str], y_train: List[str],
                      x_val: List[str], y_val: List[str]) -> None:
         pass
-
-    def __parse_config(self):
-        self.id: str = self._parser.get_id()
-        self.label: str = self._parser.get_label()
-        self.description: str = self._parser.get_description()
-        self.library: str = self._parser.get_library()
-        self.seed: int = self._parser.get_seed()
-        self.learner_type: str = self._parser.get_learner_type()
-        self.learner_implementation: str = \
-            self._parser.get_learner_implementation()
-        self.labels: List[str] = self._parser.get_labels()
-        self.architecture: Architecture = self._parser.get_architecture()
-        self.loss_hyperparameters: Dict[str, str] = \
-            self._parser.get_loss_hyperparameters()
-        self.optimizer_hyperparameters: Dict[str, str] = \
-            self._parser.get_optimizer_hyperparameters()
-        self.training_process_hyperparameters: Dict[str, str] = \
-            self._parser.get_training_process_hyperparameters()
 
     def __prepare_output_dir(self) -> None:
         if os.path.exists(self.output_dir):

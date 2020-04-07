@@ -31,8 +31,8 @@ from seqgra.learner.keraslearner import KerasMultiLabelClassificationLearner
 from seqgra.learner.torchlearner import TorchMultiClassClassificationLearner
 from seqgra.learner.torchlearner import TorchMultiLabelClassificationLearner
 from seqgra.evaluator.evaluator import Evaluator
+from seqgra.evaluator.metricsevaluator import MetricsEvaluator
 from seqgra.evaluator.sisevaluator import SISEvaluator
-from seqgra.evalargs import ValidateEvaluatorArgs
 
 
 def parse_config_file(file_name: str) -> str:
@@ -41,12 +41,12 @@ def parse_config_file(file_name: str) -> str:
     return config
 
 
-def get_learner(model_parser: ModelParser, data_parser_type: str, 
+def get_learner(model_parser: ModelParser, data_parser_type: str,
                 output_dir: str) -> Learner:
     if data_parser_type is not None and \
        model_parser.get_learner_type() != data_parser_type:
-        raise Exception("learner and data type incompatible (" + 
-                        "learner type: " + model_parser.get_learner_type() + 
+        raise Exception("learner and data type incompatible (" +
+                        "learner type: " + model_parser.get_learner_type() +
                         ", data type: " + data_parser_type + ")")
 
     if model_parser.get_learner_implementation() == "KerasMultiClassClassificationLearner":
@@ -64,7 +64,19 @@ def get_learner(model_parser: ModelParser, data_parser_type: str,
 def get_evaluator(evaluator_id: str, learner: Learner,
                   data_dir: str, output_dir: str) -> Evaluator:
     evaluator_id = evaluator_id.lower().strip()
-    if evaluator_id == "sis":
+
+    if learner is None:
+        raise Exception("no learner specified")
+
+    if evaluator_id == "metrics":
+        return MetricsEvaluator(learner, data_dir, output_dir)
+    elif evaluator_id == "predict":
+        return SISEvaluator(learner, data_dir, output_dir)
+    elif evaluator_id == "roc":
+        return SISEvaluator(learner, data_dir, output_dir)
+    elif evaluator_id == "pr":
+        return SISEvaluator(learner, data_dir, output_dir)
+    elif evaluator_id == "sis":
         return SISEvaluator(learner, data_dir, output_dir)
     else:
         raise Exception("invalid evaluator ID")
@@ -85,26 +97,11 @@ def get_valid_file(data_file: str) -> str:
         raise Exception("file does not exist: " + data_file)
 
 
-def save_metrics(training_set_metrics,
-                 validation_set_metrics,
-                 test_set_metrics,
-                 names,
-                 file_name):
-    df = pd.DataFrame([["training", training_set_metrics["loss"],
-                        training_set_metrics["accuracy"]],
-                       ["validation", validation_set_metrics["loss"],
-                        validation_set_metrics["accuracy"]],
-                       ["test", test_set_metrics["loss"], 
-                        test_set_metrics["accuracy"]]],
-                      columns=["set", "loss", "accuracy"])
-    df.to_csv(file_name, sep="\t", index=False)
-
-
 def run_seqgra(data_config_file: str,
-         data_folder: str,
-         model_config_file: str,
-         evaluator_id: str,
-         output_dir: str) -> None:
+               data_folder: str,
+               model_config_file: str,
+               evaluator_ids: List[str],
+               output_dir: str) -> None:
     output_dir = format_output_dir(output_dir.strip())
 
     if data_config_file is None:
@@ -131,8 +128,8 @@ def run_seqgra(data_config_file: str,
     if model_config_file is not None:
         model_config = parse_config_file(model_config_file.strip())
         model_parser: ModelParser = XMLModelParser(model_config)
-        learner: Learner = get_learner(model_parser, data_parser_type, 
-                                    output_dir + "models/" + simulator_id)
+        learner: Learner = get_learner(model_parser, data_parser_type,
+                                       output_dir + "models/" + simulator_id)
 
         # load data
         training_set_file: str = get_valid_file(
@@ -160,72 +157,71 @@ def run_seqgra(data_config_file: str,
                                 x_val=x_val, y_val=y_val)
             learner.save_model()
 
-        # TODO refactor metrics evaluator
-        # evaluate model using conventional performance metrics
-        logging.info("evaluating model")
-        training_set_metrics = learner.evaluate_model(x=x_train, y=y_train)
-        validation_set_metrics = learner.evaluate_model(x=x_val, y=y_val)
-        test_set_metrics = learner.evaluate_model(x=x_test, y=y_test)
-        logging.info("training, validation, test set metrics computed")
+        if evaluator_ids is not None and len(evaluator_ids) > 0:
+            data_dir: str = output_dir + "input/" + simulator_id
+            evaluation_dir: str = output_dir + "evaluation/" + \
+                simulator_id + "/" + learner.id
 
-        evaluation_dir = output_dir + "evaluation/" + simulator_id + "/" + \
-            learner.id
-        os.makedirs(evaluation_dir, exist_ok=True)
-        save_metrics(training_set_metrics,
-                    validation_set_metrics,
-                    test_set_metrics,
-                    learner.metrics,
-                    evaluation_dir + "/metrics.txt")
-        logging.info("training, validation, test set metrics saved")
+            evaluators: List[Evaluator] = [get_evaluator(evaluator_id,
+                                                         learner,
+                                                         data_dir,
+                                                         evaluation_dir)
+                                           for evaluator_id in evaluator_ids]
 
-        # TODO refactor predict evaluator
-        # save all predictions
-        y_hat_train = learner.predict(x_train)
-        y_hat_val = learner.predict(x_val)
-        y_hat_test = learner.predict(x_test)
-        logging.info("training, validation, test set predictions calculated")
+            for evaluator in evaluators:
+                logging.info("running evaluator " + evaluator.id)
+                evaluator.evaluate_model("training")
+                evaluator.evaluate_model("validation")
+                evaluator.evaluate_model("test")
 
-        pd.DataFrame(y_hat_train, columns=learner.labels).to_csv(
-            evaluation_dir + "/y-hat-train.txt", sep="\t", index=False)
-        pd.DataFrame(y_hat_val, columns=learner.labels).to_csv(
-            evaluation_dir + "/y-hat-val.txt", sep="\t", index=False)
-        pd.DataFrame(y_hat_test, columns=learner.labels).to_csv(
-            evaluation_dir + "/y-hat-test.txt", sep="\t", index=False)
-        logging.info("training, validation, test set predictions saved")
+            # # TODO refactor predict evaluator
+            # # save all predictions
+            # y_hat_train = learner.predict(x_train)
+            # y_hat_val = learner.predict(x_val)
+            # y_hat_test = learner.predict(x_test)
+            # logging.info("training, validation, test set predictions calculated")
 
-        # TODO refactor roc evaluator
-        # plot ROC and PR curves
-        encoded_y_train = learner.encode_y(y_train)
-        encoded_y_val = learner.encode_y(y_val)
-        encoded_y_test = learner.encode_y(y_test)
+            # pd.DataFrame(y_hat_train, columns=learner.labels).to_csv(
+            #     evaluation_dir + "/y-hat-train.txt", sep="\t", index=False)
+            # pd.DataFrame(y_hat_val, columns=learner.labels).to_csv(
+            #     evaluation_dir + "/y-hat-val.txt", sep="\t", index=False)
+            # pd.DataFrame(y_hat_test, columns=learner.labels).to_csv(
+            #     evaluation_dir + "/y-hat-test.txt", sep="\t", index=False)
+            # logging.info("training, validation, test set predictions saved")
 
-        learner.create_roc_curve(encoded_y_train, y_hat_train,
-                                evaluation_dir + "/roc-curve-train.pdf")
-        learner.create_roc_curve(encoded_y_val, y_hat_val,
-                                evaluation_dir + "/roc-curve-val.pdf")
-        learner.create_roc_curve(encoded_y_test, y_hat_test,
-                                evaluation_dir + "/roc-curve-test.pdf")
-        logging.info("ROC curves generated")
+            # # TODO refactor roc evaluator
+            # # plot ROC and PR curves
+            # encoded_y_train = learner.encode_y(y_train)
+            # encoded_y_val = learner.encode_y(y_val)
+            # encoded_y_test = learner.encode_y(y_test)
 
-        # TODO refactor pr evaluator
-        learner.create_precision_recall_curve(
-            encoded_y_train, y_hat_train, evaluation_dir + "/pr-curve-train.pdf")
-        learner.create_precision_recall_curve(
-            encoded_y_val, y_hat_val, evaluation_dir + "/pr-curve-val.pdf")
-        learner.create_precision_recall_curve(
-            encoded_y_test, y_hat_test, evaluation_dir + "/pr-curve-test.pdf")
-        logging.info("PR curves generated")
+            # learner.create_roc_curve(encoded_y_train, y_hat_train,
+            #                         evaluation_dir + "/roc-curve-train.pdf")
+            # learner.create_roc_curve(encoded_y_val, y_hat_val,
+            #                         evaluation_dir + "/roc-curve-val.pdf")
+            # learner.create_roc_curve(encoded_y_test, y_hat_test,
+            #                         evaluation_dir + "/roc-curve-test.pdf")
+            # logging.info("ROC curves generated")
 
-        # evaluate model with SIS
-        if evaluator_id is None:
-            logging.info("skipping evaluation step: no evaluator specified")
-        else:
-            logging.info("evaluating model using interpretability methods")
-            evaluator: Evaluator = get_evaluator(
-                evaluator_id, learner,
-                output_dir + "input/" + simulator_id, evaluation_dir)
-            evaluator.evaluate_model("test")
-    
+            # # TODO refactor pr evaluator
+            # learner.create_precision_recall_curve(
+            #     encoded_y_train, y_hat_train, evaluation_dir + "/pr-curve-train.pdf")
+            # learner.create_precision_recall_curve(
+            #     encoded_y_val, y_hat_val, evaluation_dir + "/pr-curve-val.pdf")
+            # learner.create_precision_recall_curve(
+            #     encoded_y_test, y_hat_test, evaluation_dir + "/pr-curve-test.pdf")
+            # logging.info("PR curves generated")
+
+            # # evaluate model with SIS
+            # if evaluator_id is None:
+            #     logging.info("skipping evaluation step: no evaluator specified")
+            # else:
+            #     logging.info("evaluating model using interpretability methods")
+            #     evaluator: Evaluator = get_evaluator(
+            #         evaluator_id, learner,
+            #         output_dir + "input/" + simulator_id, evaluation_dir)
+            #     evaluator.evaluate_model("test")
+
 
 def main():
     logging.basicConfig(level=logging.INFO)
@@ -259,11 +255,10 @@ def main():
     )
     parser.add_argument(
         "-e",
-        "--evaluator",
+        "--evaluators",
         type=str,
         default=None,
         nargs="+",
-        action=ValidateEvaluatorArgs,
         help="evaluator ID or IDs of interpretability method - valid evaluator IDs include metrics, roc, pr, sis"
     )
     parser.add_argument(
@@ -279,14 +274,20 @@ def main():
     if args.datafolder and args.modelconfigfile is None:
         parser.error("-f/--datafolder requires -m/--modelconfigfile.")
 
-    if args.evaluator and args.modelconfigfile is None:
-        parser.error("-e/--evaluator requires -m/--modelconfigfile.")
+    if args.evaluators and args.modelconfigfile is None:
+        parser.error("-e/--evaluators requires -m/--modelconfigfile.")
+
+    if args.evaluators is not None:
+        for evaluator in args.evaluators:
+            if evaluator not in frozenset(["metrics", "predict", "roc", "pr", "sis"]):
+                raise ValueError("invalid evaluator ID {s!r}".format(s=evaluator))
 
     run_seqgra(args.dataconfigfile,
-        args.datafolder,
-        args.modelconfigfile,
-        args.evaluator,
-        args.outputdir)
+               args.datafolder,
+               args.modelconfigfile,
+               args.evaluators,
+               args.outputdir)
+
 
 if __name__ == "__main__":
     main()

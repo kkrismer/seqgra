@@ -17,35 +17,29 @@ from seqgra.learner.learner import Learner
 
 class Evaluator(ABC):
     @abstractmethod
-    def __init__(self, learner: Learner, data_dir: str, 
+    def __init__(self, id: str, learner: Learner, data_dir: str, 
                  output_dir: str) -> None:
+        self.id: str = id
         self.learner: Learner = learner
         self.data_dir: str = data_dir
         output_dir = output_dir.replace("\\", "/")
         if not output_dir.endswith("/"):
             output_dir += "/"
-        self.output_dir = output_dir
+        self.output_dir = output_dir + id + "/"
         self.__prepare_output_dir()
         self.learner.set_seed()
 
     @abstractmethod
     def evaluate_model(self, set_name: str = "test") -> None:
         pass
-    
-    @abstractmethod
-    def save_results(self, results, name: str) -> None:
-        pass
-    
-    @abstractmethod
-    def load_results(self, name: str):
-        pass
 
-    def write_session_info(self) -> None:
-        with open(self.output_dir + "session-info.txt", "w") as session_file:
-            session_file.write("seqgra package version: " +
-                pkg_resources.require("seqgra")[0].version + "\n")
-            session_file.write("NumPy version: " + np.version.version + "\n")
-            session_file.write("Python version: " + sys.version + "\n")
+    @staticmethod
+    def get_valid_file(data_file: str) -> str:
+        data_file = data_file.replace("\\", "/").replace("//", "/").strip()
+        if os.path.isfile(data_file):
+            return data_file
+        else:
+            raise Exception("file does not exist: " + data_file)
 
     def __prepare_output_dir(self) -> None:
         if os.path.exists(self.output_dir):
@@ -53,4 +47,4 @@ class Evaluator(ABC):
                 raise Exception("output directory cannot be created "
                                 "(file with same name exists)")
         else:    
-            os.makedirs(self.output_dir)
+            os.makedirs(self.output_dir, exist_ok=True)

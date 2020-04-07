@@ -39,7 +39,7 @@ class Simulator:
     def __str__(self):
         str_rep = ["seqgra data configuration:\n",
                    "\tID: ", self.id, "\n",
-                   "\tLabel: ", self.label, "\n",
+                   "\tName: ", self.name, "\n",
                    "\tDescription:\n"]
         if self.description:
             str_rep += ["\t", self.description, "\n"]
@@ -61,7 +61,7 @@ class Simulator:
 
     def __parse_config(self):
         self.id: str = self._parser.get_id()
-        self.label: str = self._parser.get_label()
+        self.name: str = self._parser.get_name()
         self.description: str = self._parser.get_description()
         self.sequence_space: str = self._parser.get_sequence_space()
         self.sequence_elements: List[SequenceElement] = \
