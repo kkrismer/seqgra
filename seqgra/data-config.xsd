@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:simpleType name="setType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="training" />
+      <xs:enumeration value="validation" />
+      <xs:enumeration value="test" />
+    </xs:restriction>
+  </xs:simpleType>
+
   <xs:element name="seqgradata">
     <xs:complexType>
       <xs:sequence>
@@ -117,7 +125,7 @@
       <xs:element name="sets">
         <xs:complexType>
           <xs:sequence>
-            <xs:element name="set" minOccurs="1" maxOccurs="unbounded">
+            <xs:element name="set" minOccurs="3" maxOccurs="3">
               <xs:complexType>
                 <xs:sequence>
                   <xs:element name="example" minOccurs="1" maxOccurs="unbounded">
@@ -145,7 +153,7 @@
                     </xs:complexType>
                   </xs:element>
                 </xs:sequence>
-                <xs:attribute name="name" type="xs:string" use="required"/>
+                <xs:attribute name="name" type="setType" use="required"/>
               </xs:complexType>
             </xs:element>
           </xs:sequence>
