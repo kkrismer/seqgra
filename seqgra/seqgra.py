@@ -32,6 +32,7 @@ from seqgra.learner.torchlearner import TorchMultiClassClassificationLearner
 from seqgra.learner.torchlearner import TorchMultiLabelClassificationLearner
 from seqgra.evaluator.evaluator import Evaluator
 from seqgra.evaluator.metricsevaluator import MetricsEvaluator
+from seqgra.evaluator.predictevaluator import PredictEvaluator
 from seqgra.evaluator.sisevaluator import SISEvaluator
 
 
@@ -71,7 +72,7 @@ def get_evaluator(evaluator_id: str, learner: Learner,
     if evaluator_id == "metrics":
         return MetricsEvaluator(learner, data_dir, output_dir)
     elif evaluator_id == "predict":
-        return SISEvaluator(learner, data_dir, output_dir)
+        return PredictEvaluator(learner, data_dir, output_dir)
     elif evaluator_id == "roc":
         return SISEvaluator(learner, data_dir, output_dir)
     elif evaluator_id == "pr":
@@ -174,21 +175,6 @@ def run_seqgra(data_config_file: str,
                 evaluator.evaluate_model("validation")
                 evaluator.evaluate_model("test")
 
-            # # TODO refactor predict evaluator
-            # # save all predictions
-            # y_hat_train = learner.predict(x_train)
-            # y_hat_val = learner.predict(x_val)
-            # y_hat_test = learner.predict(x_test)
-            # logging.info("training, validation, test set predictions calculated")
-
-            # pd.DataFrame(y_hat_train, columns=learner.labels).to_csv(
-            #     evaluation_dir + "/y-hat-train.txt", sep="\t", index=False)
-            # pd.DataFrame(y_hat_val, columns=learner.labels).to_csv(
-            #     evaluation_dir + "/y-hat-val.txt", sep="\t", index=False)
-            # pd.DataFrame(y_hat_test, columns=learner.labels).to_csv(
-            #     evaluation_dir + "/y-hat-test.txt", sep="\t", index=False)
-            # logging.info("training, validation, test set predictions saved")
-
             # # TODO refactor roc evaluator
             # # plot ROC and PR curves
             # encoded_y_train = learner.encode_y(y_train)
@@ -280,7 +266,8 @@ def main():
     if args.evaluators is not None:
         for evaluator in args.evaluators:
             if evaluator not in frozenset(["metrics", "predict", "roc", "pr", "sis"]):
-                raise ValueError("invalid evaluator ID {s!r}".format(s=evaluator))
+                raise ValueError(
+                    "invalid evaluator ID {s!r}".format(s=evaluator))
 
     run_seqgra(args.dataconfigfile,
                args.datafolder,
