@@ -14,10 +14,11 @@ import numpy as np
 class DNAHelper:
     @staticmethod
     def convert_dense_to_one_hot_encoding(seq: str):
-        seq = seq.replace("A", "0").replace("C", "1").replace("G", "2").replace("T", "3")
-        seq = np.array(list(seq), dtype = int)
+        nt_to_num = dict({"A": 0, "C": 1, "G": 2, "T": 3})
+        seq = list(seq)
+        seq = np.array([nt_to_num[nt] for nt in seq], dtype=int)
 
-        one_hot_encoded_seq = np.zeros((len(seq), 4))
+        one_hot_encoded_seq = np.zeros((len(seq), len(nt_to_num)))
         one_hot_encoded_seq[np.arange(len(seq)), seq] = 1
         return one_hot_encoded_seq
 
@@ -40,6 +41,6 @@ class DNAHelper:
         is_valid: bool = True
         for seq in seqs:
             if not re.match("^[ACGT]*$", seq):
-                logging.warn("example with invalid sequence:" + seq)
+                logging.warn("example with invalid DNA sequence:" + seq)
                 is_valid = False
         return is_valid

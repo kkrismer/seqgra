@@ -26,10 +26,14 @@ from seqgra.parser.modelparser import ModelParser
 from seqgra.parser.xmlmodelparser import XMLModelParser
 from seqgra.simulator.simulator import Simulator
 from seqgra.learner.learner import Learner
-from seqgra.learner.keraslearner import KerasMultiClassClassificationLearner
-from seqgra.learner.keraslearner import KerasMultiLabelClassificationLearner
-from seqgra.learner.torchlearner import TorchMultiClassClassificationLearner
-from seqgra.learner.torchlearner import TorchMultiLabelClassificationLearner
+from seqgra.learner.keraslearner import KerasDNAMultiClassClassificationLearner
+from seqgra.learner.keraslearner import KerasDNAMultiLabelClassificationLearner
+from seqgra.learner.torchlearner import TorchDNAMultiClassClassificationLearner
+from seqgra.learner.torchlearner import TorchDNAMultiLabelClassificationLearner
+from seqgra.learner.keraslearner import KerasProteinMultiClassClassificationLearner
+from seqgra.learner.keraslearner import KerasProteinMultiLabelClassificationLearner
+from seqgra.learner.torchlearner import TorchProteinMultiClassClassificationLearner
+from seqgra.learner.torchlearner import TorchProteinMultiLabelClassificationLearner
 from seqgra.evaluator.evaluator import Evaluator
 from seqgra.evaluator.metricsevaluator import MetricsEvaluator
 from seqgra.evaluator.predictevaluator import PredictEvaluator
@@ -52,14 +56,22 @@ def get_learner(model_parser: ModelParser, data_parser_type: str,
                         "learner type: " + model_parser.get_learner_type() +
                         ", data type: " + data_parser_type + ")")
 
-    if model_parser.get_learner_implementation() == "KerasMultiClassClassificationLearner":
-        return KerasMultiClassClassificationLearner(model_parser, data_dir, output_dir)
-    elif model_parser.get_learner_implementation() == "KerasMultiLabelClassificationLearner":
-        return KerasMultiLabelClassificationLearner(model_parser, data_dir, output_dir)
-    elif model_parser.get_learner_implementation() == "TorchMultiClassClassificationLearner":
-        return TorchMultiClassClassificationLearner(model_parser, data_dir, output_dir)
-    elif model_parser.get_learner_implementation() == "TorchMultiLabelClassificationLearner":
-        return TorchMultiLabelClassificationLearner(model_parser, data_dir, output_dir)
+    if model_parser.get_learner_implementation() == "KerasDNAMultiClassClassificationLearner":
+        return KerasDNAMultiClassClassificationLearner(model_parser, data_dir, output_dir)
+    elif model_parser.get_learner_implementation() == "KerasDNAMultiLabelClassificationLearner":
+        return KerasDNAMultiLabelClassificationLearner(model_parser, data_dir, output_dir)
+    elif model_parser.get_learner_implementation() == "TorchDNAMultiClassClassificationLearner":
+        return TorchDNAMultiClassClassificationLearner(model_parser, data_dir, output_dir)
+    elif model_parser.get_learner_implementation() == "TorchDNAMultiLabelClassificationLearner":
+        return TorchDNAMultiLabelClassificationLearner(model_parser, data_dir, output_dir)
+    elif model_parser.get_learner_implementation() == "KerasProteinMultiClassClassificationLearner":
+        return KerasProteinMultiClassClassificationLearner(model_parser, data_dir, output_dir)
+    elif model_parser.get_learner_implementation() == "KerasProteinMultiLabelClassificationLearner":
+        return KerasProteinMultiLabelClassificationLearner(model_parser, data_dir, output_dir)
+    elif model_parser.get_learner_implementation() == "TorchProteinMultiClassClassificationLearner":
+        return TorchProteinMultiClassClassificationLearner(model_parser, data_dir, output_dir)
+    elif model_parser.get_learner_implementation() == "TorchProteinMultiLabelClassificationLearner":
+        return TorchProteinMultiLabelClassificationLearner(model_parser, data_dir, output_dir)
     else:
         raise Exception("invalid learner ID")
 
@@ -164,22 +176,14 @@ def run_seqgra(data_config_file: str,
                                                          evaluation_dir)
                                            for evaluator_id in evaluator_ids]
 
+            logging.info("evaluating model using interpretability methods")
             for evaluator in evaluators:
                 logging.info("running evaluator " + evaluator.id)
                 evaluator.evaluate_model("training")
                 evaluator.evaluate_model("validation")
                 evaluator.evaluate_model("test")
-
-            # # evaluate model with SIS
-            # if evaluator_id is None:
-            #     logging.info("skipping evaluation step: no evaluator specified")
-            # else:
-            #     logging.info("evaluating model using interpretability methods")
-            #     evaluator: Evaluator = get_evaluator(
-            #         evaluator_id, learner,
-            #         output_dir + "input/" + simulator_id, evaluation_dir)
-            #     evaluator.evaluate_model("test")
-
+        else:
+            logging.info("skipping evaluation step: no evaluator specified")
 
 def main():
     logging.basicConfig(level=logging.INFO)

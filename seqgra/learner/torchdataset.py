@@ -15,12 +15,12 @@ import numpy as np
 from sklearn.preprocessing import MultiLabelBinarizer
 
 from seqgra.learner.dnahelper import DNAHelper
+from seqgra.learner.proteinhelper import ProteinHelper
 
 
 class DNAMultiClassDataSet(torch.utils.data.Dataset):
-    def __init__(self, x, y = None,
+    def __init__(self, x, y=None,
                  labels: List[str] = None, encode_data: bool = True):
-        
         self.x = x
         self.y = y
 
@@ -36,7 +36,7 @@ class DNAMultiClassDataSet(torch.utils.data.Dataset):
         if self.y is not None:
             if not isinstance(self.y, np.ndarray):
                 self.y = np.array(self.y)
-            
+
             if self.y.dtype == np.bool:
                 self.y = np.argmax(self.y.astype(np.int64), axis=1)
 
@@ -55,7 +55,7 @@ class DNAMultiClassDataSet(torch.utils.data.Dataset):
     def __encode_x(self, x: List[str]):
         return np.stack([DNAHelper.convert_dense_to_one_hot_encoding(seq)
                          for seq in x])
-        
+
     def __encode_y(self, y: List[str]):
         if self.labels is None:
             raise Exception("labels not specified")
@@ -66,7 +66,6 @@ class DNAMultiClassDataSet(torch.utils.data.Dataset):
 class DNAMultiLabelDataSet(torch.utils.data.Dataset):
     def __init__(self, x: List[str], y: List[str] = None,
                  labels: List[str] = None, encode_data: bool = True):
-        
         self.x: List[str] = x
         self.y: List[str] = y
         DNAHelper.check_sequence(self.x)
@@ -93,16 +92,106 @@ class DNAMultiLabelDataSet(torch.utils.data.Dataset):
             return self.x[idx], self.y[idx]
 
     def __encode_x(self, x: List[str]):
-        return np.stack([DNAHelper.convert_dense_to_one_hot_encoding(seq) 
+        return np.stack([DNAHelper.convert_dense_to_one_hot_encoding(seq)
                          for seq in x])
-        
+
     def __encode_y(self, y: List[str]):
         if self.labels is None:
             raise Exception("labels not specified")
 
         y = [ex.split("|") for ex in y]
-        mlb = MultiLabelBinarizer(classes = self.labels)
-        
+        mlb = MultiLabelBinarizer(classes=self.labels)
+
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            y = mlb.fit_transform(y).astype(bool)
+        return y
+
+
+class ProteinMultiClassDataSet(torch.utils.data.Dataset):
+    def __init__(self, x, y=None,
+                 labels: List[str] = None, encode_data: bool = True):
+        self.x = x
+        self.y = y
+
+        self.labels = labels
+
+        if encode_data:
+            ProteinHelper.check_sequence(self.x)
+            self.x = self.__encode_x(self.x)
+            if self.y is not None:
+                self.y = self.__encode_y(self.y)
+
+        self.x = np.array(self.x).astype(np.float32)
+        if self.y is not None:
+            if not isinstance(self.y, np.ndarray):
+                self.y = np.array(self.y)
+
+            if self.y.dtype == np.bool:
+                self.y = np.argmax(self.y.astype(np.int64), axis=1)
+
+    def __len__(self):
+        return len(self.x)
+
+    def __getitem__(self, idx):
+        if torch.is_tensor(idx):
+            idx = idx.tolist()
+
+        if self.y is None:
+            return self.x[idx]
+        else:
+            return self.x[idx], self.y[idx]
+
+    def __encode_x(self, x: List[str]):
+        return np.stack([ProteinHelper.convert_dense_to_one_hot_encoding(seq)
+                         for seq in x])
+
+    def __encode_y(self, y: List[str]):
+        if self.labels is None:
+            raise Exception("labels not specified")
+        labels = np.array(self.labels)
+        return np.vstack([ex == labels for ex in y])
+
+
+class ProteinMultiLabelDataSet(torch.utils.data.Dataset):
+    def __init__(self, x: List[str], y: List[str] = None,
+                 labels: List[str] = None, encode_data: bool = True):
+        self.x: List[str] = x
+        self.y: List[str] = y
+        ProteinHelper.check_sequence(self.x)
+
+        self.labels = labels
+
+        if encode_data:
+            self.x = self.__encode_x(self.x)
+            if self.y is not None:
+                self.y = self.__encode_y(self.y)
+
+        self.x = np.array(self.x).astype(np.float32)
+
+    def __len__(self):
+        return len(self.x)
+
+    def __getitem__(self, idx):
+        if torch.is_tensor(idx):
+            idx = idx.tolist()
+
+        if self.y is None:
+            return self.x[idx]
+        else:
+            return self.x[idx], self.y[idx]
+
+    def __encode_x(self, x: List[str]):
+        return np.stack([ProteinHelper.convert_dense_to_one_hot_encoding(seq)
+                         for seq in x])
+
+    def __encode_y(self, y: List[str]):
+        if self.labels is None:
+            raise Exception("labels not specified")
+
+        y = [ex.split("|") for ex in y]
+        mlb = MultiLabelBinarizer(classes=self.labels)
+
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
             y = mlb.fit_transform(y).astype(bool)
