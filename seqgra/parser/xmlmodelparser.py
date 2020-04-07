@@ -48,8 +48,8 @@ class XMLModelParser(ModelParser):
     def get_id(self) -> str:
         return self._general_element.getAttribute("id")
     
-    def get_label(self) -> str:
-        return XMLHelper.read_text_node(self._general_element, "label")
+    def get_name(self) -> str:
+        return XMLHelper.read_text_node(self._general_element, "name")
     
     def get_description(self) -> str:
         return XMLHelper.read_text_node(self._general_element, "description")

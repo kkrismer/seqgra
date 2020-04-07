@@ -20,7 +20,7 @@ class DataParser(ABC):
         pass
     
     @abstractmethod
-    def get_label(self) -> str:
+    def get_name(self) -> str:
         pass
     
     @abstractmethod
