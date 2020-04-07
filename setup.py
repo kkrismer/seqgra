@@ -28,7 +28,10 @@ setuptools.setup(
         "scipy>=1.3.1",
         "pandas>=0.25.2",
         "setuptools>=41.6.0",
-        "tensorflow>=2.1.0"
+        "tensorflow>=2.1.0",
+        "pyyaml",
+        "torch>=1.4.0",
+        "pytorch-ignite"
     ],
     python_requires=">=3",
     entry_points = {
