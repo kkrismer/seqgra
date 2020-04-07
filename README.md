@@ -26,31 +26,200 @@ pip install -e .
 
 ```
 seqgra -h
-usage: seqgra [-h] (-d DATACONFIGFILE | -f DATAFOLDER) -m MODELCONFIGFILE
-              [-e {sis}] -o OUTPUTDIR
+usage: seqgra [-h] (-d DATACONFIGFILE | -f DATAFOLDER) [-m MODELCONFIGFILE] 
+              [-e EVALUATOR [EVALUATOR ...]] -o OUTPUTDIR
 
-Generate synthetic data based on grammar, train model on synthetic data,
+Generate synthetic data based on grammar, train model on synthetic data, 
 evaluate model
 
 optional arguments:
   -h, --help            show this help message and exit
   -d DATACONFIGFILE, --dataconfigfile DATACONFIGFILE
-                        path to the segra XML data configuration file. Use
-                        this option to generate synthetic data based on a
+                        path to the segra XML data configuration file. Use 
+                        this option to generate synthetic data based on a 
                         seqgra grammar (specify either -d or -f, not both)
   -f DATAFOLDER, --datafolder DATAFOLDER
-                        experimental data folder name inside outputdir/input.
-                        Use this option to train the model on experimental or
+                        experimental data folder name inside outputdir/input. 
+                        Use this option to train the model on experimental or 
                         externally synthesized data (specify either -f or -d,
                         not both)
   -m MODELCONFIGFILE, --modelconfigfile MODELCONFIGFILE
                         path to the seqgra XML model configuration file
-  -e {sis}, --evaluator {sis}
-                        evaluator ID of interpretability method
+  -e EVALUATOR [EVALUATOR ...], --evaluator EVALUATOR [EVALUATOR ...]
+                        evaluator ID or IDs of interpretability method - valid 
+                        evaluator IDs include metrics, predict, roc, pr, sis
   -o OUTPUTDIR, --outputdir OUTPUTDIR
-                        output directory, subdirectories are created for
+                        output directory, subdirectories are created for 
                         generated data, trained model, and model evaluation
 ```
+
+## Types of seqgra analysis
+
+**Generate synthetic data only:**
+```
+seqgra -d DATACONFIGFILE -o OUTPUTDIR
+```
+
+Generated files and folders:
+<pre>
+{OUTPUTDIR}
++-- input
+    +-- {GRAMMAR ID}
+        |-- session-info.txt
+        |-- training.txt
+        |-- training-annotation.txt
+        |-- validation.txt
+        |-- validation-annotation.txt
+        |-- test.txt
+        +-- test-annotation.txt
+</pre>
+
+**Generate synthetic data and train model on it:**
+```
+seqgra -d DATACONFIGFILE -m MODELCONFIGFILE -o OUTPUTDIR
+```
+
+Generated files and folders:
+<pre>
+{OUTPUTDIR}
+|-- input
+|   +-- {GRAMMAR ID}
+|       |-- session-info.txt
+|       |-- training.txt
+|       |-- training-annotation.txt
+|       |-- validation.txt
+|       |-- validation-annotation.txt
+|       |-- test.txt
+|       +-- test-annotation.txt
+|-- models
+|   +-- {GRAMMAR ID}
+        +-- {MODEL ID}
+            |-- session-info.txt
+            +-- saved_model*
+</pre>
+
+**Train model on previously synthesized data:**
+```
+seqgra -d DATACONFIGFILE -m MODELCONFIGFILE -o OUTPUTDIR
+```
+where previously synthesized data is in `{OUTPUTDIR}/input/{GRAMMAR ID}` folder and `{GRAMMAR ID}` is defined in `{DATACONFIGFILE}`.
+
+Generated files and folders (pre-existing folders and files in gray):
+<pre>
+<span style="color: gray;">{OUTPUTDIR}</span>
+|-- <span style="color: gray;">input</span>
+|   +-- <span style="color: gray;">{GRAMMAR ID}</span>
+|       |-- <span style="color: gray;">session-info.txt</span>
+|       |-- <span style="color: gray;">training.txt</span>
+|       |-- <span style="color: gray;">training-annotation.txt</span>
+|       |-- <span style="color: gray;">validation.txt</span>
+|       |-- <span style="color: gray;">validation-annotation.txt</span>
+|       |-- <span style="color: gray;">test.txt</span>
+|       +-- <span style="color: gray;">test-annotation.txt</span>
+|-- models
+|   +-- {GRAMMAR ID}
+        +-- {MODEL ID}
+            |-- session-info.txt
+            +-- saved_model*
+</pre>
+
+**Train model on experimental or externally synthesized data:**
+```
+seqgra -f DATAFOLDER -m MODELCONFIGFILE -o OUTPUTDIR
+```
+where experimental or externally synthesized data is in `{OUTPUTDIR}/input/{DATAFOLDER}` folder.
+
+Generated files and folders (pre-existing folders and files in gray):
+<pre>
+<span style="color: gray;">{OUTPUTDIR}</span>
+|-- <span style="color: gray;">input</span>
+|   +-- <span style="color: gray;">{DATAFOLDER}</span>
+|       |-- <span style="color: gray;">training.txt</span>
+|       |-- <span style="color: gray;">training-annotation.txt</span>
+|       |-- <span style="color: gray;">validation.txt</span>
+|       |-- <span style="color: gray;">validation-annotation.txt</span>
+|       |-- <span style="color: gray;">test.txt</span>
+|       +-- <span style="color: gray;">test-annotation.txt</span>
+|-- models
+|   +-- {GRAMMAR ID}
+        +-- {MODEL ID}
+            |-- session-info.txt
+            +-- saved_model*
+</pre>
+
+**Run `metrics`, `predict`, `roc`, and `pr` evaluation methods on model, which was previously trained on synthesized data:**
+```
+seqgra -d DATACONFIGFILE -m MODELCONFIGFILE -e metrics predict roc pr -o OUTPUTDIR
+```
+
+Generated files and folders (pre-existing folders and files in gray):
+<pre>
+<span style="color: gray;">{OUTPUTDIR}</span>
+|-- <span style="color: gray;">input</span>
+|   +-- <span style="color: gray;">{GRAMMAR ID}</span>
+|       |-- <span style="color: gray;">session-info.txt</span>
+|       |-- <span style="color: gray;">training.txt</span>
+|       |-- <span style="color: gray;">training-annotation.txt</span>
+|       |-- <span style="color: gray;">validation.txt</span>
+|       |-- <span style="color: gray;">validation-annotation.txt</span>
+|       |-- <span style="color: gray;">test.txt</span>
+|       +-- <span style="color: gray;">test-annotation.txt</span>
+|-- <span style="color: gray;">models</span>
+|   +-- <span style="color: gray;">{GRAMMAR ID}</span>
+|       +-- <span style="color: gray;">{MODEL ID}</span>
+|           |-- <span style="color: gray;">session-info.txt</span>
+|           +-- <span style="color: gray;">saved_model*</span>
++-- evaluation
+    +-- {GRAMMAR ID}
+        +-- {MODEL ID}
+            |-- metrics
+            |   +-- metrics.txt
+            |-- predict
+            |   |-- y-hat-training.txt
+            |   |-- y-hat-validation.txt
+            |   +-- y-hat-test.txt
+            |-- roc
+            |   |-- roc-curve-training.pdf
+            |   |-- roc-curve-validation.pdf
+            |   +-- roc-curve-test.pdf
+            +-- pr
+                |-- pr-curve-training.pdf
+                |-- pr-curve-validation.pdf
+                +-- pr-curve-test.pdf
+</pre>
+
+**Run SIS evaluation method on model, which was previously trained on experimental data:**
+```
+seqgra -f DATAFOLDER -m MODELCONFIGFILE -e sis -o OUTPUTDIR
+```
+
+Generated files and folders (pre-existing folders and files in gray):
+<pre>
+<span style="color: gray;">{OUTPUTDIR}</span>
+|-- <span style="color: gray;">input</span>
+|   +-- <span style="color: gray;">{DATAFOLDER}</span>
+|       |-- <span style="color: gray;">training.txt</span>
+|       |-- <span style="color: gray;">training-annotation.txt</span>
+|       |-- <span style="color: gray;">validation.txt</span>
+|       |-- <span style="color: gray;">validation-annotation.txt</span>
+|       |-- <span style="color: gray;">test.txt</span>
+|       +-- <span style="color: gray;">test-annotation.txt</span>
+|-- <span style="color: gray;">models</span>
+|   +-- <span style="color: gray;">{GRAMMAR ID}</span>
+|       +-- <span style="color: gray;">{MODEL ID}</span>
+|           |-- <span style="color: gray;">session-info.txt</span>
+|           +-- <span style="color: gray;">saved_model*</span>
++-- evaluation
+    +-- {GRAMMAR ID}
+        +-- {MODEL ID}
+            +-- sis
+                |-- sis-heatmap.pdf
+                |-- test-examples-class1.txt
+                |-- test-examples-class2.txt
+                +-- test-examples-classn.txt
+</pre>
+
+\* model files are library-dependent
 
 ## Citation
 
