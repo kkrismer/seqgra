@@ -53,11 +53,12 @@ optional arguments:
                         generated data, trained model, and model evaluation
 ```
 
-## Types of seqgra analysis
+## Types of seqgra analyses
 
 **Generate synthetic data only:**
 ```
-seqgra -d DATACONFIGFILE -o OUTPUTDIR
+seqgra -d DATACONFIGFILE \
+       -o OUTPUTDIR
 ```
 
 Generated files and folders:
@@ -76,7 +77,9 @@ Generated files and folders:
 
 **Generate synthetic data and train model on it:**
 ```
-seqgra -d DATACONFIGFILE -m MODELCONFIGFILE -o OUTPUTDIR
+seqgra -d DATACONFIGFILE \
+       -m MODELCONFIGFILE \
+       -o OUTPUTDIR
 ```
 
 Generated files and folders:
@@ -91,8 +94,8 @@ Generated files and folders:
 |       |-- validation-annotation.txt
 |       |-- test.txt
 |       +-- test-annotation.txt
-|-- models
-|   +-- {GRAMMAR ID}
++-- models
+    +-- {GRAMMAR ID}
         +-- {MODEL ID}
             |-- session-info.txt
             +-- saved_model*
@@ -100,24 +103,26 @@ Generated files and folders:
 
 **Train model on previously synthesized data:**
 ```
-seqgra -d DATACONFIGFILE -m MODELCONFIGFILE -o OUTPUTDIR
+seqgra -d DATACONFIGFILE \
+       -m MODELCONFIGFILE \
+       -o OUTPUTDIR
 ```
 where previously synthesized data is in `{OUTPUTDIR}/input/{GRAMMAR ID}` folder and `{GRAMMAR ID}` is defined in `{DATACONFIGFILE}`.
 
-Generated files and folders (pre-existing folders and files in gray):
+Generated files and folders (pre-existing folders and files in italics):
 <pre>
-<span style="color: gray;">{OUTPUTDIR}</span>
-|-- <span style="color: gray;">input</span>
-|   +-- <span style="color: gray;">{GRAMMAR ID}</span>
-|       |-- <span style="color: gray;">session-info.txt</span>
-|       |-- <span style="color: gray;">training.txt</span>
-|       |-- <span style="color: gray;">training-annotation.txt</span>
-|       |-- <span style="color: gray;">validation.txt</span>
-|       |-- <span style="color: gray;">validation-annotation.txt</span>
-|       |-- <span style="color: gray;">test.txt</span>
-|       +-- <span style="color: gray;">test-annotation.txt</span>
-|-- models
-|   +-- {GRAMMAR ID}
+<i>{OUTPUTDIR}</i>
+|-- <i>input</i>
+|   +-- <i>{GRAMMAR ID}</i>
+|       |-- <i>session-info.txt</i>
+|       |-- <i>training.txt</i>
+|       |-- <i>training-annotation.txt</i>
+|       |-- <i>validation.txt</i>
+|       |-- <i>validation-annotation.txt</i>
+|       |-- <i>test.txt</i>
+|       +-- <i>test-annotation.txt</i>
++-- models
+    +-- {GRAMMAR ID}
         +-- {MODEL ID}
             |-- session-info.txt
             +-- saved_model*
@@ -125,23 +130,25 @@ Generated files and folders (pre-existing folders and files in gray):
 
 **Train model on experimental or externally synthesized data:**
 ```
-seqgra -f DATAFOLDER -m MODELCONFIGFILE -o OUTPUTDIR
+seqgra -f DATAFOLDER \
+       -m MODELCONFIGFILE \
+       -o OUTPUTDIR
 ```
 where experimental or externally synthesized data is in `{OUTPUTDIR}/input/{DATAFOLDER}` folder.
 
-Generated files and folders (pre-existing folders and files in gray):
+Generated files and folders (pre-existing folders and files in italics):
 <pre>
-<span style="color: gray;">{OUTPUTDIR}</span>
-|-- <span style="color: gray;">input</span>
-|   +-- <span style="color: gray;">{DATAFOLDER}</span>
-|       |-- <span style="color: gray;">training.txt</span>
-|       |-- <span style="color: gray;">training-annotation.txt</span>
-|       |-- <span style="color: gray;">validation.txt</span>
-|       |-- <span style="color: gray;">validation-annotation.txt</span>
-|       |-- <span style="color: gray;">test.txt</span>
-|       +-- <span style="color: gray;">test-annotation.txt</span>
-|-- models
-|   +-- {GRAMMAR ID}
+<i>{OUTPUTDIR}</i>
+|-- <i>input</i>
+|   +-- <i>{DATAFOLDER}</i>
+|       |-- <i>training.txt</i>
+|       |-- <i>training-annotation.txt</i>
+|       |-- <i>validation.txt</i>
+|       |-- <i>validation-annotation.txt</i>
+|       |-- <i>test.txt</i>
+|       +-- <i>test-annotation.txt</i>
++-- models
+    +-- {GRAMMAR ID}
         +-- {MODEL ID}
             |-- session-info.txt
             +-- saved_model*
@@ -149,26 +156,29 @@ Generated files and folders (pre-existing folders and files in gray):
 
 **Run `metrics`, `predict`, `roc`, and `pr` evaluation methods on model, which was previously trained on synthesized data:**
 ```
-seqgra -d DATACONFIGFILE -m MODELCONFIGFILE -e metrics predict roc pr -o OUTPUTDIR
+seqgra -d DATACONFIGFILE \
+       -m MODELCONFIGFILE \
+       -e metrics predict roc pr \
+       -o OUTPUTDIR
 ```
 
-Generated files and folders (pre-existing folders and files in gray):
+Generated files and folders (pre-existing folders and files in italics):
 <pre>
-<span style="color: gray;">{OUTPUTDIR}</span>
-|-- <span style="color: gray;">input</span>
-|   +-- <span style="color: gray;">{GRAMMAR ID}</span>
-|       |-- <span style="color: gray;">session-info.txt</span>
-|       |-- <span style="color: gray;">training.txt</span>
-|       |-- <span style="color: gray;">training-annotation.txt</span>
-|       |-- <span style="color: gray;">validation.txt</span>
-|       |-- <span style="color: gray;">validation-annotation.txt</span>
-|       |-- <span style="color: gray;">test.txt</span>
-|       +-- <span style="color: gray;">test-annotation.txt</span>
-|-- <span style="color: gray;">models</span>
-|   +-- <span style="color: gray;">{GRAMMAR ID}</span>
-|       +-- <span style="color: gray;">{MODEL ID}</span>
-|           |-- <span style="color: gray;">session-info.txt</span>
-|           +-- <span style="color: gray;">saved_model*</span>
+<i>{OUTPUTDIR}</i>
+|-- <i>input</i>
+|   +-- <i>{GRAMMAR ID}</i>
+|       |-- <i>session-info.txt</i>
+|       |-- <i>training.txt</i>
+|       |-- <i>training-annotation.txt</i>
+|       |-- <i>validation.txt</i>
+|       |-- <i>validation-annotation.txt</i>
+|       |-- <i>test.txt</i>
+|       +-- <i>test-annotation.txt</i>
+|-- <i>models</i>
+|   +-- <i>{GRAMMAR ID}</i>
+|       +-- <i>{MODEL ID}</i>
+|           |-- <i>session-info.txt</i>
+|           +-- <i>saved_model*</i>
 +-- evaluation
     +-- {GRAMMAR ID}
         +-- {MODEL ID}
@@ -190,25 +200,28 @@ Generated files and folders (pre-existing folders and files in gray):
 
 **Run SIS evaluation method on model, which was previously trained on experimental data:**
 ```
-seqgra -f DATAFOLDER -m MODELCONFIGFILE -e sis -o OUTPUTDIR
+seqgra -f DATAFOLDER \
+       -m MODELCONFIGFILE \
+       -e sis \
+       -o OUTPUTDIR
 ```
 
 Generated files and folders (pre-existing folders and files in gray):
 <pre>
-<span style="color: gray;">{OUTPUTDIR}</span>
-|-- <span style="color: gray;">input</span>
-|   +-- <span style="color: gray;">{DATAFOLDER}</span>
-|       |-- <span style="color: gray;">training.txt</span>
-|       |-- <span style="color: gray;">training-annotation.txt</span>
-|       |-- <span style="color: gray;">validation.txt</span>
-|       |-- <span style="color: gray;">validation-annotation.txt</span>
-|       |-- <span style="color: gray;">test.txt</span>
-|       +-- <span style="color: gray;">test-annotation.txt</span>
-|-- <span style="color: gray;">models</span>
-|   +-- <span style="color: gray;">{GRAMMAR ID}</span>
-|       +-- <span style="color: gray;">{MODEL ID}</span>
-|           |-- <span style="color: gray;">session-info.txt</span>
-|           +-- <span style="color: gray;">saved_model*</span>
+<i>{OUTPUTDIR}</i>
+|-- <i>input</i>
+|   +-- <i>{DATAFOLDER}</i>
+|       |-- <i>training.txt</i>
+|       |-- <i>training-annotation.txt</i>
+|       |-- <i>validation.txt</i>
+|       |-- <i>validation-annotation.txt</i>
+|       |-- <i>test.txt</i>
+|       +-- <i>test-annotation.txt</i>
+|-- <i>models</i>
+|   +-- <i>{GRAMMAR ID}</i>
+|       +-- <i>{MODEL ID}</i>
+|           |-- <i>session-info.txt</i>
+|           +-- <i>saved_model*</i>
 +-- evaluation
     +-- {GRAMMAR ID}
         +-- {MODEL ID}
