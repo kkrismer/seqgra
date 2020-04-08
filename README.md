@@ -107,7 +107,7 @@ seqgra -d DATACONFIGFILE \
        -m MODELCONFIGFILE \
        -o OUTPUTDIR
 ```
-where previously synthesized data is in `{OUTPUTDIR}/input/{GRAMMAR ID}` folder and `{GRAMMAR ID}` is defined in `{DATACONFIGFILE}`.
+where previously synthesized data is in the `{OUTPUTDIR}/input/{GRAMMAR ID}` folder and `{GRAMMAR ID}` is defined in `{DATACONFIGFILE}`.
 
 Generated files and folders (pre-existing folders and files in italics):
 <pre>
@@ -134,7 +134,7 @@ seqgra -f DATAFOLDER \
        -m MODELCONFIGFILE \
        -o OUTPUTDIR
 ```
-where experimental or externally synthesized data is in `{OUTPUTDIR}/input/{DATAFOLDER}` folder.
+where experimental or externally synthesized data is in the `{OUTPUTDIR}/input/{DATAFOLDER}` folder.
 
 Generated files and folders (pre-existing folders and files in italics):
 <pre>
@@ -206,7 +206,7 @@ seqgra -f DATAFOLDER \
        -o OUTPUTDIR
 ```
 
-Generated files and folders (pre-existing folders and files in gray):
+Generated files and folders (pre-existing folders and files in italics):
 <pre>
 <i>{OUTPUTDIR}</i>
 |-- <i>input</i>

@@ -32,53 +32,58 @@ class TorchHelper:
         elif x == "False":
             return False
         else:
-            raise Exception("'" + str(x) + 
+            raise Exception("'" + str(x) +
                             "' must be either 'True' or 'False'")
 
     @staticmethod
     def create_model(learner: Learner) -> None:
         learner.set_seed()
+        path = learner.architecture.external_model_path
+        class_name = learner.architecture.external_model_class_name
 
-        if learner.architecture.external_model_path is None:
+        if path is None:
             raise Exception("embedded architecture definition not supported"
-                " for PyTorch models")
-        elif learner.architecture.external_model_path is not None and \
-             learner.architecture.external_model_format is not None:
+                            " for PyTorch models")
+        elif path is not None and \
+                learner.architecture.external_model_format is not None:
             if learner.architecture.external_model_format == "pytorch-module":
-                if os.path.isfile(learner.architecture.external_model_path):
-                    if learner.architecture.external_model_class_name is None:
-                        raise Exception("PyTorch model class name not specified")
+                if os.path.isfile(path):
+                    if class_name is None:
+                        raise Exception(
+                            "PyTorch model class name not specified")
                     else:
-                        module_name = learner.architecture.external_model_path
-                        module_name = module_name.replace(".py", "")
-                        module_name = module_name.replace("/", ".")
-                        module_name = module_name.replace("\\", ".")
-                        
-                        module = importlib.import_module(module_name)
-                        torch_model_class = getattr(module, learner.architecture.external_model_class_name)
+                        location = path
+                        module_spec = importlib.util.spec_from_file_location(
+                            "model", location)
+                        torch_model_module = importlib.util.module_from_spec(
+                            module_spec)
+                        module_spec.loader.exec_module(torch_model_module)
+                        torch_model_class = getattr(torch_model_module,
+                                                    class_name)
                         learner.model = torch_model_class()
                 else:
-                    raise Exception("PyTorch model class file does not exist: " + 
-                                    learner.architecture.external_model_path)
+                    raise Exception("PyTorch model class file does not exist: " +
+                                    path)
             else:
                 raise Exception("unsupported PyTorch model format: " +
                                 learner.architecture.external_model_format)
         else:
             raise Exception("neither internal nor external architecture "
                             "definition provided")
-        
+
         if learner.optimizer_hyperparameters is None:
             raise Exception("optimizer undefined")
         else:
             learner.optimizer = TorchHelper.get_optimizer(
                 learner.optimizer_hyperparameters,
                 learner.model.parameters())
-            
+
         if learner.loss_hyperparameters is None:
             raise Exception("loss undefined")
         else:
-            learner.criterion = TorchHelper.get_loss(learner.loss_hyperparameters)
-            
+            learner.criterion = TorchHelper.get_loss(
+                learner.loss_hyperparameters)
+
         if learner.metrics is None:
             raise Exception("metrics undefined")
 
@@ -98,15 +103,16 @@ class TorchHelper:
                     validation_dataset: torch.utils.data.Dataset) -> None:
         if learner.model is None:
             learner.create_model()
-        
-        batch_size = int(learner.training_process_hyperparameters["batch_size"])
+
+        batch_size = int(
+            learner.training_process_hyperparameters["batch_size"])
 
         # init data loaders
         training_loader = torch.utils.data.DataLoader(
             training_dataset,
             batch_size=batch_size,
             shuffle=bool(learner.training_process_hyperparameters["shuffle"]))
-            
+
         validation_loader = torch.utils.data.DataLoader(
             validation_dataset,
             batch_size=batch_size,
@@ -128,9 +134,11 @@ class TorchHelper:
             metrics=TorchHelper.get_metrics(learner),
             device=device)
 
-        logging.getLogger("ignite.engine.engine.Engine").setLevel(logging.WARNING)
+        logging.getLogger("ignite.engine.engine.Engine").setLevel(
+            logging.WARNING)
 
-        num_epochs: int = int(learner.training_process_hyperparameters["epochs"])
+        num_epochs: int = int(
+            learner.training_process_hyperparameters["epochs"])
 
         @trainer.on(Events.EPOCH_COMPLETED)
         def log_training_results(trainer):
@@ -138,7 +146,7 @@ class TorchHelper:
             train_evaluator.run(training_loader)
             metrics = train_evaluator.state.metrics
             print(TorchHelper._format_metrics_output(metrics, "training set"))
-            
+
         @trainer.on(Events.EPOCH_COMPLETED)
         def log_validation_results(trainer):
             val_evaluator.run(validation_loader)
@@ -156,7 +164,7 @@ class TorchHelper:
             else:
                 raise Exception("no metric to track performance")
             return score
-        
+
         best_model_saver_handler = ModelCheckpoint(
             learner.output_dir + "training/models",
             score_function=score_fn,
@@ -165,7 +173,7 @@ class TorchHelper:
             create_dir=True)
         val_evaluator.add_event_handler(Events.COMPLETED,
                                         best_model_saver_handler,
-                                        {"model": learner.model}) 
+                                        {"model": learner.model})
 
         # early stopping callback
         if bool(learner.training_process_hyperparameters["early_stopping"]):
@@ -180,25 +188,26 @@ class TorchHelper:
     @staticmethod
     def _format_metrics_output(metrics, set_label):
         message: List[str] = [set_label + " metrics:\n"]
-        message += [" - " + metric + ": " + str(metrics[metric]) + "\n" 
+        message += [" - " + metric + ": " + str(metrics[metric]) + "\n"
                     for metric in metrics]
         return "".join(message).rstrip()
 
     @staticmethod
     def train_model_basic(learner: Learner,
-                    training_dataset: torch.utils.data.Dataset,
-                    validation_dataset: torch.utils.data.Dataset) -> None:
+                          training_dataset: torch.utils.data.Dataset,
+                          validation_dataset: torch.utils.data.Dataset) -> None:
         if learner.model is None:
             learner.create_model()
-        
-        batch_size = int(learner.training_process_hyperparameters["batch_size"])
+
+        batch_size = int(
+            learner.training_process_hyperparameters["batch_size"])
 
         # init data loaders
         training_loader = torch.utils.data.DataLoader(
             training_dataset,
             batch_size=batch_size,
             shuffle=bool(learner.training_process_hyperparameters["shuffle"]))
-            
+
         validation_loader = torch.utils.data.DataLoader(
             validation_dataset,
             batch_size=batch_size,
@@ -209,7 +218,8 @@ class TorchHelper:
         learner.model = learner.model.to(device)
 
         # training loop
-        num_epochs: int = int(learner.training_process_hyperparameters["epochs"])
+        num_epochs: int = int(
+            learner.training_process_hyperparameters["epochs"])
 
         for epoch in range(num_epochs):
             print("epoch {}/{}".format(epoch + 1, num_epochs))
@@ -260,8 +270,8 @@ class TorchHelper:
         if model_name != "":
             os.makedirs(learner.output_dir + model_name)
 
-        torch.save(learner.model.state_dict(), learner.output_dir + \
-            model_name + "/saved_model.pth")
+        torch.save(learner.model.state_dict(), learner.output_dir +
+                   model_name + "/saved_model.pth")
 
         # save session info
         learner.write_session_info()
@@ -270,7 +280,7 @@ class TorchHelper:
     def write_session_info(learner: Learner) -> None:
         with open(learner.output_dir + "session-info.txt", "w") as session_file:
             session_file.write("seqgra package version: " +
-                pkg_resources.require("seqgra")[0].version + "\n")
+                               pkg_resources.require("seqgra")[0].version + "\n")
             session_file.write("PyTorch version: " + torch.__version__ + "\n")
             session_file.write("NumPy version: " + np.version.version + "\n")
             session_file.write("Python version: " + sys.version + "\n")
@@ -278,21 +288,22 @@ class TorchHelper:
     @staticmethod
     def load_model(learner: Learner, model_name: str = "") -> None:
         TorchHelper.create_model(learner)
-        learner.model.load_state_dict(torch.load(learner.output_dir + \
-            model_name + "/saved_model.pth"))
+        learner.model.load_state_dict(torch.load(learner.output_dir +
+                                                 model_name + "/saved_model.pth"))
 
     @staticmethod
     def predict(learner: Learner, dataset: torch.utils.data.Dataset,
-                final_activation_function = None):
+                final_activation_function=None):
         """ This is the forward calculation from x to y
         Returns:
             softmax_linear: Output tensor with the computed logits.
         """
         data_loader = torch.utils.data.DataLoader(
             dataset,
-            batch_size=int(learner.training_process_hyperparameters["batch_size"]),
+            batch_size=int(
+                learner.training_process_hyperparameters["batch_size"]),
             shuffle=False)
-    
+
         # GPU or CPU?
         device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
         learner.model = learner.model.to(device)
@@ -313,9 +324,9 @@ class TorchHelper:
                 elif final_activation_function == "sigmoid":
                     preds += \
                         torch.nn.functional.sigmoid(raw_logits, dim=1).tolist()
-                
+
         return np.array(preds)
- 
+
     @staticmethod
     def get_num_params(learner: Learner):
         if learner.model is None:
@@ -326,7 +337,8 @@ class TorchHelper:
     def evaluate_model(learner: Learner, dataset: torch.utils.data.Dataset):
         data_loader = torch.utils.data.DataLoader(
             dataset,
-            batch_size=int(learner.training_process_hyperparameters["batch_size"]),
+            batch_size=int(
+                learner.training_process_hyperparameters["batch_size"]),
             shuffle=False)
 
         # GPU or CPU?
@@ -350,7 +362,7 @@ class TorchHelper:
                 y_hat = torch.argmax(outputs, dim=1)
                 running_loss += loss.item() * x.size(0)
                 running_correct += torch.sum(y_hat == y)
-        
+
         overall_loss = running_loss / len(data_loader.dataset)
         overall_accuracy = running_correct.float().item() / len(data_loader.dataset)
 
@@ -361,7 +373,7 @@ class TorchHelper:
         if "optimizer" in optimizer_hyperparameters:
             optimizer = \
                 optimizer_hyperparameters["optimizer"].lower().strip()
-            
+
             if "learning_rate" in optimizer_hyperparameters:
                 learning_rate = float(
                     optimizer_hyperparameters["learning_rate"].strip())
