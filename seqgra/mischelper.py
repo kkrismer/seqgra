@@ -19,9 +19,9 @@ class MiscHelper:
             if not os.path.isdir(path):
                 raise Exception("directory cannot be created "
                                 "(file with same name exists)")
-            elif not allow_exists:
+            elif not allow_exists and len(os.listdir(path)) > 0:
                 raise Exception("directory cannot be created "
-                                "(folder with same name exists)")
+                                "(non-empty folder with same name exists)")
         else:
             os.makedirs(path)
 
