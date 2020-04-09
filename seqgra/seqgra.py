@@ -26,14 +26,6 @@ from seqgra.parser.modelparser import ModelParser
 from seqgra.parser.xmlmodelparser import XMLModelParser
 from seqgra.simulator.simulator import Simulator
 from seqgra.learner.learner import Learner
-from seqgra.learner.keraslearner import KerasDNAMultiClassClassificationLearner
-from seqgra.learner.keraslearner import KerasDNAMultiLabelClassificationLearner
-from seqgra.learner.torchlearner import TorchDNAMultiClassClassificationLearner
-from seqgra.learner.torchlearner import TorchDNAMultiLabelClassificationLearner
-from seqgra.learner.keraslearner import KerasProteinMultiClassClassificationLearner
-from seqgra.learner.keraslearner import KerasProteinMultiLabelClassificationLearner
-from seqgra.learner.torchlearner import TorchProteinMultiClassClassificationLearner
-from seqgra.learner.torchlearner import TorchProteinMultiLabelClassificationLearner
 from seqgra.evaluator.evaluator import Evaluator
 from seqgra.evaluator.metricsevaluator import MetricsEvaluator
 from seqgra.evaluator.predictevaluator import PredictEvaluator
@@ -56,21 +48,31 @@ def get_learner(model_parser: ModelParser, data_parser_type: str,
                         "learner type: " + model_parser.get_learner_type() +
                         ", data type: " + data_parser_type + ")")
 
+    # imports are inside if branches to only depend on TensorFlow and PyTorch 
+    # when required
     if model_parser.get_learner_implementation() == "KerasDNAMultiClassClassificationLearner":
+        from seqgra.learner.keraslearner import KerasDNAMultiClassClassificationLearner
         return KerasDNAMultiClassClassificationLearner(model_parser, data_dir, output_dir)
     elif model_parser.get_learner_implementation() == "KerasDNAMultiLabelClassificationLearner":
+        from seqgra.learner.keraslearner import KerasDNAMultiLabelClassificationLearner
         return KerasDNAMultiLabelClassificationLearner(model_parser, data_dir, output_dir)
     elif model_parser.get_learner_implementation() == "TorchDNAMultiClassClassificationLearner":
+        from seqgra.learner.torchlearner import TorchDNAMultiClassClassificationLearner
         return TorchDNAMultiClassClassificationLearner(model_parser, data_dir, output_dir)
     elif model_parser.get_learner_implementation() == "TorchDNAMultiLabelClassificationLearner":
+        from seqgra.learner.torchlearner import TorchDNAMultiLabelClassificationLearner
         return TorchDNAMultiLabelClassificationLearner(model_parser, data_dir, output_dir)
     elif model_parser.get_learner_implementation() == "KerasProteinMultiClassClassificationLearner":
+        from seqgra.learner.keraslearner import KerasProteinMultiClassClassificationLearner
         return KerasProteinMultiClassClassificationLearner(model_parser, data_dir, output_dir)
     elif model_parser.get_learner_implementation() == "KerasProteinMultiLabelClassificationLearner":
+        from seqgra.learner.keraslearner import KerasProteinMultiLabelClassificationLearner
         return KerasProteinMultiLabelClassificationLearner(model_parser, data_dir, output_dir)
     elif model_parser.get_learner_implementation() == "TorchProteinMultiClassClassificationLearner":
+        from seqgra.learner.torchlearner import TorchProteinMultiClassClassificationLearner
         return TorchProteinMultiClassClassificationLearner(model_parser, data_dir, output_dir)
     elif model_parser.get_learner_implementation() == "TorchProteinMultiLabelClassificationLearner":
+        from seqgra.learner.torchlearner import TorchProteinMultiLabelClassificationLearner
         return TorchProteinMultiLabelClassificationLearner(model_parser, data_dir, output_dir)
     else:
         raise Exception("invalid learner ID")
@@ -185,6 +187,7 @@ def run_seqgra(data_config_file: str,
         else:
             logging.info("skipping evaluation step: no evaluator specified")
 
+
 def main():
     logging.basicConfig(level=logging.INFO)
 
@@ -221,7 +224,8 @@ def main():
         type=str,
         default=None,
         nargs="+",
-        help="evaluator ID or IDs of interpretability method - valid evaluator IDs include metrics, roc, pr, sis"
+        help="evaluator ID or IDs of interpretability method - valid "
+        "evaluator IDs include metrics, roc, pr, sis"
     )
     parser.add_argument(
         "-o",
@@ -241,7 +245,8 @@ def main():
 
     if args.evaluators is not None:
         for evaluator in args.evaluators:
-            if evaluator not in frozenset(["metrics", "predict", "roc", "pr", "sis"]):
+            if evaluator not in frozenset(["metrics", "predict", "roc",
+                                           "pr", "sis"]):
                 raise ValueError(
                     "invalid evaluator ID {s!r}".format(s=evaluator))
 
