@@ -1,4 +1,4 @@
-# seqgra: synthetic biological sequence data using sequence grammars
+# seqgra: Synthetic rule-based biological sequence data generation for architecture evaluation and search
 
 *Travis-CI build badge placeholder*
 
