@@ -53,7 +53,7 @@ optional arguments:
                         generated data, trained model, and model evaluation
 ```
 
-## Types of seqgra analyses
+## Examples of seqgra analyses
 
 **Generate synthetic data only:**
 ```

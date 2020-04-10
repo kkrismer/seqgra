@@ -13,6 +13,7 @@ from typing import List, Set, Dict
 
 import numpy as np
 import pkg_resources
+import ushuffle
 
 from seqgra.parser.dataparser import DataParser
 from seqgra.model.data.background import Background
@@ -23,7 +24,6 @@ from seqgra.model.data.spacingconstraint import SpacingConstraint
 from seqgra.model.data.rule import Rule
 from seqgra.model.data.example import Example
 from seqgra.simulator.examplegenerator import ExampleGenerator
-from seqgra.simulator.dinucleotideshuffle import DinucleotideShuffle
 from seqgra.mischelper import MiscHelper
 
 
@@ -84,18 +84,21 @@ class Simulator:
             self.__process_set(example_set)
             logging.info("generated " + example_set.name + " set")
 
-        if self.data_generation.postprocessing is not None:
+        if self.data_generation.postprocessing_operations is not None:
             for example_set in self.data_generation.sets:
-                for operation_name, labels_value in self.data_generation.postprocessing:
-                    if operation_name == "dimer-frequency-preserving-shuffle":
-                        self.__add_shuffled_examples(
-                            example_set.name, True, labels_value)
-                    elif operation_name == "shuffle":
-                        self.__add_shuffled_examples(
-                            example_set.name, False, labels_value)
+                for operation in self.data_generation.postprocessing_operations:
+                    if operation.name == "kmer-frequency-preserving-shuffle":
+                        if operation.parameters is not None and "k" in operation.parameters:
+                            self.__add_shuffled_examples(
+                                example_set.name,
+                                int(operation.parameters["k"]),
+                                operation.labels)
+                        else:
+                            self.__add_shuffled_examples(
+                                example_set.name, 1, operation.labels)
 
     def __add_shuffled_examples(self, set_name: str,
-                                preserve_dimer_frequencies: bool,
+                                preserve_frequencies_for_kmer: int,
                                 labels_value: str,
                                 background_character: str = "_") -> None:
         # write shuffled examples
@@ -105,7 +108,7 @@ class Simulator:
                 for line in data_file:
                     columns = line.split("\t")
                     shuffled_data_file.write(self.__shuffle_example(
-                        columns[0], preserve_dimer_frequencies) + "\t" +
+                        columns[0], preserve_frequencies_for_kmer) + "\t" +
                         labels_value + "\n")
 
         # write annotations for shuffled examples (all background)
@@ -134,9 +137,10 @@ class Simulator:
                   "-annotation-shuffled.txt")
 
     def __shuffle_example(self, example: str,
-                          preserve_dimer_frequencies: bool) -> str:
-        if preserve_dimer_frequencies:
-            return DinucleotideShuffle.shuffle(example)
+                          preserve_frequencies_for_kmer: int = 1) -> str:
+        if preserve_frequencies_for_kmer > 1:
+            return str(ushuffle.shuffle(example.encode(),
+                                        preserve_frequencies_for_kmer), 'utf-8')
         else:
             example_list = list(example)
             random.shuffle(example_list)
@@ -180,6 +184,7 @@ class Simulator:
     def __set_seed(self) -> None:
         random.seed(self.data_generation.seed)
         np.random.seed(self.data_generation.seed)
+        ushuffle.set_seed(self.data_generation.seed)
 
     def check_grammar(self) -> bool:
         valid: bool = True

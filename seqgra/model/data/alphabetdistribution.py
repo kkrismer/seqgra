@@ -31,11 +31,11 @@ class AlphabetDistribution:
         if self.condition_independent:
             config += ["\tcondition: all\n"]
         else:
-            config += ["\tcondition: ", self.condition.id, "[cid]\n"]
+            config += ["\tcondition: ", self.condition.id, " [cid]\n"]
         if self.set_independent:
             config += ["\tset: all\n"]
         else:
-            config += ["\tset: ", self.set_name, "[setname]\n"]
+            config += ["\tset: ", self.set_name, " [setname]\n"]
         config += ["\tletters:\n"]
         letters_string: List[str] = [("\t\t" + letter[0] + ": " +
             str(round(letter[1], 3)) + "\n") for letter in self.letters]

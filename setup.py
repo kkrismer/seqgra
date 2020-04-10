@@ -32,7 +32,8 @@ setuptools.setup(
         "pandas>=0.25.2",
         "setuptools>=41.6.0",
         "pyyaml",
-        "ushuffle"
+        "ushuffle",
+        "Cython"
     ],
     python_requires=">=3",
     entry_points = {

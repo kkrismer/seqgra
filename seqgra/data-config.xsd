@@ -167,6 +167,7 @@
                 <xs:simpleContent>
                   <xs:extension base="xs:string">
                     <xs:attribute name="labels" type="xs:string" use="required"/>
+                    <xs:anyAttribute processContents="lax" />
                   </xs:extension>
                 </xs:simpleContent>
               </xs:complexType>
