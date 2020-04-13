@@ -1,11 +1,12 @@
 import setuptools
+import seqgra
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
     name="seqgra",
-    version="0.0.1",
+    version=seqgra.__version__,
     author="Konstantin Krismer",
     author_email="krismer@mit.edu",
     license="MIT License",
@@ -32,8 +33,8 @@ setuptools.setup(
         "pandas>=0.25.2",
         "setuptools>=41.6.0",
         "pyyaml",
-        "ushuffle",
-        "Cython"
+        "Cython",
+        "ushuffle"
     ],
     python_requires=">=3",
     entry_points = {
