@@ -451,8 +451,14 @@ class KerasHelper:
             else:
                 unroll = False
 
+            if "bidirectional" in operation.parameters:
+                bidirectional = KerasHelper.to_bool(
+                    operation.parameters["bidirectional"])
+            else:
+                bidirectional = False
+
             if input_shape is None:
-                return tf.keras.layers.LSTM(
+                lstm_layer = tf.keras.layers.LSTM(
                     units,
                     activation=activation,
                     recurrent_activation=recurrent_activation,
@@ -477,7 +483,7 @@ class KerasHelper:
                     trainable=trainable
                 )
             else:
-                return tf.keras.layers.LSTM(
+                lstm_layer = tf.keras.layers.LSTM(
                     units,
                     activation=activation,
                     recurrent_activation=recurrent_activation,
@@ -502,6 +508,16 @@ class KerasHelper:
                     trainable=trainable,
                     input_shape=input_shape
                 )
+            if bidirectional:
+                if "merge_mode" in operation.parameters:
+                    merge_mode = operation.parameters["merge_mode"].strip()
+                else:
+                    merge_mode = "concat"
+
+                return tf.keras.layers.Bidirectional(lstm_layer,
+                                                     merge_mode=merge_mode)
+            else:
+                return lstm_layer
         elif name == "conv1d":
             filters = int(operation.parameters["filters"].strip())
             kernel_size = \
@@ -721,13 +737,13 @@ class KerasHelper:
                 padding = operation.parameters["padding"].strip()
             else:
                 padding = "valid"
-    
+
             return tf.keras.layers.MaxPool1D(pool_size=pool_size,
                                              strides=strides,
                                              padding=padding)
         elif name == "dropout":
             rate = float(operation.parameters["rate"].strip())
-            
+
             return tf.keras.layers.Dropout(rate)
 
     @staticmethod
