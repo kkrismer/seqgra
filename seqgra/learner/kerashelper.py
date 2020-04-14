@@ -26,7 +26,7 @@ class KerasHelper:
         elif x == "False":
             return False
         else:
-            raise Exception("'" + str(x) + 
+            raise Exception("'" + str(x) +
                             "' must be either 'True' or 'False'")
 
     @staticmethod
@@ -36,9 +36,9 @@ class KerasHelper:
         if learner.architecture.operations is not None:
             learner.model = tf.keras.Sequential(
                 [KerasHelper.get_keras_layer(operation)
-                for operation
-                in learner.architecture.operations])
-            
+                 for operation
+                 in learner.architecture.operations])
+
             for i in range(len(learner.architecture.operations)):
                 custom_weights = KerasHelper.load_custom_weights(
                     learner.architecture.operations[i])
@@ -47,36 +47,40 @@ class KerasHelper:
         elif learner.architecture.external_model_path is not None:
             if learner.architecture.external_model_format == "keras-h5-whole-model":
                 if os.path.isfile(learner.architecture.external_model_path):
-                    learner.model = tf.keras.models.load_model(learner.architecture.external_model_path)
+                    learner.model = tf.keras.models.load_model(
+                        learner.architecture.external_model_path)
                 else:
-                    raise Exception(".h5 file does not exist: " + 
+                    raise Exception(".h5 file does not exist: " +
                                     learner.architecture.external_model_path)
             elif learner.architecture.external_model_format == "keras-tf-whole-model":
                 if os.path.isdir(learner.architecture.external_model_path):
-                    learner.model = tf.keras.models.load_model(learner.architecture.external_model_path)
+                    learner.model = tf.keras.models.load_model(
+                        learner.architecture.external_model_path)
                 else:
-                    raise Exception("TF saved model directory does not exist: " + 
+                    raise Exception("TF saved model directory does not exist: " +
                                     learner.architecture.external_model_path)
             elif learner.architecture.external_model_format == "keras-json-architecture-only":
                 if os.path.isfile(learner.architecture.external_model_path):
                     with open(learner.architecture.external_model_path, "r") as json_config_file:
                         json_config = json_config_file.read()
-                        learner.model = tf.keras.models.model_from_json(json_config)
+                        learner.model = tf.keras.models.model_from_json(
+                            json_config)
                 else:
-                    raise Exception(".json file does not exist: " + 
+                    raise Exception(".json file does not exist: " +
                                     learner.architecture.external_model_path)
             elif learner.architecture.external_model_format == "keras-yaml-architecture-only":
                 if os.path.isfile(learner.architecture.external_model_path):
                     with open(learner.architecture.external_model_path, "r") as yaml_config_file:
                         yaml_config = yaml_config_file.read()
-                        learner.model = tf.keras.models.model_from_yaml(yaml_config)
+                        learner.model = tf.keras.models.model_from_yaml(
+                            yaml_config)
                 else:
-                    raise Exception(".yaml file does not exist: " + 
+                    raise Exception(".yaml file does not exist: " +
                                     learner.architecture.external_model_path)
         else:
             raise Exception("neither internal nor external architecture "
                             "definition provided")
-        
+
         if learner.architecture.external_model_format is None or \
            learner.architecture.external_model_format == "keras-yaml-architecture-only" or \
            learner.architecture.external_model_format == "keras-json-architecture-only":
@@ -87,8 +91,9 @@ class KerasHelper:
                 if type(local_metrics) != "list":
                     local_metrics = [local_metrics]
                 learner.model.compile(
-                    optimizer=KerasHelper.get_optimizer(learner.optimizer_hyperparameters),
-                    # use categorical_crossentropy for multi-class and 
+                    optimizer=KerasHelper.get_optimizer(
+                        learner.optimizer_hyperparameters),
+                    # use categorical_crossentropy for multi-class and
                     # binary_crossentropy for multi-label
                     loss=KerasHelper.get_loss(learner.loss_hyperparameters),
                     metrics=local_metrics
@@ -108,8 +113,8 @@ class KerasHelper:
 
     @staticmethod
     def train_model(learner: Learner,
-                     x_train: List[str], y_train: List[str],
-                     x_val: List[str], y_val: List[str]) -> None:
+                    x_train: List[str], y_train: List[str],
+                    x_val: List[str], y_val: List[str]) -> None:
         # one hot encode input and labels
         encoded_x_train = learner.encode_x(x_train)
         encoded_y_train = learner.encode_y(y_train)
@@ -174,7 +179,7 @@ class KerasHelper:
         # save whole model (HDF5)
         learner.model.save(learner.output_dir + model_name + "/saved_model.h5",
                            save_format="h5")
-        
+
         # save architecture only (YAML)
         yaml_model = learner.model.to_yaml()
         with open(learner.output_dir + model_name + "/model-architecture.yaml", "w") as yaml_file:
@@ -192,14 +197,15 @@ class KerasHelper:
     def write_session_info(learner: Learner) -> None:
         with open(learner.output_dir + "session-info.txt", "w") as session_file:
             session_file.write("seqgra package version: " +
-                pkg_resources.require("seqgra")[0].version + "\n")
+                               pkg_resources.require("seqgra")[0].version + "\n")
             session_file.write("TensorFlow version: " + tf.__version__ + "\n")
             session_file.write("NumPy version: " + np.version.version + "\n")
             session_file.write("Python version: " + sys.version + "\n")
 
     @staticmethod
     def load_model(learner: Learner, model_name: str = "") -> None:
-        learner.model = tf.keras.models.load_model(learner.output_dir + model_name)
+        learner.model = tf.keras.models.load_model(
+            learner.output_dir + model_name)
 
     @staticmethod
     def predict(learner: Learner, x: Any, encode: bool = True):
@@ -210,7 +216,7 @@ class KerasHelper:
         if encode:
             x = learner.encode_x(x)
         return learner.model.predict(x)
-        
+
     @staticmethod
     def get_num_params(learner: Learner):
         if learner.model is None:
@@ -233,7 +239,7 @@ class KerasHelper:
                 operation.parameters["input_shape"].strip())
         else:
             input_shape = None
-        
+
         if "trainable" in operation.parameters:
             trainable = KerasHelper.to_bool(
                 operation.parameters["trainable"])
@@ -247,11 +253,12 @@ class KerasHelper:
             else:
                 return tf.keras.layers.Flatten(input_shape=input_shape)
         elif name == "reshape":
-            target_shape = literal_eval(operation.parameters["target_shape"].strip())
+            target_shape = literal_eval(
+                operation.parameters["target_shape"].strip())
             if input_shape is None:
-                return tf.keras.layers.Reshape(target_shape = target_shape)
+                return tf.keras.layers.Reshape(target_shape=target_shape)
             else:
-                return tf.keras.layers.Reshape(target_shape = target_shape,
+                return tf.keras.layers.Reshape(target_shape=target_shape,
                                                input_shape=input_shape)
         elif name == "dense":
             units = int(operation.parameters["units"].strip())
@@ -362,7 +369,8 @@ class KerasHelper:
 
             if "unit_forget_bias" in operation.parameters:
                 unit_forget_bias = \
-                    KerasHelper.to_bool(operation.parameters["unit_forget_bias"])
+                    KerasHelper.to_bool(
+                        operation.parameters["unit_forget_bias"])
             else:
                 unit_forget_bias = True
 
@@ -409,7 +417,8 @@ class KerasHelper:
 
             if "return_sequences" in operation.parameters:
                 return_sequences = \
-                    KerasHelper.to_bool(operation.parameters["return_sequences"])
+                    KerasHelper.to_bool(
+                        operation.parameters["return_sequences"])
             else:
                 return_sequences = False
 
@@ -697,6 +706,29 @@ class KerasHelper:
                 )
         elif name == "globalmaxpool1d":
             return tf.keras.layers.GlobalMaxPool1D()
+        elif name == "maxpool1d":
+            if "pool_size" in operation.parameters:
+                pool_size = int(operation.parameters["pool_size"].strip())
+            else:
+                pool_size = 2
+
+            if "strides" in operation.parameters:
+                strides = int(operation.parameters["strides"].strip())
+            else:
+                strides = None
+
+            if "padding" in operation.parameters:
+                padding = operation.parameters["padding"].strip()
+            else:
+                padding = "valid"
+    
+            return tf.keras.layers.MaxPool1D(pool_size=pool_size,
+                                             strides=strides,
+                                             padding=padding)
+        elif name == "dropout":
+            rate = float(operation.parameters["rate"].strip())
+            
+            return tf.keras.layers.Dropout(rate)
 
     @staticmethod
     def load_custom_weights(operation):
@@ -710,13 +742,14 @@ class KerasHelper:
             return np.load(weights_file, allow_pickle=True)
         else:
             raise Exception("weights_file (" + weights_file + ") not "
-                                "found")
+                            "found")
+
     @staticmethod
     def get_optimizer(optimizer_hyperparameters):
         if "optimizer" in optimizer_hyperparameters:
             optimizer = \
                 optimizer_hyperparameters["optimizer"].lower().strip()
-            
+
             if "learning_rate" in optimizer_hyperparameters:
                 learning_rate = float(
                     optimizer_hyperparameters["learning_rate"].strip())
@@ -758,7 +791,7 @@ class KerasHelper:
                     rho = float(optimizer_hyperparameters["rho"].strip())
                 else:
                     rho = 0.95
-                
+
                 if clipnorm is None and clipvalue is None:
                     return tf.keras.optimizers.Adadelta(
                         learning_rate=learning_rate,
@@ -789,7 +822,7 @@ class KerasHelper:
                         optimizer_hyperparameters["initial_accumulator_value"].strip())
                 else:
                     initial_accumulator_value = 0.1
-                
+
                 if clipnorm is None and clipvalue is None:
                     return tf.keras.optimizers.Adagrad(
                         learning_rate=learning_rate,
@@ -820,7 +853,7 @@ class KerasHelper:
                         optimizer_hyperparameters["amsgrad"])
                 else:
                     amsgrad = False
-                
+
                 if clipnorm is None and clipvalue is None:
                     return tf.keras.optimizers.Adam(
                         learning_rate=learning_rate,
@@ -912,7 +945,7 @@ class KerasHelper:
                         optimizer_hyperparameters["l2_shrinkage_regularization_strength"].strip())
                 else:
                     l2_shrinkage_regularization_strength = 0.0
-                
+
                 if clipnorm is None and clipvalue is None:
                     return tf.keras.optimizers.Ftrl(
                         learning_rate=learning_rate,
@@ -995,7 +1028,7 @@ class KerasHelper:
                         optimizer_hyperparameters["centered"])
                 else:
                     centered = False
-                
+
                 if clipnorm is None and clipvalue is None:
                     return tf.keras.optimizers.RMSprop(
                         learning_rate=learning_rate,
@@ -1036,7 +1069,7 @@ class KerasHelper:
                         optimizer_hyperparameters["nesterov"])
                 else:
                     nesterov = False
-                
+
                 if clipnorm is None and clipvalue is None:
                     return tf.keras.optimizers.SGD(
                         learning_rate=learning_rate,
