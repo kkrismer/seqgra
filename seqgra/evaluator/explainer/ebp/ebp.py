@@ -1,6 +1,6 @@
 import types
 import torch
-from explainer.ebp.functions import EBConv2d, EBLinear, EBAvgPool2d
+from seqgra.evaluator.explainer.ebp.functions import EBConv2d, EBLinear, EBAvgPool2d
 
 
 def get_layer(model, key_list):

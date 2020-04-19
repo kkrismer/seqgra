@@ -4,7 +4,7 @@ from torch.autograd import Variable
 from torch import optim
 import torch
 import types
-from explainer.backprop import SaliencyExplainer
+from seqgra.evaluator.explainer.backprop import SaliencyExplainer
 
 
 def first_forward(self, x):

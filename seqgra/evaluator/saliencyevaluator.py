@@ -48,7 +48,7 @@ class GradientBasedEvaluator(Evaluator):
 
 class GradientEvaluator(GradientBasedEvaluator):
     def __init__(self, learner: Learner, output_dir: str) -> None:
-        super().__init__("vanilla-grad-explainer", learner, output_dir)
+        super().__init__("grad-explainer", learner, output_dir)
         self.explainer = VanillaGradExplainer(learner.model)
 
 

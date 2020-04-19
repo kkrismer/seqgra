@@ -1,4 +1,4 @@
-from explainer.backprop import GradxInputExplainer
+from seqgra.evaluator.explainer.backprop import GradxInputExplainer
 import types
 import torch.nn.functional as F
 from torch.autograd import Variable

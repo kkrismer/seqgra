@@ -1,5 +1,5 @@
-from explainer.real_time.pytorch_fixes import SaliencyModel
-from explainer.real_time.resnet_encoder import resnet50encoder
+from seqgra.evaluator.explainer.real_time.pytorch_fixes import SaliencyModel
+from seqgra.evaluator.explainer.real_time.resnet_encoder import resnet50encoder
 import torch.nn.functional as F
 from torch.autograd import Variable
 

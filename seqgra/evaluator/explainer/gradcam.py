@@ -1,5 +1,5 @@
 import torch
-from explainer.backprop import VanillaGradExplainer
+from seqgra.evaluator.explainer.backprop import VanillaGradExplainer
 
 
 def get_layer(model, key_list):
