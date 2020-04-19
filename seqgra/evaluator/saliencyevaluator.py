@@ -11,27 +11,26 @@ from __future__ import annotations
 import os
 import logging
 from abc import ABC, abstractmethod
-from typing import List, Any, Dict, Tuple
-import random
 
-import numpy as np
-import pandas as pd
-import matplotlib as mpl
-import matplotlib.pyplot as plt
-
-from plotnine import ggplot, geom_tile, aes, ggsave, scale_x_discrete, element_blank, theme, scale_fill_manual
+import torch
 
 from seqgra.learner.learner import Learner
 from seqgra.evaluator.evaluator import Evaluator
-from seqgra.evaluator.explainer import backprop as bp
-from seqgra.evaluator.explainer import deeplift as df
-from seqgra.evaluator.explainer import gradcam as gc
-from seqgra.evaluator.explainer import patterns as pt
-from seqgra.evaluator.explainer import ebp
+from seqgra.evaluator.explainer.backprop import VanillaGradExplainer
+from seqgra.evaluator.explainer.backprop import GradxInputExplainer
+from seqgra.evaluator.explainer.backprop import SaliencyExplainer
+from seqgra.evaluator.explainer.backprop import IntegrateGradExplainer
+from seqgra.evaluator.explainer.backprop import NonlinearIntegrateGradExplainer
+from seqgra.evaluator.explainer.deeplift import DeepLIFTRescaleExplainer
+from seqgra.evaluator.explainer.gradcam import GradCAMExplainer
+from seqgra.evaluator.explainer.ebp import ExcitationBackpropExplainer
+from seqgra.evaluator.explainer.ebp import ContrastiveExcitationBackpropExplainer
+
 
 class GradientBasedEvaluator(Evaluator):
-    def __init__(self, learner: Learner, data_dir: str, output_dir: str) -> None:
-        super().__init__(learner,data_dir,output_dir)
+    def __init__(self, id: str, learner: Learner, output_dir: str) -> None:
+        super().__init__(id, learner, output_dir)
+        self.explainer = None
 
     def evaluate_model(self, set_name: str = "test") -> None:
         '''
@@ -39,86 +38,74 @@ class GradientBasedEvaluator(Evaluator):
         of form of SISEvaluator evaluate_model
         '''
 
-    def calculate_saliency(self,data,label):
-        result = self.explainer.explain(data,label)
-        return self.__explainer_transform(data,result)
+    def calculate_saliency(self, data, label):
+        result = self.explainer.explain(data, label)
+        return self._explainer_transform(data, result)
 
-    def __explainer_transform(self,data,result):
-        pass
+    def _explainer_transform(self, data, result):
+        return result.cuda().numpy()
+
 
 class GradientEvaluator(GradientBasedEvaluator):
-    def __init__(self, learner: Learner, data_dir: str, output_dir: str) -> None:
-        self.explainer = bp.VanillaGradExplainer(model)
-        super().__init__(learner,data_dir,output_dir)
-        
-    def __explainer_transform(self,data,result):
-        return result.cuda().numpy()
-    
+    def __init__(self, learner: Learner, output_dir: str) -> None:
+        super().__init__("vanilla-grad-explainer", learner, output_dir)
+        self.explainer = VanillaGradExplainer(learner.model)
+
+
 class GradientxInputEvaluator(GradientBasedEvaluator):
-    def __init__(self, learner: Learner, data_dir: str, output_dir: str) -> None:
-        self.explainer = bp.GradxInputExplainer(model)
-        super().__init__(learner,data_dir,output_dir)
-        
-    def __explainer_transform(self,data,result):
-        return result.cuda().numpy()
+    def __init__(self, learner: Learner, output_dir: str) -> None:
+        super().__init__("gradx-input-explainer", learner, output_dir)
+        self.explainer = GradxInputExplainer(learner.model)
+
 
 class SaliencyEvaluator(GradientBasedEvaluator):
-    def __init__(self, learner: Learner, data_dir: str, output_dir: str) -> None:
-        self.explainer = bp.SaliencyExplainer(model)
-        super().__init__(learner,data_dir,output_dir)
-        
-    def __explainer_transform(self,data,result):
-        return result.cuda().numpy()
+    def __init__(self, learner: Learner, output_dir: str) -> None:
+        super().__init__("saliency-explainer", learner, output_dir)
+        self.explainer = SaliencyExplainer(learner.model)
+
 
 class IntegratedGradientEvaluator(GradientBasedEvaluator):
-    def __init__(self, learner: Learner, data_dir: str, output_dir: str) -> None:
-        self.explainer = bp.IntegrateGradExplainer(model)
-        super().__init__(learner,data_dir,output_dir)
-        
-    def __explainer_transform(self,data,result):
-        return result.cuda().numpy()
-    
+    def __init__(self, learner: Learner, output_dir: str) -> None:
+        super().__init__("integrated-grad-explainer", learner, output_dir)
+        self.explainer = IntegrateGradExplainer(learner.model)
+
+
 class NonlinearIntegratedGradientEvaluator(GradientBasedEvaluator):
-    def __init__(self, learner: Learner, data_dir: str, output_dir: str) -> None:
-        #TODO NonlinearIntegratedGradExplainer
+    def __init__(self, learner: Learner, output_dir: str) -> None:
+        # TODO NonlinearIntegratedGradExplainer
         # requires other data and how to handle reference (default is None)
-        self.explainer = bp.NonlinearIntegrateGradExplainer(model)
-        super().__init__(learner,data_dir,output_dir)
-        
-    def __explainer_transform(self,data,result):
-        return result.cuda().numpy()
+        super().__init__("nonlinear-integrated-grad-explainer", learner,
+                         output_dir)
+        self.explainer = NonlinearIntegrateGradExplainer(learner.model)
+
 
 class GradCamGradientEvaluator(GradientBasedEvaluator):
-    def __init__(self, learner: Learner, data_dir: str, output_dir: str) -> None:
-        self.explainer = gc.GradCAMExplainer(model)
-        super().__init__(learner,data_dir,output_dir)
-        
-    def __explainer_transform(self,data,result):
-        return functional.interpolate(result.view(1,1,-1),size=data.shape[2],mode='linear').cpu().numpy()
+    def __init__(self, learner: Learner, output_dir: str) -> None:
+        super().__init__("grad-cam-explainer", learner, output_dir)
+        self.explainer = GradCAMExplainer(learner.model)
+
+    def _explainer_transform(self, data, result):
+        return torch.nn.functional.interpolate(result.view(1, 1, -1),
+                                               size=data.shape[2],
+                                               mode='linear').cpu().numpy()
+
 
 class DeepLiftEvaluator(GradientBasedEvaluator):
-    #TODO where to set reference?
-    def __init__(self, learner: Learner, data_dir: str, output_dir: str) -> None:
-        self.explainer = df.DeepLIFTRescaleExplainer(model,'shuffled')
-        super().__init__(learner,data_dir,output_dir)
-        
-    def __explainer_transform(self,data,result):
-        return result.cuda().numpy()
+    # TODO where to set reference?
+    def __init__(self, learner: Learner, output_dir: str) -> None:
+        super().__init__("deep-lift-rescale-explainer", learner, output_dir)
+        self.explainer = DeepLIFTRescaleExplainer(learner.model, "shuffled")
+
 
 class ExcitationBackpropEvaluator(GradientBasedEvaluator):
-    def __init__(self, learner: Learner, data_dir: str, output_dir: str) -> None:
-        self.explainer = ebp.ExcitationBackpropExplainer(model)
-        super().__init__(learner,data_dir,output_dir)
-        
-    def __explainer_transform(self,data,result):
-        return result.cuda().numpy()
-    
-class ContrastiveExcitationBackpropEvaluator(GradientBasedEvaluator):
-    def __init__(self, learner: Learner, data_dir: str, output_dir: str) -> None:
-        self.explainer = ebp.ContrastiveExcitationBackpropExplainer(model)
-        super().__init__(learner,data_dir,output_dir)
-        
-    def __explainer_transform(self,data,result):
-        return result.cuda().numpy()
-    
+    def __init__(self, learner: Learner, output_dir: str) -> None:
+        super().__init__("excitation-backprop-explainer", learner, output_dir)
+        self.explainer = ExcitationBackpropExplainer(learner.model)
 
+
+class ContrastiveExcitationBackpropEvaluator(GradientBasedEvaluator):
+    def __init__(self, learner: Learner, output_dir: str) -> None:
+        super().__init__("contrastive-excitation-backprop-explainer", learner,
+                         output_dir)
+        self.explainer = ContrastiveExcitationBackpropExplainer(
+            learner.model)
