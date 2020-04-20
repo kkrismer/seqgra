@@ -1,17 +1,14 @@
-"""
-MIT - CSAIL - Gifford Lab - seqgra
+"""Contains abstract classes for all learners.
 
-- abstract base class for all learners
-- abstract class for multi-class classification learners, i.e., learners
-  for data where the class labels are mututally exclusive
-- abstract class for multi-label classification learners, i.e., learners
-  for data where the class labels are not mututally exclusive
-- abstract class for multiple regression learners, i.e., learners with
-  multiple independent variables and one dependent variable
-- abstract class for multivariate regression learners, i.e., learners with
-  multiple independent variables and multiple dependent variables
-
-@author: Konstantin Krismer
+Classes:
+    Learner: abstract base class for all learners
+    MultiClassClassificationLearner: abstract class for multi-class
+        classification learners
+    MultiLabelClassificationLearner: abstract class for multi-label
+        classification learners
+    MultipleRegressionLearner: abstract class for multiple regression learners
+    MultivariateRegressionLearner: abstract class for multivariate
+        regression learners
 """
 import os
 from abc import ABC, abstractmethod
@@ -30,6 +27,69 @@ from seqgra.mischelper import MiscHelper
 
 
 class Learner(ABC):
+    """Abstract base class for all learners.
+
+    Attributes:
+        id (str): learner ID, used for output folder name
+        name (str): learner name
+        description (str): concise description of the model architecture
+        library (str): TensorFlow or PyTorch
+        seed (int): seed for Python, NumPy, and machine learning library
+        learner_type (str): one of the following: multi-class classification,
+            multi-label classification, multiple regression, multivariate
+            regression
+        learner_implementation (str): class name of the learner implementation,
+            KerasDNAMultiLabelClassificationLearner
+        labels (List[str]): class labels expected from output layer
+        architecture (Architecture): model architecture
+        loss_hyperparameters (Dict[str, str]): hyperparmeters for loss
+            function, e.g., type of loss function
+        optimizer_hyperparameters (Dict[str, str]): hyperparmeters for
+            optimizer, e.g., optimizer type
+        training_process_hyperparameters (Dict[str, str]): hyperparmeters
+            regarding the training process, e.g., batch size
+        data_dir (str): directory with data files, e.g., `training.txt`
+        output_dir (str): model output directory,
+            `{OUTPUTDIR}/models/{GRAMMAR ID}/{MODEL ID}/`
+        model: PyTorch or TensorFlow model
+        optimizer: PyTorch or TensorFlow optimizer
+        criterion: PyTorch or TensorFlow criterion (loss)
+        metrics (List[str]): metrics that are collected, usually `loss` and
+            `accuracy`
+
+    Methods:
+        train_model
+        parse_data
+        get_examples_file
+        get_annotations_file
+        create_model
+        save_model
+        load_model
+        print_model_summary
+        predict
+        encode_x
+        decode_x
+        encode_y
+        decode_y
+        get_num_params
+        set_seed
+
+    Arguments:
+        parser (ModelParser): parser for model definition
+        data_dir (str): directory with data files,
+            `{OUTPUTDIR}/input/{GRAMMAR ID}`
+        output_dir (str): model output directory without model folder,
+            `{OUTPUTDIR}/models/{GRAMMAR ID}`
+
+    See Also:
+        MultiClassClassificationLearner: for classification models with
+            mutually exclusive classes
+        MultiLabelClassificationLearner: for classification models with
+            non-mutually exclusive classes
+        MultipleRegressionLearner: for regression models with multiple
+            independent variables and one dependent variable
+    """
+
     @abstractmethod
     def __init__(self, parser: ModelParser, data_dir: str,
                  output_dir: str) -> None:
@@ -92,6 +152,24 @@ class Learner(ABC):
                     y_train: List[str] = None,
                     x_val: List[str] = None,
                     y_val: List[str] = None) -> None:
+        """Train model.
+
+        Specify either `training_file` and `validation_file` or
+        `x_train`, `y_train`, `x_val`, and `y_val`.
+
+        Arguments:
+            training_file (str, optional): TODO
+            validation_file (str, optional): TODO
+            x_train (List[str], optional): TODO
+            y_train (List[str], optional): TODO
+            x_val (List[str], optional): TODO
+            y_val (List[str], optional): TODO
+
+        Raises:
+            Exception: output directory non-empty
+            Exception: specify either training_file and validation_file
+                or x_train, y_train, x_val, y_val
+        """
         if len(os.listdir(self.output_dir)) > 0:
             raise Exception("output directory non-empty")
 
@@ -112,9 +190,31 @@ class Learner(ABC):
 
     @abstractmethod
     def parse_data(self, file_name: str) -> None:
-        pass
+        """Abstract method to parse data.
+
+        Sequence data type specific implementations provided for DNA and
+        amino acid sequences.
+
+        Arguments:
+            file_name (str): file name
+        """
 
     def get_examples_file(self, set_name: str = "test") -> str:
+        """Get path to examples file.
+
+        E.g., `get_examples_file("training")` returns
+        `{OUTPUTDIR}/input/{GRAMMAR ID}/training.txt`, if it exists.
+
+        Arguments:
+            set_name (str, optional): set name can be one of the following:
+                `training`, `validation`, or `test`; defaults to `test`
+
+        Returns:
+            str: file path to examples file
+
+        Raises:
+            Exception: in case requested examples file does not exist
+        """
         f: str = self.data_dir + "/" + set_name + ".txt"
         f = f.replace("\\", "/").replace("//", "/").strip()
         if os.path.isfile(f):
@@ -123,6 +223,21 @@ class Learner(ABC):
             raise Exception("examples file does not exist for set " + set_name)
 
     def get_annotations_file(self, set_name: str = "test") -> str:
+        """Get path to annotations file.
+
+        E.g., `get_annotations_file("training")` returns
+        `{OUTPUTDIR}/input/{GRAMMAR ID}/training-annotation.txt`, if it exists.
+
+        Arguments:
+            set_name (str, optional): set name can be one of the following:
+                `training`, `validation`, or `test`; defaults to `test`
+
+        Returns:
+            str: file path to annotations file
+
+        Raises:
+            Exception: in case requested annotations file does not exist
+        """
         f: str = self.data_dir + "/" + set_name + "-annotation.txt"
         f = f.replace("\\", "/").replace("//", "/").strip()
         if os.path.isfile(f):
@@ -133,47 +248,106 @@ class Learner(ABC):
 
     @abstractmethod
     def create_model(self) -> None:
-        pass
+        """Abstract method to create library-specific model.
+
+        Machine learning library specific implementations are provided for
+        TensorFlow and PyTorch.
+        """
 
     @abstractmethod
     def save_model(self, model_name: str = "final"):
-        pass
+        """TODO
+
+        TODO
+
+        Arguments:
+            model_name (str, optional): file name in output dir;
+                defaults to `final`
+        """
 
     @abstractmethod
     def load_model(self, model_name: str = "final"):
-        pass
+        """TODO
+
+        TODO
+
+        Arguments:
+            model_name (str, optional): file name in output dir;
+                defaults to `final`
+        """
 
     @abstractmethod
     def print_model_summary(self) -> None:
-        pass
+        """TODO
+
+        TODO
+        """
 
     @abstractmethod
     def predict(self, x: Any, encode: bool = True):
-        pass
+        """TODO
+
+        TODO
+
+        Arguments:
+            x (array): TODO
+            encode (bool, optional): whether `x` should be encoded;
+                defaults to `True`
+        """
 
     @abstractmethod
     def encode_x(self, x):
-        pass
+        """TODO
+
+        TODO
+
+        Arguments:
+            x (array): TODO
+        """
 
     @abstractmethod
     def decode_x(self, x):
-        pass
+        """TODO
+
+        TODO
+
+        Arguments:
+            x (array): TODO
+        """
 
     @abstractmethod
     def encode_y(self, y):
-        pass
+        """TODO
+
+        TODO
+
+        Arguments:
+            y (array): TODO
+        """
 
     @abstractmethod
     def decode_y(self, y):
-        pass
+        """TODO
+
+        TODO
+
+        Arguments:
+            y (array): TODO
+        """
 
     @abstractmethod
     def get_num_params(self):
-        pass
+        """TODO
+
+        TODO
+        """
 
     @abstractmethod
     def set_seed(self) -> None:
-        pass
+        """TODO
+
+        TODO
+        """
 
     @abstractmethod
     def _train_model(self,
@@ -183,6 +357,67 @@ class Learner(ABC):
 
 
 class MultiClassClassificationLearner(Learner):
+    """Abstract class for multi-class classification learners.
+
+    Multi-class classification learners are learners for models with
+    mututally exclusive class labels.
+
+    Attributes:
+        id (str): learner ID, used for output folder name
+        name (str): learner name
+        description (str): concise description of the model architecture
+        library (str): TensorFlow or PyTorch
+        seed (int): seed for Python, NumPy, and machine learning library
+        learner_type (str): one of the following: multi-class classification,
+            multi-label classification, multiple regression, multivariate
+            regression
+        learner_implementation (str): class name of the learner implementation,
+            KerasDNAMultiLabelClassificationLearner
+        labels (List[str]): class labels expected from output layer
+        architecture (Architecture): model architecture
+        loss_hyperparameters (Dict[str, str]): hyperparmeters for loss
+            function, e.g., type of loss function
+        optimizer_hyperparameters (Dict[str, str]): hyperparmeters for
+            optimizer, e.g., optimizer type
+        training_process_hyperparameters (Dict[str, str]): hyperparmeters
+            regarding the training process, e.g., batch size
+        data_dir (str): directory with data files, e.g., `training.txt`
+        output_dir (str): model output directory,
+            `{OUTPUTDIR}/models/{GRAMMAR ID}/{MODEL ID}/`
+        model: PyTorch or TensorFlow model
+        optimizer: PyTorch or TensorFlow optimizer
+        criterion: PyTorch or TensorFlow criterion (loss)
+        metrics (List[str]): metrics that are collected, usually `loss` and
+            `accuracy`
+
+    Methods:
+        train_model
+        parse_data
+        get_examples_file
+        get_annotations_file
+        create_model
+        save_model
+        load_model
+        print_model_summary
+        predict
+        encode_x
+        decode_x
+        encode_y
+        decode_y
+        get_num_params
+        set_seed
+        evaluate_model
+        create_roc_curve
+        create_precision_recall_curve
+
+    Arguments:
+        parser (ModelParser): parser for model definition
+        data_dir (str): directory with data files,
+            `{OUTPUTDIR}/input/{GRAMMAR ID}`
+        output_dir (str): model output directory without model folder,
+            `{OUTPUTDIR}/models/{GRAMMAR ID}`
+    """
+
     @abstractmethod
     def __init__(self, parser: ModelParser, data_dir: str,
                  output_dir: str) -> None:
@@ -195,6 +430,21 @@ class MultiClassClassificationLearner(Learner):
 
     def evaluate_model(self, file_name: str = None,
                        x: List[str] = None, y: List[str] = None):
+        """TODO
+
+        TODO
+
+        Arguments:
+            file_name (str): TODO
+            x (List[str]): TODO
+            y (List[str]): TODO
+
+        Returns:
+            array: TODO
+
+        Raises:
+            Exception: if neither `file_name` nor (`x` and `y`) are specified
+        """
         if file_name is not None:
             x, y = self.parse_data(file_name)
 
@@ -204,7 +454,17 @@ class MultiClassClassificationLearner(Learner):
         else:
             return self._evaluate_model(x, y)
 
-    def create_roc_curve(self, y_true, y_hat, file_name) -> None:
+    def create_roc_curve(self, y_true, y_hat, file_name: str) -> None:
+        """Create ROC curve.
+
+        Plots ROC curves for each class label, including micro-average and
+        macro-average. Saves plot as PDF in `file_name`.
+
+        Arguments:
+            y_true (array): TODO ; shape = [n_samples, n_classes]
+            y_hat (array): TODO ; shape = [n_samples, n_classes]
+            file_name (str): TODO
+        """
         fpr = dict()
         tpr = dict()
         roc_auc = dict()
@@ -240,21 +500,21 @@ class MultiClassClassificationLearner(Learner):
         lines = []
         labels = []
 
-        l, = plt.plot(fpr["micro"], tpr["micro"],
-                      color="gold", linestyle=":", linewidth=2)
-        lines.append(l)
+        line, _ = plt.plot(fpr["micro"], tpr["micro"],
+                           color="gold", linestyle=":", linewidth=2)
+        lines.append(line)
         labels.append("micro-average (area = {0:0.2f})"
                       "".format(roc_auc["micro"]))
 
-        l, = plt.plot(fpr["macro"], tpr["macro"],
-                      color="darkorange", linestyle=":", linewidth=2)
-        lines.append(l)
+        line, _ = plt.plot(fpr["macro"], tpr["macro"],
+                           color="darkorange", linestyle=":", linewidth=2)
+        lines.append(line)
         labels.append("macro-average (area = {0:0.2f})"
                       "".format(roc_auc["macro"]))
 
         for i in range(n_classes):
-            l, = plt.plot(fpr[i], tpr[i], linewidth=2)
-            lines.append(l)
+            line, _ = plt.plot(fpr[i], tpr[i], linewidth=2)
+            lines.append(line)
             labels.append("condition {0} (area = {1:0.2f})"
                           "".format(self.labels[i], roc_auc[i]))
 
@@ -268,7 +528,18 @@ class MultiClassClassificationLearner(Learner):
                    loc="upper left", prop=dict(size=14))
         plt.savefig(file_name, bbox_inches="tight")
 
-    def create_precision_recall_curve(self, y_true, y_hat, file_name) -> None:
+    def create_precision_recall_curve(self, y_true, y_hat,
+                                      file_name: str) -> None:
+        """Create precision-recall curve.
+
+        Plots PR curves for each class label, including micro-average and
+        iso-F1 curves. Saves plot as PDF in `file_name`.
+
+        Arguments:
+            y_true (array): TODO ; shape = [n_samples, n_classes]
+            y_hat (array): TODO ; shape = [n_samples, n_classes]
+            file_name (str): TODO
+        """
         precision = dict()
         recall = dict()
         average_precision = dict()
@@ -293,21 +564,21 @@ class MultiClassClassificationLearner(Learner):
         for f_score in f_scores:
             x = np.linspace(0.001, 1)
             y = f_score * x / (2 * x - f_score)
-            l, = plt.plot(x[y >= 0], y[y >= 0], color="gray", alpha=0.2)
+            line, _ = plt.plot(x[y >= 0], y[y >= 0], color="gray", alpha=0.2)
             plt.annotate(r"$F_1 = {0:0.1f}$".format(
                 f_score), xy=(0.89, y[45] + 0.02))
 
-        lines.append(l)
+        lines.append(line)
         labels.append(r"iso-$F_1$ curves")
-        l, = plt.plot(recall["micro"], precision["micro"],
-                      linestyle=":", color="gold", linewidth=2)
-        lines.append(l)
+        line, _ = plt.plot(recall["micro"], precision["micro"],
+                           linestyle=":", color="gold", linewidth=2)
+        lines.append(line)
         labels.append("micro-average (area = {0:0.2f})"
                       "".format(average_precision["micro"]))
 
         for i in range(n_classes):
-            l, = plt.plot(recall[i], precision[i], linewidth=2)
-            lines.append(l)
+            line, _ = plt.plot(recall[i], precision[i], linewidth=2)
+            lines.append(line)
             labels.append("condition {0} (area = {1:0.2f})"
                           "".format(self.labels[i], average_precision[i]))
 
@@ -328,6 +599,67 @@ class MultiClassClassificationLearner(Learner):
 
 
 class MultiLabelClassificationLearner(Learner):
+    """Abstract class for multi-label classification learners.
+
+    Multi-label classification learners are learners for models with class
+    labels that are not mututally exclusive.
+
+    Attributes:
+        id (str): learner ID, used for output folder name
+        name (str): learner name
+        description (str): concise description of the model architecture
+        library (str): TensorFlow or PyTorch
+        seed (int): seed for Python, NumPy, and machine learning library
+        learner_type (str): one of the following: multi-class classification,
+            multi-label classification, multiple regression, multivariate
+            regression
+        learner_implementation (str): class name of the learner implementation,
+            KerasDNAMultiLabelClassificationLearner
+        labels (List[str]): class labels expected from output layer
+        architecture (Architecture): model architecture
+        loss_hyperparameters (Dict[str, str]): hyperparmeters for loss
+            function, e.g., type of loss function
+        optimizer_hyperparameters (Dict[str, str]): hyperparmeters for
+            optimizer, e.g., optimizer type
+        training_process_hyperparameters (Dict[str, str]): hyperparmeters
+            regarding the training process, e.g., batch size
+        data_dir (str): directory with data files, e.g., `training.txt`
+        output_dir (str): model output directory,
+            `{OUTPUTDIR}/models/{GRAMMAR ID}/{MODEL ID}/`
+        model: PyTorch or TensorFlow model
+        optimizer: PyTorch or TensorFlow optimizer
+        criterion: PyTorch or TensorFlow criterion (loss)
+        metrics (List[str]): metrics that are collected, usually `loss` and
+            `accuracy`
+
+    Methods:
+        train_model
+        parse_data
+        get_examples_file
+        get_annotations_file
+        create_model
+        save_model
+        load_model
+        print_model_summary
+        predict
+        encode_x
+        decode_x
+        encode_y
+        decode_y
+        get_num_params
+        set_seed
+        evaluate_model
+        create_roc_curve
+        create_precision_recall_curve
+
+    Arguments:
+        parser (ModelParser): parser for model definition
+        data_dir (str): directory with data files,
+            `{OUTPUTDIR}/input/{GRAMMAR ID}`
+        output_dir (str): model output directory without model folder,
+            `{OUTPUTDIR}/models/{GRAMMAR ID}`
+    """
+
     @abstractmethod
     def __init__(self, parser: ModelParser, data_dir: str,
                  output_dir: str) -> None:
@@ -340,6 +672,21 @@ class MultiLabelClassificationLearner(Learner):
 
     def evaluate_model(self, file_name: str = None,
                        x: List[str] = None, y: List[List[str]] = None):
+        """TODO
+
+        TODO
+
+        Arguments:
+            file_name (str): TODO
+            x (List[str]): TODO
+            y (List[List[str]]): TODO
+
+        Returns:
+            array: TODO
+
+        Raises:
+            Exception: if neither `file_name` nor (`x` and `y`) are specified
+        """
         if file_name is not None:
             x, y = self.parse_data(file_name)
 
@@ -350,6 +697,16 @@ class MultiLabelClassificationLearner(Learner):
             return self._evaluate_model(x, y)
 
     def create_roc_curve(self, y_true, y_hat, file_name) -> None:
+        """Create ROC curve.
+
+        Plots ROC curves for each class label, including micro-average and
+        macro-average. Saves plot as PDF in `file_name`.
+
+        Arguments:
+            y_true (array): TODO ; shape = [n_samples, n_classes]
+            y_hat (array): TODO ; shape = [n_samples, n_classes]
+            file_name (str): TODO
+        """
         fpr = dict()
         tpr = dict()
         roc_auc = dict()
@@ -385,21 +742,21 @@ class MultiLabelClassificationLearner(Learner):
         lines = []
         labels = []
 
-        l, = plt.plot(fpr["micro"], tpr["micro"],
-                      color="gold", linestyle=":", linewidth=2)
-        lines.append(l)
+        line, _ = plt.plot(fpr["micro"], tpr["micro"],
+                           color="gold", linestyle=":", linewidth=2)
+        lines.append(line)
         labels.append("micro-average (area = {0:0.2f})"
                       "".format(roc_auc["micro"]))
 
-        l, = plt.plot(fpr["macro"], tpr["macro"],
-                      color="darkorange", linestyle=":", linewidth=2)
-        lines.append(l)
+        line, _ = plt.plot(fpr["macro"], tpr["macro"],
+                           color="darkorange", linestyle=":", linewidth=2)
+        lines.append(line)
         labels.append("macro-average (area = {0:0.2f})"
                       "".format(roc_auc["macro"]))
 
         for i in range(n_classes):
-            l, = plt.plot(fpr[i], tpr[i], linewidth=2)
-            lines.append(l)
+            line, _ = plt.plot(fpr[i], tpr[i], linewidth=2)
+            lines.append(line)
             labels.append("condition {0} (area = {1:0.2f})"
                           "".format(self.labels[i], roc_auc[i]))
 
@@ -414,6 +771,16 @@ class MultiLabelClassificationLearner(Learner):
         plt.savefig(file_name, bbox_inches="tight")
 
     def create_precision_recall_curve(self, y_true, y_hat, file_name) -> None:
+        """Create precision-recall curve.
+
+        Plots PR curves for each class label, including micro-average and
+        iso-F1 curves. Saves plot as PDF in `file_name`.
+
+        Arguments:
+            y_true (array): TODO ; shape = [n_samples, n_classes]
+            y_hat (array): TODO ; shape = [n_samples, n_classes]
+            file_name (str): TODO
+        """
         precision = dict()
         recall = dict()
         average_precision = dict()
@@ -438,21 +805,21 @@ class MultiLabelClassificationLearner(Learner):
         for f_score in f_scores:
             x = np.linspace(0.001, 1)
             y = f_score * x / (2 * x - f_score)
-            l, = plt.plot(x[y >= 0], y[y >= 0], color="gray", alpha=0.2)
+            line, _ = plt.plot(x[y >= 0], y[y >= 0], color="gray", alpha=0.2)
             plt.annotate(r"$F_1 = {0:0.1f}$".format(
                 f_score), xy=(0.89, y[45] + 0.02))
 
-        lines.append(l)
+        lines.append(line)
         labels.append(r"iso-$F_1$ curves")
-        l, = plt.plot(recall["micro"], precision["micro"],
-                      linestyle=":", color="gold", linewidth=2)
-        lines.append(l)
+        line, = plt.plot(recall["micro"], precision["micro"],
+                         linestyle=":", color="gold", linewidth=2)
+        lines.append(line)
         labels.append("micro-average (area = {0:0.2f})"
                       "".format(average_precision["micro"]))
 
         for i in range(n_classes):
-            l, = plt.plot(recall[i], precision[i], linewidth=2)
-            lines.append(l)
+            line, = plt.plot(recall[i], precision[i], linewidth=2)
+            lines.append(line)
             labels.append("condition {0} (area = {1:0.2f})"
                           "".format(self.labels[i], average_precision[i]))
 
@@ -473,9 +840,72 @@ class MultiLabelClassificationLearner(Learner):
 
 
 class MultipleRegressionLearner(Learner):
+    """Abstract class for multiple regression learners.
+
+    Multiple regression learners are learners for models with
+    multiple independent real-valued variables (:math:`x \\in R^n`) and
+    one dependent real-valued variable (:math:`x \\in R`).
+
+    Attributes:
+        id (str): learner ID, used for output folder name
+        name (str): learner name
+        description (str): concise description of the model architecture
+        library (str): TensorFlow or PyTorch
+        seed (int): seed for Python, NumPy, and machine learning library
+        learner_type (str): one of the following: multi-class classification,
+            multi-label classification, multiple regression, multivariate
+            regression
+        learner_implementation (str): class name of the learner implementation,
+            KerasDNAMultiLabelClassificationLearner
+        labels (List[str]): class labels expected from output layer
+        architecture (Architecture): model architecture
+        loss_hyperparameters (Dict[str, str]): hyperparmeters for loss
+            function, e.g., type of loss function
+        optimizer_hyperparameters (Dict[str, str]): hyperparmeters for
+            optimizer, e.g., optimizer type
+        training_process_hyperparameters (Dict[str, str]): hyperparmeters
+            regarding the training process, e.g., batch size
+        data_dir (str): directory with data files, e.g., `training.txt`
+        output_dir (str): model output directory,
+            `{OUTPUTDIR}/models/{GRAMMAR ID}/{MODEL ID}/`
+        model: PyTorch or TensorFlow model
+        optimizer: PyTorch or TensorFlow optimizer
+        criterion: PyTorch or TensorFlow criterion (loss)
+        metrics (List[str]): metrics that are collected, usually `loss` and
+            `accuracy`
+
+    Methods:
+        train_model
+        parse_data
+        get_examples_file
+        get_annotations_file
+        create_model
+        save_model
+        load_model
+        print_model_summary
+        predict
+        encode_x
+        decode_x
+        encode_y
+        decode_y
+        get_num_params
+        set_seed
+        evaluate_model
+        create_roc_curve
+        create_precision_recall_curve
+
+    Arguments:
+        parser (ModelParser): parser for model definition
+        data_dir (str): directory with data files,
+            `{OUTPUTDIR}/input/{GRAMMAR ID}`
+        output_dir (str): model output directory without model folder,
+            `{OUTPUTDIR}/models/{GRAMMAR ID}`
+    """
+
     @abstractmethod
-    def __init__(self, parser: ModelParser, output_dir: str) -> None:
-        super().__init__(parser, output_dir)
+    def __init__(self, parser: ModelParser, data_dir: str,
+                 output_dir: str) -> None:
+        super().__init__(parser, data_dir, output_dir)
 
         if self.learner_type != "multiple regression":
             raise Exception("model definition must specify multiple "
@@ -484,6 +914,21 @@ class MultipleRegressionLearner(Learner):
 
     def evaluate_model(self, file_name: str = None,
                        x: List[str] = None, y: List[float] = None):
+        """TODO
+
+        TODO
+
+        Arguments:
+            file_name (str): TODO
+            x (List[str]): TODO
+            y (List[float]): TODO
+
+        Returns:
+            array: TODO
+
+        Raises:
+            Exception: if neither `file_name` nor (`x` and `y`) are specified
+        """
         if file_name is not None:
             x, y = self.parse_data(file_name)
 
@@ -493,10 +938,28 @@ class MultipleRegressionLearner(Learner):
             return self._evaluate_model(x, y)
 
     def create_roc_curve(self, y_true, y_hat, file_name) -> None:
-        pass
+        """Create ROC curve.
+
+        Plots ROC curves for each class label, including micro-average and
+        macro-average. Saves plot as PDF in `file_name`.
+
+        Arguments:
+            y_true (array): TODO ; shape = [n_samples, n_classes]
+            y_hat (array): TODO ; shape = [n_samples, n_classes]
+            file_name (str): TODO
+        """
 
     def create_precision_recall_curve(self, y_true, y_hat, file_name) -> None:
-        pass
+        """Create precision-recall curve.
+
+        Plots PR curves for each class label, including micro-average and
+        iso-F1 curves. Saves plot as PDF in `file_name`.
+
+        Arguments:
+            y_true (array): TODO ; shape = [n_samples, n_classes]
+            y_hat (array): TODO ; shape = [n_samples, n_classes]
+            file_name (str): TODO
+        """
 
     @abstractmethod
     def _evaluate_model(self, x: List[str], y: List[float]):
@@ -504,9 +967,72 @@ class MultipleRegressionLearner(Learner):
 
 
 class MultivariateRegressionLearner(Learner):
+    """Abstract class for multivariate regression learners.
+
+    Multivariate regression learners are used for models with
+    multiple independent real-valued variables (:math:`x \\in R^n`) and
+    multiple dependent real-valued variables (:math:`y \\in R^n`).
+
+    Attributes:
+        id (str): learner ID, used for output folder name
+        name (str): learner name
+        description (str): concise description of the model architecture
+        library (str): TensorFlow or PyTorch
+        seed (int): seed for Python, NumPy, and machine learning library
+        learner_type (str): one of the following: multi-class classification,
+            multi-label classification, multiple regression, multivariate
+            regression
+        learner_implementation (str): class name of the learner implementation,
+            KerasDNAMultiLabelClassificationLearner
+        labels (List[str]): class labels expected from output layer
+        architecture (Architecture): model architecture
+        loss_hyperparameters (Dict[str, str]): hyperparmeters for loss
+            function, e.g., type of loss function
+        optimizer_hyperparameters (Dict[str, str]): hyperparmeters for
+            optimizer, e.g., optimizer type
+        training_process_hyperparameters (Dict[str, str]): hyperparmeters
+            regarding the training process, e.g., batch size
+        data_dir (str): directory with data files, e.g., `training.txt`
+        output_dir (str): model output directory,
+            `{OUTPUTDIR}/models/{GRAMMAR ID}/{MODEL ID}/`
+        model: PyTorch or TensorFlow model
+        optimizer: PyTorch or TensorFlow optimizer
+        criterion: PyTorch or TensorFlow criterion (loss)
+        metrics (List[str]): metrics that are collected, usually `loss` and
+            `accuracy`
+
+    Methods:
+        train_model
+        parse_data
+        get_examples_file
+        get_annotations_file
+        create_model
+        save_model
+        load_model
+        print_model_summary
+        predict
+        encode_x
+        decode_x
+        encode_y
+        decode_y
+        get_num_params
+        set_seed
+        evaluate_model
+        create_roc_curve
+        create_precision_recall_curve
+
+    Arguments:
+        parser (ModelParser): parser for model definition
+        data_dir (str): directory with data files,
+            `{OUTPUTDIR}/input/{GRAMMAR ID}`
+        output_dir (str): model output directory without model folder,
+            `{OUTPUTDIR}/models/{GRAMMAR ID}`
+    """
+
     @abstractmethod
-    def __init__(self, parser: ModelParser, output_dir: str) -> None:
-        super().__init__(parser, output_dir)
+    def __init__(self, parser: ModelParser, data_dir: str,
+                 output_dir: str) -> None:
+        super().__init__(parser, data_dir, output_dir)
 
         if self.learner_type != "multivariate regression":
             raise Exception("model definition must specify multivariate "
@@ -515,6 +1041,21 @@ class MultivariateRegressionLearner(Learner):
 
     def evaluate_model(self, file_name: str = None,
                        x: List[str] = None, y: List[List[float]] = None):
+        """TODO
+
+        TODO
+
+        Arguments:
+            file_name (str): TODO
+            x (List[str]): TODO
+            y (List[List[float]]): TODO
+
+        Returns:
+            array: TODO
+
+        Raises:
+            Exception: if neither `file_name` nor (`x` and `y`) are specified
+        """
         if file_name is not None:
             x, y = self.parse_data(file_name)
 
@@ -525,10 +1066,28 @@ class MultivariateRegressionLearner(Learner):
             return self._evaluate_model(x, y)
 
     def create_roc_curve(self, y_true, y_hat, file_name) -> None:
-        pass
+        """Create ROC curve.
+
+        Plots ROC curves for each class label, including micro-average and
+        macro-average. Saves plot as PDF in `file_name`.
+
+        Arguments:
+            y_true (array): TODO ; shape = [n_samples, n_classes]
+            y_hat (array): TODO ; shape = [n_samples, n_classes]
+            file_name (str): TODO
+        """
 
     def create_precision_recall_curve(self, y_true, y_hat, file_name) -> None:
-        pass
+        """Create precision-recall curve.
+
+        Plots PR curves for each class label, including micro-average and
+        iso-F1 curves. Saves plot as PDF in `file_name`.
+
+        Arguments:
+            y_true (array): TODO ; shape = [n_samples, n_classes]
+            y_hat (array): TODO ; shape = [n_samples, n_classes]
+            file_name (str): TODO
+        """
 
     @abstractmethod
     def _evaluate_model(self, x: List[str], y: List[float]):
