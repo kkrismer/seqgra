@@ -34,7 +34,8 @@ setuptools.setup(
         "setuptools>=41.6.0",
         "pyyaml",
         "Cython",
-        "ushuffle"
+        "ushuffle",
+        "scikit-image"
     ],
     python_requires=">=3",
     entry_points = {
