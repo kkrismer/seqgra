@@ -17,9 +17,9 @@ import pandas as pd
 
 from seqgra.learner.learner import Learner
 from seqgra.evaluator.evaluator import Evaluator
-from seqgra.sis import sis_collection
-from seqgra.sis import make_empty_boolean_mask_broadcast_over_axis
-from seqgra.sis import produce_masked_inputs
+from seqgra.evaluator.sis import sis_collection
+from seqgra.evaluator.sis import make_empty_boolean_mask_broadcast_over_axis
+from seqgra.evaluator.sis import produce_masked_inputs
 
 
 class SISEvaluator(Evaluator):
