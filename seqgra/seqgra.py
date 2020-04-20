@@ -11,14 +11,10 @@ seqgra complete pipeline:
 @author: Konstantin Krismer
 '''
 
-import sys
 import os
 import argparse
 import logging
-from typing import Dict, List
-
-import numpy as np
-import pandas as pd
+from typing import List
 
 from seqgra.parser.dataparser import DataParser
 from seqgra.parser.xmldataparser import XMLDataParser
@@ -27,20 +23,6 @@ from seqgra.parser.xmlmodelparser import XMLModelParser
 from seqgra.simulator.simulator import Simulator
 from seqgra.learner.learner import Learner
 from seqgra.evaluator.evaluator import Evaluator
-from seqgra.evaluator.metricsevaluator import MetricsEvaluator
-from seqgra.evaluator.predictevaluator import PredictEvaluator
-from seqgra.evaluator.rocevaluator import ROCEvaluator
-from seqgra.evaluator.prevaluator import PREvaluator
-from seqgra.evaluator.sisevaluator import SISEvaluator
-from seqgra.evaluator.saliencyevaluator import GradientEvaluator
-from seqgra.evaluator.saliencyevaluator import GradientxInputEvaluator
-from seqgra.evaluator.saliencyevaluator import SaliencyEvaluator
-from seqgra.evaluator.saliencyevaluator import IntegratedGradientEvaluator
-from seqgra.evaluator.saliencyevaluator import NonlinearIntegratedGradientEvaluator
-from seqgra.evaluator.saliencyevaluator import GradCamGradientEvaluator
-from seqgra.evaluator.saliencyevaluator import DeepLiftEvaluator
-from seqgra.evaluator.saliencyevaluator import ExcitationBackpropEvaluator
-from seqgra.evaluator.saliencyevaluator import ContrastiveExcitationBackpropEvaluator
 
 
 def parse_config_file(file_name: str) -> str:
@@ -95,32 +77,46 @@ def get_evaluator(evaluator_id: str, learner: Learner,
         raise Exception("no learner specified")
 
     if evaluator_id == "metrics":
+        from seqgra.evaluator.metricsevaluator import MetricsEvaluator
         return MetricsEvaluator(learner, output_dir)
     elif evaluator_id == "predict":
+        from seqgra.evaluator.predictevaluator import PredictEvaluator
         return PredictEvaluator(learner, output_dir)
     elif evaluator_id == "roc":
+        from seqgra.evaluator.rocevaluator import ROCEvaluator
         return ROCEvaluator(learner, output_dir)
     elif evaluator_id == "pr":
+        from seqgra.evaluator.prevaluator import PREvaluator
         return PREvaluator(learner, output_dir)
     elif evaluator_id == "sis":
+        from seqgra.evaluator.sisevaluator import SISEvaluator
         return SISEvaluator(learner, output_dir)
     elif evaluator_id == "gradient":
+        from seqgra.evaluator.saliencyevaluator import GradientEvaluator
         return GradientEvaluator(learner, output_dir)
     elif evaluator_id == "gradientx-input":
+        from seqgra.evaluator.saliencyevaluator import GradientxInputEvaluator
         return GradientxInputEvaluator(learner, output_dir)
     elif evaluator_id == "saliency":
+        from seqgra.evaluator.saliencyevaluator import SaliencyEvaluator
         return SaliencyEvaluator(learner, output_dir)
     elif evaluator_id == "integrated-gradient":
+        from seqgra.evaluator.saliencyevaluator import IntegratedGradientEvaluator
         return IntegratedGradientEvaluator(learner, output_dir)
     elif evaluator_id == "nonlinear-integrated-gradient":
+        from seqgra.evaluator.saliencyevaluator import NonlinearIntegratedGradientEvaluator
         return NonlinearIntegratedGradientEvaluator(learner, output_dir)
     elif evaluator_id == "grad-cam-gradient":
+        from seqgra.evaluator.saliencyevaluator import GradCamGradientEvaluator
         return GradCamGradientEvaluator(learner, output_dir)
     elif evaluator_id == "deep-lift":
+        from seqgra.evaluator.saliencyevaluator import DeepLiftEvaluator
         return DeepLiftEvaluator(learner, output_dir)
     elif evaluator_id == "excitation-backprop":
+        from seqgra.evaluator.saliencyevaluator import ExcitationBackpropEvaluator
         return ExcitationBackpropEvaluator(learner, output_dir)
     elif evaluator_id == "contrastive-excitation-backprop":
+        from seqgra.evaluator.saliencyevaluator import ContrastiveExcitationBackpropEvaluator
         return ContrastiveExcitationBackpropEvaluator(learner, output_dir)
     else:
         raise Exception("invalid evaluator ID")
