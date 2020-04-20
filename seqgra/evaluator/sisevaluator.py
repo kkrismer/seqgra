@@ -9,20 +9,17 @@ from __future__ import annotations
 
 import os
 import logging
-from abc import ABC, abstractmethod
-from typing import List, Any, Dict, Tuple
+from typing import List
 import random
 
 import numpy as np
 import pandas as pd
-import matplotlib as mpl
-import matplotlib.pyplot as plt
-
-from plotnine import ggplot, geom_tile, aes, ggsave, scale_x_discrete, element_blank, theme, scale_fill_manual
 
 from seqgra.learner.learner import Learner
 from seqgra.evaluator.evaluator import Evaluator
-from seqgra.sis import sis_collection, make_empty_boolean_mask_broadcast_over_axis, produce_masked_inputs
+from seqgra.sis import sis_collection
+from seqgra.sis import make_empty_boolean_mask_broadcast_over_axis
+from seqgra.sis import produce_masked_inputs
 
 
 class SISEvaluator(Evaluator):

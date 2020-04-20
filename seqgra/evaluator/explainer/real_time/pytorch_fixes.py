@@ -1,8 +1,8 @@
-import torch.nn as nn
-from torch.nn import functional as F
-import torch
 import os
 
+import torch
+import torch.nn as nn
+from torch.nn import functional as F
 
 class PixelShuffleBlock(nn.Module):
     def forward(self, x):

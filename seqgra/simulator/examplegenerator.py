@@ -7,7 +7,7 @@ Example generator
 """
 from __future__ import annotations
 
-from typing import List, Tuple, Dict
+from typing import List, Dict
 import random
 
 import numpy as np
@@ -19,7 +19,7 @@ from seqgra.model.data.example import Example
 from seqgra.model.data.spacingconstraint import SpacingConstraint
 from seqgra.simulator.backgroundgenerator import BackgroundGenerator
 
-class ExampleGenerator:    
+class ExampleGenerator:
     @staticmethod
     def generate_example(conditions: List[Condition], set_name: str,
                          background: Background,

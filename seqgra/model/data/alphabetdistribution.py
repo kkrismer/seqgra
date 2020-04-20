@@ -8,7 +8,6 @@ AlphabetDistribution class definition, markup language agnostic
 from __future__ import annotations
 
 from typing import List, Tuple
-import random
 
 import numpy as np
 

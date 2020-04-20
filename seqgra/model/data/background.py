@@ -7,8 +7,6 @@ Background class definition, markup language agnostic
 """
 from typing import List
 
-import numpy as np
-
 from seqgra.model.data.alphabetdistribution import AlphabetDistribution
 
 class Background:

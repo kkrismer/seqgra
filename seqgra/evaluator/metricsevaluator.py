@@ -7,8 +7,6 @@ calculates accuracy and loss for training, validation and test set
 
 @author: Konstantin Krismer
 """
-import os
-
 import pandas as pd
 
 from seqgra.learner.learner import Learner

@@ -4,13 +4,10 @@ PyTorch DataSet class
 
 @author: Konstantin Krismer
 """
-import logging
-import re
 from typing import List
 import warnings
 
 import torch
-import pandas as pd
 import numpy as np
 from sklearn.preprocessing import MultiLabelBinarizer
 

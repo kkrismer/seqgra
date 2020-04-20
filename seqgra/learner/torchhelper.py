@@ -4,19 +4,19 @@ PyTorch learner helper class
 
 @author: Konstantin Krismer
 """
-from ast import literal_eval
-from typing import List, Any
+from typing import List
 import os
 import sys
 import random
-import pkg_resources
 import importlib
 import logging
 
+import pkg_resources
 import torch
 import numpy as np
 from ignite.engine import Events
-from ignite.engine import create_supervised_trainer, create_supervised_evaluator
+from ignite.engine import create_supervised_trainer
+from ignite.engine import create_supervised_evaluator
 from ignite.metrics import Accuracy, Loss
 from ignite.handlers import EarlyStopping, ModelCheckpoint
 

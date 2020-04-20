@@ -6,12 +6,6 @@ MIT - CSAIL - Gifford Lab - seqgra
 
 @author: Jennifer Hammelma
 """
-from __future__ import annotations
-
-import os
-import logging
-from abc import ABC, abstractmethod
-
 import torch
 
 from seqgra.learner.learner import Learner

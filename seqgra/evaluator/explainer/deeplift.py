@@ -1,8 +1,10 @@
-from seqgra.evaluator.explainer.backprop import GradxInputExplainer
 import types
+
+import torch
 import torch.nn.functional as F
 from torch.autograd import Variable
-import torch
+
+from seqgra.evaluator.explainer.backprop import GradxInputExplainer
 # Based on formulation in DeepExplain, https://arxiv.org/abs/1711.06104
 # https://github.com/marcoancona/DeepExplain/blob/master/deepexplain/tensorflow/methods.py#L221-L272
 class DeepLIFTRescaleExplainer(GradxInputExplainer):

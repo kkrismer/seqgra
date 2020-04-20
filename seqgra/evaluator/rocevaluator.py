@@ -5,10 +5,6 @@ ROC evaluator: creates ROC curves
 
 @author: Konstantin Krismer
 """
-import os
-
-import pandas as pd
-
 from seqgra.learner.learner import Learner
 from seqgra.evaluator.evaluator import Evaluator
 

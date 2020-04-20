@@ -1,9 +1,11 @@
+import types
+
+import torch
 import torch.nn.functional as F
 from torch.nn import Parameter
 from torch.autograd import Variable
 from torch import optim
-import torch
-import types
+
 from seqgra.evaluator.explainer.backprop import SaliencyExplainer
 
 

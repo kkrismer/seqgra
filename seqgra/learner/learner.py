@@ -26,7 +26,6 @@ from scipy import interp
 
 from seqgra.parser.modelparser import ModelParser
 from seqgra.model.model.architecture import Architecture
-from seqgra.model.model.operation import Operation
 from seqgra.mischelper import MiscHelper
 
 

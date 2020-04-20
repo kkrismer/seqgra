@@ -5,8 +5,6 @@ predict evaluator: writes model predictions of all examples in set to file
 
 @author: Konstantin Krismer
 """
-import os
-
 import pandas as pd
 
 from seqgra.learner.learner import Learner

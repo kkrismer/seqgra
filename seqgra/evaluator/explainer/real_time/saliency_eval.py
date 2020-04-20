@@ -1,8 +1,8 @@
-from seqgra.evaluator.explainer.real_time.pytorch_fixes import SaliencyModel
-from seqgra.evaluator.explainer.real_time.resnet_encoder import resnet50encoder
 import torch.nn.functional as F
 from torch.autograd import Variable
 
+from seqgra.evaluator.explainer.real_time.pytorch_fixes import SaliencyModel
+from seqgra.evaluator.explainer.real_time.resnet_encoder import resnet50encoder
 
 def get_pretrained_saliency_fn(model_dir, cuda=True, return_classification_logits=False):
     ''' returns a saliency function that takes images and class selectors as inputs. If cuda=True then places the model on a GPU.

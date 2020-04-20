@@ -1,8 +1,10 @@
+import types
+
 import numpy as np
 from torch.autograd import Variable, Function
 import torch
-import types
-import path
+
+import seqgra.evaluator.explainer.path as path
 
 class VanillaDifferenceGradExplainer(object):
     def __init__(self, model):

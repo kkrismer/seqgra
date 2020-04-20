@@ -9,7 +9,6 @@ Implementation of Parser for XML configuration files
 import io
 import logging
 from typing import Dict, List, Any
-from abc import ABC, abstractmethod
 from xml.dom.minidom import Document, parseString
 
 import pkg_resources

@@ -5,7 +5,7 @@ DataGeneration and Set class definitions, markup language agnostic
 
 @author: Konstantin Krismer
 """
-from typing import List, Tuple
+from typing import List
 
 from seqgra.model.data.condition import Condition
 from seqgra.model.data.operation import PostprocessingOperation
