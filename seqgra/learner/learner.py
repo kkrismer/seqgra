@@ -489,8 +489,7 @@ class MultipleRegressionLearner(Learner):
             x, y = self.parse_data(file_name)
 
         if x is None or y is None:
-            raise Exception(
-                "specify either file_name or x and y")
+            raise Exception("specify either file_name or x and y")
         else:
             return self._evaluate_model(x, y)
 

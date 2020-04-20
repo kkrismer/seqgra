@@ -48,25 +48,25 @@ class GradientBasedEvaluator(Evaluator):
 
 class GradientEvaluator(GradientBasedEvaluator):
     def __init__(self, learner: Learner, output_dir: str) -> None:
-        super().__init__("grad-explainer", learner, output_dir)
+        super().__init__("gradient", learner, output_dir)
         self.explainer = VanillaGradExplainer(learner.model)
 
 
 class GradientxInputEvaluator(GradientBasedEvaluator):
     def __init__(self, learner: Learner, output_dir: str) -> None:
-        super().__init__("gradx-input-explainer", learner, output_dir)
+        super().__init__("gradientx-input", learner, output_dir)
         self.explainer = GradxInputExplainer(learner.model)
 
 
 class SaliencyEvaluator(GradientBasedEvaluator):
     def __init__(self, learner: Learner, output_dir: str) -> None:
-        super().__init__("saliency-explainer", learner, output_dir)
+        super().__init__("saliency", learner, output_dir)
         self.explainer = SaliencyExplainer(learner.model)
 
 
 class IntegratedGradientEvaluator(GradientBasedEvaluator):
     def __init__(self, learner: Learner, output_dir: str) -> None:
-        super().__init__("integrated-grad-explainer", learner, output_dir)
+        super().__init__("integrated-gradient", learner, output_dir)
         self.explainer = IntegrateGradExplainer(learner.model)
 
 
@@ -74,38 +74,38 @@ class NonlinearIntegratedGradientEvaluator(GradientBasedEvaluator):
     def __init__(self, learner: Learner, output_dir: str) -> None:
         # TODO NonlinearIntegratedGradExplainer
         # requires other data and how to handle reference (default is None)
-        super().__init__("nonlinear-integrated-grad-explainer", learner,
+        super().__init__("nonlinear-integrated-gradient", learner,
                          output_dir)
-        self.explainer = NonlinearIntegrateGradExplainer(learner.model)
+        # self.explainer = NonlinearIntegrateGradExplainer(learner.model)
 
 
 class GradCamGradientEvaluator(GradientBasedEvaluator):
     def __init__(self, learner: Learner, output_dir: str) -> None:
-        super().__init__("grad-cam-explainer", learner, output_dir)
+        super().__init__("grad-cam-gradient", learner, output_dir)
         self.explainer = GradCAMExplainer(learner.model)
 
     def _explainer_transform(self, data, result):
         return torch.nn.functional.interpolate(result.view(1, 1, -1),
                                                size=data.shape[2],
-                                               mode='linear').cpu().numpy()
+                                               mode="linear").cpu().numpy()
 
 
 class DeepLiftEvaluator(GradientBasedEvaluator):
     # TODO where to set reference?
     def __init__(self, learner: Learner, output_dir: str) -> None:
-        super().__init__("deep-lift-rescale-explainer", learner, output_dir)
+        super().__init__("deep-lift", learner, output_dir)
         self.explainer = DeepLIFTRescaleExplainer(learner.model, "shuffled")
 
 
 class ExcitationBackpropEvaluator(GradientBasedEvaluator):
     def __init__(self, learner: Learner, output_dir: str) -> None:
-        super().__init__("excitation-backprop-explainer", learner, output_dir)
+        super().__init__("excitation-backprop", learner, output_dir)
         self.explainer = ExcitationBackpropExplainer(learner.model)
 
 
 class ContrastiveExcitationBackpropEvaluator(GradientBasedEvaluator):
     def __init__(self, learner: Learner, output_dir: str) -> None:
-        super().__init__("contrastive-excitation-backprop-explainer", learner,
+        super().__init__("contrastive-excitation-backprop", learner,
                          output_dir)
         self.explainer = ContrastiveExcitationBackpropExplainer(
             learner.model)

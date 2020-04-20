@@ -32,6 +32,15 @@ from seqgra.evaluator.predictevaluator import PredictEvaluator
 from seqgra.evaluator.rocevaluator import ROCEvaluator
 from seqgra.evaluator.prevaluator import PREvaluator
 from seqgra.evaluator.sisevaluator import SISEvaluator
+from seqgra.evaluator.saliencyevaluator import GradientEvaluator
+from seqgra.evaluator.saliencyevaluator import GradientxInputEvaluator
+from seqgra.evaluator.saliencyevaluator import SaliencyEvaluator
+from seqgra.evaluator.saliencyevaluator import IntegratedGradientEvaluator
+from seqgra.evaluator.saliencyevaluator import NonlinearIntegratedGradientEvaluator
+from seqgra.evaluator.saliencyevaluator import GradCamGradientEvaluator
+from seqgra.evaluator.saliencyevaluator import DeepLiftEvaluator
+from seqgra.evaluator.saliencyevaluator import ExcitationBackpropEvaluator
+from seqgra.evaluator.saliencyevaluator import ContrastiveExcitationBackpropEvaluator
 
 
 def parse_config_file(file_name: str) -> str:
@@ -48,7 +57,7 @@ def get_learner(model_parser: ModelParser, data_parser_type: str,
                         "learner type: " + model_parser.get_learner_type() +
                         ", data type: " + data_parser_type + ")")
 
-    # imports are inside if branches to only depend on TensorFlow and PyTorch 
+    # imports are inside if branches to only depend on TensorFlow and PyTorch
     # when required
     if model_parser.get_learner_implementation() == "KerasDNAMultiClassClassificationLearner":
         from seqgra.learner.keraslearner import KerasDNAMultiClassClassificationLearner
@@ -95,6 +104,24 @@ def get_evaluator(evaluator_id: str, learner: Learner,
         return PREvaluator(learner, output_dir)
     elif evaluator_id == "sis":
         return SISEvaluator(learner, output_dir)
+    elif evaluator_id == "gradient":
+        return GradientEvaluator(learner, output_dir)
+    elif evaluator_id == "gradientx-input":
+        return GradientxInputEvaluator(learner, output_dir)
+    elif evaluator_id == "saliency":
+        return SaliencyEvaluator(learner, output_dir)
+    elif evaluator_id == "integrated-gradient":
+        return IntegratedGradientEvaluator(learner, output_dir)
+    elif evaluator_id == "nonlinear-integrated-gradient":
+        return NonlinearIntegratedGradientEvaluator(learner, output_dir)
+    elif evaluator_id == "grad-cam-gradient":
+        return GradCamGradientEvaluator(learner, output_dir)
+    elif evaluator_id == "deep-lift":
+        return DeepLiftEvaluator(learner, output_dir)
+    elif evaluator_id == "excitation-backprop":
+        return ExcitationBackpropEvaluator(learner, output_dir)
+    elif evaluator_id == "contrastive-excitation-backprop":
+        return ContrastiveExcitationBackpropEvaluator(learner, output_dir)
     else:
         raise Exception("invalid evaluator ID")
 
@@ -133,6 +160,7 @@ def run_seqgra(data_config_file: str,
         data_parser_type = data_parser.get_type()
         simulator = Simulator(data_parser, output_dir + "input")
         simulator_id = simulator.id
+        print(simulator)
         synthetic_data_available: bool = \
             len(os.listdir(simulator.output_dir)) > 0
         if synthetic_data_available:
@@ -225,7 +253,10 @@ def main():
         default=None,
         nargs="+",
         help="evaluator ID or IDs of interpretability method - valid "
-        "evaluator IDs include metrics, roc, pr, sis"
+        "evaluator IDs include metrics, roc, pr, sis, gradient, "
+        "gradientx-input, saliency, integrated-gradient, "
+        "nonlinear-integrated-gradient, grad-cam-gradient, deep-lift, "
+        "excitation-backprop, contrastive-excitation-backprop"
     )
     parser.add_argument(
         "-o",
