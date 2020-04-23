@@ -14,30 +14,31 @@ seqgra complete pipeline:
 import os
 import argparse
 import logging
-from typing import List
+from typing import List, Optional
 
 from seqgra.parser.dataparser import DataParser
 from seqgra.parser.xmldataparser import XMLDataParser
 from seqgra.parser.modelparser import ModelParser
 from seqgra.parser.xmlmodelparser import XMLModelParser
+from seqgra.model.data.datadefinition import DataDefinition
 from seqgra.simulator.simulator import Simulator
 from seqgra.learner.learner import Learner
 from seqgra.evaluator.evaluator import Evaluator
 
 
-def parse_config_file(file_name: str) -> str:
+def read_config_file(file_name: str) -> str:
     with open(file_name.strip()) as f:
         config: str = f.read()
     return config
 
 
-def get_learner(model_parser: ModelParser, data_parser_type: str,
+def get_learner(model_parser: ModelParser, data_definition_type: Optional[str],
                 data_dir: str, output_dir: str) -> Learner:
-    if data_parser_type is not None and \
-       model_parser.get_learner_type() != data_parser_type:
+    if data_definition_type is not None and \
+       model_parser.get_learner_type() != data_definition_type:
         raise Exception("learner and data type incompatible (" +
                         "learner type: " + model_parser.get_learner_type() +
-                        ", data type: " + data_parser_type + ")")
+                        ", data type: " + data_definition_type + ")")
 
     # imports are inside if branches to only depend on TensorFlow and PyTorch
     # when required
@@ -145,18 +146,19 @@ def run_seqgra(data_config_file: str,
     output_dir = format_output_dir(output_dir.strip())
 
     if data_config_file is None:
-        data_parser_type = None
-        simulator_id = data_folder.strip()
+        data_definition_type: Optional[str] = None
+        grammar_id = data_folder.strip()
         logging.info("loading experimental data")
     else:
         # generate synthetic data
-        data_config_file = data_config_file.strip()
-        data_config = parse_config_file(data_config_file)
+        data_config = read_config_file(data_config_file.strip())
         data_parser: DataParser = XMLDataParser(data_config)
-        data_parser_type = data_parser.get_type()
-        simulator = Simulator(data_parser, output_dir + "input")
-        simulator_id = simulator.id
-        print(simulator)
+        data_definition: DataDefinition = data_parser.get_data_definition()
+        data_definition_type: str = data_definition.model_type
+        grammar_id: str = data_definition.id
+
+        simulator = Simulator(data_definition, output_dir + "input")
+        print(data_definition)
         synthetic_data_available: bool = \
             len(os.listdir(simulator.output_dir)) > 0
         if synthetic_data_available:
@@ -167,11 +169,11 @@ def run_seqgra(data_config_file: str,
 
     # get learner
     if model_config_file is not None:
-        model_config = parse_config_file(model_config_file.strip())
+        model_config = read_config_file(model_config_file.strip())
         model_parser: ModelParser = XMLModelParser(model_config)
-        learner: Learner = get_learner(model_parser, data_parser_type,
-                                       output_dir + "input/" + simulator_id,
-                                       output_dir + "models/" + simulator_id)
+        learner: Learner = get_learner(model_parser, data_definition_type,
+                                       output_dir + "input/" + grammar_id,
+                                       output_dir + "models/" + grammar_id)
 
         # load data
         training_set_file: str = learner.get_examples_file("training")
@@ -195,7 +197,7 @@ def run_seqgra(data_config_file: str,
 
         if evaluator_ids is not None and len(evaluator_ids) > 0:
             evaluation_dir: str = output_dir + "evaluation/" + \
-                simulator_id + "/" + learner.id
+                grammar_id + "/" + learner.id
 
             evaluators: List[Evaluator] = [get_evaluator(evaluator_id,
                                                          learner,

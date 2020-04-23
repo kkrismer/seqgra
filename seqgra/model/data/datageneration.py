@@ -5,6 +5,8 @@ DataGeneration and Set class definitions, markup language agnostic
 
 @author: Konstantin Krismer
 """
+from __future__ import annotations
+
 from typing import List
 
 from seqgra.model.data.condition import Condition

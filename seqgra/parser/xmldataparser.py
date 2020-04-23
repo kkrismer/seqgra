@@ -16,18 +16,19 @@ from lxml import etree
 
 from seqgra.parser.xmlhelper import XMLHelper
 from seqgra.parser.dataparser import DataParser
-from seqgra.model.data.background import Background
-from seqgra.model.data.datageneration import DataGeneration
-from seqgra.model.data.datageneration import ExampleSet
-from seqgra.model.data.datageneration import Example
-from seqgra.model.data.condition import Condition
-from seqgra.model.data.sequenceelement import SequenceElement
-from seqgra.model.data.sequenceelement import KmerBasedSequenceElement
-from seqgra.model.data.sequenceelement import MatrixBasedSequenceElement
-from seqgra.model.data.alphabetdistribution import AlphabetDistribution
-from seqgra.model.data.rule import Rule
-from seqgra.model.data.spacingconstraint import SpacingConstraint
-from seqgra.model.data.operation import PostprocessingOperation
+from seqgra.model.data import Background
+from seqgra.model.data.datadefinition import DataDefinition
+from seqgra.model.data import DataGeneration
+from seqgra.model.data import ExampleSet
+from seqgra.model.data import Example
+from seqgra.model.data import Condition
+from seqgra.model.data import SequenceElement
+from seqgra.model.data import KmerBasedSequenceElement
+from seqgra.model.data import MatrixBasedSequenceElement
+from seqgra.model.data import AlphabetDistribution
+from seqgra.model.data import Rule
+from seqgra.model.data import SpacingConstraint
+from seqgra.model.data import PostprocessingOperation
 
 
 class XMLDataParser(DataParser):
@@ -66,7 +67,7 @@ class XMLDataParser(DataParser):
     def get_sequence_space(self) -> str:
         return XMLHelper.read_text_node(self._general_element, "sequencespace")
 
-    def get_type(self) -> str:
+    def get_model_type(self) -> str:
         return XMLHelper.read_text_node(self._general_element, "type")
 
     def get_background(self, valid_conditions: List[Condition]) -> Background:
@@ -285,3 +286,16 @@ class XMLDataParser(DataParser):
         letter_elements: Any = position_element.getElementsByTagName("letter")
         return [XMLDataParser.__parse_letter(letter_element)
                 for letter_element in letter_elements]
+
+    def get_data_definition(self) -> DataDefinition:
+        sequence_elements: List[SequenceElement] = self.get_sequence_elements()
+        conditions: List[Condition] = self.get_conditions(sequence_elements)
+        return DataDefinition(self.get_id(),
+                              self.get_name(),
+                              self.get_description(),
+                              self.get_sequence_space(),
+                              self.get_model_type(),
+                              self.get_background(conditions),
+                              self.get_data_generation(conditions),
+                              conditions,
+                              sequence_elements)

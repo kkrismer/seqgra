@@ -5,6 +5,8 @@ Generates synthetic sequences based on grammar
 
 @author: Konstantin Krismer
 """
+from __future__ import annotations
+
 import logging
 import os
 import sys
@@ -16,58 +18,24 @@ import pkg_resources
 import ushuffle
 
 from seqgra.parser.dataparser import DataParser
-from seqgra.model.data.background import Background
-from seqgra.model.data.datageneration import DataGeneration, ExampleSet
-from seqgra.model.data.condition import Condition
-from seqgra.model.data.sequenceelement import SequenceElement
-from seqgra.model.data.spacingconstraint import SpacingConstraint
-from seqgra.model.data.rule import Rule
-from seqgra.model.data.example import Example
+from seqgra.model.data import Background
+from seqgra.model.data.datadefinition import DataDefinition
+from seqgra.model.data import DataGeneration, ExampleSet
+from seqgra.model.data import Condition
+from seqgra.model.data import SequenceElement
+from seqgra.model.data import SpacingConstraint
+from seqgra.model.data import Rule
+from seqgra.simulator.example import Example
 from seqgra.simulator.examplegenerator import ExampleGenerator
 from seqgra.mischelper import MiscHelper
 
 
 class Simulator:
-    def __init__(self, parser: DataParser, output_dir: str) -> None:
-        # parse grammar definition
-        self.id: str = parser.get_id()
-        self.name: str = parser.get_name()
-        self.description: str = parser.get_description()
-        self.sequence_space: str = parser.get_sequence_space()
-        self.sequence_elements: List[SequenceElement] = \
-            parser.get_sequence_elements()
-        self.conditions: List[Condition] = parser.get_conditions(
-            self.sequence_elements)
-        self.background: Background = parser.get_background(
-            self.conditions)
-        self.data_generation: DataGeneration = \
-            parser.get_data_generation(self.conditions)
-
+    def __init__(self, data_definition: DataDefinition, output_dir: str) -> None:
+        self.definition: DataDefinition = data_definition
         self.check_grammar()
-        self.output_dir = MiscHelper.prepare_path(output_dir + "/" + self.id)
-
-    def __str__(self):
-        str_rep = ["seqgra data configuration:\n",
-                   "\tID: ", self.id, "\n",
-                   "\tName: ", self.name, "\n",
-                   "\tDescription:\n"]
-        if self.description:
-            str_rep += ["\t", self.description, "\n"]
-        str_rep += ["\tSequence space: ", self.sequence_space, "\n"]
-
-        str_rep += ["\t" + s + "\n" for s in str(self.background).splitlines()]
-        str_rep += ["\t" + s +
-                    "\n" for s in str(self.data_generation).splitlines()]
-
-        str_rep += ["\tConditions:\n"]
-        for condition in self.conditions:
-            str_rep += ["\t\t" + s + "\n" for s in str(condition).splitlines()]
-
-        str_rep += ["\tSequence elements:\n"]
-        for sequence_element in self.sequence_elements:
-            str_rep += ["\t\t" + s +
-                        "\n" for s in str(sequence_element).splitlines()]
-        return "".join(str_rep)
+        self.output_dir = MiscHelper.prepare_path(output_dir + "/" +
+                                                  self.definition.id)
 
     def simulate_data(self) -> None:
         logging.info("started data simulation")
@@ -80,13 +48,13 @@ class Simulator:
 
         self.__set_seed()
 
-        for example_set in self.data_generation.sets:
+        for example_set in self.definition.data_generation.sets:
             self.__process_set(example_set)
             logging.info("generated " + example_set.name + " set")
 
-        if self.data_generation.postprocessing_operations is not None:
-            for example_set in self.data_generation.sets:
-                for operation in self.data_generation.postprocessing_operations:
+        if self.definition.data_generation.postprocessing_operations is not None:
+            for example_set in self.definition.data_generation.sets:
+                for operation in self.definition.data_generation.postprocessing_operations:
                     if operation.name == "kmer-frequency-preserving-shuffle":
                         if operation.parameters is not None and "k" in operation.parameters:
                             self.__add_shuffled_examples(
@@ -168,7 +136,7 @@ class Simulator:
                 conditions: List[Condition] = self.__deserialize_example(
                     condition_id)
                 example: Example = ExampleGenerator.generate_example(
-                    conditions, example_set.name, self.background)
+                    conditions, example_set.name, self.definition.background)
                 data_file.write(example.sequence + "\t" + condition_id + "\n")
                 annotation_file.write(
                     example.annotation + "\t" + condition_id + "\n")
@@ -178,13 +146,13 @@ class Simulator:
 
     def __deserialize_example(self, example_str_rep: str) -> List[Condition]:
         condition_ids: List[str] = example_str_rep.split("|")
-        return [Condition.get_by_id(self.conditions, condition_id)
+        return [Condition.get_by_id(self.definition.conditions, condition_id)
                 for condition_id in condition_ids]
 
     def __set_seed(self) -> None:
         random.seed(self.data_generation.seed)
-        np.random.seed(self.data_generation.seed)
-        ushuffle.set_seed(self.data_generation.seed)
+        np.random.seed(self.definition.data_generation.seed)
+        ushuffle.set_seed(self.definition.data_generation.seed)
 
     def check_grammar(self) -> bool:
         valid: bool = True
@@ -207,12 +175,12 @@ class Simulator:
         valid: bool = True
 
         used_condition_ids: Set[str] = set()
-        for example_set in self.data_generation.sets:
+        for example_set in self.definition.data_generation.sets:
             for example in example_set.examples:
                 for condition_sample in example.conditions:
                     used_condition_ids.add(condition_sample.id)
 
-        for condition in self.conditions:
+        for condition in self.definition.conditions:
             if condition.id not in used_condition_ids:
                 valid = False
                 logging.warn("condition " + condition.id +
@@ -224,12 +192,12 @@ class Simulator:
         valid: bool = True
 
         used_sequence_element_ids: Set[str] = set()
-        for condition in self.conditions:
+        for condition in self.definition.conditions:
             for rule in condition.grammar:
                 for sequence_element in rule.sequence_elements:
                     used_sequence_element_ids.add(sequence_element.id)
 
-        for sequence_element in self.sequence_elements:
+        for sequence_element in self.definition.sequence_elements:
             if sequence_element.id not in used_sequence_element_ids:
                 valid = False
                 logging.warn("sequence element " + sequence_element.id +
@@ -242,7 +210,7 @@ class Simulator:
 
         set_condition_combinations: Dict[str, Dict[str, str]] = dict()
 
-        for example_set in self.data_generation.sets:
+        for example_set in self.definition.data_generation.sets:
             for example in example_set.examples:
                 for condition_sample in example.conditions:
                     if example_set.name in set_condition_combinations:
@@ -251,7 +219,7 @@ class Simulator:
                         set_condition_combinations[example_set.name] = {
                             condition_sample.id: "unspecified"}
 
-        for alphabet in self.background.alphabet_distributions:
+        for alphabet in self.definition.background.alphabet_distributions:
             if alphabet.set_independent and alphabet.condition_independent:
                 for set_name in set_condition_combinations.keys():
                     tmp_dict = set_condition_combinations[set_name]
@@ -303,18 +271,18 @@ class Simulator:
 
     def check_invalid_positions(self) -> bool:
         valid: bool = True
-        for condition in self.conditions:
+        for condition in self.definition.conditions:
             for i in range(len(condition.grammar)):
                 rule = condition.grammar[i]
                 if rule.position != "random" and rule.position != "start" \
                         and rule.position != "end" and rule.position != "center":
-                    if int(rule.position) > self.background.min_length:
+                    if int(rule.position) > self.definition.background.min_length:
                         valid = False
                         logging.warn("condition " + condition.id +
                                      " [cid], rule " + str(i + 1) +
                                      ": position exceeds minimum "
                                      "sequence length")
-                    elif int(rule.probability) + self.__get_longest_sequence_element_length(rule) > self.background.min_length:
+                    elif int(rule.probability) + self.__get_longest_sequence_element_length(rule) > self.definition.background.min_length:
                         valid = False
                         logging.warn("condition " + condition.id +
                                      " [cid], rule " + str(i + 1) +
@@ -325,21 +293,21 @@ class Simulator:
     def check_invalid_distances(self) -> bool:
         valid: bool = True
 
-        for condition in self.conditions:
+        for condition in self.definition.conditions:
             for i in range(len(condition.grammar)):
                 rule: Rule = condition.grammar[i]
                 if rule.spacing_constraints is not None and \
                         len(rule.spacing_constraints) > 0:
                     for j in range(len(rule.spacing_constraints)):
                         spacing_constraint: SpacingConstraint = rule.spacing_constraints[j]
-                        if spacing_constraint.min_distance > self.background.min_length:
+                        if spacing_constraint.min_distance > self.definition.background.min_length:
                             valid = False
                             logging.warn("condition " + condition.id +
                                          " [cid], rule " + str(i + 1) +
                                          ", spacing constraint " + str(j + 1) +
                                          ": minimum distance exceeds minimum "
                                          "sequence length")
-                        elif spacing_constraint.min_distance + spacing_constraint.sequence_element1.get_max_length() + spacing_constraint.sequence_element2.get_max_length() > self.background.min_length:
+                        elif spacing_constraint.min_distance + spacing_constraint.sequence_element1.get_max_length() + spacing_constraint.sequence_element2.get_max_length() > self.definition.background.min_length:
                             valid = False
                             logging.warn("condition " + condition.id +
                                          " [cid], rule " + str(i + 1) +
@@ -353,8 +321,8 @@ class Simulator:
     def check_invalid_sequence_elements(self) -> bool:
         valid: bool = True
 
-        for sequence_element in self.sequence_elements:
-            if sequence_element.get_max_length() > self.background.min_length:
+        for sequence_element in self.definition.sequence_elements:
+            if sequence_element.get_max_length() > self.definition.background.min_length:
                 valid = False
                 logging.warn("sequence element " + sequence_element.id +
                              ": maximum sequence element length exceeds "
@@ -365,7 +333,7 @@ class Simulator:
     def check_spacing_contraint_se_refs(self) -> bool:
         valid: bool = True
         valid_sequence_element_ids: Set[str] = set()
-        for condition in self.conditions:
+        for condition in self.definition.conditions:
             for i in range(len(condition.grammar)):
                 rule: Rule = condition.grammar[i]
                 if rule.spacing_constraints is not None and len(rule.spacing_constraints) > 0:

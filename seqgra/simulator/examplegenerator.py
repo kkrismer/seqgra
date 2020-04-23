@@ -15,7 +15,7 @@ import numpy as np
 from seqgra.model.data.rule import Rule
 from seqgra.model.data.condition import Condition
 from seqgra.model.data.background import Background
-from seqgra.model.data.example import Example
+from seqgra.simulator.example import Example
 from seqgra.model.data.spacingconstraint import SpacingConstraint
 from seqgra.simulator.backgroundgenerator import BackgroundGenerator
 
