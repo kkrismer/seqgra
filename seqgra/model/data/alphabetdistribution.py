@@ -11,7 +11,7 @@ from typing import List, Tuple
 
 import numpy as np
 
-from seqgra.model.data.condition import Condition
+from seqgra.model.data import Condition
 
 class AlphabetDistribution:
     def __init__(self, letters: List[Tuple[str, float]], 

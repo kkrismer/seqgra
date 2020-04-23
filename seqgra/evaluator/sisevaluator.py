@@ -15,8 +15,8 @@ import random
 import numpy as np
 import pandas as pd
 
-from seqgra.learner.learner import Learner
-from seqgra.evaluator.evaluator import Evaluator
+from seqgra.learner import Learner
+from seqgra.evaluator import Evaluator
 from seqgra.evaluator.sis import sis_collection
 from seqgra.evaluator.sis import make_empty_boolean_mask_broadcast_over_axis
 from seqgra.evaluator.sis import produce_masked_inputs

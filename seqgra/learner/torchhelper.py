@@ -20,7 +20,7 @@ from ignite.engine import create_supervised_evaluator
 from ignite.metrics import Accuracy, Loss
 from ignite.handlers import EarlyStopping, ModelCheckpoint
 
-from seqgra.learner.learner import Learner
+from seqgra.learner import Learner
 from seqgra.model.model import Architecture
 
 

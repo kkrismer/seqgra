@@ -12,12 +12,12 @@ import random
 
 import numpy as np
 
-from seqgra.model.data.rule import Rule
-from seqgra.model.data.condition import Condition
-from seqgra.model.data.background import Background
-from seqgra.simulator.example import Example
-from seqgra.model.data.spacingconstraint import SpacingConstraint
-from seqgra.simulator.backgroundgenerator import BackgroundGenerator
+from seqgra.model.data import Rule
+from seqgra.model.data import Condition
+from seqgra.model.data import Background
+from seqgra.simulator import Example
+from seqgra.model.data import SpacingConstraint
+from seqgra.simulator import BackgroundGenerator
 
 class ExampleGenerator:
     @staticmethod

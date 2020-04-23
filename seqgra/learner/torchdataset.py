@@ -11,8 +11,8 @@ import torch
 import numpy as np
 from sklearn.preprocessing import MultiLabelBinarizer
 
-from seqgra.learner.dnahelper import DNAHelper
-from seqgra.learner.proteinhelper import ProteinHelper
+from seqgra.learner import DNAHelper
+from seqgra.learner import ProteinHelper
 
 
 class DNAMultiClassDataSet(torch.utils.data.Dataset):

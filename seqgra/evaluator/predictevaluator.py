@@ -7,8 +7,8 @@ predict evaluator: writes model predictions of all examples in set to file
 """
 import pandas as pd
 
-from seqgra.learner.learner import Learner
-from seqgra.evaluator.evaluator import Evaluator
+from seqgra.learner import Learner
+from seqgra.evaluator import Evaluator
 
 
 class PredictEvaluator(Evaluator):

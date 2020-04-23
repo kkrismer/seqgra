@@ -7,8 +7,8 @@ MIT - CSAIL - Gifford Lab - seqgra
 """
 from abc import ABC, abstractmethod
 
-from seqgra.learner.learner import Learner
-from seqgra.mischelper import MiscHelper
+from seqgra import MiscHelper
+from seqgra.learner import Learner
 
 
 class Evaluator(ABC):

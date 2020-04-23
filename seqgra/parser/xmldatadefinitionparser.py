@@ -14,8 +14,8 @@ from xml.dom.minidom import Document, parseString
 import pkg_resources
 from lxml import etree
 
-from seqgra.parser.xmlhelper import XMLHelper
-from seqgra.parser.dataparser import DataParser
+from seqgra.parser import XMLHelper
+from seqgra.parser import DataDefinitionParser
 from seqgra.model import DataDefinition
 from seqgra.model.data import Background
 from seqgra.model.data import DataGeneration
@@ -31,7 +31,7 @@ from seqgra.model.data import SpacingConstraint
 from seqgra.model.data import PostprocessingOperation
 
 
-class XMLDataParser(DataParser):
+class XMLDataDefinitionParser(DataDefinitionParser):
     """
     The Strategy interface declares operations common to all supported versions
     of some algorithm.
@@ -81,8 +81,8 @@ class XMLDataParser(DataParser):
         distribution_elements: Any = \
             background_element.getElementsByTagName("alphabetdistribution")
         distributions: List[AlphabetDistribution] = \
-            [XMLDataParser.__parse_alphabet_distribution(distribution_element,
-                                                         valid_conditions)
+            [XMLDataDefinitionParser.__parse_alphabet_distribution(distribution_element,
+                                                                   valid_conditions)
              for distribution_element in distribution_elements]
         return Background(min_length, max_length, distributions)
 
@@ -106,7 +106,7 @@ class XMLDataParser(DataParser):
         letter_elements: Any = \
             alphabet_distribution_element.getElementsByTagName("letter")
         letters: List[Tuple[str, float]] = \
-            [XMLDataParser.__parse_letter(letter_element)
+            [XMLDataDefinitionParser.__parse_letter(letter_element)
              for letter_element in letter_elements]
         return AlphabetDistribution(letters, condition, set_name)
 
@@ -128,7 +128,7 @@ class XMLDataParser(DataParser):
             operation_elements = \
                 postprocessing_element.getElementsByTagName("operation")
             postprocessing: List[PostprocessingOperation] = \
-                [XMLDataParser.__parse_operation(operation_element)
+                [XMLDataDefinitionParser.__parse_operation(operation_element)
                  for operation_element in operation_elements]
         else:
             postprocessing: List[Tuple[str, str]] = None
@@ -136,7 +136,7 @@ class XMLDataParser(DataParser):
         sets_element = data_generation_element.getElementsByTagName("sets")[0]
         set_elements = sets_element.getElementsByTagName("set")
         sets: List[ExampleSet] = \
-            [XMLDataParser.__parse_set(set_element, valid_conditions)
+            [XMLDataDefinitionParser.__parse_set(set_element, valid_conditions)
              for set_element in set_elements]
         return DataGeneration(seed, sets, postprocessing)
 
@@ -161,7 +161,7 @@ class XMLDataParser(DataParser):
         name: str = set_element.getAttribute("name")
         example_elements: Any = set_element.getElementsByTagName("example")
         examples: List[Example] = \
-            [XMLDataParser.__parse_example(example_element, valid_conditions)
+            [XMLDataDefinitionParser.__parse_example(example_element, valid_conditions)
              for example_element in example_elements]
         return ExampleSet(name, examples)
 
@@ -184,8 +184,8 @@ class XMLDataParser(DataParser):
             self._dom.getElementsByTagName("conditions")[0]
         condition_elements: Any = \
             conditions_element.getElementsByTagName("condition")
-        return [XMLDataParser.__parse_condition(condition_element,
-                                                valid_sequence_elements)
+        return [XMLDataDefinitionParser.__parse_condition(condition_element,
+                                                          valid_sequence_elements)
                 for condition_element in condition_elements]
 
     @staticmethod
@@ -200,7 +200,7 @@ class XMLDataParser(DataParser):
             condition_element.getElementsByTagName("grammar")[0]
         rule_elements = grammar_element.getElementsByTagName("rule")
         grammar: List[Rule] = \
-            [XMLDataParser.__parse_rule(rule_element, valid_sequence_elements)
+            [XMLDataDefinitionParser.__parse_rule(rule_element, valid_sequence_elements)
              for rule_element in rule_elements]
         return Condition(id, label, description, grammar)
 
@@ -222,8 +222,8 @@ class XMLDataParser(DataParser):
             spacing_constraint_elements: Any = rule_element.getElementsByTagName(
                 "spacingconstraints")[0].getElementsByTagName("spacingconstraint")
             spacing_constraints: List[SpacingConstraint] = \
-                [XMLDataParser.__parse_spacing_constraint(spacing_constraint_element,
-                                                          valid_sequence_elements)
+                [XMLDataDefinitionParser.__parse_spacing_constraint(spacing_constraint_element,
+                                                                    valid_sequence_elements)
                  for spacing_constraint_element in spacing_constraint_elements]
         else:
             spacing_constraints: List[SpacingConstraint] = None
@@ -254,7 +254,7 @@ class XMLDataParser(DataParser):
             self._dom.getElementsByTagName("sequenceelements")[0]
         sequence_element_elements: List[Any] = \
             sequence_elements_element.getElementsByTagName("sequenceelement")
-        return [XMLDataParser.__parse_sequence_element(sequence_element_element)
+        return [XMLDataDefinitionParser.__parse_sequence_element(sequence_element_element)
                 for sequence_element_element in sequence_element_elements]
 
     @staticmethod
@@ -268,14 +268,14 @@ class XMLDataParser(DataParser):
             kmer_elements: Any = \
                 kmer_based_element[0].getElementsByTagName("kmer")
             kmers: List[Tuple[str, float]] = \
-                [XMLDataParser.__parse_letter(kmer_element)
+                [XMLDataDefinitionParser.__parse_letter(kmer_element)
                  for kmer_element in kmer_elements]
             return KmerBasedSequenceElement(id, kmers)
         elif len(matrix_based_element) == 1:
             position_elements: Any = \
                 matrix_based_element[0].getElementsByTagName("position")
             positions: List[List[Tuple[str, float]]] = \
-                [XMLDataParser.__parse_position(position_element)
+                [XMLDataDefinitionParser.__parse_position(position_element)
                  for position_element in position_elements]
             return MatrixBasedSequenceElement(id, positions)
         else:
@@ -284,7 +284,7 @@ class XMLDataParser(DataParser):
     @staticmethod
     def __parse_position(position_element) -> List[Tuple[str, float]]:
         letter_elements: Any = position_element.getElementsByTagName("letter")
-        return [XMLDataParser.__parse_letter(letter_element)
+        return [XMLDataDefinitionParser.__parse_letter(letter_element)
                 for letter_element in letter_elements]
 
     def get_data_definition(self) -> DataDefinition:

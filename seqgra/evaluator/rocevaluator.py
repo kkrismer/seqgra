@@ -5,8 +5,8 @@ ROC evaluator: creates ROC curves
 
 @author: Konstantin Krismer
 """
-from seqgra.learner.learner import Learner
-from seqgra.evaluator.evaluator import Evaluator
+from seqgra.learner import Learner
+from seqgra.evaluator import Evaluator
 
 
 class ROCEvaluator(Evaluator):

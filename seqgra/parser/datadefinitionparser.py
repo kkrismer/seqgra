@@ -15,7 +15,7 @@ from seqgra.model.data import DataGeneration
 from seqgra.model.data import Condition
 from seqgra.model.data import SequenceElement
 
-class DataParser(ABC):
+class DataDefinitionParser(ABC):
     @abstractmethod
     def get_id(self) -> str:
         pass

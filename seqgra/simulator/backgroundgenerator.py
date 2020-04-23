@@ -9,9 +9,9 @@ from __future__ import annotations
 
 import numpy as np
 
-from seqgra.model.data.alphabetdistribution import AlphabetDistribution
-from seqgra.model.data.background import Background
-from seqgra.model.data.condition import Condition
+from seqgra.model.data import AlphabetDistribution
+from seqgra.model.data import Background
+from seqgra.model.data import Condition
 
 class BackgroundGenerator:
 

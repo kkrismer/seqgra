@@ -9,8 +9,8 @@ from __future__ import annotations
 
 from typing import List
 
-from seqgra.model.data.condition import Condition
-from seqgra.model.data.operation import PostprocessingOperation
+from seqgra.model.data import Condition
+from seqgra.model.data import PostprocessingOperation
 
 
 class Example:

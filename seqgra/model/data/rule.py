@@ -7,8 +7,8 @@ Rule class definition, markup language agnostic
 """
 from typing import List
 
-from seqgra.model.data.sequenceelement import SequenceElement
-from seqgra.model.data.spacingconstraint import SpacingConstraint
+from seqgra.model.data import SequenceElement
+from seqgra.model.data import SpacingConstraint
 
 
 class Rule:

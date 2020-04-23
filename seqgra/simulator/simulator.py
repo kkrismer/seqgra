@@ -17,17 +17,14 @@ import numpy as np
 import pkg_resources
 import ushuffle
 
-from seqgra.parser.dataparser import DataParser
+from seqgra import MiscHelper
 from seqgra.model import DataDefinition
-from seqgra.model.data import Background
-from seqgra.model.data import DataGeneration, ExampleSet
+from seqgra.model.data import ExampleSet
 from seqgra.model.data import Condition
-from seqgra.model.data import SequenceElement
 from seqgra.model.data import SpacingConstraint
 from seqgra.model.data import Rule
-from seqgra.simulator.example import Example
-from seqgra.simulator.examplegenerator import ExampleGenerator
-from seqgra.mischelper import MiscHelper
+from seqgra.simulator import Example
+from seqgra.simulator import ExampleGenerator
 
 
 class Simulator:
@@ -150,7 +147,7 @@ class Simulator:
                 for condition_id in condition_ids]
 
     def __set_seed(self) -> None:
-        random.seed(self.data_generation.seed)
+        random.seed(self.definition.data_generation.seed)
         np.random.seed(self.definition.data_generation.seed)
         ushuffle.set_seed(self.definition.data_generation.seed)
 

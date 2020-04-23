@@ -14,9 +14,9 @@ import numpy as np
 import pandas as pd
 from sklearn.preprocessing import MultiLabelBinarizer
 
-from seqgra.learner.learner import MultiClassClassificationLearner
-from seqgra.learner.learner import MultiLabelClassificationLearner
-from seqgra.learner.dnahelper import DNAHelper
+from seqgra.learner import MultiClassClassificationLearner
+from seqgra.learner import MultiLabelClassificationLearner
+from seqgra.learner import DNAHelper
 from seqgra.model import ModelDefinition
 
 

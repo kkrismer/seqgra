@@ -16,15 +16,15 @@ import argparse
 import logging
 from typing import List, Optional
 
-from seqgra.parser.dataparser import DataParser
-from seqgra.parser.xmldataparser import XMLDataParser
-from seqgra.parser.modelparser import ModelParser
-from seqgra.parser.xmlmodelparser import XMLModelParser
+from seqgra.parser import DataDefinitionParser
+from seqgra.parser import XMLDataDefinitionParser
+from seqgra.parser import ModelDefinitionParser
+from seqgra.parser import XMLModelDefinitionParser
 from seqgra.model import DataDefinition
 from seqgra.model import ModelDefinition
-from seqgra.simulator.simulator import Simulator
-from seqgra.learner.learner import Learner
-from seqgra.evaluator.evaluator import Evaluator
+from seqgra.simulator import Simulator
+from seqgra.learner import Learner
+from seqgra.evaluator import Evaluator
 
 
 def read_config_file(file_name: str) -> str:
@@ -44,28 +44,28 @@ def get_learner(model_definition: ModelDefinition, data_definition_type: Optiona
     # imports are inside if branches to only depend on TensorFlow and PyTorch
     # when required
     if model_definition.learner_implementation == "KerasDNAMultiClassClassificationLearner":
-        from seqgra.learner.keraslearner import KerasDNAMultiClassClassificationLearner  # pylint: disable=import-outside-toplevel
+        from seqgra.learner import KerasDNAMultiClassClassificationLearner  # pylint: disable=import-outside-toplevel
         return KerasDNAMultiClassClassificationLearner(model_definition, data_dir, output_dir)
     elif model_definition.learner_implementation == "KerasDNAMultiLabelClassificationLearner":
-        from seqgra.learner.keraslearner import KerasDNAMultiLabelClassificationLearner  # pylint: disable=import-outside-toplevel
+        from seqgra.learner import KerasDNAMultiLabelClassificationLearner  # pylint: disable=import-outside-toplevel
         return KerasDNAMultiLabelClassificationLearner(model_definition, data_dir, output_dir)
     elif model_definition.learner_implementation == "TorchDNAMultiClassClassificationLearner":
-        from seqgra.learner.torchlearner import TorchDNAMultiClassClassificationLearner  # pylint: disable=import-outside-toplevel
+        from seqgra.learner import TorchDNAMultiClassClassificationLearner  # pylint: disable=import-outside-toplevel
         return TorchDNAMultiClassClassificationLearner(model_definition, data_dir, output_dir)
     elif model_definition.learner_implementation == "TorchDNAMultiLabelClassificationLearner":
-        from seqgra.learner.torchlearner import TorchDNAMultiLabelClassificationLearner  # pylint: disable=import-outside-toplevel
+        from seqgra.learner import TorchDNAMultiLabelClassificationLearner  # pylint: disable=import-outside-toplevel
         return TorchDNAMultiLabelClassificationLearner(model_definition, data_dir, output_dir)
     elif model_definition.learner_implementation == "KerasProteinMultiClassClassificationLearner":
-        from seqgra.learner.keraslearner import KerasProteinMultiClassClassificationLearner  # pylint: disable=import-outside-toplevel
+        from seqgra.learner import KerasProteinMultiClassClassificationLearner  # pylint: disable=import-outside-toplevel
         return KerasProteinMultiClassClassificationLearner(model_definition, data_dir, output_dir)
     elif model_definition.learner_implementation == "KerasProteinMultiLabelClassificationLearner":
-        from seqgra.learner.keraslearner import KerasProteinMultiLabelClassificationLearner  # pylint: disable=import-outside-toplevel
+        from seqgra.learner import KerasProteinMultiLabelClassificationLearner  # pylint: disable=import-outside-toplevel
         return KerasProteinMultiLabelClassificationLearner(model_definition, data_dir, output_dir)
     elif model_definition.learner_implementation == "TorchProteinMultiClassClassificationLearner":
-        from seqgra.learner.torchlearner import TorchProteinMultiClassClassificationLearner  # pylint: disable=import-outside-toplevel
+        from seqgra.learner import TorchProteinMultiClassClassificationLearner  # pylint: disable=import-outside-toplevel
         return TorchProteinMultiClassClassificationLearner(model_definition, data_dir, output_dir)
     elif model_definition.learner_implementation == "TorchProteinMultiLabelClassificationLearner":
-        from seqgra.learner.torchlearner import TorchProteinMultiLabelClassificationLearner  # pylint: disable=import-outside-toplevel
+        from seqgra.learner import TorchProteinMultiLabelClassificationLearner  # pylint: disable=import-outside-toplevel
         return TorchProteinMultiLabelClassificationLearner(model_definition, data_dir, output_dir)
     else:
         raise Exception("invalid learner ID")
@@ -79,46 +79,46 @@ def get_evaluator(evaluator_id: str, learner: Learner,
         raise Exception("no learner specified")
 
     if evaluator_id == "metrics":
-        from seqgra.evaluator.metricsevaluator import MetricsEvaluator  # pylint: disable=import-outside-toplevel
+        from seqgra.evaluator import MetricsEvaluator  # pylint: disable=import-outside-toplevel
         return MetricsEvaluator(learner, output_dir)
     elif evaluator_id == "predict":
-        from seqgra.evaluator.predictevaluator import PredictEvaluator  # pylint: disable=import-outside-toplevel
+        from seqgra.evaluator import PredictEvaluator  # pylint: disable=import-outside-toplevel
         return PredictEvaluator(learner, output_dir)
     elif evaluator_id == "roc":
-        from seqgra.evaluator.rocevaluator import ROCEvaluator  # pylint: disable=import-outside-toplevel
+        from seqgra.evaluator import ROCEvaluator  # pylint: disable=import-outside-toplevel
         return ROCEvaluator(learner, output_dir)
     elif evaluator_id == "pr":
-        from seqgra.evaluator.prevaluator import PREvaluator  # pylint: disable=import-outside-toplevel
+        from seqgra.evaluator import PREvaluator  # pylint: disable=import-outside-toplevel
         return PREvaluator(learner, output_dir)
     elif evaluator_id == "sis":
-        from seqgra.evaluator.sisevaluator import SISEvaluator  # pylint: disable=import-outside-toplevel
+        from seqgra.evaluator import SISEvaluator  # pylint: disable=import-outside-toplevel
         return SISEvaluator(learner, output_dir)
     elif evaluator_id == "gradient":
-        from seqgra.evaluator.saliencyevaluator import GradientEvaluator  # pylint: disable=import-outside-toplevel
+        from seqgra.evaluator import GradientEvaluator  # pylint: disable=import-outside-toplevel
         return GradientEvaluator(learner, output_dir)
     elif evaluator_id == "gradientx-input":
-        from seqgra.evaluator.saliencyevaluator import GradientxInputEvaluator  # pylint: disable=import-outside-toplevel
+        from seqgra.evaluator import GradientxInputEvaluator  # pylint: disable=import-outside-toplevel
         return GradientxInputEvaluator(learner, output_dir)
     elif evaluator_id == "saliency":
-        from seqgra.evaluator.saliencyevaluator import SaliencyEvaluator  # pylint: disable=import-outside-toplevel
+        from seqgra.evaluator import SaliencyEvaluator  # pylint: disable=import-outside-toplevel
         return SaliencyEvaluator(learner, output_dir)
     elif evaluator_id == "integrated-gradient":
-        from seqgra.evaluator.saliencyevaluator import IntegratedGradientEvaluator  # pylint: disable=import-outside-toplevel
+        from seqgra.evaluator import IntegratedGradientEvaluator  # pylint: disable=import-outside-toplevel
         return IntegratedGradientEvaluator(learner, output_dir)
     elif evaluator_id == "nonlinear-integrated-gradient":
-        from seqgra.evaluator.saliencyevaluator import NonlinearIntegratedGradientEvaluator  # pylint: disable=import-outside-toplevel
+        from seqgra.evaluator import NonlinearIntegratedGradientEvaluator  # pylint: disable=import-outside-toplevel
         return NonlinearIntegratedGradientEvaluator(learner, output_dir)
     elif evaluator_id == "grad-cam-gradient":
-        from seqgra.evaluator.saliencyevaluator import GradCamGradientEvaluator  # pylint: disable=import-outside-toplevel
+        from seqgra.evaluator import GradCamGradientEvaluator  # pylint: disable=import-outside-toplevel
         return GradCamGradientEvaluator(learner, output_dir)
     elif evaluator_id == "deep-lift":
-        from seqgra.evaluator.saliencyevaluator import DeepLiftEvaluator  # pylint: disable=import-outside-toplevel
+        from seqgra.evaluator import DeepLiftEvaluator  # pylint: disable=import-outside-toplevel
         return DeepLiftEvaluator(learner, output_dir)
     elif evaluator_id == "excitation-backprop":
-        from seqgra.evaluator.saliencyevaluator import ExcitationBackpropEvaluator  # pylint: disable=import-outside-toplevel
+        from seqgra.evaluator import ExcitationBackpropEvaluator  # pylint: disable=import-outside-toplevel
         return ExcitationBackpropEvaluator(learner, output_dir)
     elif evaluator_id == "contrastive-excitation-backprop":
-        from seqgra.evaluator.saliencyevaluator import ContrastiveExcitationBackpropEvaluator  # pylint: disable=import-outside-toplevel
+        from seqgra.evaluator import ContrastiveExcitationBackpropEvaluator  # pylint: disable=import-outside-toplevel
         return ContrastiveExcitationBackpropEvaluator(learner, output_dir)
     else:
         raise Exception("invalid evaluator ID")
@@ -153,8 +153,8 @@ def run_seqgra(data_config_file: str,
     else:
         # generate synthetic data
         data_config = read_config_file(data_config_file.strip())
-        data_parser: DataParser = XMLDataParser(data_config)
-        data_definition: DataDefinition = data_parser.get_data_definition()
+        data_def_parser: DataDefinitionParser = XMLDataDefinitionParser(data_config)
+        data_definition: DataDefinition = data_def_parser.get_data_definition()
         data_definition_type: str = data_definition.model_type
         grammar_id: str = data_definition.id
         print(data_definition)
@@ -171,8 +171,8 @@ def run_seqgra(data_config_file: str,
     # get learner
     if model_config_file is not None:
         model_config = read_config_file(model_config_file.strip())
-        model_parser: ModelParser = XMLModelParser(model_config)
-        model_definition: ModelDefinition = model_parser.get_model_definition()
+        model_def_parser: ModelDefinitionParser = XMLModelDefinitionParser(model_config)
+        model_definition: ModelDefinition = model_def_parser.get_model_definition()
         print(model_definition)
 
         learner: Learner = get_learner(model_definition, data_definition_type,

@@ -9,7 +9,7 @@ from __future__ import annotations
 
 from typing import List
 
-from seqgra.model.data.rule import Rule
+from seqgra.model.data import Rule
 
 class Condition:
     def __init__(self, id: str, label: str,

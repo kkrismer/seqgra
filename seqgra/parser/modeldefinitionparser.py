@@ -12,7 +12,7 @@ from typing import List, Dict
 from seqgra.model import ModelDefinition
 from seqgra.model.model import Architecture
 
-class ModelParser(ABC):
+class ModelDefinitionParser(ABC):
     @abstractmethod
     def get_id(self) -> str:
         pass

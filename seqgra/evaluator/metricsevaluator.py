@@ -9,8 +9,8 @@ calculates accuracy and loss for training, validation and test set
 """
 import pandas as pd
 
-from seqgra.learner.learner import Learner
-from seqgra.evaluator.evaluator import Evaluator
+from seqgra.learner import Learner
+from seqgra.evaluator import Evaluator
 
 
 class MetricsEvaluator(Evaluator):

@@ -14,7 +14,7 @@ import pkg_resources
 import tensorflow as tf
 import numpy as np
 
-from seqgra.learner.learner import Learner
+from seqgra.learner import Learner
 from seqgra.model.model import Architecture
 
 

@@ -5,7 +5,7 @@ SpacingConstraint class definition, markup language agnostic
 
 @author: Konstantin Krismer
 """
-from seqgra.model.data.sequenceelement import SequenceElement
+from seqgra.model.data import SequenceElement
 
 class SpacingConstraint:
     def __init__(self, sequence_element1: SequenceElement,

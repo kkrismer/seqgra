@@ -21,9 +21,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy import interp
 
+from seqgra import MiscHelper
 from seqgra.model import ModelDefinition
 from seqgra.model.model import Architecture
-from seqgra.mischelper import MiscHelper
 
 
 class Learner(ABC):

@@ -8,8 +8,8 @@ MIT - CSAIL - Gifford Lab - seqgra
 """
 import torch
 
-from seqgra.learner.learner import Learner
-from seqgra.evaluator.evaluator import Evaluator
+from seqgra.learner import Learner
+from seqgra.evaluator import Evaluator
 from seqgra.evaluator.explainer.backprop import VanillaGradExplainer
 from seqgra.evaluator.explainer.backprop import GradxInputExplainer
 from seqgra.evaluator.explainer.backprop import SaliencyExplainer

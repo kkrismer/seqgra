@@ -14,14 +14,14 @@ from xml.dom.minidom import Document, parseString
 import pkg_resources
 from lxml import etree
 
-from seqgra.parser.xmlhelper import XMLHelper
-from seqgra.parser.modelparser import ModelParser
+from seqgra.parser import XMLHelper
+from seqgra.parser import ModelDefinitionParser
 from seqgra.model import ModelDefinition
 from seqgra.model.model import Architecture
 from seqgra.model.model import Operation
 
 
-class XMLModelParser(ModelParser):
+class XMLModelDefinitionParser(ModelDefinitionParser):
     """
     The Strategy interface declares operations common to all supported versions
     of some algorithm.

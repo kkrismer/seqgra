@@ -6,10 +6,10 @@ PyTorch learners
 """
 from typing import List, Any
 
-from seqgra.learner.dna import DNAMultiClassClassificationLearner
-from seqgra.learner.dna import DNAMultiLabelClassificationLearner
-from seqgra.learner.protein import ProteinMultiClassClassificationLearner
-from seqgra.learner.protein import ProteinMultiLabelClassificationLearner
+from seqgra.learner import DNAMultiClassClassificationLearner
+from seqgra.learner import DNAMultiLabelClassificationLearner
+from seqgra.learner import ProteinMultiClassClassificationLearner
+from seqgra.learner import ProteinMultiLabelClassificationLearner
 from seqgra.learner.torchdataset import DNAMultiClassDataSet
 from seqgra.learner.torchdataset import DNAMultiLabelDataSet
 from seqgra.learner.torchdataset import ProteinMultiClassDataSet
