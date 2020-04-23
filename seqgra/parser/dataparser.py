@@ -9,8 +9,8 @@ Abstract base class for configuration file parser
 from abc import ABC, abstractmethod
 from typing import List
 
+from seqgra.model import DataDefinition
 from seqgra.model.data import Background
-from seqgra.model.data.datadefinition import DataDefinition
 from seqgra.model.data import DataGeneration
 from seqgra.model.data import Condition
 from seqgra.model.data import SequenceElement

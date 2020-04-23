@@ -20,7 +20,7 @@ from seqgra.parser.dataparser import DataParser
 from seqgra.parser.xmldataparser import XMLDataParser
 from seqgra.parser.modelparser import ModelParser
 from seqgra.parser.xmlmodelparser import XMLModelParser
-from seqgra.model.data.datadefinition import DataDefinition
+from seqgra.model import DataDefinition
 from seqgra.simulator.simulator import Simulator
 from seqgra.learner.learner import Learner
 from seqgra.evaluator.evaluator import Evaluator

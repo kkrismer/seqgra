@@ -18,8 +18,8 @@ import pkg_resources
 import ushuffle
 
 from seqgra.parser.dataparser import DataParser
+from seqgra.model import DataDefinition
 from seqgra.model.data import Background
-from seqgra.model.data.datadefinition import DataDefinition
 from seqgra.model.data import DataGeneration, ExampleSet
 from seqgra.model.data import Condition
 from seqgra.model.data import SequenceElement

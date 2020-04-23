@@ -16,8 +16,8 @@ from lxml import etree
 
 from seqgra.parser.xmlhelper import XMLHelper
 from seqgra.parser.dataparser import DataParser
+from seqgra.model import DataDefinition
 from seqgra.model.data import Background
-from seqgra.model.data.datadefinition import DataDefinition
 from seqgra.model.data import DataGeneration
 from seqgra.model.data import ExampleSet
 from seqgra.model.data import Example
