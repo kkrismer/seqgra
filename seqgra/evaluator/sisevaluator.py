@@ -27,7 +27,7 @@ class SISEvaluator(Evaluator):
         super().__init__("sis", learner, output_dir)
 
     def evaluate_model(self, set_name: str = "test") -> None:
-        labels: List[str] = self.learner.labels
+        labels: List[str] = self.learner.definition.labels
 
         for i in range(len(labels)):
             sis_results = self.find_sis(

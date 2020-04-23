@@ -10,15 +10,15 @@ from seqgra.learner.dna import DNAMultiClassClassificationLearner
 from seqgra.learner.dna import DNAMultiLabelClassificationLearner
 from seqgra.learner.protein import ProteinMultiClassClassificationLearner
 from seqgra.learner.protein import ProteinMultiLabelClassificationLearner
-from seqgra.parser.modelparser import ModelParser
 from seqgra.learner.kerashelper import KerasHelper
+from seqgra.model import ModelDefinition
 
 
 class KerasDNAMultiClassClassificationLearner(
         DNAMultiClassClassificationLearner):
-    def __init__(self, parser: ModelParser, data_dir: str,
+    def __init__(self, model_definition: ModelDefinition, data_dir: str,
                  output_dir: str) -> None:
-        super().__init__(parser, data_dir, output_dir)
+        super().__init__(model_definition, data_dir, output_dir)
 
     def create_model(self) -> None:
         KerasHelper.create_model(self)
@@ -55,9 +55,9 @@ class KerasDNAMultiClassClassificationLearner(
 
 class KerasDNAMultiLabelClassificationLearner(
         DNAMultiLabelClassificationLearner):
-    def __init__(self, parser: ModelParser, data_dir: str,
+    def __init__(self, model_definition: ModelDefinition, data_dir: str,
                  output_dir: str) -> None:
-        super().__init__(parser, data_dir, output_dir)
+        super().__init__(model_definition, data_dir, output_dir)
 
     def create_model(self) -> None:
         KerasHelper.create_model(self)
@@ -94,9 +94,9 @@ class KerasDNAMultiLabelClassificationLearner(
 
 class KerasProteinMultiClassClassificationLearner(
         ProteinMultiClassClassificationLearner):
-    def __init__(self, parser: ModelParser, data_dir: str,
+    def __init__(self, model_definition: ModelDefinition, data_dir: str,
                  output_dir: str) -> None:
-        super().__init__(parser, data_dir, output_dir)
+        super().__init__(model_definition, data_dir, output_dir)
 
     def create_model(self) -> None:
         KerasHelper.create_model(self)
@@ -133,9 +133,9 @@ class KerasProteinMultiClassClassificationLearner(
 
 class KerasProteinMultiLabelClassificationLearner(
         ProteinMultiLabelClassificationLearner):
-    def __init__(self, parser: ModelParser, data_dir: str,
+    def __init__(self, model_definition: ModelDefinition, data_dir: str,
                  output_dir: str) -> None:
-        super().__init__(parser, data_dir, output_dir)
+        super().__init__(model_definition, data_dir, output_dir)
 
     def create_model(self) -> None:
         KerasHelper.create_model(self)

@@ -16,8 +16,10 @@ from lxml import etree
 
 from seqgra.parser.xmlhelper import XMLHelper
 from seqgra.parser.modelparser import ModelParser
-from seqgra.model.model.architecture import Architecture
-from seqgra.model.model.operation import Operation
+from seqgra.model import ModelDefinition
+from seqgra.model.model import Architecture
+from seqgra.model.model import Operation
+
 
 class XMLModelParser(ModelParser):
     """
@@ -46,42 +48,42 @@ class XMLModelParser(ModelParser):
 
     def get_id(self) -> str:
         return self._general_element.getAttribute("id")
-    
+
     def get_name(self) -> str:
         return XMLHelper.read_text_node(self._general_element, "name")
-    
+
     def get_description(self) -> str:
         return XMLHelper.read_text_node(self._general_element, "description")
-    
+
     def get_library(self) -> str:
         return XMLHelper.read_text_node(self._general_element, "library")
-    
+
     def get_seed(self) -> str:
         return XMLHelper.read_int_node(self._general_element, "seed")
-    
+
     def get_learner_type(self) -> str:
         learner_element: Any = \
             self._general_element.getElementsByTagName("learner")[0]
         return XMLHelper.read_text_node(learner_element, "type")
-    
+
     def get_learner_implementation(self) -> str:
         learner_element: Any = \
             self._general_element.getElementsByTagName("learner")[0]
         return XMLHelper.read_text_node(learner_element, "implementation")
-    
+
     def get_labels(self) -> List[str]:
         labels_element: Any = \
             self._general_element.getElementsByTagName("labels")[0]
         label_elements = labels_element.getElementsByTagName("label")
-        return [XMLHelper.read_immediate_text_node(label_element) 
+        return [XMLHelper.read_immediate_text_node(label_element)
                 for label_element in label_elements]
-    
+
     def get_architecture(self) -> Architecture:
         sequential_element = self._dom.getElementsByTagName("sequential")
         if len(sequential_element) == 1:
             operation_elements: Any = \
                 sequential_element[0].getElementsByTagName("operation")
-            operations = [self.__parse_operation(operation_element) 
+            operations = [self.__parse_operation(operation_element)
                           for operation_element in operation_elements]
         else:
             operations = None
@@ -90,12 +92,13 @@ class XMLModelParser(ModelParser):
             self._dom.getElementsByTagName("hyperparameters")
         if len(hyperparameters_element) == 1:
             hyperparameter_elements: Any = \
-                hyperparameters_element[0].getElementsByTagName("hyperparameter")
+                hyperparameters_element[0].getElementsByTagName(
+                    "hyperparameter")
             hyperparameters = \
                 self.__parse_hyperparameters(hyperparameter_elements)
         else:
             hyperparameters = None
-            
+
         external_element = self._dom.getElementsByTagName("external")
         if len(external_element) == 1:
             external_model_path: str = \
@@ -112,14 +115,13 @@ class XMLModelParser(ModelParser):
             external_model_format: str = None
             external_model_class_name: str = None
 
-        return Architecture(operations, hyperparameters, 
+        return Architecture(operations, hyperparameters,
                             external_model_path, external_model_format,
                             external_model_class_name)
-    
+
     def __parse_operation(self, operation_element) -> Operation:
         return Operation(operation_element.firstChild.nodeValue,
                          dict(operation_element.attributes.items()))
-
 
     def get_loss_hyperparameters(self) -> Dict[str, str]:
         loss_element: Any = self._dom.getElementsByTagName("loss")
@@ -129,7 +131,7 @@ class XMLModelParser(ModelParser):
             return self.__parse_hyperparameters(hyperparameter_elements)
         else:
             return None
-    
+
     def get_optimizer_hyperparameters(self) -> Dict[str, str]:
         optimizer_element: Any = self._dom.getElementsByTagName("optimizer")
         if len(optimizer_element) == 1:
@@ -138,7 +140,7 @@ class XMLModelParser(ModelParser):
             return self.__parse_hyperparameters(hyperparameter_elements)
         else:
             return None
-    
+
     def get_training_process_hyperparameters(self) -> Dict[str, str]:
         training_process_element: Any = \
             self._dom.getElementsByTagName("trainingprocess")[0]
@@ -146,7 +148,7 @@ class XMLModelParser(ModelParser):
             training_process_element.getElementsByTagName("hyperparameter")
         return self.__parse_hyperparameters(hyperparameter_elements)
 
-    def __parse_hyperparameters(self, 
+    def __parse_hyperparameters(self,
                                 hyperparameter_elements) -> Dict[str, str]:
         hyperparams: Dict[str, str] = dict()
 
@@ -155,3 +157,17 @@ class XMLModelParser(ModelParser):
                 hyperparameter_element.firstChild.nodeValue
 
         return hyperparams
+
+    def get_model_definition(self) -> ModelDefinition:
+        return ModelDefinition(self.get_id(),
+                               self.get_name(),
+                               self.get_description(),
+                               self.get_library(),
+                               self.get_seed(),
+                               self.get_learner_type(),
+                               self.get_learner_implementation(),
+                               self.get_labels(),
+                               self.get_architecture(),
+                               self.get_loss_hyperparameters(),
+                               self.get_optimizer_hyperparameters(),
+                               self.get_training_process_hyperparameters())

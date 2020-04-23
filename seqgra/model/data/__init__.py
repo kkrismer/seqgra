@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from seqgra.model.data.alphabetdistribution import AlphabetDistribution
 from seqgra.model.data.background import Background
 from seqgra.model.data.condition import Condition

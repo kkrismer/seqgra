@@ -25,9 +25,9 @@ class PredictEvaluator(Evaluator):
 
     def __save_results(self, results, set_name: str) -> None:
         if results is None:
-            df = pd.DataFrame([], columns=self.learner.labels)
+            df = pd.DataFrame([], columns=self.learner.definition.labels)
         else:
-            df = pd.DataFrame(results, columns=self.learner.labels)
+            df = pd.DataFrame(results, columns=self.learner.definition.labels)
 
         df.to_csv(self.output_dir + set_name + "-y-hat.txt", sep="\t",
                   index=False)

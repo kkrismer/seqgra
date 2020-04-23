@@ -21,6 +21,7 @@ from seqgra.parser.xmldataparser import XMLDataParser
 from seqgra.parser.modelparser import ModelParser
 from seqgra.parser.xmlmodelparser import XMLModelParser
 from seqgra.model import DataDefinition
+from seqgra.model import ModelDefinition
 from seqgra.simulator.simulator import Simulator
 from seqgra.learner.learner import Learner
 from seqgra.evaluator.evaluator import Evaluator
@@ -32,40 +33,40 @@ def read_config_file(file_name: str) -> str:
     return config
 
 
-def get_learner(model_parser: ModelParser, data_definition_type: Optional[str],
+def get_learner(model_definition: ModelDefinition, data_definition_type: Optional[str],
                 data_dir: str, output_dir: str) -> Learner:
     if data_definition_type is not None and \
-       model_parser.get_learner_type() != data_definition_type:
+       model_definition.learner_type != data_definition_type:
         raise Exception("learner and data type incompatible (" +
-                        "learner type: " + model_parser.get_learner_type() +
+                        "learner type: " + model_definition.learner_type +
                         ", data type: " + data_definition_type + ")")
 
     # imports are inside if branches to only depend on TensorFlow and PyTorch
     # when required
-    if model_parser.get_learner_implementation() == "KerasDNAMultiClassClassificationLearner":
+    if model_definition.learner_implementation == "KerasDNAMultiClassClassificationLearner":
         from seqgra.learner.keraslearner import KerasDNAMultiClassClassificationLearner  # pylint: disable=import-outside-toplevel
-        return KerasDNAMultiClassClassificationLearner(model_parser, data_dir, output_dir)
-    elif model_parser.get_learner_implementation() == "KerasDNAMultiLabelClassificationLearner":
+        return KerasDNAMultiClassClassificationLearner(model_definition, data_dir, output_dir)
+    elif model_definition.learner_implementation == "KerasDNAMultiLabelClassificationLearner":
         from seqgra.learner.keraslearner import KerasDNAMultiLabelClassificationLearner  # pylint: disable=import-outside-toplevel
-        return KerasDNAMultiLabelClassificationLearner(model_parser, data_dir, output_dir)
-    elif model_parser.get_learner_implementation() == "TorchDNAMultiClassClassificationLearner":
+        return KerasDNAMultiLabelClassificationLearner(model_definition, data_dir, output_dir)
+    elif model_definition.learner_implementation == "TorchDNAMultiClassClassificationLearner":
         from seqgra.learner.torchlearner import TorchDNAMultiClassClassificationLearner  # pylint: disable=import-outside-toplevel
-        return TorchDNAMultiClassClassificationLearner(model_parser, data_dir, output_dir)
-    elif model_parser.get_learner_implementation() == "TorchDNAMultiLabelClassificationLearner":
+        return TorchDNAMultiClassClassificationLearner(model_definition, data_dir, output_dir)
+    elif model_definition.learner_implementation == "TorchDNAMultiLabelClassificationLearner":
         from seqgra.learner.torchlearner import TorchDNAMultiLabelClassificationLearner  # pylint: disable=import-outside-toplevel
-        return TorchDNAMultiLabelClassificationLearner(model_parser, data_dir, output_dir)
-    elif model_parser.get_learner_implementation() == "KerasProteinMultiClassClassificationLearner":
+        return TorchDNAMultiLabelClassificationLearner(model_definition, data_dir, output_dir)
+    elif model_definition.learner_implementation == "KerasProteinMultiClassClassificationLearner":
         from seqgra.learner.keraslearner import KerasProteinMultiClassClassificationLearner  # pylint: disable=import-outside-toplevel
-        return KerasProteinMultiClassClassificationLearner(model_parser, data_dir, output_dir)
-    elif model_parser.get_learner_implementation() == "KerasProteinMultiLabelClassificationLearner":
+        return KerasProteinMultiClassClassificationLearner(model_definition, data_dir, output_dir)
+    elif model_definition.learner_implementation == "KerasProteinMultiLabelClassificationLearner":
         from seqgra.learner.keraslearner import KerasProteinMultiLabelClassificationLearner  # pylint: disable=import-outside-toplevel
-        return KerasProteinMultiLabelClassificationLearner(model_parser, data_dir, output_dir)
-    elif model_parser.get_learner_implementation() == "TorchProteinMultiClassClassificationLearner":
+        return KerasProteinMultiLabelClassificationLearner(model_definition, data_dir, output_dir)
+    elif model_definition.learner_implementation == "TorchProteinMultiClassClassificationLearner":
         from seqgra.learner.torchlearner import TorchProteinMultiClassClassificationLearner  # pylint: disable=import-outside-toplevel
-        return TorchProteinMultiClassClassificationLearner(model_parser, data_dir, output_dir)
-    elif model_parser.get_learner_implementation() == "TorchProteinMultiLabelClassificationLearner":
+        return TorchProteinMultiClassClassificationLearner(model_definition, data_dir, output_dir)
+    elif model_definition.learner_implementation == "TorchProteinMultiLabelClassificationLearner":
         from seqgra.learner.torchlearner import TorchProteinMultiLabelClassificationLearner  # pylint: disable=import-outside-toplevel
-        return TorchProteinMultiLabelClassificationLearner(model_parser, data_dir, output_dir)
+        return TorchProteinMultiLabelClassificationLearner(model_definition, data_dir, output_dir)
     else:
         raise Exception("invalid learner ID")
 
@@ -156,9 +157,9 @@ def run_seqgra(data_config_file: str,
         data_definition: DataDefinition = data_parser.get_data_definition()
         data_definition_type: str = data_definition.model_type
         grammar_id: str = data_definition.id
+        print(data_definition)
 
         simulator = Simulator(data_definition, output_dir + "input")
-        print(data_definition)
         synthetic_data_available: bool = \
             len(os.listdir(simulator.output_dir)) > 0
         if synthetic_data_available:
@@ -171,7 +172,10 @@ def run_seqgra(data_config_file: str,
     if model_config_file is not None:
         model_config = read_config_file(model_config_file.strip())
         model_parser: ModelParser = XMLModelParser(model_config)
-        learner: Learner = get_learner(model_parser, data_definition_type,
+        model_definition: ModelDefinition = model_parser.get_model_definition()
+        print(model_definition)
+
+        learner: Learner = get_learner(model_definition, data_definition_type,
                                        output_dir + "input/" + grammar_id,
                                        output_dir + "models/" + grammar_id)
 
@@ -197,7 +201,7 @@ def run_seqgra(data_config_file: str,
 
         if evaluator_ids is not None and len(evaluator_ids) > 0:
             evaluation_dir: str = output_dir + "evaluation/" + \
-                grammar_id + "/" + learner.id
+                grammar_id + "/" + learner.definition.id
 
             evaluators: List[Evaluator] = [get_evaluator(evaluator_id,
                                                          learner,

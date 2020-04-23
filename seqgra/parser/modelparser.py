@@ -9,7 +9,8 @@ Abstract base class for configuration file parser
 from abc import ABC, abstractmethod
 from typing import List, Dict
 
-from seqgra.model.model.architecture import Architecture
+from seqgra.model import ModelDefinition
+from seqgra.model.model import Architecture
 
 class ModelParser(ABC):
     @abstractmethod
@@ -58,4 +59,8 @@ class ModelParser(ABC):
     
     @abstractmethod
     def get_training_process_hyperparameters(self) -> Dict[str, str]:
+        pass
+
+    @abstractmethod
+    def get_model_definition(self) -> ModelDefinition:
         pass

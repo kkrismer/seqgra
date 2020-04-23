@@ -30,11 +30,13 @@ class DataDefinition:
     def __str__(self):
         str_rep: List[str] = ["seqgra data definition:\n",
                               "\tGeneral:\n",
-                              "\t\tID" + self.id + " [gid]\n",
-                              "\t\tName" + self.name + "\n",
-                              "\t\tDescription" + self.description + "\n",
-                              "\t\tSequence space" + self.sequence_space + "\n",
-                              "\t\tModel type" + self.model_type + "\n"]
+                              "\t\tID: " + self.id + " [gid]\n",
+                              "\t\tName: " + self.name + "\n",
+                              "\t\tDescription:\n"]
+        if self.description:
+            str_rep += ["\t\t\t", self.description, "\n"]
+        str_rep += ["\t\tSequence space: " + self.sequence_space + "\n",
+                    "\t\tModel type: " + self.model_type + "\n"]
         str_rep += ["\t" + s + "\n"
                     for s in str(self.background).splitlines()]
         str_rep += ["\t" + s + "\n"

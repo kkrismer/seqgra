@@ -16,5 +16,5 @@ class Operation:
         str_rep = ["Operation:\n",
             "\tName:", self.name, "\n",
             "\tParameters:\n",
-            "\t\t", self.parameters]
+            "\t\t", str(self.parameters), "\n"]
         return "".join(str_rep)

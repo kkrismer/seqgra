@@ -7,7 +7,7 @@ Architecture class definition, markup language agnostic
 """
 from typing import Dict, List
 
-from seqgra.model.model.operation import Operation
+from seqgra.model.model import Operation
 
 class Architecture:
     def __init__(self, operations: List[Operation] = None,

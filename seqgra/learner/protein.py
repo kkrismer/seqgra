@@ -16,14 +16,14 @@ from sklearn.preprocessing import MultiLabelBinarizer
 
 from seqgra.learner.learner import MultiClassClassificationLearner
 from seqgra.learner.learner import MultiLabelClassificationLearner
-from seqgra.parser.modelparser import ModelParser
 from seqgra.learner.proteinhelper import ProteinHelper
+from seqgra.model import ModelDefinition
 
 
 class ProteinMultiClassClassificationLearner(MultiClassClassificationLearner):
-    def __init__(self, parser: ModelParser, data_dir: str,
+    def __init__(self, model_definition: ModelDefinition, data_dir: str,
                  output_dir: str) -> None:
-        super().__init__(parser, data_dir, output_dir)
+        super().__init__(model_definition, data_dir, output_dir)
 
     def encode_x(self, x: List[str]):
         return np.stack([ProteinHelper.convert_dense_to_one_hot_encoding(seq)
@@ -34,17 +34,17 @@ class ProteinMultiClassClassificationLearner(MultiClassClassificationLearner):
                          for seq in x])
 
     def encode_y(self, y: List[str]):
-        if self.labels is None:
+        if self.definition.labels is None:
             raise Exception("unknown labels, call parse_data or "
                             "load_model first")
-        labels = np.array(self.labels)
+        labels = np.array(self.definition.labels)
         return np.vstack([ex == labels for ex in y])
 
     def decode_y(self, y):
-        if self.labels is None:
+        if self.definition.labels is None:
             raise Exception("unknown labels, call parse_data or "
                             "load_model first")
-        labels = np.array(self.labels)
+        labels = np.array(self.definition.labels)
 
         decoded_y = np.vstack([labels[ex] for ex in y])
         decoded_y = list(itertools.chain(*decoded_y))
@@ -60,9 +60,9 @@ class ProteinMultiClassClassificationLearner(MultiClassClassificationLearner):
 
 
 class ProteinMultiLabelClassificationLearner(MultiLabelClassificationLearner):
-    def __init__(self, parser: ModelParser, data_dir: str,
+    def __init__(self, model_definition: ModelDefinition, data_dir: str,
                  output_dir: str) -> None:
-        super().__init__(parser, data_dir, output_dir)
+        super().__init__(model_definition, data_dir, output_dir)
 
     def encode_x(self, x: List[str]):
         return np.stack([ProteinHelper.convert_dense_to_one_hot_encoding(seq)
@@ -73,12 +73,12 @@ class ProteinMultiLabelClassificationLearner(MultiLabelClassificationLearner):
                          for seq in x])
 
     def encode_y(self, y: List[str]):
-        if self.labels is None:
+        if self.definition.labels is None:
             raise Exception("unknown labels, call parse_data or "
                             "load_model first")
 
         y = [ex.split("|") for ex in y]
-        mlb = MultiLabelBinarizer(classes=self.labels)
+        mlb = MultiLabelBinarizer(classes=self.definition.labels)
 
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
@@ -86,10 +86,10 @@ class ProteinMultiLabelClassificationLearner(MultiLabelClassificationLearner):
         return y
 
     def decode_y(self, y):
-        if self.labels is None:
+        if self.definition.labels is None:
             raise Exception("unknown labels, call parse_data or "
                             "load_model first")
-        labels = np.array(self.labels)
+        labels = np.array(self.definition.labels)
 
         decoded_y = [labels[ex] for ex in y]
         decoded_y = ["|".join(ex) for ex in decoded_y]

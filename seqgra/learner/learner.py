@@ -21,8 +21,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy import interp
 
-from seqgra.parser.modelparser import ModelParser
-from seqgra.model.model.architecture import Architecture
+from seqgra.model import ModelDefinition
+from seqgra.model.model import Architecture
 from seqgra.mischelper import MiscHelper
 
 
@@ -82,7 +82,7 @@ class Learner(ABC):
             `{OUTPUTDIR}/models/{GRAMMAR ID}`
 
     See Also:
-        MultiClassClassificationLearner: for classification models with
+        :class:`MultiClassClassificationLearner`: for classification models with
             mutually exclusive classes
         MultiLabelClassificationLearner: for classification models with
             non-mutually exclusive classes
@@ -91,59 +91,16 @@ class Learner(ABC):
     """
 
     @abstractmethod
-    def __init__(self, parser: ModelParser, data_dir: str,
+    def __init__(self, model_definition: ModelDefinition, data_dir: str,
                  output_dir: str) -> None:
-        # parse model definition
-        self.id: str = parser.get_id()
-        self.name: str = parser.get_name()
-        self.description: str = parser.get_description()
-        self.library: str = parser.get_library()
-        self.seed: int = parser.get_seed()
-        self.learner_type: str = parser.get_learner_type()
-        self.learner_implementation: str = \
-            parser.get_learner_implementation()
-        self.labels: List[str] = parser.get_labels()
-        self.architecture: Architecture = parser.get_architecture()
-        self.loss_hyperparameters: Dict[str, str] = \
-            parser.get_loss_hyperparameters()
-        self.optimizer_hyperparameters: Dict[str, str] = \
-            parser.get_optimizer_hyperparameters()
-        self.training_process_hyperparameters: Dict[str, str] = \
-            parser.get_training_process_hyperparameters()
-
+        self.definition: ModelDefinition = model_definition
         self.data_dir = MiscHelper.prepare_path(data_dir)
-        self.output_dir = MiscHelper.prepare_path(output_dir + "/" + self.id,
+        self.output_dir = MiscHelper.prepare_path(output_dir + "/" + self.definition.id,
                                                   allow_exists=False)
         self.model = None
         self.optimizer = None
         self.criterion = None
         self.metrics = ["loss", "accuracy"]
-
-    def __str__(self):
-        str_rep = ["seqgra model configuration:\n",
-                   "\tID: ", self.id, "\n",
-                   "\tName: ", self.name, "\n",
-                   "\tDescription:\n"]
-        if self.description:
-            str_rep += ["\t", self.description, "\n"]
-        str_rep += ["\tLibrary: ", self.library, "\n",
-                    "\tLearner type: ", self.learner_type, "\t",
-                    "\tLearner implementation", self.learner_implementation]
-
-        if self.metrics is not None:
-            str_rep += ["\tMetrics:\n", str(self.metrics)]
-
-        str_rep += ["\t" + s +
-                    "\n" for s in str(self.architecture).splitlines()]
-
-        str_rep += ["\tLoss hyperparameters:\n", "\t\t",
-                    str(self.loss_hyperparameters), "\n"]
-        str_rep += ["\tOptimizer hyperparameters:\n", "\t\t",
-                    str(self.optimizer_hyperparameters), "\n"]
-        str_rep += ["\tTraining process hyperparameters:\n", "\t\t",
-                    str(self.training_process_hyperparameters), "\n"]
-
-        return "".join(str_rep)
 
     def train_model(self,
                     training_file: str = None,
@@ -419,14 +376,14 @@ class MultiClassClassificationLearner(Learner):
     """
 
     @abstractmethod
-    def __init__(self, parser: ModelParser, data_dir: str,
+    def __init__(self, model_definition: ModelDefinition, data_dir: str,
                  output_dir: str) -> None:
-        super().__init__(parser, data_dir, output_dir)
+        super().__init__(model_definition, data_dir, output_dir)
 
-        if self.learner_type != "multi-class classification":
+        if self.definition.learner_type != "multi-class classification":
             raise Exception("model definition must specify multi-class "
                             "classification learner type, but learner type "
-                            "is '" + self.learner_type, "'")
+                            "is '" + self.definition.learner_type, "'")
 
     def evaluate_model(self, file_name: str = None,
                        x: List[str] = None, y: List[str] = None):
@@ -468,7 +425,7 @@ class MultiClassClassificationLearner(Learner):
         fpr = dict()
         tpr = dict()
         roc_auc = dict()
-        n_classes = len(self.labels)
+        n_classes = len(self.definition.labels)
         for i in range(n_classes):
             fpr[i], tpr[i], _ = roc_curve(y_true[:, i], y_hat[:, i])
             roc_auc[i] = auc(fpr[i], tpr[i])
@@ -516,7 +473,7 @@ class MultiClassClassificationLearner(Learner):
             line, _ = plt.plot(fpr[i], tpr[i], linewidth=2)
             lines.append(line)
             labels.append("condition {0} (area = {1:0.2f})"
-                          "".format(self.labels[i], roc_auc[i]))
+                          "".format(self.definition.labels[i], roc_auc[i]))
 
         plt.plot([0, 1], [0, 1], "k--", linewidth=2)
         plt.xlim([0.0, 1.0])
@@ -543,7 +500,7 @@ class MultiClassClassificationLearner(Learner):
         precision = dict()
         recall = dict()
         average_precision = dict()
-        n_classes = len(self.labels)
+        n_classes = len(self.definition.labels)
         for i in range(n_classes):
             precision[i], recall[i], _ = precision_recall_curve(y_true[:, i],
                                                                 y_hat[:, i])
@@ -580,7 +537,7 @@ class MultiClassClassificationLearner(Learner):
             line, _ = plt.plot(recall[i], precision[i], linewidth=2)
             lines.append(line)
             labels.append("condition {0} (area = {1:0.2f})"
-                          "".format(self.labels[i], average_precision[i]))
+                          "".format(self.definition.labels[i], average_precision[i]))
 
         fig = plt.gcf()
         fig.subplots_adjust(bottom=0.25)
@@ -661,14 +618,14 @@ class MultiLabelClassificationLearner(Learner):
     """
 
     @abstractmethod
-    def __init__(self, parser: ModelParser, data_dir: str,
+    def __init__(self, model_definition: ModelDefinition, data_dir: str,
                  output_dir: str) -> None:
-        super().__init__(parser, data_dir, output_dir)
+        super().__init__(model_definition, data_dir, output_dir)
 
-        if self.learner_type != "multi-label classification":
+        if self.definition.learner_type != "multi-label classification":
             raise Exception("model definition must specify multi-label "
                             "classification learner type, but learner type "
-                            "is '" + self.learner_type, "'")
+                            "is '" + self.definition.learner_type, "'")
 
     def evaluate_model(self, file_name: str = None,
                        x: List[str] = None, y: List[List[str]] = None):
@@ -710,7 +667,7 @@ class MultiLabelClassificationLearner(Learner):
         fpr = dict()
         tpr = dict()
         roc_auc = dict()
-        n_classes = len(self.labels)
+        n_classes = len(self.definition.labels)
         for i in range(n_classes):
             fpr[i], tpr[i], _ = roc_curve(y_true[:, i], y_hat[:, i])
             roc_auc[i] = auc(fpr[i], tpr[i])
@@ -758,7 +715,7 @@ class MultiLabelClassificationLearner(Learner):
             line, _ = plt.plot(fpr[i], tpr[i], linewidth=2)
             lines.append(line)
             labels.append("condition {0} (area = {1:0.2f})"
-                          "".format(self.labels[i], roc_auc[i]))
+                          "".format(self.definition.labels[i], roc_auc[i]))
 
         plt.plot([0, 1], [0, 1], "k--", linewidth=2)
         plt.xlim([0.0, 1.0])
@@ -784,7 +741,7 @@ class MultiLabelClassificationLearner(Learner):
         precision = dict()
         recall = dict()
         average_precision = dict()
-        n_classes = len(self.labels)
+        n_classes = len(self.definition.labels)
         for i in range(n_classes):
             precision[i], recall[i], _ = precision_recall_curve(y_true[:, i],
                                                                 y_hat[:, i])
@@ -821,7 +778,7 @@ class MultiLabelClassificationLearner(Learner):
             line, = plt.plot(recall[i], precision[i], linewidth=2)
             lines.append(line)
             labels.append("condition {0} (area = {1:0.2f})"
-                          "".format(self.labels[i], average_precision[i]))
+                          "".format(self.definition.labels[i], average_precision[i]))
 
         fig = plt.gcf()
         fig.subplots_adjust(bottom=0.25)
@@ -903,14 +860,14 @@ class MultipleRegressionLearner(Learner):
     """
 
     @abstractmethod
-    def __init__(self, parser: ModelParser, data_dir: str,
+    def __init__(self, model_definition: ModelDefinition, data_dir: str,
                  output_dir: str) -> None:
-        super().__init__(parser, data_dir, output_dir)
+        super().__init__(model_definition, data_dir, output_dir)
 
-        if self.learner_type != "multiple regression":
+        if self.definition.learner_type != "multiple regression":
             raise Exception("model definition must specify multiple "
                             "regression learner type, but learner type "
-                            "is '" + self.learner_type, "'")
+                            "is '" + self.definition.learner_type, "'")
 
     def evaluate_model(self, file_name: str = None,
                        x: List[str] = None, y: List[float] = None):
@@ -1030,14 +987,14 @@ class MultivariateRegressionLearner(Learner):
     """
 
     @abstractmethod
-    def __init__(self, parser: ModelParser, data_dir: str,
+    def __init__(self, model_definition: ModelDefinition, data_dir: str,
                  output_dir: str) -> None:
-        super().__init__(parser, data_dir, output_dir)
+        super().__init__(model_definition, data_dir, output_dir)
 
-        if self.learner_type != "multivariate regression":
+        if self.definition.learner_type != "multivariate regression":
             raise Exception("model definition must specify multivariate "
                             "regression learner type, but learner type "
-                            "is '" + self.learner_type, "'")
+                            "is '" + self.definition.learner_type, "'")
 
     def evaluate_model(self, file_name: str = None,
                        x: List[str] = None, y: List[List[float]] = None):

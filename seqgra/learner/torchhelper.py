@@ -21,6 +21,7 @@ from ignite.metrics import Accuracy, Loss
 from ignite.handlers import EarlyStopping, ModelCheckpoint
 
 from seqgra.learner.learner import Learner
+from seqgra.model.model import Architecture
 
 
 class TorchHelper:
@@ -37,24 +38,23 @@ class TorchHelper:
 
     @staticmethod
     def create_model(learner: Learner) -> None:
+        path = learner.definition.architecture.external_model_path
+        class_name = learner.definition.architecture.external_model_class_name
         learner.set_seed()
-        path = learner.architecture.external_model_path
-        class_name = learner.architecture.external_model_class_name
 
         if path is None:
             raise Exception("embedded architecture definition not supported"
                             " for PyTorch models")
         elif path is not None and \
-                learner.architecture.external_model_format is not None:
-            if learner.architecture.external_model_format == "pytorch-module":
+                learner.definition.architecture.external_model_format is not None:
+            if learner.definition.architecture.external_model_format == "pytorch-module":
                 if os.path.isfile(path):
                     if class_name is None:
                         raise Exception(
                             "PyTorch model class name not specified")
                     else:
-                        location = path
                         module_spec = importlib.util.spec_from_file_location(
-                            "model", location)
+                            "model", path)
                         torch_model_module = importlib.util.module_from_spec(
                             module_spec)
                         module_spec.loader.exec_module(torch_model_module)
@@ -66,23 +66,23 @@ class TorchHelper:
                                     path)
             else:
                 raise Exception("unsupported PyTorch model format: " +
-                                learner.architecture.external_model_format)
+                                learner.definition.architecture.external_model_format)
         else:
             raise Exception("neither internal nor external architecture "
                             "definition provided")
 
-        if learner.optimizer_hyperparameters is None:
+        if learner.definition.optimizer_hyperparameters is None:
             raise Exception("optimizer undefined")
         else:
             learner.optimizer = TorchHelper.get_optimizer(
-                learner.optimizer_hyperparameters,
+                learner.definition.optimizer_hyperparameters,
                 learner.model.parameters())
 
-        if learner.loss_hyperparameters is None:
+        if learner.definition.loss_hyperparameters is None:
             raise Exception("loss undefined")
         else:
             learner.criterion = TorchHelper.get_loss(
-                learner.loss_hyperparameters)
+                learner.definition.loss_hyperparameters)
 
         if learner.metrics is None:
             raise Exception("metrics undefined")

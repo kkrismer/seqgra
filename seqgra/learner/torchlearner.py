@@ -14,15 +14,15 @@ from seqgra.learner.torchdataset import DNAMultiClassDataSet
 from seqgra.learner.torchdataset import DNAMultiLabelDataSet
 from seqgra.learner.torchdataset import ProteinMultiClassDataSet
 from seqgra.learner.torchdataset import ProteinMultiLabelDataSet
-from seqgra.parser.modelparser import ModelParser
 from seqgra.learner.torchhelper import TorchHelper
+from seqgra.model import ModelDefinition
 
 
 class TorchDNAMultiClassClassificationLearner(
         DNAMultiClassClassificationLearner):
-    def __init__(self, parser: ModelParser, data_dir: str,
+    def __init__(self, model_definition: ModelDefinition, data_dir: str,
                  output_dir: str) -> None:
-        super().__init__(parser, data_dir, output_dir)
+        super().__init__(model_definition, data_dir, output_dir)
 
     def create_model(self) -> None:
         TorchHelper.create_model(self)
@@ -37,9 +37,9 @@ class TorchDNAMultiClassClassificationLearner(
                      x_train: List[str], y_train: List[str],
                      x_val: List[str], y_val: List[str]) -> None:
         training_dataset: DNAMultiClassDataSet = DNAMultiClassDataSet(
-            x_train, y_train, self.labels, True)
+            x_train, y_train, self.definition.labels, True)
         validation_dataset: DNAMultiClassDataSet = DNAMultiClassDataSet(
-            x_val, y_val, self.labels, True)
+            x_val, y_val, self.definition.labels, True)
         TorchHelper.train_model(self, training_dataset, validation_dataset)
 
     def save_model(self, model_name: str = "") -> None:
@@ -61,15 +61,15 @@ class TorchDNAMultiClassClassificationLearner(
 
     def _evaluate_model(self, x: List[str], y: List[str]):
         dataset: DNAMultiClassDataSet = DNAMultiClassDataSet(
-            x, y, self.labels, True)
+            x, y, self.definition.labels, True)
         return TorchHelper.evaluate_model(self, dataset)
 
 
 class TorchDNAMultiLabelClassificationLearner(
         DNAMultiLabelClassificationLearner):
-    def __init__(self, parser: ModelParser, data_dir: str,
+    def __init__(self, model_definition: ModelDefinition, data_dir: str,
                  output_dir: str) -> None:
-        super().__init__(parser, data_dir, output_dir)
+        super().__init__(model_definition, data_dir, output_dir)
 
     def create_model(self) -> None:
         TorchHelper.create_model(self)
@@ -84,9 +84,9 @@ class TorchDNAMultiLabelClassificationLearner(
                      x_train: List[str], y_train: List[str],
                      x_val: List[str], y_val: List[str]) -> None:
         training_dataset: DNAMultiLabelDataSet = DNAMultiLabelDataSet(
-            x_train, y_train, self.labels, True)
+            x_train, y_train, self.definition.labels, True)
         validation_dataset: DNAMultiLabelDataSet = DNAMultiLabelDataSet(
-            x_val, y_val, self.labels, True)
+            x_val, y_val, self.definition.labels, True)
         TorchHelper.train_model(self, training_dataset, validation_dataset)
 
     def save_model(self, model_name: str = "") -> None:
@@ -108,14 +108,15 @@ class TorchDNAMultiLabelClassificationLearner(
 
     def _evaluate_model(self, x: List[str], y: List[str]):
         dataset: DNAMultiLabelDataSet = DNAMultiLabelDataSet(
-            x, y, self.labels, True)
+            x, y, self.definition.labels, True)
         return TorchHelper.evaluate_model(self, dataset)
+
 
 class TorchProteinMultiClassClassificationLearner(
         ProteinMultiClassClassificationLearner):
-    def __init__(self, parser: ModelParser, data_dir: str,
+    def __init__(self, model_definition: ModelDefinition, data_dir: str,
                  output_dir: str) -> None:
-        super().__init__(parser, data_dir, output_dir)
+        super().__init__(model_definition, data_dir, output_dir)
 
     def create_model(self) -> None:
         TorchHelper.create_model(self)
@@ -130,9 +131,9 @@ class TorchProteinMultiClassClassificationLearner(
                      x_train: List[str], y_train: List[str],
                      x_val: List[str], y_val: List[str]) -> None:
         training_dataset: ProteinMultiClassDataSet = ProteinMultiClassDataSet(
-            x_train, y_train, self.labels, True)
+            x_train, y_train, self.definition.labels, True)
         validation_dataset: ProteinMultiClassDataSet = ProteinMultiClassDataSet(
-            x_val, y_val, self.labels, True)
+            x_val, y_val, self.definition.labels, True)
         TorchHelper.train_model(self, training_dataset, validation_dataset)
 
     def save_model(self, model_name: str = "") -> None:
@@ -154,15 +155,15 @@ class TorchProteinMultiClassClassificationLearner(
 
     def _evaluate_model(self, x: List[str], y: List[str]):
         dataset: ProteinMultiClassDataSet = ProteinMultiClassDataSet(
-            x, y, self.labels, True)
+            x, y, self.definition.labels, True)
         return TorchHelper.evaluate_model(self, dataset)
 
 
 class TorchProteinMultiLabelClassificationLearner(
         ProteinMultiLabelClassificationLearner):
-    def __init__(self, parser: ModelParser, data_dir: str,
+    def __init__(self, model_definition: ModelDefinition, data_dir: str,
                  output_dir: str) -> None:
-        super().__init__(parser, data_dir, output_dir)
+        super().__init__(model_definition, data_dir, output_dir)
 
     def create_model(self) -> None:
         TorchHelper.create_model(self)
@@ -177,9 +178,9 @@ class TorchProteinMultiLabelClassificationLearner(
                      x_train: List[str], y_train: List[str],
                      x_val: List[str], y_val: List[str]) -> None:
         training_dataset: ProteinMultiLabelDataSet = ProteinMultiLabelDataSet(
-            x_train, y_train, self.labels, True)
+            x_train, y_train, self.definition.labels, True)
         validation_dataset: ProteinMultiLabelDataSet = ProteinMultiLabelDataSet(
-            x_val, y_val, self.labels, True)
+            x_val, y_val, self.definition.labels, True)
         TorchHelper.train_model(self, training_dataset, validation_dataset)
 
     def save_model(self, model_name: str = "") -> None:
@@ -201,5 +202,5 @@ class TorchProteinMultiLabelClassificationLearner(
 
     def _evaluate_model(self, x: List[str], y: List[str]):
         dataset: ProteinMultiLabelDataSet = ProteinMultiLabelDataSet(
-            x, y, self.labels, True)
+            x, y, self.definition.labels, True)
         return TorchHelper.evaluate_model(self, dataset)
