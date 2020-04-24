@@ -10,7 +10,7 @@ from seqgra.learner import DNAMultiClassClassificationLearner
 from seqgra.learner import DNAMultiLabelClassificationLearner
 from seqgra.learner import ProteinMultiClassClassificationLearner
 from seqgra.learner import ProteinMultiLabelClassificationLearner
-from seqgra.learner import KerasHelper
+from seqgra.learner.tensorflow import KerasHelper
 from seqgra.model import ModelDefinition
 
 

@@ -44,28 +44,28 @@ def get_learner(model_definition: ModelDefinition, data_definition_type: Optiona
     # imports are inside if branches to only depend on TensorFlow and PyTorch
     # when required
     if model_definition.learner_implementation == "KerasDNAMultiClassClassificationLearner":
-        from seqgra.learner import KerasDNAMultiClassClassificationLearner  # pylint: disable=import-outside-toplevel
+        from seqgra.learner.tensorflow import KerasDNAMultiClassClassificationLearner  # pylint: disable=import-outside-toplevel
         return KerasDNAMultiClassClassificationLearner(model_definition, data_dir, output_dir)
     elif model_definition.learner_implementation == "KerasDNAMultiLabelClassificationLearner":
-        from seqgra.learner import KerasDNAMultiLabelClassificationLearner  # pylint: disable=import-outside-toplevel
+        from seqgra.learner.tensorflow import KerasDNAMultiLabelClassificationLearner  # pylint: disable=import-outside-toplevel
         return KerasDNAMultiLabelClassificationLearner(model_definition, data_dir, output_dir)
     elif model_definition.learner_implementation == "TorchDNAMultiClassClassificationLearner":
-        from seqgra.learner import TorchDNAMultiClassClassificationLearner  # pylint: disable=import-outside-toplevel
+        from seqgra.learner.torch import TorchDNAMultiClassClassificationLearner  # pylint: disable=import-outside-toplevel
         return TorchDNAMultiClassClassificationLearner(model_definition, data_dir, output_dir)
     elif model_definition.learner_implementation == "TorchDNAMultiLabelClassificationLearner":
-        from seqgra.learner import TorchDNAMultiLabelClassificationLearner  # pylint: disable=import-outside-toplevel
+        from seqgra.learner.torch import TorchDNAMultiLabelClassificationLearner  # pylint: disable=import-outside-toplevel
         return TorchDNAMultiLabelClassificationLearner(model_definition, data_dir, output_dir)
     elif model_definition.learner_implementation == "KerasProteinMultiClassClassificationLearner":
-        from seqgra.learner import KerasProteinMultiClassClassificationLearner  # pylint: disable=import-outside-toplevel
+        from seqgra.learner.tensorflow import KerasProteinMultiClassClassificationLearner  # pylint: disable=import-outside-toplevel
         return KerasProteinMultiClassClassificationLearner(model_definition, data_dir, output_dir)
     elif model_definition.learner_implementation == "KerasProteinMultiLabelClassificationLearner":
-        from seqgra.learner import KerasProteinMultiLabelClassificationLearner  # pylint: disable=import-outside-toplevel
+        from seqgra.learner.tensorflow import KerasProteinMultiLabelClassificationLearner  # pylint: disable=import-outside-toplevel
         return KerasProteinMultiLabelClassificationLearner(model_definition, data_dir, output_dir)
     elif model_definition.learner_implementation == "TorchProteinMultiClassClassificationLearner":
-        from seqgra.learner import TorchProteinMultiClassClassificationLearner  # pylint: disable=import-outside-toplevel
+        from seqgra.learner.torch import TorchProteinMultiClassClassificationLearner  # pylint: disable=import-outside-toplevel
         return TorchProteinMultiClassClassificationLearner(model_definition, data_dir, output_dir)
     elif model_definition.learner_implementation == "TorchProteinMultiLabelClassificationLearner":
-        from seqgra.learner import TorchProteinMultiLabelClassificationLearner  # pylint: disable=import-outside-toplevel
+        from seqgra.learner.torch import TorchProteinMultiLabelClassificationLearner  # pylint: disable=import-outside-toplevel
         return TorchProteinMultiLabelClassificationLearner(model_definition, data_dir, output_dir)
     else:
         raise Exception("invalid learner ID")

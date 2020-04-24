@@ -10,11 +10,11 @@ from seqgra.learner import DNAMultiClassClassificationLearner
 from seqgra.learner import DNAMultiLabelClassificationLearner
 from seqgra.learner import ProteinMultiClassClassificationLearner
 from seqgra.learner import ProteinMultiLabelClassificationLearner
-from seqgra.learner.torchdataset import DNAMultiClassDataSet
-from seqgra.learner.torchdataset import DNAMultiLabelDataSet
-from seqgra.learner.torchdataset import ProteinMultiClassDataSet
-from seqgra.learner.torchdataset import ProteinMultiLabelDataSet
-from seqgra.learner.torchhelper import TorchHelper
+from seqgra.learner.torch.torchdataset import DNAMultiClassDataSet
+from seqgra.learner.torch.torchdataset import DNAMultiLabelDataSet
+from seqgra.learner.torch.torchdataset import ProteinMultiClassDataSet
+from seqgra.learner.torch.torchdataset import ProteinMultiLabelDataSet
+from seqgra.learner.torch import TorchHelper
 from seqgra.model import ModelDefinition
 
 

@@ -5,17 +5,7 @@ from seqgra.learner.learner import MultipleRegressionLearner
 from seqgra.learner.learner import MultivariateRegressionLearner
 from seqgra.learner.dnahelper import DNAHelper
 from seqgra.learner.proteinhelper import ProteinHelper
-from seqgra.learner.torchhelper import TorchHelper
-from seqgra.learner.kerashelper import KerasHelper
 from seqgra.learner.dna import DNAMultiClassClassificationLearner
 from seqgra.learner.dna import DNAMultiLabelClassificationLearner
 from seqgra.learner.protein import ProteinMultiClassClassificationLearner
 from seqgra.learner.protein import ProteinMultiLabelClassificationLearner
-from seqgra.learner.keraslearner import KerasDNAMultiClassClassificationLearner
-from seqgra.learner.keraslearner import KerasDNAMultiLabelClassificationLearner
-from seqgra.learner.keraslearner import KerasProteinMultiClassClassificationLearner
-from seqgra.learner.keraslearner import KerasProteinMultiLabelClassificationLearner
-from seqgra.learner.torchlearner import TorchDNAMultiClassClassificationLearner
-from seqgra.learner.torchlearner import TorchDNAMultiLabelClassificationLearner
-from seqgra.learner.torchlearner import TorchProteinMultiClassClassificationLearner
-from seqgra.learner.torchlearner import TorchProteinMultiLabelClassificationLearner
