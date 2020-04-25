@@ -42,11 +42,17 @@ class DataDefinition:
         str_rep += ["\t" + s + "\n"
                     for s in str(self.data_generation).splitlines()]
         str_rep += ["\tConditions:\n"]
-        for condition in self.conditions:
-            str_rep += ["\t\t" + s + "\n" for s in str(condition).splitlines()]
+        if self.conditions is not None and len(self.conditions) > 0:
+            for condition in self.conditions:
+                str_rep += ["\t\t" + s + "\n" for s in str(condition).splitlines()]
+        else:
+            str_rep += ["\t\tnone"]
         str_rep += ["\tSequence elements:\n"]
-        for sequence_element in self.sequence_elements:
-            str_rep += ["\t\t" + s +
-                        "\n" for s in str(sequence_element).splitlines()]
+        if self.sequence_elements is not None and len(self.sequence_elements) > 0:
+            for sequence_element in self.sequence_elements:
+                str_rep += ["\t\t" + s +
+                            "\n" for s in str(sequence_element).splitlines()]
+        else:
+            str_rep += ["\t\tnone"]
 
         return "".join(str_rep)

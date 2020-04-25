@@ -4,7 +4,7 @@ PyTorch DataSet class
 
 @author: Konstantin Krismer
 """
-from typing import List
+from typing import List, Optional
 import warnings
 
 import torch
@@ -17,11 +17,11 @@ from seqgra.learner import ProteinHelper
 
 class DNAMultiClassDataSet(torch.utils.data.Dataset):
     def __init__(self, x, y=None,
-                 labels: List[str] = None, encode_data: bool = True):
+                 labels: Optional[List[str]] = None, encode_data: bool = True):
         self.x = x
         self.y = y
 
-        self.labels = labels
+        self.labels: Optional[List[str]] = labels
 
         if encode_data:
             DNAHelper.check_sequence(self.x)
@@ -61,13 +61,13 @@ class DNAMultiClassDataSet(torch.utils.data.Dataset):
 
 
 class DNAMultiLabelDataSet(torch.utils.data.Dataset):
-    def __init__(self, x: List[str], y: List[str] = None,
-                 labels: List[str] = None, encode_data: bool = True):
+    def __init__(self, x: List[str], y: Optional[List[str]] = None,
+                 labels: Optional[List[str]] = None, encode_data: bool = True):
         self.x: List[str] = x
-        self.y: List[str] = y
+        self.y: Optional[List[str]] = y
         DNAHelper.check_sequence(self.x)
 
-        self.labels = labels
+        self.labels: Optional[List[str]] = labels
 
         if encode_data:
             self.x = self.__encode_x(self.x)
@@ -107,11 +107,11 @@ class DNAMultiLabelDataSet(torch.utils.data.Dataset):
 
 class ProteinMultiClassDataSet(torch.utils.data.Dataset):
     def __init__(self, x, y=None,
-                 labels: List[str] = None, encode_data: bool = True):
+                 labels: Optional[List[str]] = None, encode_data: bool = True):
         self.x = x
         self.y = y
 
-        self.labels = labels
+        self.labels: Optional[List[str]] = labels
 
         if encode_data:
             ProteinHelper.check_sequence(self.x)
@@ -151,13 +151,13 @@ class ProteinMultiClassDataSet(torch.utils.data.Dataset):
 
 
 class ProteinMultiLabelDataSet(torch.utils.data.Dataset):
-    def __init__(self, x: List[str], y: List[str] = None,
-                 labels: List[str] = None, encode_data: bool = True):
+    def __init__(self, x: List[str], y: Optional[List[str]] = None,
+                 labels: Optional[List[str]] = None, encode_data: bool = True):
         self.x: List[str] = x
-        self.y: List[str] = y
+        self.y: Optional[List[str]] = y
         ProteinHelper.check_sequence(self.x)
 
-        self.labels = labels
+        self.labels: Optional[List[str]] = labels
 
         if encode_data:
             self.x = self.__encode_x(self.x)

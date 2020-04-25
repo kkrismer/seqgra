@@ -7,7 +7,7 @@ AlphabetDistribution class definition, markup language agnostic
 """
 from __future__ import annotations
 
-from typing import List, Tuple
+from typing import List, Tuple, Optional
 
 import numpy as np
 
@@ -16,13 +16,14 @@ from seqgra.model.data import Condition
 
 class AlphabetDistribution:
     def __init__(self, letters: List[Tuple[str, float]],
-                 condition: Condition = None, set_name: str = None) -> None:
+                 condition: Optional[Condition] = None,
+                 set_name: Optional[str] = None) -> None:
         self.letters: List[Tuple[str, float]] = letters
         self.__l = [letter[0] for letter in self.letters]
         self.__p = [letter[1] for letter in self.letters]
         self.__p = [prop / sum(self.__p) for prop in self.__p]
-        self.condition: Condition = condition
-        self.set_name: str = set_name
+        self.condition: Optional[Condition] = condition
+        self.set_name: Optional[str] = set_name
         self.condition_independent: bool = condition is None
         self.set_independent: bool = set_name is None
 

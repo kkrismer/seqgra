@@ -7,24 +7,28 @@ DataGeneration and Set class definitions, markup language agnostic
 """
 from __future__ import annotations
 
-from typing import List
+from typing import List, Optional
 
 from seqgra.model.data import Condition
 from seqgra.model.data import PostprocessingOperation
 
 
 class Example:
-    def __init__(self, samples: int, conditions: List[Condition]) -> None:
+    def __init__(self, samples: int,
+    conditions: Optional[List[Condition]] = None) -> None:
         self.samples: int = samples
-        self.conditions: List[Condition] = conditions
+        self.conditions: Optional[List[Condition]] = conditions
 
     def __str__(self):
         str_rep: List[str] = ["Example:\n",
                               "\tNumber of samples drawn: ", str(
                                   self.samples), "\n",
                               "\tInstance of the following conditions:\n"]
-        str_rep += ["\t\t" + "condition " + condition.condition_id + " [cid]\n"
-                    for condition in self.conditions]
+        if self.conditions is not None and len(self.conditions) > 0:
+            str_rep += ["\t\t" + "condition " + condition.condition_id + " [cid]\n"
+                        for condition in self.conditions]
+        else:
+            str_rep += ["\t\tnone"]
         return "".join(str_rep)
 
 
@@ -46,10 +50,10 @@ class ExampleSet:
 
 class DataGeneration:
     def __init__(self, seed: int, sets: List[ExampleSet],
-                 postprocessing_operations: List[PostprocessingOperation] = None) -> None:
+                 postprocessing_operations: Optional[List[PostprocessingOperation]] = None) -> None:
         self.seed: int = int(seed)
         self.sets: List[ExampleSet] = sets
-        self.postprocessing_operations: List[PostprocessingOperation] = postprocessing_operations
+        self.postprocessing_operations: Optional[List[PostprocessingOperation]] = postprocessing_operations
 
     def __str__(self):
         str_rep = ["Data generation:\n",

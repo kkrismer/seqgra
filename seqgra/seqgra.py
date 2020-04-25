@@ -139,10 +139,10 @@ def get_valid_file(data_file: str) -> str:
         raise Exception("file does not exist: " + data_file)
 
 
-def run_seqgra(data_config_file: str,
-               data_folder: str,
-               model_config_file: str,
-               evaluator_ids: List[str],
+def run_seqgra(data_config_file: Optional[str],
+               data_folder: Optional[str],
+               model_config_file: Optional[str],
+               evaluator_ids: Optional[List[str]],
                output_dir: str) -> None:
     output_dir = format_output_dir(output_dir.strip())
 
@@ -152,7 +152,7 @@ def run_seqgra(data_config_file: str,
         logging.info("loading experimental data")
     else:
         # generate synthetic data
-        data_config = read_config_file(data_config_file.strip())
+        data_config = read_config_file(data_config_file)
         data_def_parser: DataDefinitionParser = XMLDataDefinitionParser(
             data_config)
         data_definition: DataDefinition = data_def_parser.get_data_definition()
@@ -171,7 +171,7 @@ def run_seqgra(data_config_file: str,
 
     # get learner
     if model_config_file is not None:
-        model_config = read_config_file(model_config_file.strip())
+        model_config = read_config_file(model_config_file)
         model_def_parser: ModelDefinitionParser = XMLModelDefinitionParser(
             model_config)
         model_definition: ModelDefinition = model_def_parser.get_model_definition()

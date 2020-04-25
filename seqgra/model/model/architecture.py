@@ -5,22 +5,22 @@ Architecture class definition, markup language agnostic
 
 @author: Konstantin Krismer
 """
-from typing import Dict, List
+from typing import Dict, List, Optional
 
 from seqgra.model.model import Operation
 
 
 class Architecture:
-    def __init__(self, operations: List[Operation] = None,
-                 hyperparameters: Dict[str, str] = None,
-                 external_model_path: str = None,
-                 external_model_format: str = None,
-                 external_model_class_name: str = None) -> None:
-        self.operations: List[Operation] = operations
-        self.hyperparameters: Dict[str, str] = hyperparameters
-        self.external_model_path: str = external_model_path
-        self.external_model_format: str = external_model_format
-        self.external_model_class_name: str = external_model_class_name
+    def __init__(self, operations: Optional[List[Operation]] = None,
+                 hyperparameters: Optional[Dict[str, str]] = None,
+                 external_model_path: Optional[str] = None,
+                 external_model_format: Optional[str] = None,
+                 external_model_class_name: Optional[str] = None) -> None:
+        self.operations: Optional[List[Operation]] = operations
+        self.hyperparameters: Optional[Dict[str, str]] = hyperparameters
+        self.external_model_path: Optional[str] = external_model_path
+        self.external_model_format: Optional[str] = external_model_format
+        self.external_model_class_name: Optional[str] = external_model_class_name
 
     def __str__(self):
         str_rep = ["Architecture:\n"]

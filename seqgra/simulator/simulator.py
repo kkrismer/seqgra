@@ -105,7 +105,8 @@ class Simulator:
                           preserve_frequencies_for_kmer: int = 1) -> str:
         if preserve_frequencies_for_kmer > 1:
             return str(ushuffle.shuffle(example.encode(),
-                                        preserve_frequencies_for_kmer), 'utf-8')
+                                        preserve_frequencies_for_kmer),
+                       "utf-8")
         else:
             example_list = list(example)
             random.shuffle(example_list)

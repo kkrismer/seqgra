@@ -5,13 +5,14 @@ Operation class definition, markup language agnostic
 
 @author: Konstantin Krismer
 """
-from typing import Dict
+from typing import Dict, Optional
 
 
 class Operation:
-    def __init__(self, name: str, parameters: Dict[str, str]) -> None:
+    def __init__(self, name: str,
+                 parameters: Optional[Dict[str, str]] = None) -> None:
         self.name: str = name
-        self.parameters: Dict[str, str] = parameters
+        self.parameters: Optional[Dict[str, str]] = parameters
 
     def __str__(self):
         str_rep = ["Operation:\n",

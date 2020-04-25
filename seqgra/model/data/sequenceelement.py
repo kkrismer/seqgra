@@ -14,6 +14,9 @@ import numpy as np
 
 
 class SequenceElement(ABC):
+    def __init__(self, sid: str) -> None:
+        self.sid: str = sid
+
     @abstractmethod
     def generate(self) -> str:
         pass
@@ -34,7 +37,7 @@ class SequenceElement(ABC):
 class MatrixBasedSequenceElement(SequenceElement):
     def __init__(self, sid: str,
                  positions: List[List[Tuple[str, float]]]) -> None:
-        self.sid: str = sid
+        super().__init__(sid)
         self.positions: List[List[Tuple[str, float]]] = positions
 
     def __str__(self):
@@ -61,7 +64,7 @@ class MatrixBasedSequenceElement(SequenceElement):
 
 class KmerBasedSequenceElement(SequenceElement):
     def __init__(self, sid: str, kmers: List[Tuple[str, float]]) -> None:
-        self.sid: str = sid
+        super().__init__(sid)
         self.kmers: List[Tuple[str, float]] = kmers
         self._kmers = [kmer[0] for kmer in self.kmers]
         self._p = [kmer[1] for kmer in self.kmers]

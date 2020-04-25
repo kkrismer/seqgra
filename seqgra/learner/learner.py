@@ -12,7 +12,7 @@ Classes:
 """
 import os
 from abc import ABC, abstractmethod
-from typing import List, Any, Dict
+from typing import List, Any, Optional
 
 from sklearn.metrics import precision_recall_curve
 from sklearn.metrics import average_precision_score
@@ -23,7 +23,6 @@ from scipy import interp
 
 from seqgra import MiscHelper
 from seqgra.model import ModelDefinition
-from seqgra.model.model import Architecture
 
 
 class Learner(ABC):
@@ -104,24 +103,24 @@ class Learner(ABC):
         self.metrics = ["loss", "accuracy"]
 
     def train_model(self,
-                    training_file: str = None,
-                    validation_file: str = None,
-                    x_train: List[str] = None,
-                    y_train: List[str] = None,
-                    x_val: List[str] = None,
-                    y_val: List[str] = None) -> None:
+                    training_file: Optional[str] = None,
+                    validation_file: Optional[str] = None,
+                    x_train: Optional[List[str]] = None,
+                    y_train: Optional[List[str]] = None,
+                    x_val: Optional[List[str]] = None,
+                    y_val: Optional[List[str]] = None) -> None:
         """Train model.
 
         Specify either `training_file` and `validation_file` or
         `x_train`, `y_train`, `x_val`, and `y_val`.
 
         Arguments:
-            training_file (str, optional): TODO
-            validation_file (str, optional): TODO
-            x_train (List[str], optional): TODO
-            y_train (List[str], optional): TODO
-            x_val (List[str], optional): TODO
-            y_val (List[str], optional): TODO
+            training_file (Optional[str]): TODO
+            validation_file (Optional[str]): TODO
+            x_train (Optional[List[str]]): TODO
+            y_train (Optional[List[str]]): TODO
+            x_val (Optional[List[str]]): TODO
+            y_val (Optional[List[str]]): TODO
 
         Raises:
             Exception: output directory non-empty
@@ -386,16 +385,17 @@ class MultiClassClassificationLearner(Learner):
                             "classification learner type, but learner type "
                             "is '" + self.definition.learner_type, "'")
 
-    def evaluate_model(self, file_name: str = None,
-                       x: List[str] = None, y: List[str] = None):
+    def evaluate_model(self, file_name: Optional[str] = None,
+                       x: Optional[List[str]] = None,
+                       y: Optional[List[str]] = None):
         """TODO
 
         TODO
 
         Arguments:
             file_name (str): TODO
-            x (List[str]): TODO
-            y (List[str]): TODO
+            x (Optional[List[str]]): TODO
+            y (Optional[List[str]]): TODO
 
         Returns:
             array: TODO
@@ -628,16 +628,17 @@ class MultiLabelClassificationLearner(Learner):
                             "classification learner type, but learner type "
                             "is '" + self.definition.learner_type, "'")
 
-    def evaluate_model(self, file_name: str = None,
-                       x: List[str] = None, y: List[List[str]] = None):
+    def evaluate_model(self, file_name: Optional[str] = None,
+                       x: Optional[List[str]] = None,
+                       y: Optional[List[List[str]]] = None):
         """TODO
 
         TODO
 
         Arguments:
-            file_name (str): TODO
-            x (List[str]): TODO
-            y (List[List[str]]): TODO
+            file_name (Optional[str]): TODO
+            x (Optional[List[str]]): TODO
+            y (Optional[List[List[str]]]): TODO
 
         Returns:
             array: TODO
@@ -870,16 +871,17 @@ class MultipleRegressionLearner(Learner):
                             "regression learner type, but learner type "
                             "is '" + self.definition.learner_type, "'")
 
-    def evaluate_model(self, file_name: str = None,
-                       x: List[str] = None, y: List[float] = None):
+    def evaluate_model(self, file_name: Optional[str] = None,
+                       x: Optional[List[str]] = None,
+                       y: Optional[List[float]] = None):
         """TODO
 
         TODO
 
         Arguments:
-            file_name (str): TODO
-            x (List[str]): TODO
-            y (List[float]): TODO
+            file_name (Optional[str]): TODO
+            x (Optional[List[str]]): TODO
+            y (Optional[List[float]]): TODO
 
         Returns:
             array: TODO
@@ -997,16 +999,17 @@ class MultivariateRegressionLearner(Learner):
                             "regression learner type, but learner type "
                             "is '" + self.definition.learner_type, "'")
 
-    def evaluate_model(self, file_name: str = None,
-                       x: List[str] = None, y: List[List[float]] = None):
+    def evaluate_model(self, file_name: Optional[str] = None,
+                       x: Optional[List[str]] = None,
+                       y: Optional[List[List[float]]] = None):
         """TODO
 
         TODO
 
         Arguments:
-            file_name (str): TODO
-            x (List[str]): TODO
-            y (List[List[float]]): TODO
+            file_name (Optional[str]): TODO
+            x (Optional[List[str]]): TODO
+            y (Optional[List[List[float]]]): TODO
 
         Returns:
             array: TODO

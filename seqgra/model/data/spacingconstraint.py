@@ -11,7 +11,7 @@ from seqgra.model.data import SequenceElement
 class SpacingConstraint:
     def __init__(self, sequence_element1: SequenceElement,
                  sequence_element2: SequenceElement, min_distance: int,
-                 max_distance: int, order: str) -> None:
+                 max_distance: int, order: str = "random") -> None:
         self.sequence_element1: SequenceElement = sequence_element1
         self.sequence_element2: SequenceElement = sequence_element2
         self.min_distance: int = min_distance

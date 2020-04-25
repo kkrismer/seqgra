@@ -10,15 +10,15 @@ Each instance of PostProcessingOperation has a name
 """
 from __future__ import annotations
 
-from typing import List, Dict
+from typing import List, Dict, Optional
 
 
 class PostprocessingOperation:
     def __init__(self, name: str, labels: str,
-                 parameters: Dict[str, str]) -> None:
+                 parameters: Optional[Dict[str, str]] = None) -> None:
         self.name: str = name
         self.labels: str = labels
-        self.parameters: Dict[str, str] = parameters
+        self.parameters: Optional[Dict[str, str]] = parameters
 
     def __str__(self):
         config: List[str] = ["Post-processing operation:\n"]
