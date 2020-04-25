@@ -127,7 +127,7 @@ class ExampleGenerator:
                                                       element1, element2,
                                                       rule_position)
 
-        if spacing_constraint.direction == "random":
+        if spacing_constraint.order == "random":
             if random.uniform(0, 1) <= 0.5:
                 element1, element2 = element2, element1
 

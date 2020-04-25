@@ -247,9 +247,9 @@ class XMLDataDefinitionParser(DataDefinitionParser):
             spacing_constraint_element.getAttribute("mindistance"))
         max_distance: int = int(
             spacing_constraint_element.getAttribute("maxdistance"))
-        direction: str = spacing_constraint_element.getAttribute("direction")
+        order: str = spacing_constraint_element.getAttribute("order")
         return SpacingConstraint(sequence_element1, sequence_element2,
-                                 min_distance, max_distance, direction)
+                                 min_distance, max_distance, order)
 
     def get_sequence_elements(self) -> List[SequenceElement]:
         sequence_elements_element: Any = \

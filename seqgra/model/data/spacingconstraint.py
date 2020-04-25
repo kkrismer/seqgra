@@ -11,12 +11,12 @@ from seqgra.model.data import SequenceElement
 class SpacingConstraint:
     def __init__(self, sequence_element1: SequenceElement,
                  sequence_element2: SequenceElement, min_distance: int,
-                 max_distance: int, direction: str) -> None:
+                 max_distance: int, order: str) -> None:
         self.sequence_element1: SequenceElement = sequence_element1
         self.sequence_element2: SequenceElement = sequence_element2
         self.min_distance: int = min_distance
         self.max_distance: int = max_distance
-        self.direction: str = direction
+        self.order: str = order
 
     def __str__(self):
         str_rep = ["Spacing constraint:\n",
@@ -24,5 +24,5 @@ class SpacingConstraint:
                    "\tSecond sequence element: ", self.sequence_element2.sid, " [sid]\n",
                    "\tMinimum distance: ", str(self.min_distance), "\n",
                    "\tMaximum distance: ", str(self.max_distance), "\n",
-                   "\tDirection: ", self.direction, "\n"]
+                   "\tOrder: ", self.order, "\n"]
         return "".join(str_rep)
