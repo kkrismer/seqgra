@@ -18,9 +18,9 @@ class AlphabetDistribution:
     def __init__(self, letters: List[Tuple[str, float]],
                  condition: Condition = None, set_name: str = None) -> None:
         self.letters: List[Tuple[str, float]] = letters
-        self.l = [letter[0] for letter in self.letters]
-        self.p = [letter[1] for letter in self.letters]
-        self.p = [prop / sum(self.p) for prop in self.p]
+        self.__l = [letter[0] for letter in self.letters]
+        self.__p = [letter[1] for letter in self.letters]
+        self.__p = [prop / sum(self.__p) for prop in self.__p]
         self.condition: Condition = condition
         self.set_name: str = set_name
         self.condition_independent: bool = condition is None
@@ -44,4 +44,4 @@ class AlphabetDistribution:
         return "".join(config)
 
     def generate_letters(self, n: int) -> str:
-        return "".join(np.random.choice(self.l, n, p=self.p))
+        return "".join(np.random.choice(self.__l, n, p=self.__p))
