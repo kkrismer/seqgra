@@ -95,7 +95,8 @@ class Learner(ABC):
                  output_dir: str) -> None:
         self.definition: ModelDefinition = model_definition
         self.data_dir = MiscHelper.prepare_path(data_dir)
-        self.output_dir = MiscHelper.prepare_path(output_dir + "/" + self.definition.id,
+        self.output_dir = MiscHelper.prepare_path(output_dir + "/" +
+                                                  self.definition.model_id,
                                                   allow_exists=False)
         self.model = None
         self.optimizer = None

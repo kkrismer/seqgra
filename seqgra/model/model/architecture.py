@@ -9,6 +9,7 @@ from typing import Dict, List
 
 from seqgra.model.model import Operation
 
+
 class Architecture:
     def __init__(self, operations: List[Operation] = None,
                  hyperparameters: Dict[str, str] = None,
@@ -33,17 +34,17 @@ class Architecture:
                         for s in operators_str_rep.splitlines()]
 
         if self.hyperparameters is not None and len(self.hyperparameters) > 0:
-            str_rep += ["\tHyperparameters:\n", "\t\t", 
+            str_rep += ["\tHyperparameters:\n", "\t\t",
                         str(self.hyperparameters)]
-                        
+
         if self.external_model_path is not None:
-            str_rep += ["\tExternal model path:\n", "\t\t", 
+            str_rep += ["\tExternal model path:\n", "\t\t",
                         self.external_model_path]
         if self.external_model_path is not None:
-            str_rep += ["\tExternal model format:\n", "\t\t", 
+            str_rep += ["\tExternal model format:\n", "\t\t",
                         self.external_model_format]
         if self.external_model_class_name is not None:
-            str_rep += ["\tExternal model class name:\n", "\t\t", 
+            str_rep += ["\tExternal model class name:\n", "\t\t",
                         self.external_model_class_name]
 
         return "".join(str_rep)

@@ -46,7 +46,7 @@ class XMLModelDefinitionParser(ModelDefinitionParser):
         logging.info("seqgra model configuration XML file "
                      "is well-formed and valid")
 
-    def get_id(self) -> str:
+    def get_model_id(self) -> str:
         return self._general_element.getAttribute("id")
 
     def get_name(self) -> str:
@@ -159,7 +159,7 @@ class XMLModelDefinitionParser(ModelDefinitionParser):
         return hyperparams
 
     def get_model_definition(self) -> ModelDefinition:
-        return ModelDefinition(self.get_id(),
+        return ModelDefinition(self.get_model_id(),
                                self.get_name(),
                                self.get_description(),
                                self.get_library(),

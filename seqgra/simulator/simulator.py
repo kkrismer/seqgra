@@ -32,7 +32,7 @@ class Simulator:
         self.definition: DataDefinition = data_definition
         self.check_grammar()
         self.output_dir = MiscHelper.prepare_path(output_dir + "/" +
-                                                  self.definition.id)
+                                                  self.definition.grammar_id)
 
     def simulate_data(self) -> None:
         logging.info("started data simulation")
@@ -139,7 +139,8 @@ class Simulator:
                     example.annotation + "\t" + condition_id + "\n")
 
     def __serialize_example(self, example: Example) -> str:
-        return "|".join([condition.id for condition in example.conditions])
+        return "|".join([condition.condition_id
+                         for condition in example.conditions])
 
     def __deserialize_example(self, example_str_rep: str) -> List[Condition]:
         condition_ids: List[str] = example_str_rep.split("|")
@@ -175,12 +176,12 @@ class Simulator:
         for example_set in self.definition.data_generation.sets:
             for example in example_set.examples:
                 for condition_sample in example.conditions:
-                    used_condition_ids.add(condition_sample.id)
+                    used_condition_ids.add(condition_sample.condition_id)
 
         for condition in self.definition.conditions:
-            if condition.id not in used_condition_ids:
+            if condition.condition_id not in used_condition_ids:
                 valid = False
-                logging.warn("condition " + condition.id +
+                logging.warn("condition " + condition.condition_id +
                              " [cid]: unused condition")
 
         return valid
@@ -192,12 +193,12 @@ class Simulator:
         for condition in self.definition.conditions:
             for rule in condition.grammar:
                 for sequence_element in rule.sequence_elements:
-                    used_sequence_element_ids.add(sequence_element.id)
+                    used_sequence_element_ids.add(sequence_element.sid)
 
         for sequence_element in self.definition.sequence_elements:
-            if sequence_element.id not in used_sequence_element_ids:
+            if sequence_element.sid not in used_sequence_element_ids:
                 valid = False
-                logging.warn("sequence element " + sequence_element.id +
+                logging.warn("sequence element " + sequence_element.sid +
                              " [sid]: unused sequence element")
 
         return valid
@@ -211,10 +212,10 @@ class Simulator:
             for example in example_set.examples:
                 for condition_sample in example.conditions:
                     if example_set.name in set_condition_combinations:
-                        set_condition_combinations[example_set.name][condition_sample.id] = "unspecified"
+                        set_condition_combinations[example_set.name][condition_sample.condition_id] = "unspecified"
                     else:
                         set_condition_combinations[example_set.name] = {
-                            condition_sample.id: "unspecified"}
+                            condition_sample.condition_id: "unspecified"}
 
         for alphabet in self.definition.background.alphabet_distributions:
             if alphabet.set_independent and alphabet.condition_independent:
@@ -239,22 +240,22 @@ class Simulator:
                         tmp_dict[condition_id] = "condition-independent"
             elif alphabet.set_independent:
                 for set_name in set_condition_combinations.keys():
-                    if set_condition_combinations[set_name][alphabet.condition.id] == "set-independent":
+                    if set_condition_combinations[set_name][alphabet.condition.condition_id] == "set-independent":
                         valid = False
                         logging.warn("more than one set-independent alphabet "
                                      "definition found for condition " +
-                                     alphabet.condition.id + " [cid]")
+                                     alphabet.condition.condition_id + " [cid]")
                     else:
-                        set_condition_combinations[set_name][alphabet.condition.id] = "set-independent"
+                        set_condition_combinations[set_name][alphabet.condition.condition_id] = "set-independent"
             else:
-                if set_condition_combinations[alphabet.set_name][alphabet.condition.id] == "specified":
+                if set_condition_combinations[alphabet.set_name][alphabet.condition.condition_id] == "specified":
                     valid = False
                     logging.warn("duplicate alphabet definition found for "
-                                 "set name " + example_set.name +
-                                 " and condition " + condition_sample.id +
-                                 " [cid]")
+                                 "set name " + alphabet.set_name +
+                                 " and condition " +
+                                 alphabet.condition_id + " [cid]")
                 else:
-                    set_condition_combinations[alphabet.set_name][alphabet.condition.id] = "specified"
+                    set_condition_combinations[alphabet.set_name][alphabet.condition.condition_id] = "specified"
 
         for set_name, tmp_dict in set_condition_combinations.items():
             for condition_id, value in tmp_dict.items():
@@ -275,13 +276,13 @@ class Simulator:
                         and rule.position != "end" and rule.position != "center":
                     if int(rule.position) > self.definition.background.min_length:
                         valid = False
-                        logging.warn("condition " + condition.id +
+                        logging.warn("condition " + condition.condition_id +
                                      " [cid], rule " + str(i + 1) +
                                      ": position exceeds minimum "
                                      "sequence length")
                     elif int(rule.probability) + self.__get_longest_sequence_element_length(rule) > self.definition.background.min_length:
                         valid = False
-                        logging.warn("condition " + condition.id +
+                        logging.warn("condition " + condition.condition_id +
                                      " [cid], rule " + str(i + 1) +
                                      ": position plus sequence element "
                                      "length exceeds minimum sequence length")
@@ -299,14 +300,14 @@ class Simulator:
                         spacing_constraint: SpacingConstraint = rule.spacing_constraints[j]
                         if spacing_constraint.min_distance > self.definition.background.min_length:
                             valid = False
-                            logging.warn("condition " + condition.id +
+                            logging.warn("condition " + condition.condition_id +
                                          " [cid], rule " + str(i + 1) +
                                          ", spacing constraint " + str(j + 1) +
                                          ": minimum distance exceeds minimum "
                                          "sequence length")
                         elif spacing_constraint.min_distance + spacing_constraint.sequence_element1.get_max_length() + spacing_constraint.sequence_element2.get_max_length() > self.definition.background.min_length:
                             valid = False
-                            logging.warn("condition " + condition.id +
+                            logging.warn("condition " + condition.condition_id +
                                          " [cid], rule " + str(i + 1) +
                                          ", spacing constraint " + str(j + 1) +
                                          ": minimum distance plus sequence "
@@ -321,7 +322,7 @@ class Simulator:
         for sequence_element in self.definition.sequence_elements:
             if sequence_element.get_max_length() > self.definition.background.min_length:
                 valid = False
-                logging.warn("sequence element " + sequence_element.id +
+                logging.warn("sequence element " + sequence_element.sid +
                              ": maximum sequence element length exceeds "
                              "minimum sequence length")
 
@@ -336,26 +337,26 @@ class Simulator:
                 if rule.spacing_constraints is not None and len(rule.spacing_constraints) > 0:
                     valid_sequence_element_ids.clear()
                     for sequence_element in rule.sequence_elements:
-                        valid_sequence_element_ids.add(sequence_element.id)
+                        valid_sequence_element_ids.add(sequence_element.sid)
 
                     for j in range(len(rule.spacing_constraints)):
                         spacing_constraint: SpacingConstraint = rule.spacing_constraints[j]
-                        if spacing_constraint.sequence_element1.id not in valid_sequence_element_ids:
+                        if spacing_constraint.sequence_element1.sid not in valid_sequence_element_ids:
                             valid = False
-                            logging.error("condition " + condition.id +
+                            logging.error("condition " + condition.condition_id +
                                           " [cid], rule " + str(i + 1) +
                                           ", spacing constraint " +
                                           str(j + 1) + ": sequence element " +
-                                          spacing_constraint.sequence_element1.id +
+                                          spacing_constraint.sequence_element1.sid +
                                           " [sid] not among sequence elements "
                                           "of rule")
-                        if spacing_constraint.sequence_element2.id not in valid_sequence_element_ids:
+                        if spacing_constraint.sequence_element2.sid not in valid_sequence_element_ids:
                             valid = False
-                            logging.error("condition " + condition.id +
+                            logging.error("condition " + condition.condition_id +
                                           " [cid], rule " + str(i + 1) +
                                           ", spacing constraint " +
                                           str(j + 1) + ": sequence element " +
-                                          spacing_constraint.sequence_element2.id +
+                                          spacing_constraint.sequence_element2.sid +
                                           " [sid] not among sequence elements "
                                           "of rule")
 

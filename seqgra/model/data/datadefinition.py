@@ -9,14 +9,14 @@ from seqgra.model.data import SequenceElement
 
 
 class DataDefinition:
-    def __init__(self, id: str = "", name: str = "", description: str = "",
+    def __init__(self, grammar_id: str = "", name: str = "", description: str = "",
                  sequence_space: str = "DNA",
                  model_type: str = "multi-class classification",
                  background: Optional[Background] = None,
                  data_generation: Optional[DataGeneration] = None,
                  conditions: Optional[List[Condition]] = None,
                  sequence_elements: Optional[List[SequenceElement]] = None) -> None:
-        self.id: str = id
+        self.grammar_id: str = grammar_id
         self.name: str = name
         self.description: str = description
         self.sequence_space: str = sequence_space
@@ -30,7 +30,7 @@ class DataDefinition:
     def __str__(self):
         str_rep: List[str] = ["seqgra data definition:\n",
                               "\tGeneral:\n",
-                              "\t\tID: " + self.id + " [gid]\n",
+                              "\t\tID: " + self.grammar_id + " [gid]\n",
                               "\t\tName: " + self.name + "\n",
                               "\t\tDescription:\n"]
         if self.description:

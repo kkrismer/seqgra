@@ -13,10 +13,11 @@ from seqgra.learner import Learner
 
 class Evaluator(ABC):
     @abstractmethod
-    def __init__(self, id: str, learner: Learner, output_dir: str) -> None:
-        self.id: str = id
+    def __init__(self, evaluator_id: str, learner: Learner, output_dir: str) -> None:
+        self.evaluator_id: str = evaluator_id
         self.learner: Learner = learner
-        self.output_dir = MiscHelper.prepare_path(output_dir + "/" + self.id,
+        self.output_dir = MiscHelper.prepare_path(output_dir + "/" +
+                                                  self.evaluator_id,
                                                   allow_exists=False)
 
     @abstractmethod

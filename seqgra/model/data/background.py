@@ -9,6 +9,7 @@ from typing import List
 
 from seqgra.model.data import AlphabetDistribution
 
+
 class Background:
     def __init__(self, min_length: int, max_length: int,
                  alphabet_distributions: List[AlphabetDistribution]) -> None:
@@ -19,9 +20,9 @@ class Background:
 
     def __str__(self):
         str_rep = ["Background:\n",
-        "\tMinimum length: ", str(self.min_length), "\n",
-        "\tMaximum length: ", str(self.max_length), "\n",
-        "\tAlphabet distributions:\n"]
+                   "\tMinimum length: ", str(self.min_length), "\n",
+                   "\tMaximum length: ", str(self.max_length), "\n",
+                   "\tAlphabet distributions:\n"]
         alphabets_string: List[str] = [str(alphabet_distribution)
                                        for alphabet_distribution
                                        in self.alphabet_distributions]

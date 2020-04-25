@@ -12,51 +12,52 @@ from typing import List, Dict
 from seqgra.model import ModelDefinition
 from seqgra.model.model import Architecture
 
+
 class ModelDefinitionParser(ABC):
     @abstractmethod
-    def get_id(self) -> str:
+    def get_model_id(self) -> str:
         pass
-    
+
     @abstractmethod
     def get_name(self) -> str:
         pass
-    
+
     @abstractmethod
     def get_description(self) -> str:
         pass
-    
+
     @abstractmethod
     def get_library(self) -> str:
         pass
-    
+
     @abstractmethod
     def get_seed(self) -> int:
         pass
-    
+
     @abstractmethod
     def get_learner_type(self) -> str:
         pass
-    
+
     @abstractmethod
     def get_learner_implementation(self) -> str:
         pass
-    
+
     @abstractmethod
     def get_labels(self) -> List[str]:
         pass
-    
+
     @abstractmethod
     def get_architecture(self) -> Architecture:
         pass
-    
+
     @abstractmethod
     def get_loss_hyperparameters(self) -> Dict[str, str]:
         pass
-    
+
     @abstractmethod
     def get_optimizer_hyperparameters(self) -> Dict[str, str]:
         pass
-    
+
     @abstractmethod
     def get_training_process_hyperparameters(self) -> Dict[str, str]:
         pass

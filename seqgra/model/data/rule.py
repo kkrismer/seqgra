@@ -25,7 +25,7 @@ class Rule:
                    "\tPosition: ", self.position, "\n",
                    "\tProbability: ", str(self.probability), "\n",
                    "\tSequence elements:\n"]
-        str_rep += ["\t\t" + sequence_element.id + " [sid]\n"
+        str_rep += ["\t\t" + sequence_element.sid + " [sid]\n"
                     for sequence_element in self.sequence_elements]
         if self.spacing_constraints is not None and \
            len(self.spacing_constraints) > 0:

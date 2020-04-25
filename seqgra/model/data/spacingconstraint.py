@@ -7,6 +7,7 @@ SpacingConstraint class definition, markup language agnostic
 """
 from seqgra.model.data import SequenceElement
 
+
 class SpacingConstraint:
     def __init__(self, sequence_element1: SequenceElement,
                  sequence_element2: SequenceElement, min_distance: int,
@@ -19,9 +20,9 @@ class SpacingConstraint:
 
     def __str__(self):
         str_rep = ["Spacing constraint:\n",
-        "\tFirst sequence element: ", self.sequence_element1.id, " [sid]\n",
-        "\tSecond sequence element: ", self.sequence_element2.id, " [sid]\n",
-        "\tMinimum distance: ", str(self.min_distance), "\n",
-        "\tMaximum distance: ", str(self.max_distance), "\n",
-        "\tDirection: ", self.direction, "\n"]
+                   "\tFirst sequence element: ", self.sequence_element1.sid, " [sid]\n",
+                   "\tSecond sequence element: ", self.sequence_element2.sid, " [sid]\n",
+                   "\tMinimum distance: ", str(self.min_distance), "\n",
+                   "\tMaximum distance: ", str(self.max_distance), "\n",
+                   "\tDirection: ", self.direction, "\n"]
         return "".join(str_rep)

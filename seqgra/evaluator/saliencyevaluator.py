@@ -22,8 +22,8 @@ from seqgra.evaluator.explainer.ebp import ContrastiveExcitationBackpropExplaine
 
 
 class GradientBasedEvaluator(Evaluator):
-    def __init__(self, id: str, learner: Learner, output_dir: str) -> None:
-        super().__init__(id, learner, output_dir)
+    def __init__(self, evaluator_id: str, learner: Learner, output_dir: str) -> None:
+        super().__init__(evaluator_id, learner, output_dir)
         self.explainer = None
 
     def evaluate_model(self, set_name: str = "test") -> None:

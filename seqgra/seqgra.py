@@ -153,10 +153,11 @@ def run_seqgra(data_config_file: str,
     else:
         # generate synthetic data
         data_config = read_config_file(data_config_file.strip())
-        data_def_parser: DataDefinitionParser = XMLDataDefinitionParser(data_config)
+        data_def_parser: DataDefinitionParser = XMLDataDefinitionParser(
+            data_config)
         data_definition: DataDefinition = data_def_parser.get_data_definition()
         data_definition_type: str = data_definition.model_type
-        grammar_id: str = data_definition.id
+        grammar_id: str = data_definition.grammar_id
         print(data_definition)
 
         simulator = Simulator(data_definition, output_dir + "input")
@@ -171,7 +172,8 @@ def run_seqgra(data_config_file: str,
     # get learner
     if model_config_file is not None:
         model_config = read_config_file(model_config_file.strip())
-        model_def_parser: ModelDefinitionParser = XMLModelDefinitionParser(model_config)
+        model_def_parser: ModelDefinitionParser = XMLModelDefinitionParser(
+            model_config)
         model_definition: ModelDefinition = model_def_parser.get_model_definition()
         print(model_definition)
 
@@ -201,7 +203,7 @@ def run_seqgra(data_config_file: str,
 
         if evaluator_ids is not None and len(evaluator_ids) > 0:
             evaluation_dir: str = output_dir + "evaluation/" + \
-                grammar_id + "/" + learner.definition.id
+                grammar_id + "/" + learner.definition.model_id
 
             evaluators: List[Evaluator] = [get_evaluator(evaluator_id,
                                                          learner,
@@ -210,7 +212,7 @@ def run_seqgra(data_config_file: str,
 
             logging.info("evaluating model using interpretability methods")
             for evaluator in evaluators:
-                logging.info("running evaluator " + evaluator.id)
+                logging.info("running evaluator " + evaluator.evaluator_id)
                 evaluator.evaluate_model("training")
                 evaluator.evaluate_model("validation")
                 evaluator.evaluate_model("test")

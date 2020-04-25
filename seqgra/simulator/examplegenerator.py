@@ -19,6 +19,7 @@ from seqgra.simulator import Example
 from seqgra.model.data import SpacingConstraint
 from seqgra.simulator import BackgroundGenerator
 
+
 class ExampleGenerator:
     @staticmethod
     def generate_example(conditions: List[Condition], set_name: str,
@@ -26,19 +27,19 @@ class ExampleGenerator:
                          background_character: str = "_") -> Example:
         if conditions is None:
             background: str = \
-                BackgroundGenerator.generate_background(background, None, 
+                BackgroundGenerator.generate_background(background, None,
                                                         set_name)
             annotation: str = "".join([background_character] * len(background))
             example: Example = Example(background, annotation)
         else:
-            # randomly shuffle the order of the conditions, 
+            # randomly shuffle the order of the conditions,
             # which determines in what order the condition rules are applied
             random.shuffle(conditions)
-            # pick the background distribution of the first 
+            # pick the background distribution of the first
             # condition (after random shuffle)
             background: str = \
-                BackgroundGenerator.generate_background(background, 
-                                                        conditions[0], 
+                BackgroundGenerator.generate_background(background,
+                                                        conditions[0],
                                                         set_name)
             annotation: str = "".join([background_character] * len(background))
             example: Example = Example(background, annotation)
@@ -54,8 +55,8 @@ class ExampleGenerator:
         if random.uniform(0, 1) <= rule.probability:
             elements: Dict[str, str] = dict()
             for sequence_element in rule.sequence_elements:
-                elements[sequence_element.id] = sequence_element.generate()
-            
+                elements[sequence_element.sid] = sequence_element.generate()
+
             if rule.spacing_constraints is not None and \
                len(rule.spacing_constraints) > 0:
                 # process all sequence elements with spacing constraints
@@ -64,30 +65,30 @@ class ExampleGenerator:
                         ExampleGenerator.add_spatially_constrained_elements(
                             example,
                             spacing_constraint,
-                            elements[spacing_constraint.sequence_element1.id],
-                            elements[spacing_constraint.sequence_element2.id],
+                            elements[spacing_constraint.sequence_element1.sid],
+                            elements[spacing_constraint.sequence_element2.sid],
                             rule.position)
-                    if spacing_constraint.sequence_element1.id in elements:
-                        del elements[spacing_constraint.sequence_element1.id]
-                    if spacing_constraint.sequence_element2.id in elements:
-                        del elements[spacing_constraint.sequence_element2.id]
-                
+                    if spacing_constraint.sequence_element1.sid in elements:
+                        del elements[spacing_constraint.sequence_element1.sid]
+                    if spacing_constraint.sequence_element2.sid in elements:
+                        del elements[spacing_constraint.sequence_element2.sid]
+
             # process remaining sequence elements (w/o spacing constraints)
-            for element in elements.values(): 
+            for element in elements.values():
                 position: int = ExampleGenerator.get_position(
                     rule.position,
                     len(example.sequence),
                     len(element))
-                example = ExampleGenerator.add_element(example, element, 
+                example = ExampleGenerator.add_element(example, element,
                                                        position)
 
         return example
-    
+
     @staticmethod
     def get_position(rule_position: str, sequence_length,
                      element_length) -> int:
         if rule_position == "random":
-            return np.random.randint(0, 
+            return np.random.randint(0,
                                      high=sequence_length - element_length + 1)
         elif rule_position == "start":
             return 0
@@ -97,7 +98,7 @@ class ExampleGenerator:
             return int(sequence_length / 2 - element_length / 2)
         else:
             return int(rule_position) - 1
-        
+
     @staticmethod
     def get_distance(example: Example, spacing_constraint: SpacingConstraint,
                      element1: str, element2: str, rule_position: str) -> int:
@@ -108,7 +109,7 @@ class ExampleGenerator:
            rule_position != "center":
             position = int(rule_position)
             max_length -= position
-        
+
         max_distance = max_length - len(element1) - len(element2)
         return np.random.randint(
             spacing_constraint.min_distance,
@@ -116,14 +117,14 @@ class ExampleGenerator:
 
     @staticmethod
     def add_spatially_constrained_elements(
-        example: Example, 
-        spacing_constraint: SpacingConstraint,
-        element1: str,
-        element2: str,
-        rule_position: str) -> Example:
-        distance: int = ExampleGenerator.get_distance(example, 
-                                                      spacing_constraint, 
-                                                      element1, element2, 
+            example: Example,
+            spacing_constraint: SpacingConstraint,
+            element1: str,
+            element2: str,
+            rule_position: str) -> Example:
+        distance: int = ExampleGenerator.get_distance(example,
+                                                      spacing_constraint,
+                                                      element1, element2,
                                                       rule_position)
 
         if spacing_constraint.direction == "random":
@@ -135,7 +136,7 @@ class ExampleGenerator:
             len(example.sequence),
             len(element1) + distance + len(element2))
         example = ExampleGenerator.add_element(example, element1, position1)
-        
+
         position2: int = position1 + len(element1) + distance
         example = ExampleGenerator.add_element(example, element2, position2)
         return example

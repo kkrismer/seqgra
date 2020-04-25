@@ -11,19 +11,20 @@ from typing import List
 
 from seqgra.model.data import Rule
 
+
 class Condition:
-    def __init__(self, id: str, label: str,
+    def __init__(self, condition_id: str, label: str,
                  description: str, grammar: List[Rule]) -> None:
-        self.id: str = id
+        self.condition_id: str = condition_id
         self.label: str = label
         self.description: str = description
         self.grammar: List[Rule] = grammar
-        
+
     def __str__(self):
         str_rep = ["Condition:\n",
-        "\tID: ", self.id, "\n",
-        "\tLabel: ", self.label, "\n",
-        "\tDescription:\n"]
+                   "\tID: ", self.condition_id, "\n",
+                   "\tLabel: ", self.label, "\n",
+                   "\tDescription:\n"]
         if self.description:
             str_rep += ["\t", self.description, "\n"]
         str_rep += ["\tGrammar:\n"]
@@ -33,8 +34,8 @@ class Condition:
         return "".join(str_rep)
 
     @staticmethod
-    def get_by_id(conditions: List[Condition], id: str) -> Condition:
+    def get_by_id(conditions: List[Condition], condition_id: str) -> Condition:
         for condition in conditions:
-            if condition.id == id:
+            if condition.condition_id == condition_id:
                 return condition
         return None

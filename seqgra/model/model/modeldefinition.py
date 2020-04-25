@@ -6,7 +6,8 @@ from seqgra.model.model import Architecture
 
 
 class ModelDefinition:
-    def __init__(self, id: str = "", name: str = "", description: str = "",
+    def __init__(self, model_id: str = "", name: str = "",
+                 description: str = "",
                  library: str = "PyTorch",
                  seed: int = 0,
                  learner_type: str = "multi-class classification",
@@ -16,7 +17,7 @@ class ModelDefinition:
                  loss_hyperparameters: Optional[Dict[str, str]] = None,
                  optimizer_hyperparameters: Optional[Dict[str, str]] = None,
                  training_process_hyperparameters: Optional[Dict[str, str]] = None) -> None:
-        self.id: str = id
+        self.model_id: str = model_id
         self.name: str = name
         self.description: str = description
         self.library: str = library
@@ -35,7 +36,7 @@ class ModelDefinition:
     def __str__(self):
         str_rep: List[str] = ["seqgra model definition:\n",
                               "\tGeneral:\n",
-                              "\t\tID: ", self.id, " [mid]\n",
+                              "\t\tID: ", self.model_id, " [mid]\n",
                               "\t\tName: ", self.name, "\n",
                               "\t\tDescription:\n"]
         if self.description:

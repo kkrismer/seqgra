@@ -23,7 +23,7 @@ class Example:
                               "\tNumber of samples drawn: ", str(
                                   self.samples), "\n",
                               "\tInstance of the following conditions:\n"]
-        str_rep += ["\t\t" + "condition " + condition.id + " [cid]\n"
+        str_rep += ["\t\t" + "condition " + condition.condition_id + " [cid]\n"
                     for condition in self.conditions]
         return "".join(str_rep)
 
