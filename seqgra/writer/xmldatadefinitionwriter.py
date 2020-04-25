@@ -26,7 +26,6 @@ from seqgra.writer import DataDefinitionWriter
 
 
 class XMLDataDefinitionWriter(DataDefinitionWriter):
-
     @staticmethod
     def create_root_element():
         attr_qname = etree.QName("http://www.w3.org/2001/XMLSchema-instance",
