@@ -181,12 +181,6 @@ def run_seqgra(data_config_file: Optional[str],
                                        output_dir + "input/" + grammar_id,
                                        output_dir + "models/" + grammar_id)
 
-        # load data
-        training_set_file: str = learner.get_examples_file("training")
-        validation_set_file: str = learner.get_examples_file("validation")
-        x_train, y_train = learner.parse_data(training_set_file)
-        x_val, y_val = learner.parse_data(validation_set_file)
-
         # train model on data
         trained_model_available: bool = len(os.listdir(learner.output_dir)) > 0
         if trained_model_available:
@@ -195,6 +189,12 @@ def run_seqgra(data_config_file: Optional[str],
         else:
             logging.info("training model")
 
+            # load data
+            training_set_file: str = learner.get_examples_file("training")
+            validation_set_file: str = learner.get_examples_file("validation")
+            x_train, y_train = learner.parse_data(training_set_file)
+            x_val, y_val = learner.parse_data(validation_set_file)
+
             learner.create_model()
             learner.print_model_summary()
             learner.train_model(x_train=x_train, y_train=y_train,
@@ -202,20 +202,26 @@ def run_seqgra(data_config_file: Optional[str],
             learner.save_model()
 
         if evaluator_ids is not None and len(evaluator_ids) > 0:
+            logging.info("evaluating model using interpretability methods")
+
             evaluation_dir: str = output_dir + "evaluation/" + \
                 grammar_id + "/" + learner.definition.model_id
 
-            evaluators: List[Evaluator] = [get_evaluator(evaluator_id,
+            for evaluator_id in evaluator_ids:
+                results_dir: str = evaluation_dir + "/" + evaluator_id
+                results_exist: bool = os.path.exists(results_dir) and \
+                    len(os.listdir(results_dir)) > 0
+                if results_exist:
+                    logging.info("skip evaluator " + evaluator_id +
+                                 ": results already saved to disk")
+                else:
+                    evaluator: Evaluator = get_evaluator(evaluator_id,
                                                          learner,
                                                          evaluation_dir)
-                                           for evaluator_id in evaluator_ids]
-
-            logging.info("evaluating model using interpretability methods")
-            for evaluator in evaluators:
-                logging.info("running evaluator " + evaluator.evaluator_id)
-                evaluator.evaluate_model("training")
-                evaluator.evaluate_model("validation")
-                evaluator.evaluate_model("test")
+                    logging.info("running evaluator " + evaluator_id)
+                    evaluator.evaluate_model("training")
+                    evaluator.evaluate_model("validation")
+                    evaluator.evaluate_model("test")
         else:
             logging.info("skipping evaluation step: no evaluator specified")
 
