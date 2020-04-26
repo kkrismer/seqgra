@@ -17,7 +17,9 @@ from seqgra.learner import ProteinHelper
 
 class DNAMultiClassDataSet(torch.utils.data.Dataset):
     def __init__(self, x, y=None,
-                 labels: Optional[List[str]] = None, encode_data: bool = True):
+                 labels: Optional[List[str]] = None,
+                 encode_data: bool = True,
+                 add_empty_height_dim: bool = True):
         self.x = x
         self.y = y
 
@@ -26,10 +28,20 @@ class DNAMultiClassDataSet(torch.utils.data.Dataset):
         if encode_data:
             DNAHelper.check_sequence(self.x)
             self.x = self.__encode_x(self.x)
+            
+            if add_empty_height_dim:
+                # transpose for PyTorch from N x H x W x C to N x C x H x W
+                self.x = np.expand_dims(self.x, axis=0)
+                self.x = np.transpose(self.x, (1, 3, 0, 2))
+            else:
+                # transpose for PyTorch from N x W x C to N x C x W
+                self.x = np.transpose(self.x, (0, 2, 1))
+                
             if self.y is not None:
                 self.y = self.__encode_y(self.y)
 
         self.x = np.array(self.x).astype(np.float32)
+
         if self.y is not None:
             if not isinstance(self.y, np.ndarray):
                 self.y = np.array(self.y)
@@ -62,7 +74,9 @@ class DNAMultiClassDataSet(torch.utils.data.Dataset):
 
 class DNAMultiLabelDataSet(torch.utils.data.Dataset):
     def __init__(self, x: List[str], y: Optional[List[str]] = None,
-                 labels: Optional[List[str]] = None, encode_data: bool = True):
+                 labels: Optional[List[str]] = None, 
+                 encode_data: bool = True,
+                 add_empty_height_dim: bool = True):
         self.x: List[str] = x
         self.y: Optional[List[str]] = y
         DNAHelper.check_sequence(self.x)
@@ -71,6 +85,15 @@ class DNAMultiLabelDataSet(torch.utils.data.Dataset):
 
         if encode_data:
             self.x = self.__encode_x(self.x)
+            
+            if add_empty_height_dim:
+                # transpose for PyTorch from N x H x W x C to N x C x H x W
+                self.x = np.expand_dims(self.x, axis=0)
+                self.x = np.transpose(self.x, (1, 3, 0, 2))
+            else:
+                # transpose for PyTorch from N x W x C to N x C x W
+                self.x = np.transpose(self.x, (0, 2, 1))
+                
             if self.y is not None:
                 self.y = self.__encode_y(self.y)
 
@@ -107,7 +130,9 @@ class DNAMultiLabelDataSet(torch.utils.data.Dataset):
 
 class ProteinMultiClassDataSet(torch.utils.data.Dataset):
     def __init__(self, x, y=None,
-                 labels: Optional[List[str]] = None, encode_data: bool = True):
+                 labels: Optional[List[str]] = None, 
+                 encode_data: bool = True,
+                 add_empty_height_dim: bool = True):
         self.x = x
         self.y = y
 
@@ -116,10 +141,20 @@ class ProteinMultiClassDataSet(torch.utils.data.Dataset):
         if encode_data:
             ProteinHelper.check_sequence(self.x)
             self.x = self.__encode_x(self.x)
+            
+            if add_empty_height_dim:
+                # transpose for PyTorch from N x H x W x C to N x C x H x W
+                self.x = np.expand_dims(self.x, axis=0)
+                self.x = np.transpose(self.x, (1, 3, 0, 2))
+            else:
+                # transpose for PyTorch from N x W x C to N x C x W
+                self.x = np.transpose(self.x, (0, 2, 1))
+                
             if self.y is not None:
                 self.y = self.__encode_y(self.y)
 
         self.x = np.array(self.x).astype(np.float32)
+
         if self.y is not None:
             if not isinstance(self.y, np.ndarray):
                 self.y = np.array(self.y)
@@ -152,7 +187,9 @@ class ProteinMultiClassDataSet(torch.utils.data.Dataset):
 
 class ProteinMultiLabelDataSet(torch.utils.data.Dataset):
     def __init__(self, x: List[str], y: Optional[List[str]] = None,
-                 labels: Optional[List[str]] = None, encode_data: bool = True):
+                 labels: Optional[List[str]] = None, 
+                 encode_data: bool = True,
+                 add_empty_height_dim: bool = True):
         self.x: List[str] = x
         self.y: Optional[List[str]] = y
         ProteinHelper.check_sequence(self.x)
@@ -161,6 +198,15 @@ class ProteinMultiLabelDataSet(torch.utils.data.Dataset):
 
         if encode_data:
             self.x = self.__encode_x(self.x)
+
+            if add_empty_height_dim:
+                # transpose for PyTorch from N x H x W x C to N x C x H x W
+                self.x = np.expand_dims(self.x, axis=0)
+                self.x = np.transpose(self.x, (1, 3, 0, 2))
+            else:
+                # transpose for PyTorch from N x W x C to N x C x W
+                self.x = np.transpose(self.x, (0, 2, 1))
+
             if self.y is not None:
                 self.y = self.__encode_y(self.y)
 
