@@ -145,6 +145,8 @@ def run_seqgra(data_config_file: Optional[str],
                evaluator_ids: Optional[List[str]],
                output_dir: str) -> None:
     output_dir = format_output_dir(output_dir.strip())
+    new_data: bool = False
+    new_model: bool = False
 
     if data_config_file is None:
         data_definition_type: Optional[str] = None
@@ -168,6 +170,7 @@ def run_seqgra(data_config_file: Optional[str],
         else:
             logging.info("generating synthetic data")
             simulator.simulate_data()
+            new_data = True
 
     # get learner
     if model_config_file is not None:
@@ -184,6 +187,12 @@ def run_seqgra(data_config_file: Optional[str],
         # train model on data
         trained_model_available: bool = len(os.listdir(learner.output_dir)) > 0
         if trained_model_available:
+            if new_data:
+                raise Exception("previously trained model used outdated "
+                                "training data; please delete '" +
+                                learner.output_dir +
+                                "' and run seqgra again to train new model "
+                                "on current data")
             logging.info("loading previously trained model")
             learner.load_model()
         else:
@@ -200,6 +209,7 @@ def run_seqgra(data_config_file: Optional[str],
             learner.train_model(x_train=x_train, y_train=y_train,
                                 x_val=x_val, y_val=y_val)
             learner.save_model()
+            new_model = True
 
         if evaluator_ids is not None and len(evaluator_ids) > 0:
             logging.info("evaluating model using interpretability methods")
@@ -214,13 +224,25 @@ def run_seqgra(data_config_file: Optional[str],
                 if results_exist:
                     logging.info("skip evaluator " + evaluator_id +
                                  ": results already saved to disk")
+                    if new_model:
+                        logging.warn("results from evaluator " + evaluator_id +
+                                     " are based on an outdated model; "
+                                     "please delete '" + results_dir + "' "
+                                     "and run seqgra again to get results "
+                                     "from " + evaluator_id +
+                                     " on current model")
                 else:
                     evaluator: Evaluator = get_evaluator(evaluator_id,
                                                          learner,
                                                          evaluation_dir)
-                    logging.info("running evaluator " + evaluator_id)
+                    logging.info("running evaluator " + evaluator_id +
+                                 " on training set")
                     evaluator.evaluate_model("training")
+                    logging.info("running evaluator " + evaluator_id +
+                                 " on validation set")
                     evaluator.evaluate_model("validation")
+                    logging.info("running evaluator " + evaluator_id +
+                                 " on test set")
                     evaluator.evaluate_model("test")
         else:
             logging.info("skipping evaluation step: no evaluator specified")
@@ -287,7 +309,13 @@ def main():
     if args.evaluators is not None:
         for evaluator in args.evaluators:
             if evaluator not in frozenset(["metrics", "predict", "roc",
-                                           "pr", "sis"]):
+                                           "pr", "sis", "gradient",
+                                           "gradientx-input", "saliency",
+                                           "integrated-gradient",
+                                           "nonlinear-integrated-gradient",
+                                           "grad-cam-gradient", "deep-lift",
+                                           "excitation-backprop",
+                                           "contrastive-excitation-backprop"]):
                 raise ValueError(
                     "invalid evaluator ID {s!r}".format(s=evaluator))
 
