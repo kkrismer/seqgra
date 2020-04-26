@@ -93,9 +93,9 @@ class TorchHelper:
 
     @staticmethod
     def set_seed(learner: Learner) -> None:
-        random.seed(learner.seed)
-        np.random.seed(learner.seed)
-        torch.manual_seed(learner.seed)
+        random.seed(learner.definition.seed)
+        np.random.seed(learner.definition.seed)
+        torch.manual_seed(learner.definition.seed)
 
     @staticmethod
     def train_model(learner: Learner,
@@ -105,13 +105,13 @@ class TorchHelper:
             learner.create_model()
 
         batch_size = int(
-            learner.training_process_hyperparameters["batch_size"])
+            learner.definition.training_process_hyperparameters["batch_size"])
 
         # init data loaders
         training_loader = torch.utils.data.DataLoader(
             training_dataset,
             batch_size=batch_size,
-            shuffle=bool(learner.training_process_hyperparameters["shuffle"]))
+            shuffle=bool(learner.definition.training_process_hyperparameters["shuffle"]))
 
         validation_loader = torch.utils.data.DataLoader(
             validation_dataset,
@@ -138,7 +138,7 @@ class TorchHelper:
             logging.WARNING)
 
         num_epochs: int = int(
-            learner.training_process_hyperparameters["epochs"])
+            learner.definition.training_process_hyperparameters["epochs"])
 
         @trainer.on(Events.EPOCH_COMPLETED)
         def log_training_results(trainer):
@@ -176,7 +176,7 @@ class TorchHelper:
                                         {"model": learner.model})
 
         # early stopping callback
-        if bool(learner.training_process_hyperparameters["early_stopping"]):
+        if bool(learner.definition.training_process_hyperparameters["early_stopping"]):
             es_handler = EarlyStopping(patience=2,
                                        score_function=score_fn,
                                        trainer=trainer,
@@ -200,13 +200,13 @@ class TorchHelper:
             learner.create_model()
 
         batch_size = int(
-            learner.training_process_hyperparameters["batch_size"])
+            learner.definition.training_process_hyperparameters["batch_size"])
 
         # init data loaders
         training_loader = torch.utils.data.DataLoader(
             training_dataset,
             batch_size=batch_size,
-            shuffle=bool(learner.training_process_hyperparameters["shuffle"]))
+            shuffle=bool(learner.definition.training_process_hyperparameters["shuffle"]))
 
         validation_loader = torch.utils.data.DataLoader(
             validation_dataset,
@@ -219,7 +219,7 @@ class TorchHelper:
 
         # training loop
         num_epochs: int = int(
-            learner.training_process_hyperparameters["epochs"])
+            learner.definition.training_process_hyperparameters["epochs"])
 
         for epoch in range(num_epochs):
             print("epoch {}/{}".format(epoch + 1, num_epochs))
@@ -301,7 +301,7 @@ class TorchHelper:
         data_loader = torch.utils.data.DataLoader(
             dataset,
             batch_size=int(
-                learner.training_process_hyperparameters["batch_size"]),
+                learner.definition.training_process_hyperparameters["batch_size"]),
             shuffle=False)
 
         # GPU or CPU?
@@ -338,7 +338,7 @@ class TorchHelper:
         data_loader = torch.utils.data.DataLoader(
             dataset,
             batch_size=int(
-                learner.training_process_hyperparameters["batch_size"]),
+                learner.definition.training_process_hyperparameters["batch_size"]),
             shuffle=False)
 
         # GPU or CPU?
@@ -414,7 +414,7 @@ class TorchHelper:
 
     @staticmethod
     def get_metrics(learner: Learner):
-        is_multilabel = learner.learner_type == "multi-label classification"
+        is_multilabel = learner.definition.learner_type == "multi-label classification"
         metrics_dict = dict()
         for metric in learner.metrics:
             metric = metric.lower().strip()
