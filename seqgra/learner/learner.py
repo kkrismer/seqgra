@@ -14,13 +14,6 @@ import os
 from abc import ABC, abstractmethod
 from typing import List, Any, Optional
 
-from sklearn.metrics import precision_recall_curve
-from sklearn.metrics import average_precision_score
-from sklearn.metrics import roc_curve, auc
-import matplotlib.pyplot as plt
-import numpy as np
-from scipy import interp
-
 from seqgra import MiscHelper
 from seqgra.model import ModelDefinition
 
@@ -96,7 +89,7 @@ class Learner(ABC):
         self.data_dir = MiscHelper.prepare_path(data_dir)
         self.output_dir = MiscHelper.prepare_path(output_dir + "/" +
                                                   self.definition.model_id,
-                                                  allow_exists=False)
+                                                  allow_exists=True)
         self.model = None
         self.optimizer = None
         self.criterion = None
@@ -364,8 +357,6 @@ class MultiClassClassificationLearner(Learner):
         get_num_params
         set_seed
         evaluate_model
-        create_roc_curve
-        create_precision_recall_curve
 
     Arguments:
         parser (ModelParser): parser for model definition
@@ -411,145 +402,6 @@ class MultiClassClassificationLearner(Learner):
                 "specify either file_name or x and y")
         else:
             return self._evaluate_model(x, y)
-
-    def create_roc_curve(self, y_true, y_hat, file_name: str) -> None:
-        """Create ROC curve.
-
-        Plots ROC curves for each class label, including micro-average and
-        macro-average. Saves plot as PDF in `file_name`.
-
-        Arguments:
-            y_true (array): TODO ; shape = [n_samples, n_classes]
-            y_hat (array): TODO ; shape = [n_samples, n_classes]
-            file_name (str): TODO
-        """
-        fpr = dict()
-        tpr = dict()
-        roc_auc = dict()
-        n_classes = len(self.definition.labels)
-        for i in range(n_classes):
-            fpr[i], tpr[i], _ = roc_curve(y_true[:, i], y_hat[:, i])
-            roc_auc[i] = auc(fpr[i], tpr[i])
-
-        # Compute micro-average ROC curve and ROC area
-        fpr["micro"], tpr["micro"], _ = roc_curve(
-            y_true.ravel(), y_hat.ravel())
-        roc_auc["micro"] = auc(fpr["micro"], tpr["micro"])
-
-        # Compute macro-average ROC curve and ROC area
-
-        # First aggregate all false positive rates
-        all_fpr = np.unique(np.concatenate([fpr[i] for i in range(n_classes)]))
-
-        # Then interpolate all ROC curves at this points
-        mean_tpr = np.zeros_like(all_fpr)
-        for i in range(n_classes):
-            mean_tpr += interp(all_fpr, fpr[i], tpr[i])
-
-        # Finally average it and compute AUC
-        mean_tpr /= n_classes
-
-        fpr["macro"] = all_fpr
-        tpr["macro"] = mean_tpr
-        roc_auc["macro"] = auc(fpr["macro"], tpr["macro"])
-
-        # Plot all ROC curves
-        plt.figure()
-        lines = []
-        labels = []
-
-        line, _ = plt.plot(fpr["micro"], tpr["micro"],
-                           color="gold", linestyle=":", linewidth=2)
-        lines.append(line)
-        labels.append("micro-average (area = {0:0.2f})"
-                      "".format(roc_auc["micro"]))
-
-        line, _ = plt.plot(fpr["macro"], tpr["macro"],
-                           color="darkorange", linestyle=":", linewidth=2)
-        lines.append(line)
-        labels.append("macro-average (area = {0:0.2f})"
-                      "".format(roc_auc["macro"]))
-
-        for i in range(n_classes):
-            line, _ = plt.plot(fpr[i], tpr[i], linewidth=2)
-            lines.append(line)
-            labels.append("condition {0} (area = {1:0.2f})"
-                          "".format(self.definition.labels[i], roc_auc[i]))
-
-        plt.plot([0, 1], [0, 1], "k--", linewidth=2)
-        plt.xlim([0.0, 1.0])
-        plt.ylim([0.0, 1.05])
-        plt.xlabel("False Positive Rate")
-        plt.ylabel("True Positive Rate")
-        plt.title("ROC curve")
-        plt.legend(lines, labels, bbox_to_anchor=(1.04, 1),
-                   loc="upper left", prop=dict(size=14))
-        plt.savefig(file_name, bbox_inches="tight")
-
-    def create_precision_recall_curve(self, y_true, y_hat,
-                                      file_name: str) -> None:
-        """Create precision-recall curve.
-
-        Plots PR curves for each class label, including micro-average and
-        iso-F1 curves. Saves plot as PDF in `file_name`.
-
-        Arguments:
-            y_true (array): TODO ; shape = [n_samples, n_classes]
-            y_hat (array): TODO ; shape = [n_samples, n_classes]
-            file_name (str): TODO
-        """
-        precision = dict()
-        recall = dict()
-        average_precision = dict()
-        n_classes = len(self.definition.labels)
-        for i in range(n_classes):
-            precision[i], recall[i], _ = precision_recall_curve(y_true[:, i],
-                                                                y_hat[:, i])
-            average_precision[i] = average_precision_score(
-                y_true[:, i], y_hat[:, i])
-
-        # A "micro-average": quantifying score on all classes jointly
-        precision["micro"], recall["micro"], _ = precision_recall_curve(
-            y_true.ravel(), y_hat.ravel())
-        average_precision["micro"] = average_precision_score(y_true, y_hat,
-                                                             average="micro")
-
-        plt.figure(figsize=(7, 8))
-        lines = []
-        labels = []
-
-        f_scores = np.linspace(0.2, 0.8, num=4)
-        for f_score in f_scores:
-            x = np.linspace(0.001, 1)
-            y = f_score * x / (2 * x - f_score)
-            line, _ = plt.plot(x[y >= 0], y[y >= 0], color="gray", alpha=0.2)
-            plt.annotate(r"$F_1 = {0:0.1f}$".format(
-                f_score), xy=(0.89, y[45] + 0.02))
-
-        lines.append(line)
-        labels.append(r"iso-$F_1$ curves")
-        line, _ = plt.plot(recall["micro"], precision["micro"],
-                           linestyle=":", color="gold", linewidth=2)
-        lines.append(line)
-        labels.append("micro-average (area = {0:0.2f})"
-                      "".format(average_precision["micro"]))
-
-        for i in range(n_classes):
-            line, _ = plt.plot(recall[i], precision[i], linewidth=2)
-            lines.append(line)
-            labels.append("condition {0} (area = {1:0.2f})"
-                          "".format(self.definition.labels[i], average_precision[i]))
-
-        fig = plt.gcf()
-        fig.subplots_adjust(bottom=0.25)
-        plt.xlim([0.0, 1.0])
-        plt.ylim([0.0, 1.05])
-        plt.xlabel("Recall")
-        plt.ylabel("Precision")
-        plt.title("Precision-Recall curve")
-        plt.legend(lines, labels, bbox_to_anchor=(1.04, 1),
-                   loc="upper left", prop=dict(size=14))
-        plt.savefig(file_name, bbox_inches="tight")
 
     @abstractmethod
     def _evaluate_model(self, x: List[str], y: List[str]):
@@ -607,8 +459,6 @@ class MultiLabelClassificationLearner(Learner):
         get_num_params
         set_seed
         evaluate_model
-        create_roc_curve
-        create_precision_recall_curve
 
     Arguments:
         parser (ModelParser): parser for model definition
@@ -654,144 +504,6 @@ class MultiLabelClassificationLearner(Learner):
                 "specify either file_name or x and y")
         else:
             return self._evaluate_model(x, y)
-
-    def create_roc_curve(self, y_true, y_hat, file_name) -> None:
-        """Create ROC curve.
-
-        Plots ROC curves for each class label, including micro-average and
-        macro-average. Saves plot as PDF in `file_name`.
-
-        Arguments:
-            y_true (array): TODO ; shape = [n_samples, n_classes]
-            y_hat (array): TODO ; shape = [n_samples, n_classes]
-            file_name (str): TODO
-        """
-        fpr = dict()
-        tpr = dict()
-        roc_auc = dict()
-        n_classes = len(self.definition.labels)
-        for i in range(n_classes):
-            fpr[i], tpr[i], _ = roc_curve(y_true[:, i], y_hat[:, i])
-            roc_auc[i] = auc(fpr[i], tpr[i])
-
-        # Compute micro-average ROC curve and ROC area
-        fpr["micro"], tpr["micro"], _ = roc_curve(
-            y_true.ravel(), y_hat.ravel())
-        roc_auc["micro"] = auc(fpr["micro"], tpr["micro"])
-
-        # Compute macro-average ROC curve and ROC area
-
-        # First aggregate all false positive rates
-        all_fpr = np.unique(np.concatenate([fpr[i] for i in range(n_classes)]))
-
-        # Then interpolate all ROC curves at this points
-        mean_tpr = np.zeros_like(all_fpr)
-        for i in range(n_classes):
-            mean_tpr += interp(all_fpr, fpr[i], tpr[i])
-
-        # Finally average it and compute AUC
-        mean_tpr /= n_classes
-
-        fpr["macro"] = all_fpr
-        tpr["macro"] = mean_tpr
-        roc_auc["macro"] = auc(fpr["macro"], tpr["macro"])
-
-        # Plot all ROC curves
-        plt.figure()
-        lines = []
-        labels = []
-
-        line, _ = plt.plot(fpr["micro"], tpr["micro"],
-                           color="gold", linestyle=":", linewidth=2)
-        lines.append(line)
-        labels.append("micro-average (area = {0:0.2f})"
-                      "".format(roc_auc["micro"]))
-
-        line, _ = plt.plot(fpr["macro"], tpr["macro"],
-                           color="darkorange", linestyle=":", linewidth=2)
-        lines.append(line)
-        labels.append("macro-average (area = {0:0.2f})"
-                      "".format(roc_auc["macro"]))
-
-        for i in range(n_classes):
-            line, _ = plt.plot(fpr[i], tpr[i], linewidth=2)
-            lines.append(line)
-            labels.append("condition {0} (area = {1:0.2f})"
-                          "".format(self.definition.labels[i], roc_auc[i]))
-
-        plt.plot([0, 1], [0, 1], "k--", linewidth=2)
-        plt.xlim([0.0, 1.0])
-        plt.ylim([0.0, 1.05])
-        plt.xlabel("False Positive Rate")
-        plt.ylabel("True Positive Rate")
-        plt.title("ROC curve")
-        plt.legend(lines, labels, bbox_to_anchor=(1.04, 1),
-                   loc="upper left", prop=dict(size=14))
-        plt.savefig(file_name, bbox_inches="tight")
-
-    def create_precision_recall_curve(self, y_true, y_hat, file_name) -> None:
-        """Create precision-recall curve.
-
-        Plots PR curves for each class label, including micro-average and
-        iso-F1 curves. Saves plot as PDF in `file_name`.
-
-        Arguments:
-            y_true (array): TODO ; shape = [n_samples, n_classes]
-            y_hat (array): TODO ; shape = [n_samples, n_classes]
-            file_name (str): TODO
-        """
-        precision = dict()
-        recall = dict()
-        average_precision = dict()
-        n_classes = len(self.definition.labels)
-        for i in range(n_classes):
-            precision[i], recall[i], _ = precision_recall_curve(y_true[:, i],
-                                                                y_hat[:, i])
-            average_precision[i] = average_precision_score(
-                y_true[:, i], y_hat[:, i])
-
-        # A "micro-average": quantifying score on all classes jointly
-        precision["micro"], recall["micro"], _ = precision_recall_curve(
-            y_true.ravel(), y_hat.ravel())
-        average_precision["micro"] = average_precision_score(y_true, y_hat,
-                                                             average="micro")
-
-        plt.figure(figsize=(7, 8))
-        lines = []
-        labels = []
-
-        f_scores = np.linspace(0.2, 0.8, num=4)
-        for f_score in f_scores:
-            x = np.linspace(0.001, 1)
-            y = f_score * x / (2 * x - f_score)
-            line, _ = plt.plot(x[y >= 0], y[y >= 0], color="gray", alpha=0.2)
-            plt.annotate(r"$F_1 = {0:0.1f}$".format(
-                f_score), xy=(0.89, y[45] + 0.02))
-
-        lines.append(line)
-        labels.append(r"iso-$F_1$ curves")
-        line, = plt.plot(recall["micro"], precision["micro"],
-                         linestyle=":", color="gold", linewidth=2)
-        lines.append(line)
-        labels.append("micro-average (area = {0:0.2f})"
-                      "".format(average_precision["micro"]))
-
-        for i in range(n_classes):
-            line, = plt.plot(recall[i], precision[i], linewidth=2)
-            lines.append(line)
-            labels.append("condition {0} (area = {1:0.2f})"
-                          "".format(self.definition.labels[i], average_precision[i]))
-
-        fig = plt.gcf()
-        fig.subplots_adjust(bottom=0.25)
-        plt.xlim([0.0, 1.0])
-        plt.ylim([0.0, 1.05])
-        plt.xlabel("Recall")
-        plt.ylabel("Precision")
-        plt.title("Precision-Recall curve")
-        plt.legend(lines, labels, bbox_to_anchor=(1.04, 1),
-                   loc="upper left", prop=dict(size=14))
-        plt.savefig(file_name, bbox_inches="tight")
 
     @abstractmethod
     def _evaluate_model(self, x: List[str], y: List[List[str]]):
@@ -850,8 +562,6 @@ class MultipleRegressionLearner(Learner):
         get_num_params
         set_seed
         evaluate_model
-        create_roc_curve
-        create_precision_recall_curve
 
     Arguments:
         parser (ModelParser): parser for model definition
@@ -896,30 +606,6 @@ class MultipleRegressionLearner(Learner):
             raise Exception("specify either file_name or x and y")
         else:
             return self._evaluate_model(x, y)
-
-    def create_roc_curve(self, y_true, y_hat, file_name) -> None:
-        """Create ROC curve.
-
-        Plots ROC curves for each class label, including micro-average and
-        macro-average. Saves plot as PDF in `file_name`.
-
-        Arguments:
-            y_true (array): TODO ; shape = [n_samples, n_classes]
-            y_hat (array): TODO ; shape = [n_samples, n_classes]
-            file_name (str): TODO
-        """
-
-    def create_precision_recall_curve(self, y_true, y_hat, file_name) -> None:
-        """Create precision-recall curve.
-
-        Plots PR curves for each class label, including micro-average and
-        iso-F1 curves. Saves plot as PDF in `file_name`.
-
-        Arguments:
-            y_true (array): TODO ; shape = [n_samples, n_classes]
-            y_hat (array): TODO ; shape = [n_samples, n_classes]
-            file_name (str): TODO
-        """
 
     @abstractmethod
     def _evaluate_model(self, x: List[str], y: List[float]):
@@ -978,8 +664,6 @@ class MultivariateRegressionLearner(Learner):
         get_num_params
         set_seed
         evaluate_model
-        create_roc_curve
-        create_precision_recall_curve
 
     Arguments:
         parser (ModelParser): parser for model definition
@@ -1025,30 +709,6 @@ class MultivariateRegressionLearner(Learner):
                 "specify either file_name or x and y")
         else:
             return self._evaluate_model(x, y)
-
-    def create_roc_curve(self, y_true, y_hat, file_name) -> None:
-        """Create ROC curve.
-
-        Plots ROC curves for each class label, including micro-average and
-        macro-average. Saves plot as PDF in `file_name`.
-
-        Arguments:
-            y_true (array): TODO ; shape = [n_samples, n_classes]
-            y_hat (array): TODO ; shape = [n_samples, n_classes]
-            file_name (str): TODO
-        """
-
-    def create_precision_recall_curve(self, y_true, y_hat, file_name) -> None:
-        """Create precision-recall curve.
-
-        Plots PR curves for each class label, including micro-average and
-        iso-F1 curves. Saves plot as PDF in `file_name`.
-
-        Arguments:
-            y_true (array): TODO ; shape = [n_samples, n_classes]
-            y_hat (array): TODO ; shape = [n_samples, n_classes]
-            file_name (str): TODO
-        """
 
     @abstractmethod
     def _evaluate_model(self, x: List[str], y: List[float]):
