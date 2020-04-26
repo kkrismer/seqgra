@@ -9,10 +9,10 @@ from typing import List, Any
 import os
 import sys
 import random
-import pkg_resources
 
 import tensorflow as tf
 import numpy as np
+import pkg_resources
 
 from seqgra.learner import Learner
 from seqgra.model.model import Architecture
@@ -85,7 +85,7 @@ class KerasHelper:
                learner.definition.loss_hyperparameters is not None and \
                learner.metrics is not None:
                 local_metrics = learner.metrics[learner.metrics != "loss"]
-                if type(local_metrics) != "list":
+                if isinstance(local_metrics, list):
                     local_metrics = [local_metrics]
                 learner.model.compile(
                     optimizer=KerasHelper.get_optimizer(

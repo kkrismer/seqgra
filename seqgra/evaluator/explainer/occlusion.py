@@ -6,7 +6,7 @@ from skimage.util import view_as_windows
 # modified from https://github.com/marcoancona/DeepExplain/blob/master/deepexplain/tensorflow/methods.py#L291-L342
 # note the different dim order in pytorch (NCHW) and tensorflow (NHWC)
 def occlusion(inp, model, window_shape, step=None):
-    if type(window_shape) == int:
+    if isinstance(window_shape, int):
         window_shape = (window_shape, window_shape, 3)
         
     if step is None:
