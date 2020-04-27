@@ -10,9 +10,13 @@ Classes:
     MultivariateRegressionLearner: abstract class for multivariate
         regression learners
 """
-import os
 from abc import ABC, abstractmethod
-from typing import List, Any, Optional, Tuple
+import logging
+import os
+import re
+from typing import Any, List, Optional, Tuple
+
+import pandas as pd
 
 from seqgra import MiscHelper
 from seqgra.model import ModelDefinition
@@ -51,7 +55,8 @@ class Learner(ABC):
 
     Methods:
         train_model
-        parse_data
+        parse_examples_data
+        parse_annotations_data
         get_examples_file
         get_annotations_file
         create_model
@@ -126,10 +131,10 @@ class Learner(ABC):
         self.set_seed()
 
         if training_file is not None:
-            x_train, y_train = self.parse_data(training_file)
+            x_train, y_train = self.parse_examples_data(training_file)
 
         if validation_file is not None:
-            x_val, y_val = self.parse_data(validation_file)
+            x_val, y_val = self.parse_examples_data(validation_file)
 
         if x_train is None or y_train is None or \
            x_val is None or y_val is None:
@@ -139,15 +144,54 @@ class Learner(ABC):
             self._train_model(x_train, y_train, x_val, y_val)
 
     @abstractmethod
-    def parse_data(self, file_name: str) -> Tuple[List[str], List[str]]:
-        """Abstract method to parse data.
+    def parse_examples_data(self,
+                            file_name: str) -> Tuple[List[str], List[str]]:
+        """Abstract method to parse examples data file.
 
-        Sequence data type specific implementations provided for DNA and
-        amino acid sequences.
+        Checks validity of sequences with sequence data type specific 
+        implementations provided for DNA and amino acid sequences.
 
         Arguments:
             file_name (str): file name
+
+        Returns:
+            Tuple:
+                x (List[str]): sequences
+                y (List[str]): labels
         """
+
+    def parse_annotations_data(self,
+                               file_name: str) -> Tuple[List[str], List[str]]:
+        """Method to parse annotations data file.
+
+        Checks validity of annotations.
+
+        Arguments:
+            file_name (str): file name
+
+        Returns:
+            Tuple:
+                annotations (List[str]): annotations
+                y (List[str]): labels
+        """
+        df = pd.read_csv(file_name, sep="\t")
+        annotations: List[str] = df["annotation"].tolist()
+        y: List[str] = df["y"].tolist()
+
+        Learner.check_annotations(annotations)
+        return (annotations, y)
+
+    @staticmethod
+    def check_annotations(annotations: List[str]) -> bool:
+        is_valid: bool = True
+        for annotation in annotations:
+            if not re.match("^[\_GC]*$", annotation):
+                logging.warn("example with invalid annotation "
+                             "(only 'G' for grammar position, 'C' for "
+                             "confounding position, and '_' for background "
+                             "position allowed): " + annotation)
+                is_valid = False
+        return is_valid
 
     def get_examples_file(self, set_name: str = "test") -> str:
         """Get path to examples file.
@@ -342,7 +386,8 @@ class MultiClassClassificationLearner(Learner):
 
     Methods:
         train_model
-        parse_data
+        parse_examples_data
+        parse_annotations_data
         get_examples_file
         get_annotations_file
         create_model
@@ -395,7 +440,7 @@ class MultiClassClassificationLearner(Learner):
             Exception: if neither `file_name` nor (`x` and `y`) are specified
         """
         if file_name is not None:
-            x, y = self.parse_data(file_name)
+            x, y = self.parse_examples_data(file_name)
 
         if x is None or y is None:
             raise Exception(
@@ -444,7 +489,8 @@ class MultiLabelClassificationLearner(Learner):
 
     Methods:
         train_model
-        parse_data
+        parse_examples_data
+        parse_annotations_data
         get_examples_file
         get_annotations_file
         create_model
@@ -497,7 +543,7 @@ class MultiLabelClassificationLearner(Learner):
             Exception: if neither `file_name` nor (`x` and `y`) are specified
         """
         if file_name is not None:
-            x, y = self.parse_data(file_name)
+            x, y = self.parse_examples_data(file_name)
 
         if x is None or y is None:
             raise Exception(
@@ -547,7 +593,8 @@ class MultipleRegressionLearner(Learner):
 
     Methods:
         train_model
-        parse_data
+        parse_examples_data
+        parse_annotations_data
         get_examples_file
         get_annotations_file
         create_model
@@ -600,7 +647,7 @@ class MultipleRegressionLearner(Learner):
             Exception: if neither `file_name` nor (`x` and `y`) are specified
         """
         if file_name is not None:
-            x, y = self.parse_data(file_name)
+            x, y = self.parse_examples_data(file_name)
 
         if x is None or y is None:
             raise Exception("specify either file_name or x and y")
@@ -649,7 +696,8 @@ class MultivariateRegressionLearner(Learner):
 
     Methods:
         train_model
-        parse_data
+        parse_examples_data
+        parse_annotations_data
         get_examples_file
         get_annotations_file
         create_model
@@ -702,7 +750,7 @@ class MultivariateRegressionLearner(Learner):
             Exception: if neither `file_name` nor (`x` and `y`) are specified
         """
         if file_name is not None:
-            x, y = self.parse_data(file_name)
+            x, y = self.parse_examples_data(file_name)
 
         if x is None or y is None:
             raise Exception(

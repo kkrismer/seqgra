@@ -15,7 +15,7 @@ class ProteinHelper:
     @staticmethod
     def convert_dense_to_one_hot_encoding(seq: str):
         aa_to_num = dict({"A": 0, "R": 1, "N": 2, "D": 3, "C": 4,
-                          "E": 5, "Q": 6, "G": 7, "H": 8, "I": 9, 
+                          "E": 5, "Q": 6, "G": 7, "H": 8, "I": 9,
                           "L": 10, "K": 11, "M": 12, "F": 13, "P": 14,
                           "S": 15, "T": 16, "W": 17, "Y": 18, "V": 19})
         seq = list(seq)
@@ -96,6 +96,8 @@ class ProteinHelper:
         is_valid: bool = True
         for seq in seqs:
             if not re.match("^[ARNDCEQGHILKMFPSTWYV]*$", seq):
-                logging.warn("example with invalid amino acid sequence:" + seq)
+                logging.warn("example with invalid amino acid sequence "
+                             "(only uppercase single letter codes of 20 "
+                             "canonical amino acids allowed): " + seq)
                 is_valid = False
         return is_valid

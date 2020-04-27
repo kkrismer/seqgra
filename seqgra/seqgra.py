@@ -201,8 +201,8 @@ def run_seqgra(data_config_file: Optional[str],
             # load data
             training_set_file: str = learner.get_examples_file("training")
             validation_set_file: str = learner.get_examples_file("validation")
-            x_train, y_train = learner.parse_data(training_set_file)
-            x_val, y_val = learner.parse_data(validation_set_file)
+            x_train, y_train = learner.parse_examples_data(training_set_file)
+            x_val, y_val = learner.parse_examples_data(validation_set_file)
 
             learner.create_model()
             learner.print_model_summary()

@@ -35,14 +35,14 @@ class DNAMultiClassClassificationLearner(MultiClassClassificationLearner):
 
     def encode_y(self, y: List[str]):
         if self.definition.labels is None:
-            raise Exception("unknown labels, call parse_data or "
+            raise Exception("unknown labels, call parse_examples_data or "
                             "load_model first")
         labels = np.array(self.definition.labels)
         return np.vstack([ex == labels for ex in y])
 
     def decode_y(self, y):
         if self.definition.labels is None:
-            raise Exception("unknown labels, call parse_data or "
+            raise Exception("unknown labels, call parse_examples_data or "
                             "load_model first")
         labels = np.array(self.definition.labels)
 
@@ -50,7 +50,7 @@ class DNAMultiClassClassificationLearner(MultiClassClassificationLearner):
         decoded_y = list(itertools.chain(*decoded_y))
         return decoded_y
 
-    def parse_data(self, file_name: str) -> Tuple[List[str], List[str]]:
+    def parse_examples_data(self, file_name: str) -> Tuple[List[str], List[str]]:
         df = pd.read_csv(file_name, sep="\t")
         x: List[str] = df["x"].tolist()
         y: List[str] = df["y"].tolist()
@@ -74,7 +74,7 @@ class DNAMultiLabelClassificationLearner(MultiLabelClassificationLearner):
 
     def encode_y(self, y: List[str]):
         if self.definition.labels is None:
-            raise Exception("unknown labels, call parse_data or "
+            raise Exception("unknown labels, call parse_examples_data or "
                             "load_model first")
 
         y = [ex.split("|") for ex in y]
@@ -87,7 +87,7 @@ class DNAMultiLabelClassificationLearner(MultiLabelClassificationLearner):
 
     def decode_y(self, y):
         if self.definition.labels is None:
-            raise Exception("unknown labels, call parse_data or "
+            raise Exception("unknown labels, call parse_examples_data or "
                             "load_model first")
         labels = np.array(self.definition.labels)
 
@@ -95,7 +95,8 @@ class DNAMultiLabelClassificationLearner(MultiLabelClassificationLearner):
         decoded_y = ["|".join(ex) for ex in decoded_y]
         return decoded_y
 
-    def parse_data(self, file_name: str) -> Tuple[List[str], List[str]]:
+    def parse_examples_data(self,
+                            file_name: str) -> Tuple[List[str], List[str]]:
         df = pd.read_csv(file_name, sep="\t")
         x: List[str] = df["x"].tolist()
         y: List[str] = df["y"].replace(np.nan, "", regex=True).tolist()
