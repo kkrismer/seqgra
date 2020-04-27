@@ -7,7 +7,7 @@ calculates accuracy and loss for training, validation and test set
 
 @author: Konstantin Krismer
 """
-from typing import List, Any
+from typing import Any, List
 
 import pandas as pd
 
@@ -19,7 +19,8 @@ class MetricsEvaluator(Evaluator):
     def __init__(self, learner: Learner, output_dir: str) -> None:
         super().__init__("metrics", learner, output_dir)
 
-    def _evaluate_model(self, x: List[str], y: List[str]) -> Any:
+    def _evaluate_model(self, x: List[str], y: List[str],
+                        annotations: List[str]) -> Any:
         return self.learner.evaluate_model(x=x, y=y)
 
     def _save_results(self, results, set_name: str = "test") -> None:

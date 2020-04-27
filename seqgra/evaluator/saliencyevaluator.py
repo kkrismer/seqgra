@@ -6,7 +6,7 @@ MIT - CSAIL - Gifford Lab - seqgra
 
 @author: Jennifer Hammelman
 """
-from typing import List, Optional, Any
+from typing import Any, List
 
 import numpy as np
 import torch
@@ -29,11 +29,8 @@ class GradientBasedEvaluator(Evaluator):
         super().__init__(evaluator_id, learner, output_dir)
         self.explainer = None
 
-    def _evaluate_model(self, x: List[str], y: List[str]) -> Any:
-        '''
-        TODO make calls to calculate saliency
-        of form of SISEvaluator evaluate_model
-        '''
+    def _evaluate_model(self, x: List[str], y: List[str],
+                        annotations: List[str]) -> Any:
         use_cuda = torch.cuda.is_available()
 
         # encode

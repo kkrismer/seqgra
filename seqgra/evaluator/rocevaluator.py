@@ -5,7 +5,7 @@ ROC evaluator: creates ROC curves
 
 @author: Konstantin Krismer
 """
-from typing import List, Any
+from typing import Any, List
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -20,7 +20,8 @@ class ROCEvaluator(Evaluator):
     def __init__(self, learner: Learner, output_dir: str) -> None:
         super().__init__("roc", learner, output_dir)
 
-    def _evaluate_model(self, x: List[str], y: List[str]) -> Any:
+    def _evaluate_model(self, x: List[str], y: List[str],
+                        annotations: List[str]) -> Any:
         encoded_y = self.learner.encode_y(y)
         y_hat = self.learner.predict(x)
 

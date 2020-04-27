@@ -28,25 +28,27 @@ class Evaluator(ABC):
 
     def evaluate_model(self, set_name: str = "test",
                        subset_idx: Optional[List[int]] = None) -> None:
-        x, y = self._load_data(set_name, subset_idx)
-        results = self._evaluate_model(x, y)
+        x, y, annotations = self._load_data(set_name, subset_idx)
+        results = self._evaluate_model(x, y, annotations)
         self._save_results(results, set_name)
 
     def _load_data(self, set_name: str = "test",
-                   subset_idx: Optional[List[int]] = None) -> Tuple[List[str], List[str]]:
+                   subset_idx: Optional[List[int]] = None) -> \
+            Tuple[List[str], List[str], List[str]]:
         # load data
-        set_file: str = self.learner.get_examples_file(set_name)
-        x, y = self.learner.parse_examples_data(set_file)
+        examples_file: str = self.learner.get_examples_file(set_name)
+        annotations_file: str = self.learner.get_annotations_file(set_name)
+        x, y = self.learner.parse_examples_data(examples_file)
+        annotations, _ = self.learner.parse_annotations_data(annotations_file)
 
-        # select examples
-        if subset_idx is not None:
-            x = [x[i] for i in subset_idx]
-            y = [y[i] for i in subset_idx]
-
-        return (x, y)
+        if subset_idx is None:
+            return (x, y, annotations)
+        else:
+            return self.__subset(subset_idx, x, y, annotations)
 
     @abstractmethod
-    def _evaluate_model(self, x: List[str], y: List[str]) -> Any:
+    def _evaluate_model(self, x: List[str], y: List[str],
+                        annotations: List[str]) -> Any:
         pass
 
     @abstractmethod

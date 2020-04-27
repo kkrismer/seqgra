@@ -5,7 +5,7 @@ predict evaluator: writes model predictions of all examples in set to file
 
 @author: Konstantin Krismer
 """
-from typing import List, Any
+from typing import Any, List
 
 import pandas as pd
 
@@ -17,7 +17,8 @@ class PredictEvaluator(Evaluator):
     def __init__(self, learner: Learner, output_dir: str) -> None:
         super().__init__("predict", learner, output_dir)
 
-    def _evaluate_model(self, x: List[str], y: List[str]) -> Any:
+    def _evaluate_model(self, x: List[str], y: List[str],
+                        annotations: List[str]) -> Any:
         return self.learner.predict(x)
 
     def _save_results(self, results, set_name: str = "test") -> None:
