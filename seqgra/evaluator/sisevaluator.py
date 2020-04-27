@@ -190,46 +190,6 @@ class SISEvaluator(Evaluator):
         # plt.tight_layout()
         #plt.savefig(self.output_dir + name + "." + image_format, bbox_inches="tight")
 
-    def select_random_n_examples(self, for_label, for_set, n, threshold):
-        input_df, annotation_df = self.__select_examples(
-            for_label, for_set, threshold)
-
-        if len(input_df.index) == 0:
-            logging.warn("no correctly labeled examples with label '" + for_label +
-                         "' prediction threshold > " + str(threshold) + " in set")
-            return (None, None)
-        elif n > len(input_df.index):
-            logging.warn("n is larger than number of correctly labeled examples with label '" +
-                         for_label + "' prediction threshold > " + str(threshold) + " in set")
-            n = len(input_df.index)
-
-        idx: List[int] = list(range(len(input_df.index)))
-        random.shuffle(idx)
-        idx = idx[:n]
-
-        input_df = input_df.iloc[idx]
-        annotation_df = annotation_df.iloc[idx]
-
-        return (input_df["x"].tolist(), annotation_df["annotation"].tolist())
-
-    def select_first_n_examples(self, for_label, for_set, n, threshold):
-        input_df, annotation_df = self.__select_examples(
-            for_label, for_set, threshold)
-
-        if len(input_df.index) == 0:
-            logging.warn("no correctly labeled examples with label '" + for_label +
-                         "' prediction threshold > " + str(threshold) + " in set")
-            return (None, None)
-        elif n > len(input_df.index):
-            logging.warn("n is larger than number of correctly labeled examples with label '" +
-                         for_label + "' prediction threshold > " + str(threshold) + " in set")
-            n = len(input_df.index)
-
-        input_df = input_df.iloc[range(n)]
-        annotation_df = annotation_df.iloc[range(n)]
-
-        return (input_df["x"].tolist(), annotation_df["annotation"].tolist())
-
     def find_sis(self, for_label, label_index, for_set, n=10,
                  select_randomly=False,
                  threshold=0.9):
@@ -367,37 +327,3 @@ class SISEvaluator(Evaluator):
         else:
             raise Exception("file does not exist: " + data_file)
 
-    def __select_examples(self, for_label, set_name, threshold):
-        """ 
-        Returns all correctly classified examples for a specified label and
-        set that exceed the threshold.
-
-        Parameters: 
-            TODO 
-
-        Returns:
-            TODO
-        """
-        examples_file: str = self.learner.get_examples_file(set_name)
-        annotations_file: str = self.learner.get_annotations_file(set_name)
-
-        examples_df = pd.read_csv(examples_file, sep="\t")
-        examples_df = examples_df[examples_df.y == for_label]
-
-        annotations_df = pd.read_csv(annotations_file, sep="\t")
-        annotations_df = annotations_df[annotations_df.y == for_label]
-
-        # predict with learner and discard misclassified / mislabelled examples
-
-        x = examples_df["x"].tolist()
-        y = examples_df["y"].tolist()
-        encoded_y = self.learner.encode_y(y)
-        y_hat = self.learner.predict(x)
-
-        idx = [i for i in range(len(encoded_y)) if np.argmax(
-            y_hat[i]) == np.argmax(encoded_y[i]) and np.max(y_hat[i]) > threshold]
-
-        examples_df = examples_df.iloc[idx]
-        annotations_df = annotations_df.iloc[idx]
-
-        return (examples_df, annotations_df)

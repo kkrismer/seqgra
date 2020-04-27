@@ -38,13 +38,26 @@ class VanillaGradExplainer(object):
         self.model = model
 
     def _backprop(self, inp, ind):
+        print("init")
+        print("input size (inp): " + str(inp.size()))
+        print("label size (ind): " + str(ind.size()))
         output = self.model(inp)
+        print("backprop after model inference")
         if ind is None:
-            ind = output.data.max(1)[1]
+            ind = output.data.max(1)[1].unsqueeze(0)
+        print("output size (output): " + str(output.size()))
         grad_out = output.data.clone()
+        print("grad_out size: " + str(grad_out.size()))
         grad_out.fill_(0.0)
-        grad_out.scatter_(1, ind.unsqueeze(0).t(), 1.0)
+        print("grad_out size after fill: " + str(grad_out.size()))
+        print("ind size: " + str(ind.size()))
+        grad_out.scatter_(1, ind, 1.0)
+        print("grad_out size after scatter_: " + str(grad_out.size()))
         output.backward(grad_out)
+        print("output after backward: " + str(output.size()))
+        print("grad_out after backward: " + str(grad_out.size()))
+        print("inp after backward: " + str(inp.size()))
+        print("inp.grad.data after backward: " + str(inp.grad.data.size()))
         return inp.grad.data
 
     def explain(self, inp, ind=None, blank=None):

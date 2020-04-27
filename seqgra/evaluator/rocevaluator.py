@@ -5,6 +5,8 @@ ROC evaluator: creates ROC curves
 
 @author: Konstantin Krismer
 """
+from typing import List, Any
+
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.metrics import roc_curve, auc
@@ -18,14 +20,14 @@ class ROCEvaluator(Evaluator):
     def __init__(self, learner: Learner, output_dir: str) -> None:
         super().__init__("roc", learner, output_dir)
 
-    def evaluate_model(self, set_name: str = "test") -> None:
-        # load data
-        set_file: str = self.learner.get_examples_file(set_name)
-        x, y = self.learner.parse_data(set_file)
+    def _evaluate_model(self, x: List[str], y: List[str]) -> Any:
         encoded_y = self.learner.encode_y(y)
         y_hat = self.learner.predict(x)
 
-        self.create_roc_curve(encoded_y, y_hat,
+        return (encoded_y, y_hat)
+
+    def _save_results(self, results, set_name: str = "test") -> None:
+        self.create_roc_curve(results[0], results[0],
                               self.output_dir + set_name +
                               "-roc-curve.pdf")
 

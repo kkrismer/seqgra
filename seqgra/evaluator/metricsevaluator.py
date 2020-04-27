@@ -7,6 +7,8 @@ calculates accuracy and loss for training, validation and test set
 
 @author: Konstantin Krismer
 """
+from typing import List, Any
+
 import pandas as pd
 
 from seqgra.learner import Learner
@@ -17,16 +19,10 @@ class MetricsEvaluator(Evaluator):
     def __init__(self, learner: Learner, output_dir: str) -> None:
         super().__init__("metrics", learner, output_dir)
 
-    def evaluate_model(self, set_name: str = "test") -> None:
-        # load data
-        set_file: str = self.learner.get_examples_file(set_name)
-        x, y = self.learner.parse_data(set_file)
+    def _evaluate_model(self, x: List[str], y: List[str]) -> Any:
+        return self.learner.evaluate_model(x=x, y=y)
 
-        metrics = self.learner.evaluate_model(x=x, y=y)
-
-        self.__save_results(metrics, set_name)
-
-    def __save_results(self, results, set_name: str) -> None:
+    def _save_results(self, results, set_name: str = "test") -> None:
         if results is None:
             df = pd.DataFrame([], columns=["set", "metric", "value"])
         else:

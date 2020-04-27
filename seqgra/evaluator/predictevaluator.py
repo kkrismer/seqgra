@@ -5,6 +5,8 @@ predict evaluator: writes model predictions of all examples in set to file
 
 @author: Konstantin Krismer
 """
+from typing import List, Any
+
 import pandas as pd
 
 from seqgra.learner import Learner
@@ -15,19 +17,13 @@ class PredictEvaluator(Evaluator):
     def __init__(self, learner: Learner, output_dir: str) -> None:
         super().__init__("predict", learner, output_dir)
 
-    def evaluate_model(self, set_name: str = "test") -> None:
-        # load data
-        set_file: str = self.learner.get_examples_file(set_name)
-        x, _ = self.learner.parse_data(set_file)
+    def _evaluate_model(self, x: List[str], y: List[str]) -> Any:
+        return self.learner.predict(x)
 
-        y_hat = self.learner.predict(x)
-        self.__save_results(y_hat, set_name)
-
-    def __save_results(self, results, set_name: str) -> None:
+    def _save_results(self, results, set_name: str = "test") -> None:
         if results is None:
-            df = pd.DataFrame([], columns=self.learner.definition.labels)
-        else:
-            df = pd.DataFrame(results, columns=self.learner.definition.labels)
+            results = []
 
+        df = pd.DataFrame(results, columns=self.learner.definition.labels)
         df.to_csv(self.output_dir + set_name + "-y-hat.txt", sep="\t",
                   index=False)
