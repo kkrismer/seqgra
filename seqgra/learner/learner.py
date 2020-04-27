@@ -12,7 +12,7 @@ Classes:
 """
 import os
 from abc import ABC, abstractmethod
-from typing import List, Any, Optional
+from typing import List, Any, Optional, Tuple
 
 from seqgra import MiscHelper
 from seqgra.model import ModelDefinition
@@ -139,7 +139,7 @@ class Learner(ABC):
             self._train_model(x_train, y_train, x_val, y_val)
 
     @abstractmethod
-    def parse_data(self, file_name: str) -> None:
+    def parse_data(self, file_name: str) -> Tuple[List[str], List[str]]:
         """Abstract method to parse data.
 
         Sequence data type specific implementations provided for DNA and

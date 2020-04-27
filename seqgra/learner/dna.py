@@ -6,7 +6,7 @@ Abstract base class for learners
 """
 from __future__ import annotations
 
-from typing import List
+from typing import List, Tuple
 import itertools
 import warnings
 
@@ -50,7 +50,7 @@ class DNAMultiClassClassificationLearner(MultiClassClassificationLearner):
         decoded_y = list(itertools.chain(*decoded_y))
         return decoded_y
 
-    def parse_data(self, file_name: str) -> None:
+    def parse_data(self, file_name: str) -> Tuple[List[str], List[str]]:
         df = pd.read_csv(file_name, sep="\t")
         x: List[str] = df["x"].tolist()
         y: List[str] = df["y"].tolist()
@@ -95,7 +95,7 @@ class DNAMultiLabelClassificationLearner(MultiLabelClassificationLearner):
         decoded_y = ["|".join(ex) for ex in decoded_y]
         return decoded_y
 
-    def parse_data(self, file_name: str) -> None:
+    def parse_data(self, file_name: str) -> Tuple[List[str], List[str]]:
         df = pd.read_csv(file_name, sep="\t")
         x: List[str] = df["x"].tolist()
         y: List[str] = df["y"].replace(np.nan, "", regex=True).tolist()
