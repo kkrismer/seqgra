@@ -10,8 +10,9 @@ from seqgra.model.data import SequenceElement
 
 class DataDefinition:
     def __init__(self, grammar_id: str = "", name: str = "", description: str = "",
+                 task: str = "multi-class classification",
                  sequence_space: str = "DNA",
-                 model_type: str = "multi-class classification",
+                 seed: int = 0,
                  background: Optional[Background] = None,
                  data_generation: Optional[DataGeneration] = None,
                  conditions: Optional[List[Condition]] = None,
@@ -19,8 +20,9 @@ class DataDefinition:
         self.grammar_id: str = grammar_id
         self.name: str = name
         self.description: str = description
+        self.task: str = task
         self.sequence_space: str = sequence_space
-        self.model_type: str = model_type
+        self.seed: int = int(seed)
         self.background: Optional[Background] = background
         self.data_generation: Optional[DataGeneration] = data_generation
         self.conditions: Optional[List[Condition]] = conditions
@@ -35,8 +37,9 @@ class DataDefinition:
                               "\t\tDescription:\n"]
         if self.description:
             str_rep += ["\t\t\t", self.description, "\n"]
-        str_rep += ["\t\tSequence space: " + self.sequence_space + "\n",
-                    "\t\tModel type: " + self.model_type + "\n"]
+        str_rep += ["\t\tTask: " + self.task + "\n",
+                    "\t\tSequence space: " + self.sequence_space + "\n",
+                    "\t\tSeed: " + str(self.seed) + "\n"]
         str_rep += ["\t" + s + "\n"
                     for s in str(self.background).splitlines()]
         str_rep += ["\t" + s + "\n"
@@ -44,7 +47,8 @@ class DataDefinition:
         str_rep += ["\tConditions:\n"]
         if self.conditions is not None and len(self.conditions) > 0:
             for condition in self.conditions:
-                str_rep += ["\t\t" + s + "\n" for s in str(condition).splitlines()]
+                str_rep += ["\t\t" + s +
+                            "\n" for s in str(condition).splitlines()]
         else:
             str_rep += ["\t\tnone"]
         str_rep += ["\tSequence elements:\n"]

@@ -34,9 +34,10 @@ class XMLModelDefinitionParser(ModelDefinitionParser):
         self._dom: Document = parseString(config)
         self._general_element: Any = \
             self._dom.getElementsByTagName("general")[0]
-        self.validate(config)
+        XMLModelDefinitionParser.validate(config)
 
-    def validate(self, xml_config: str) -> None:
+    @staticmethod
+    def validate(xml_config: str) -> None:
         xsd_path = pkg_resources.resource_filename("seqgra",
                                                    "model-config.xsd")
         xmlschema_doc = etree.parse(xsd_path)
@@ -54,22 +55,18 @@ class XMLModelDefinitionParser(ModelDefinitionParser):
 
     def get_description(self) -> str:
         return XMLHelper.read_text_node(self._general_element, "description")
+        
+    def get_task(self) -> str:
+        return XMLHelper.read_text_node(self._general_element, "task")
+        
+    def get_sequence_space(self) -> str:
+        return XMLHelper.read_text_node(self._general_element, "sequencespace")
 
     def get_library(self) -> str:
         return XMLHelper.read_text_node(self._general_element, "library")
 
-    def get_seed(self) -> str:
-        return XMLHelper.read_int_node(self._general_element, "seed")
-
-    def get_learner_type(self) -> str:
-        learner_element: Any = \
-            self._general_element.getElementsByTagName("learner")[0]
-        return XMLHelper.read_text_node(learner_element, "type")
-
-    def get_learner_implementation(self) -> str:
-        learner_element: Any = \
-            self._general_element.getElementsByTagName("learner")[0]
-        return XMLHelper.read_text_node(learner_element, "implementation")
+    def get_implementation(self) -> str:
+        return XMLHelper.read_text_node(self._general_element, "implementation")
 
     def get_labels(self) -> List[str]:
         labels_element: Any = \
@@ -77,6 +74,9 @@ class XMLModelDefinitionParser(ModelDefinitionParser):
         label_elements = labels_element.getElementsByTagName("label")
         return [XMLHelper.read_immediate_text_node(label_element)
                 for label_element in label_elements]
+
+    def get_seed(self) -> str:
+        return XMLHelper.read_int_node(self._general_element, "seed")
 
     def get_architecture(self) -> Architecture:
         sequential_element = self._dom.getElementsByTagName("sequential")
@@ -162,11 +162,12 @@ class XMLModelDefinitionParser(ModelDefinitionParser):
         return ModelDefinition(self.get_model_id(),
                                self.get_name(),
                                self.get_description(),
+                               self.get_task(),
+                               self.get_sequence_space(),
                                self.get_library(),
-                               self.get_seed(),
-                               self.get_learner_type(),
-                               self.get_learner_implementation(),
+                               self.get_implementation(),
                                self.get_labels(),
+                               self.get_seed(),
                                self.get_architecture(),
                                self.get_loss_hyperparameters(),
                                self.get_optimizer_hyperparameters(),

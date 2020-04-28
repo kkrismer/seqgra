@@ -27,23 +27,27 @@ class ModelDefinitionParser(ABC):
         pass
 
     @abstractmethod
+    def get_task(self) -> str:
+        pass
+
+    @abstractmethod
+    def get_sequence_space(self) -> str:
+        pass
+
+    @abstractmethod
     def get_library(self) -> str:
         pass
 
     @abstractmethod
-    def get_seed(self) -> int:
-        pass
-
-    @abstractmethod
-    def get_learner_type(self) -> str:
-        pass
-
-    @abstractmethod
-    def get_learner_implementation(self) -> str:
+    def get_implementation(self) -> str:
         pass
 
     @abstractmethod
     def get_labels(self) -> List[str]:
+        pass
+
+    @abstractmethod
+    def get_seed(self) -> int:
         pass
 
     @abstractmethod

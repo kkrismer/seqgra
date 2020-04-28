@@ -414,7 +414,7 @@ class TorchHelper:
 
     @staticmethod
     def get_metrics(learner: Learner):
-        is_multilabel = learner.definition.learner_type == "multi-label classification"
+        is_multilabel = learner.definition.task == "multi-label classification"
         metrics_dict = dict()
         for metric in learner.metrics:
             metric = metric.lower().strip()

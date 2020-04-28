@@ -30,15 +30,19 @@ class DataDefinitionParser(ABC):
         pass
 
     @abstractmethod
+    def get_task(self) -> str:
+        pass
+
+    @abstractmethod
     def get_sequence_space(self) -> str:
         pass
 
     @abstractmethod
-    def get_model_type(self) -> str:
+    def get_seed(self) -> int:
         pass
 
     @abstractmethod
-    def get_background(self) -> Background:
+    def get_background(self, valid_conditions: List[Condition]) -> Background:
         pass
 
     @abstractmethod

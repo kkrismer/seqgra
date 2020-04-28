@@ -47,12 +47,15 @@ class XMLDataDefinitionWriter(DataDefinitionWriter):
         description_element = etree.SubElement(general_element, "description")
         description_element.text = data_definition.description
 
+        task_element = etree.SubElement(general_element, "task")
+        task_element.text = data_definition.task
+
         sequence_space_element = etree.SubElement(
             general_element, "sequencespace")
         sequence_space_element.text = data_definition.sequence_space
 
-        model_type_element = etree.SubElement(general_element, "type")
-        model_type_element.text = data_definition.model_type
+        seed_element = etree.SubElement(general_element, "seed")
+        seed_element.text = str(data_definition.seed)
 
     @staticmethod
     def attach_alphabet_distribution(ads_element,
@@ -117,8 +120,6 @@ class XMLDataDefinitionWriter(DataDefinitionWriter):
     def attach_data_generation_element(root,
                                        data_generation: DataGeneration) -> None:
         dg_element = etree.SubElement(root, "datageneration")
-        seed_element = etree.SubElement(dg_element, "seed")
-        seed_element.text = str(data_generation.seed)
 
         sets_element = etree.SubElement(dg_element, "sets")
         if data_generation.sets is None or \

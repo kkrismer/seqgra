@@ -61,8 +61,9 @@
     <xs:sequence>
       <xs:element name="name" type="xs:string"/>
       <xs:element name="description" type="xs:string"/>
+      <xs:element name="task" type="xs:string"/>
       <xs:element name="sequencespace" type="xs:string"/>
-      <xs:element name="type" type="xs:string"/>
+      <xs:element name="seed" type="xs:long"/>
     </xs:sequence>
     <xs:attribute name="id" use="required">
       <xs:simpleType>
@@ -121,7 +122,6 @@
 
   <xs:complexType name="datagenerationType">
     <xs:sequence>
-      <xs:element name="seed" type="xs:long"/>
       <xs:element name="sets">
         <xs:complexType>
           <xs:sequence>

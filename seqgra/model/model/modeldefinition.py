@@ -8,11 +8,12 @@ from seqgra.model.model import Architecture
 class ModelDefinition:
     def __init__(self, model_id: str = "", name: str = "",
                  description: str = "",
+                 task: str = "multi-class classification",
+                 sequence_space: str = "DNA",
                  library: str = "PyTorch",
-                 seed: int = 0,
-                 learner_type: str = "multi-class classification",
-                 learner_implementation: str = "TorchDNAMultiClassClassificationLearner",
+                 implementation: Optional[str] = None,
                  labels: Optional[List[str]] = None,
+                 seed: int = 0,
                  architecture: Optional[Architecture] = None,
                  loss_hyperparameters: Optional[Dict[str, str]] = None,
                  optimizer_hyperparameters: Optional[Dict[str, str]] = None,
@@ -20,11 +21,12 @@ class ModelDefinition:
         self.model_id: str = model_id
         self.name: str = name
         self.description: str = description
+        self.task: str = task
+        self.sequence_space: str = sequence_space
         self.library: str = library
-        self.seed: int = seed
-        self.learner_type: str = learner_type
-        self.learner_implementation: str = learner_implementation
+        self.implementation: Optional[str] = implementation
         self.labels: Optional[List[str]] = labels
+        self.seed: int = seed
         self.architecture: Optional[Architecture] = architecture
         self.loss_hyperparameters: Optional[Dict[str,
                                                  str]] = loss_hyperparameters
@@ -41,13 +43,14 @@ class ModelDefinition:
                               "\t\tDescription:\n"]
         if self.description:
             str_rep += ["\t\t\t", self.description, "\n"]
-        str_rep += ["\t\tLibrary: ", self.library, "\n",
-                    "\t\tSeed: ", str(self.seed), "\n",
-                    "\t\tLearner type: ", self.learner_type, "\n",
-                    "\t\tLearner implementation: ", self.learner_implementation, "\n",
+        str_rep += ["\t\tTask: ", self.task, "\n",
+                    "\t\tSequence space: ", self.sequence_space, "\n",
+                    "\t\tLibrary: ", self.library, "\n",
+                    "\t\tImplementation: ", self.implementation, "\n",
                     "\t\tLabels:\n"]
         if self.labels is not None and len(self.labels) > 0:
             str_rep += ["\t\t\t" + label + "\n" for label in self.labels]
+        str_rep += ["\t\tSeed: ", str(self.seed), "\n"]
         str_rep += ["\t" + s + "\n"
                     for s in str(self.architecture).splitlines()]
         str_rep += ["\tLoss hyperparameters:\n", "\t\t",

@@ -44,24 +44,29 @@ class XMLModelDefinitionWriter(ModelDefinitionWriter):
         description_element = etree.SubElement(general_element, "description")
         description_element.text = model_definition.description
 
+        task_element = etree.SubElement(general_element, "task")
+        task_element.text = model_definition.task
+
+        sequence_space_element = etree.SubElement(general_element,
+                                                  "sequencespace")
+        sequence_space_element.text = model_definition.sequence_space
+
         library_element = etree.SubElement(general_element, "library")
         library_element.text = model_definition.library
 
-        seed_element = etree.SubElement(general_element, "seed")
-        seed_element.text = str(model_definition.seed)
-
-        learner_element = etree.SubElement(general_element, "learner")
-        learner_type_element = etree.SubElement(learner_element, "type")
-        learner_type_element.text = model_definition.learner_type
-        learner_implementation_element = etree.SubElement(
-            learner_element, "implementation")
-        learner_implementation_element.text = model_definition.learner_implementation
+        if model_definition.implementation is not None:
+            implementation_element = etree.SubElement(general_element,
+                                                    "implementation")
+            implementation_element.text = model_definition.implementation
 
         if model_definition.labels is None or len(model_definition.labels) == 0:
             raise Exception("no labels specified")
         else:
-            XMLModelDefinitionWriter.attach_labels_element(general_element,
-                                                           model_definition.labels)
+            XMLModelDefinitionWriter.attach_labels_element(
+                general_element, model_definition.labels)
+
+        seed_element = etree.SubElement(general_element, "seed")
+        seed_element.text = str(model_definition.seed)
 
     @staticmethod
     def attach_hp_element(hps_element, hps: Dict[str, str]) -> None:

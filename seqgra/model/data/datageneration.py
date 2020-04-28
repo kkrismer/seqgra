@@ -49,15 +49,13 @@ class ExampleSet:
 
 
 class DataGeneration:
-    def __init__(self, seed: int, sets: List[ExampleSet],
+    def __init__(self, sets: List[ExampleSet],
                  postprocessing_operations: Optional[List[PostprocessingOperation]] = None) -> None:
-        self.seed: int = int(seed)
         self.sets: List[ExampleSet] = sets
         self.postprocessing_operations: Optional[List[PostprocessingOperation]] = postprocessing_operations
 
     def __str__(self):
-        str_rep = ["Data generation:\n",
-                   "\tSets:\n"]
+        str_rep = ["Data generation:\n"]
         sets_string: List[str] = [str(example_set)
                                   for example_set in self.sets]
         sets_str_rep = ''.join(sets_string)

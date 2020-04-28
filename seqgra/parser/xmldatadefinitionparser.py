@@ -64,11 +64,14 @@ class XMLDataDefinitionParser(DataDefinitionParser):
     def get_description(self) -> str:
         return XMLHelper.read_text_node(self._general_element, "description")
 
+    def get_task(self) -> str:
+        return XMLHelper.read_text_node(self._general_element, "task")
+
     def get_sequence_space(self) -> str:
         return XMLHelper.read_text_node(self._general_element, "sequencespace")
 
-    def get_model_type(self) -> str:
-        return XMLHelper.read_text_node(self._general_element, "type")
+    def get_seed(self) -> int:
+        return XMLHelper.read_int_node(self._general_element, "seed")
 
     def get_background(self, valid_conditions: List[Condition]) -> Background:
         background_element: Any = \
@@ -120,7 +123,6 @@ class XMLDataDefinitionParser(DataDefinitionParser):
             valid_conditions: List[Condition]) -> DataGeneration:
         data_generation_element: Any = \
             self._dom.getElementsByTagName("datageneration")[0]
-        seed: int = XMLHelper.read_int_node(data_generation_element, "seed")
         postprocessing_element: Any = \
             data_generation_element.getElementsByTagName("postprocessing")
         if len(postprocessing_element) == 1:
@@ -138,7 +140,7 @@ class XMLDataDefinitionParser(DataDefinitionParser):
         sets: List[ExampleSet] = \
             [XMLDataDefinitionParser.__parse_set(set_element, valid_conditions)
              for set_element in set_elements]
-        return DataGeneration(seed, sets, postprocessing)
+        return DataGeneration(sets, postprocessing)
 
     @staticmethod
     def __parse_operation(operation_element) -> Tuple[str, str]:
@@ -295,8 +297,9 @@ class XMLDataDefinitionParser(DataDefinitionParser):
         return DataDefinition(self.get_grammar_id(),
                               self.get_name(),
                               self.get_description(),
+                              self.get_task(),
                               self.get_sequence_space(),
-                              self.get_model_type(),
+                              self.get_seed(),
                               self.get_background(conditions),
                               self.get_data_generation(conditions),
                               conditions,

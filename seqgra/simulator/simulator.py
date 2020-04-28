@@ -149,9 +149,9 @@ class Simulator:
                 for condition_id in condition_ids]
 
     def __set_seed(self) -> None:
-        random.seed(self.definition.data_generation.seed)
-        np.random.seed(self.definition.data_generation.seed)
-        ushuffle.set_seed(self.definition.data_generation.seed)
+        random.seed(self.definition.seed)
+        np.random.seed(self.definition.seed)
+        ushuffle.set_seed(self.definition.seed)
 
     def check_grammar(self) -> bool:
         valid: bool = True

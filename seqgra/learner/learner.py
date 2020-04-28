@@ -416,10 +416,10 @@ class MultiClassClassificationLearner(Learner):
                  output_dir: str) -> None:
         super().__init__(model_definition, data_dir, output_dir)
 
-        if self.definition.learner_type != "multi-class classification":
-            raise Exception("model definition must specify multi-class "
-                            "classification learner type, but learner type "
-                            "is '" + self.definition.learner_type, "'")
+        if self.definition.task != "multi-class classification":
+            raise Exception("task of model definition must be multi-class "
+                            "classification, but is '" +
+                            self.definition.task + "' instead")
 
     def evaluate_model(self, file_name: Optional[str] = None,
                        x: Optional[List[str]] = None,
@@ -519,10 +519,10 @@ class MultiLabelClassificationLearner(Learner):
                  output_dir: str) -> None:
         super().__init__(model_definition, data_dir, output_dir)
 
-        if self.definition.learner_type != "multi-label classification":
-            raise Exception("model definition must specify multi-label "
-                            "classification learner type, but learner type "
-                            "is '" + self.definition.learner_type, "'")
+        if self.definition.task != "multi-label classification":
+            raise Exception("task of model definition must be multi-label "
+                            "classification, but is '" +
+                            self.definition.task, "' instead")
 
     def evaluate_model(self, file_name: Optional[str] = None,
                        x: Optional[List[str]] = None,
@@ -623,10 +623,10 @@ class MultipleRegressionLearner(Learner):
                  output_dir: str) -> None:
         super().__init__(model_definition, data_dir, output_dir)
 
-        if self.definition.learner_type != "multiple regression":
-            raise Exception("model definition must specify multiple "
-                            "regression learner type, but learner type "
-                            "is '" + self.definition.learner_type, "'")
+        if self.definition.task != "multiple regression":
+            raise Exception("task of model definition must be multiple "
+                            "regression, but is '" +
+                            self.definition.task, "' instead")
 
     def evaluate_model(self, file_name: Optional[str] = None,
                        x: Optional[List[str]] = None,
@@ -726,10 +726,10 @@ class MultivariateRegressionLearner(Learner):
                  output_dir: str) -> None:
         super().__init__(model_definition, data_dir, output_dir)
 
-        if self.definition.learner_type != "multivariate regression":
-            raise Exception("model definition must specify multivariate "
-                            "regression learner type, but learner type "
-                            "is '" + self.definition.learner_type, "'")
+        if self.definition.task != "multivariate regression":
+            raise Exception("task of model definition must be multivariate "
+                            "regression, but is '" +
+                            self.definition.task, "' instead")
 
     def evaluate_model(self, file_name: Optional[str] = None,
                        x: Optional[List[str]] = None,
