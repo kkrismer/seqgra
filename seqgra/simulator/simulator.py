@@ -18,13 +18,13 @@ import pkg_resources
 import ushuffle
 
 import seqgra.constants as c
-from seqgra import MiscHelper
+from seqgra import AnnotatedExample, MiscHelper
 from seqgra.model import DataDefinition
-from seqgra.model.data import ExampleSet
+from seqgra.model.data import DataGenerationExample
+from seqgra.model.data import DataGenerationSet
 from seqgra.model.data import Condition
 from seqgra.model.data import SpacingConstraint
 from seqgra.model.data import Rule
-from seqgra.simulator import Example
 from seqgra.simulator import ExampleGenerator
 
 
@@ -119,7 +119,7 @@ class Simulator:
             session_file.write("NumPy version: " + np.version.version + "\n")
             session_file.write("Python version: " + sys.version + "\n")
 
-    def __process_set(self, example_set: ExampleSet) -> None:
+    def __process_set(self, example_set: DataGenerationSet) -> None:
         condition_ids: List[str] = []
         for example in example_set.examples:
             condition_ids += [self.__serialize_example(example)] * \
@@ -133,13 +133,13 @@ class Simulator:
             for condition_id in condition_ids:
                 conditions: List[Condition] = self.__deserialize_example(
                     condition_id)
-                example: Example = ExampleGenerator.generate_example(
+                example: AnnotatedExample = ExampleGenerator.generate_example(
                     conditions, example_set.name, self.definition.background)
-                data_file.write(example.sequence + "\t" + condition_id + "\n")
+                data_file.write(example.x + "\t" + condition_id + "\n")
                 annotation_file.write(
                     example.annotation + "\t" + condition_id + "\n")
 
-    def __serialize_example(self, example: Example) -> str:
+    def __serialize_example(self, example: DataGenerationExample) -> str:
         return "|".join([condition.condition_id
                          for condition in example.conditions])
 

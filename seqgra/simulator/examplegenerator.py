@@ -12,11 +12,11 @@ import random
 
 import numpy as np
 
+from seqgra import AnnotatedExample
 import seqgra.constants as c
 from seqgra.model.data import Rule
 from seqgra.model.data import Condition
 from seqgra.model.data import Background
-from seqgra.simulator import Example
 from seqgra.model.data import SpacingConstraint
 from seqgra.simulator import BackgroundGenerator
 
@@ -24,13 +24,15 @@ from seqgra.simulator import BackgroundGenerator
 class ExampleGenerator:
     @staticmethod
     def generate_example(conditions: List[Condition], set_name: str,
-                         background: Background) -> Example:
+                         background: Background) -> AnnotatedExample:
         if conditions is None:
             background: str = \
                 BackgroundGenerator.generate_background(background, None,
                                                         set_name)
-            annotation: str = "".join([c.PositionType.BACKGROUND] * len(background))
-            example: Example = Example(background, annotation)
+            annotation: str = "".join(
+                [c.PositionType.BACKGROUND] * len(background))
+            example: AnnotatedExample = AnnotatedExample(background, None,
+                                                         annotation)
         else:
             # randomly shuffle the order of the conditions,
             # which determines in what order the condition rules are applied
@@ -41,8 +43,10 @@ class ExampleGenerator:
                 BackgroundGenerator.generate_background(background,
                                                         conditions[0],
                                                         set_name)
-            annotation: str = "".join([c.PositionType.BACKGROUND] * len(background))
-            example: Example = Example(background, annotation)
+            annotation: str = "".join(
+                [c.PositionType.BACKGROUND] * len(background))
+            example: AnnotatedExample = AnnotatedExample(
+                background, None, annotation)
 
             for condition in conditions:
                 if condition is not None:
@@ -51,7 +55,7 @@ class ExampleGenerator:
         return example
 
     @staticmethod
-    def apply_rule(rule: Rule, example: Example) -> Example:
+    def apply_rule(rule: Rule, example: AnnotatedExample) -> AnnotatedExample:
         if random.uniform(0, 1) <= rule.probability:
             elements: Dict[str, str] = dict()
             for sequence_element in rule.sequence_elements:
@@ -77,7 +81,7 @@ class ExampleGenerator:
             for element in elements.values():
                 position: int = ExampleGenerator.get_position(
                     rule.position,
-                    len(example.sequence),
+                    len(example.x),
                     len(element))
                 example = ExampleGenerator.add_element(example, element,
                                                        position)
@@ -100,9 +104,10 @@ class ExampleGenerator:
             return int(rule_position) - 1
 
     @staticmethod
-    def get_distance(example: Example, spacing_constraint: SpacingConstraint,
+    def get_distance(example: AnnotatedExample,
+                     spacing_constraint: SpacingConstraint,
                      element1: str, element2: str, rule_position: str) -> int:
-        max_length: int = len(example.sequence)
+        max_length: int = len(example.x)
         if rule_position != "random" and \
            rule_position != "start" and \
            rule_position != "end" and \
@@ -117,11 +122,11 @@ class ExampleGenerator:
 
     @staticmethod
     def add_spatially_constrained_elements(
-            example: Example,
+            example: AnnotatedExample,
             spacing_constraint: SpacingConstraint,
             element1: str,
             element2: str,
-            rule_position: str) -> Example:
+            rule_position: str) -> AnnotatedExample:
         distance: int = ExampleGenerator.get_distance(example,
                                                       spacing_constraint,
                                                       element1, element2,
@@ -133,7 +138,7 @@ class ExampleGenerator:
 
         position1: int = ExampleGenerator.get_position(
             rule_position,
-            len(example.sequence),
+            len(example.x),
             len(element1) + distance + len(element2))
         example = ExampleGenerator.add_element(example, element1, position1)
 
@@ -142,9 +147,10 @@ class ExampleGenerator:
         return example
 
     @staticmethod
-    def add_element(example: Example, element: str, position: int) -> Example:
-        example.sequence = example.sequence[:position] + element + \
-            example.sequence[position + len(element):]
+    def add_element(example: AnnotatedExample, element: str,
+                    position: int) -> AnnotatedExample:
+        example.x = example.x[:position] + element + \
+            example.x[position + len(element):]
         example.annotation = example.annotation[:position] + \
             (c.PositionType.GRAMMAR * len(element)) + \
             example.annotation[position + len(element):]

@@ -123,8 +123,12 @@ class SISEvaluator(Evaluator):
         for example_id, row in enumerate(results.itertuples(), 1):
             example_column += [example_id] * len(row.annotation)
             position_column += list(range(1, len(row.annotation) + 1))
-            group_column += [self.__get_agreement_group(char, row.sis_collapsed[i])
-                             for i, char in enumerate(row.annotation)]
+            if row.sis_collapsed:
+                group_column += [self.__get_agreement_group(char, row.sis_collapsed[i])
+                                 for i, char in enumerate(row.annotation)]
+            else:
+                group_column += [self.__get_agreement_group(char, self.__get_masked_letter())
+                                 for i, char in enumerate(row.annotation)]
             label_column += [row.y] * len(row.annotation)
             precision_column += [row.precision] * len(row.annotation)
             recall_column += [row.recall] * len(row.annotation)

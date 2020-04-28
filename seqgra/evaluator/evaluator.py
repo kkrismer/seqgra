@@ -8,14 +8,14 @@ MIT - CSAIL - Gifford Lab - seqgra
 from abc import ABC, abstractmethod
 import logging
 import random
-from typing import Any, List, Optional, Set, Tuple
+from typing import Any, List, Optional, Set
 
 import numpy as np
 
 import seqgra.constants as c
+from seqgra import AnnotatedExampleSet
 from seqgra import MiscHelper
 from seqgra.learner import Learner
-
 
 class Evaluator(ABC):
     @abstractmethod
@@ -65,8 +65,7 @@ class Evaluator(ABC):
         self._save_results(results, set_name)
 
     def _load_data(self, set_name: str = "test",
-                   subset_idx: Optional[List[int]] = None) -> \
-            Tuple[List[str], List[str], List[str]]:
+                   subset_idx: Optional[List[int]] = None) -> AnnotatedExampleSet:
         # load data
         examples_file: str = self.learner.get_examples_file(set_name)
         annotations_file: str = self.learner.get_annotations_file(set_name)
@@ -74,7 +73,7 @@ class Evaluator(ABC):
         annotations, _ = self.learner.parse_annotations_data(annotations_file)
 
         if subset_idx is None:
-            return (x, y, annotations)
+            return AnnotatedExampleSet(x, y, annotations)
         else:
             return self._subset(subset_idx, x, y, annotations)
 
@@ -89,7 +88,7 @@ class Evaluator(ABC):
 
     @staticmethod
     def _subset(idx: List[int], x: List[str], y: List[str],
-                annotations: List[str]) -> Tuple[List[str], List[str], List[str]]:
+                annotations: List[str]) -> AnnotatedExampleSet:
         if len(x) != len(y) or len(x) != len(annotations):
             raise Exception("x, y, and annotations have to be the same length")
 
@@ -100,10 +99,10 @@ class Evaluator(ABC):
         y = [y[i] for i in idx]
         annotations = [annotations[i] for i in idx]
 
-        return (x, y, annotations)
+        return AnnotatedExampleSet(x, y, annotations)
 
     def select_examples(self, set_name: str = "test",
-                        labels: Optional[Set[str]] = None) -> Tuple[List[str], List[str], List[str]]:
+                        labels: Optional[Set[str]] = None) -> AnnotatedExampleSet:
         """Returns all correctly classified examples that exceed the threshold.
 
         for the specified labels
@@ -140,13 +139,13 @@ class Evaluator(ABC):
                       np.max(y_hat[i]) > self.threshold]
         x, y, annotations = self._subset(subset_idx, x, y, annotations)
 
-        return (x, y, annotations)
+        return AnnotatedExampleSet(x, y, annotations)
 
     def select_n_examples(self, n: int,
                           set_name: str = "test",
                           labels: Optional[Set[str]] = None,
                           per_label: bool = True,
-                          shuffle: bool = True) -> Tuple[List[str], List[str], List[str]]:
+                          shuffle: bool = True) -> AnnotatedExampleSet:
         if labels is not None and per_label:
             x: List[str] = list()
             y: List[str] = list()
@@ -157,7 +156,7 @@ class Evaluator(ABC):
                 x += examples.x
                 y += examples.y
                 annotations += examples.annotations
-            return x, y, annotations
+            return AnnotatedExampleSet(x, y, annotations)
         else:
             x, y, annotations = self.select_examples(set_name, labels)
 
@@ -171,7 +170,7 @@ class Evaluator(ABC):
                                     "prediction threshold > %s in set '%s' "
                                     "that has one of the following labels: %s",
                                     self.threshold, set_name, labels)
-                return (None, None, None)
+                return AnnotatedExampleSet(None, None, None)
             elif n > len(x):
                 if labels is None:
                     logging.warning("n (%s) is larger than the number "

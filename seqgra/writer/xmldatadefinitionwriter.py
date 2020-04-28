@@ -5,17 +5,16 @@ Abstract base class for configuration file writer
 
 @author: Konstantin Krismer
 """
-from typing import Dict, List, Tuple
+from typing import Dict, List
 
 from lxml import etree
 
+from seqgra import ProbabilisticToken
 from seqgra.model import DataDefinition
 from seqgra.model.data import Background
 from seqgra.model.data import AlphabetDistribution
 from seqgra.model.data import DataGeneration
-from seqgra.model.data import ExampleSet
-from seqgra.model.data import Example
-from seqgra.model.data import PostprocessingOperation
+from seqgra.model.data import DataGenerationSet
 from seqgra.model.data import Condition
 from seqgra.model.data import Rule
 from seqgra.model.data import SequenceElement
@@ -70,8 +69,8 @@ class XMLDataDefinitionWriter(DataDefinitionWriter):
         if ad.letters:
             for letter in ad.letters:
                 letter_element = etree.SubElement(ad_element, "letter",
-                                                  {"probability": str(letter[1])})
-                letter_element.text = letter[0]
+                                                  {"probability": str(letter.probability)})
+                letter_element.text = letter.token
         else:
             raise Exception("no letters in alphabet")
 
@@ -96,7 +95,7 @@ class XMLDataDefinitionWriter(DataDefinitionWriter):
             raise Exception("no alphabet distribution specified")
 
     @staticmethod
-    def attach_set_element(sets_element, example_set: ExampleSet) -> None:
+    def attach_set_element(sets_element, example_set: DataGenerationSet) -> None:
         if example_set.name not in {"training", "validation", "test"}:
             raise Exception("invalid set name: " + example_set.name +
                             " (valid set names: training, validation, test)")
@@ -208,13 +207,14 @@ class XMLDataDefinitionWriter(DataDefinitionWriter):
 
     @staticmethod
     def attach_matrix_position_element(matrix_element,
-                                       letters: List[Tuple[str, float]]) -> None:
+                                       letters: List[ProbabilisticToken]) -> None:
         position_element = etree.SubElement(matrix_element, "position")
         if letters:
             for letter in letters:
-                letter_element = etree.SubElement(position_element, "letter",
-                                                  {"probability": str(letter[1])})
-                letter_element.text = letter[0]
+                letter_element = etree.SubElement(
+                    position_element, "letter",
+                    {"probability": str(letter.probability)})
+                letter_element.text = letter.token
         else:
             raise Exception("no letters specified in position weight matrix")
 

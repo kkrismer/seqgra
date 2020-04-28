@@ -14,11 +14,11 @@ from abc import ABC, abstractmethod
 import logging
 import os
 import re
-from typing import Any, List, Optional, Tuple
+from typing import Any, List, Optional
 
 import pandas as pd
 
-from seqgra import MiscHelper
+from seqgra import AnnotationSet, ExampleSet, MiscHelper
 import seqgra.constants as c
 from seqgra.model import ModelDefinition
 
@@ -130,8 +130,7 @@ class Learner(ABC):
             self._train_model(x_train, y_train, x_val, y_val)
 
     @abstractmethod
-    def parse_examples_data(self,
-                            file_name: str) -> Tuple[List[str], List[str]]:
+    def parse_examples_data(self, file_name: str) -> ExampleSet:
         """Abstract method to parse examples data file.
 
         Checks validity of sequences with sequence data type specific
@@ -141,13 +140,12 @@ class Learner(ABC):
             file_name (str): file name
 
         Returns:
-            Tuple:
+            ExampleSet:
                 x (List[str]): sequences
                 y (List[str]): labels
         """
 
-    def parse_annotations_data(self,
-                               file_name: str) -> Tuple[List[str], List[str]]:
+    def parse_annotations_data(self, file_name: str) -> AnnotationSet:
         """Method to parse annotations data file.
 
         Checks validity of annotations.
@@ -156,7 +154,7 @@ class Learner(ABC):
             file_name (str): file name
 
         Returns:
-            Tuple:
+            AnnotationSet:
                 annotations (List[str]): annotations
                 y (List[str]): labels
         """
@@ -165,7 +163,7 @@ class Learner(ABC):
         y: List[str] = df["y"].tolist()
 
         Learner.check_annotations(annotations)
-        return (annotations, y)
+        return AnnotationSet(annotations, y)
 
     @staticmethod
     def check_annotations(annotations: List[str]) -> bool:

@@ -13,9 +13,9 @@ from seqgra.model.data import Condition
 from seqgra.model.data import PostprocessingOperation
 
 
-class Example:
+class DataGenerationExample:
     def __init__(self, samples: int,
-    conditions: Optional[List[Condition]] = None) -> None:
+                 conditions: Optional[List[Condition]] = None) -> None:
         self.samples: int = samples
         self.conditions: Optional[List[Condition]] = conditions
 
@@ -32,10 +32,10 @@ class Example:
         return "".join(str_rep)
 
 
-class ExampleSet:
-    def __init__(self, name: str, examples: List[Example]) -> None:
+class DataGenerationSet:
+    def __init__(self, name: str, examples: List[DataGenerationExample]) -> None:
         self.name: str = name
-        self.examples: List[Example] = examples
+        self.examples: List[DataGenerationExample] = examples
 
     def __str__(self):
         str_rep = ["Set:\n",
@@ -49,10 +49,11 @@ class ExampleSet:
 
 
 class DataGeneration:
-    def __init__(self, sets: List[ExampleSet],
+    def __init__(self, sets: List[DataGenerationSet],
                  postprocessing_operations: Optional[List[PostprocessingOperation]] = None) -> None:
-        self.sets: List[ExampleSet] = sets
-        self.postprocessing_operations: Optional[List[PostprocessingOperation]] = postprocessing_operations
+        self.sets: List[DataGenerationSet] = sets
+        self.postprocessing_operations: Optional[List[PostprocessingOperation]
+                                                 ] = postprocessing_operations
 
     def __str__(self):
         str_rep = ["Data generation:\n"]

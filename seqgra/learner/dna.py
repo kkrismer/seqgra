@@ -6,7 +6,7 @@ Abstract base class for learners
 """
 from __future__ import annotations
 
-from typing import List, Tuple
+from typing import List
 import itertools
 import warnings
 
@@ -14,6 +14,7 @@ import numpy as np
 import pandas as pd
 from sklearn.preprocessing import MultiLabelBinarizer
 
+from seqgra import ExampleSet
 from seqgra.learner import MultiClassClassificationLearner
 from seqgra.learner import MultiLabelClassificationLearner
 from seqgra.learner import DNAHelper
@@ -50,13 +51,13 @@ class DNAMultiClassClassificationLearner(MultiClassClassificationLearner):
         decoded_y = list(itertools.chain(*decoded_y))
         return decoded_y
 
-    def parse_examples_data(self, file_name: str) -> Tuple[List[str], List[str]]:
+    def parse_examples_data(self, file_name: str) -> ExampleSet:
         df = pd.read_csv(file_name, sep="\t")
         x: List[str] = df["x"].tolist()
         y: List[str] = df["y"].tolist()
 
         DNAHelper.check_sequence(x)
-        return (x, y)
+        return ExampleSet(x, y)
 
 
 class DNAMultiLabelClassificationLearner(MultiLabelClassificationLearner):
@@ -95,11 +96,10 @@ class DNAMultiLabelClassificationLearner(MultiLabelClassificationLearner):
         decoded_y = ["|".join(ex) for ex in decoded_y]
         return decoded_y
 
-    def parse_examples_data(self,
-                            file_name: str) -> Tuple[List[str], List[str]]:
+    def parse_examples_data(self, file_name: str) -> ExampleSet:
         df = pd.read_csv(file_name, sep="\t")
         x: List[str] = df["x"].tolist()
         y: List[str] = df["y"].replace(np.nan, "", regex=True).tolist()
 
         DNAHelper.check_sequence(x)
-        return (x, y)
+        return ExampleSet(x, y)

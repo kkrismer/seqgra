@@ -14,13 +14,14 @@ from xml.dom.minidom import Document, parseString
 import pkg_resources
 from lxml import etree
 
+from seqgra import ProbabilisticToken
 from seqgra.parser import XMLHelper
 from seqgra.parser import DataDefinitionParser
 from seqgra.model import DataDefinition
 from seqgra.model.data import Background
 from seqgra.model.data import DataGeneration
-from seqgra.model.data import ExampleSet
-from seqgra.model.data import Example
+from seqgra.model.data import DataGenerationExample
+from seqgra.model.data import DataGenerationSet
 from seqgra.model.data import Condition
 from seqgra.model.data import SequenceElement
 from seqgra.model.data import KmerBasedSequenceElement
@@ -108,15 +109,16 @@ class XMLDataDefinitionParser(DataDefinitionParser):
 
         letter_elements: Any = \
             alphabet_distribution_element.getElementsByTagName("letter")
-        letters: List[Tuple[str, float]] = \
+        letters: List[ProbabilisticToken] = \
             [XMLDataDefinitionParser.__parse_letter(letter_element)
              for letter_element in letter_elements]
         return AlphabetDistribution(letters, condition, set_name)
 
     @staticmethod
-    def __parse_letter(letter_element) -> Tuple[str, float]:
-        return tuple((XMLHelper.read_immediate_text_node(letter_element),
-                      float(letter_element.getAttribute("probability"))))
+    def __parse_letter(letter_element) -> ProbabilisticToken:
+        return ProbabilisticToken(
+            XMLHelper.read_immediate_text_node(letter_element),
+            float(letter_element.getAttribute("probability")))
 
     def get_data_generation(
             self,
@@ -137,7 +139,7 @@ class XMLDataDefinitionParser(DataDefinitionParser):
 
         sets_element = data_generation_element.getElementsByTagName("sets")[0]
         set_elements = sets_element.getElementsByTagName("set")
-        sets: List[ExampleSet] = \
+        sets: List[DataGenerationSet] = \
             [XMLDataDefinitionParser.__parse_set(set_element, valid_conditions)
              for set_element in set_elements]
         return DataGeneration(sets, postprocessing)
@@ -159,18 +161,18 @@ class XMLDataDefinitionParser(DataDefinitionParser):
 
     @staticmethod
     def __parse_set(set_element,
-                    valid_conditions: List[Condition]) -> ExampleSet:
+                    valid_conditions: List[Condition]) -> DataGenerationSet:
         name: str = set_element.getAttribute("name")
         example_elements: Any = set_element.getElementsByTagName("example")
-        examples: List[Example] = \
+        examples: List[DataGenerationExample] = \
             [XMLDataDefinitionParser.__parse_example(
                 example_element, valid_conditions)
              for example_element in example_elements]
-        return ExampleSet(name, examples)
+        return DataGenerationSet(name, examples)
 
     @staticmethod
     def __parse_example(example_element,
-                        valid_conditions: List[Condition]) -> Example:
+                        valid_conditions: List[Condition]) -> DataGenerationExample:
         samples: int = int(example_element.getAttribute("samples"))
         condition_elements: Any = \
             example_element.getElementsByTagName("conditionref")
@@ -178,7 +180,7 @@ class XMLDataDefinitionParser(DataDefinitionParser):
             [Condition.get_by_id(valid_conditions,
                                  condition_element.getAttribute("cid"))
              for condition_element in condition_elements]
-        return Example(samples, conditions)
+        return DataGenerationExample(samples, conditions)
 
     def get_conditions(
             self,
@@ -271,14 +273,14 @@ class XMLDataDefinitionParser(DataDefinitionParser):
         if len(kmer_based_element) == 1:
             kmer_elements: Any = \
                 kmer_based_element[0].getElementsByTagName("kmer")
-            kmers: List[Tuple[str, float]] = \
+            kmers: List[ProbabilisticToken] = \
                 [XMLDataDefinitionParser.__parse_letter(kmer_element)
                  for kmer_element in kmer_elements]
             return KmerBasedSequenceElement(sid, kmers)
         elif len(matrix_based_element) == 1:
             position_elements: Any = \
                 matrix_based_element[0].getElementsByTagName("position")
-            positions: List[List[Tuple[str, float]]] = \
+            positions: List[List[ProbabilisticToken]] = \
                 [XMLDataDefinitionParser.__parse_position(position_element)
                  for position_element in position_elements]
             return MatrixBasedSequenceElement(sid, positions)
@@ -286,7 +288,7 @@ class XMLDataDefinitionParser(DataDefinitionParser):
             raise Exception("sequence element is invalid")
 
     @staticmethod
-    def __parse_position(position_element) -> List[Tuple[str, float]]:
+    def __parse_position(position_element) -> List[ProbabilisticToken]:
         letter_elements: Any = position_element.getElementsByTagName("letter")
         return [XMLDataDefinitionParser.__parse_letter(letter_element)
                 for letter_element in letter_elements]

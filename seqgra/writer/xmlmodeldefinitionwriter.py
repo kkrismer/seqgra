@@ -5,7 +5,7 @@ Abstract base class for configuration file writer
 
 @author: Konstantin Krismer
 """
-from typing import Dict, List, Tuple, Optional
+from typing import Dict, List, Optional
 
 from lxml import etree
 
