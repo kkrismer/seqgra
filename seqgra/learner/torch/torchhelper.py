@@ -423,5 +423,5 @@ class TorchHelper:
             elif metric == "accuracy":
                 metrics_dict[metric] = Accuracy(is_multilabel=is_multilabel)
             else:
-                logging.warn("unknown metric: " + metric)
+                logging.warning("unknown metric: %s", metric)
         return metrics_dict

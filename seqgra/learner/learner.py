@@ -172,10 +172,10 @@ class Learner(ABC):
         is_valid: bool = True
         for annotation in annotations:
             if not re.match("^[\_GC]*$", annotation):
-                logging.warn("example with invalid annotation "
-                             "(only 'G' for grammar position, 'C' for "
-                             "confounding position, and '_' for background "
-                             "position allowed): " + annotation)
+                logging.warning("example with invalid annotation "
+                                "(only 'G' for grammar position, 'C' for "
+                                "confounding position, and '_' for background "
+                                "position allowed): %s", annotation)
                 is_valid = False
         return is_valid
 

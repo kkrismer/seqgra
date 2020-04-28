@@ -49,11 +49,12 @@ class Evaluator(ABC):
 
     def __detect_incompatibilities(self):
         if not self.learner.definition.task in self.supported_tasks:
-            logging.warn("learner task incompatible with evaluator")
+            logging.warning("learner task incompatible with evaluator")
         if not self.learner.definition.sequence_space in self.supported_sequence_spaces:
-            logging.warn("learner sequence space incompatible with evaluator")
+            logging.warning("learner sequence space incompatible with "
+                            "evaluator")
         if not self.learner.definition.library in self.supported_libraries:
-            logging.warn("learner library incompatible with evaluator")
+            logging.warning("learner library incompatible with evaluator")
 
     def evaluate_model(self, set_name: str = "test",
                        subset_idx: Optional[List[int]] = None) -> None:
@@ -162,29 +163,30 @@ class Evaluator(ABC):
 
             if len(x) == 0:
                 if labels is None:
-                    logging.warn("no correctly labeled example with prediction "
-                                 "threshold > " + str(self.threshold) +
-                                 " in set '" + set_name + "'")
+                    logging.warning("no correctly labeled example with "
+                                    "prediction threshold > %s in set '%s'",
+                                    self.threshold, set_name)
                 else:
-                    logging.warn("no correctly labeled example with prediction "
-                                 "threshold > " + str(self.threshold) +
-                                 " in set '" + set_name + "' that has one of the"
-                                 "following labels: " + labels)
+                    logging.warning("no correctly labeled example with "
+                                    "prediction threshold > %s in set '%s' "
+                                    "that has one of the following labels: %s",
+                                    self.threshold, set_name, labels)
                 return (None, None, None)
             elif n > len(x):
                 if labels is None:
-                    logging.warn("n (" + str(n) + ") is larger than the number "
-                                 "of correctly labeled examples with prediction "
-                                 "threshold > " + str(self.threshold) +
-                                 " in set '" + set_name + "' (" + str(len(x)) +
-                                 "): reset n to " + str(len(x)))
+                    logging.warning("n (%s) is larger than the number "
+                                    "of correctly labeled examples with "
+                                    "prediction threshold > %s in set '%s' "
+                                    "(%s): reset n to %s",
+                                    n, self.threshold, set_name,
+                                    len(x), len(x))
                 else:
-                    logging.warn("n (" + str(n) + ") is larger than the number "
-                                 "of correctly labeled examples with prediction "
-                                 "threshold > " + str(self.threshold) +
-                                 " in set '" + set_name + "' (" + str(len(x)) +
-                                 ") for the labels specified: reset n to " +
-                                 str(len(x)))
+                    logging.warning("n (%s) is larger than the number "
+                                    "of correctly labeled examples with "
+                                    "prediction threshold > %s in set '%s' "
+                                    "(%s) for the labels specified: reset n "
+                                    "to %s", n, self.threshold, set_name,
+                                    len(x), len(x))
                 n = len(x)
 
             if shuffle:

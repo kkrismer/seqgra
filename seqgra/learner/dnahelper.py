@@ -41,7 +41,7 @@ class DNAHelper:
         is_valid: bool = True
         for seq in seqs:
             if not re.match("^[ACGT]*$", seq):
-                logging.warn("example with invalid DNA sequence "
-                             "(only 'A', 'C', 'G', 'T' allowed): " + seq)
+                logging.warning("example with invalid DNA sequence "
+                                "(only 'A', 'C', 'G', 'T' allowed): %s", seq)
                 is_valid = False
         return is_valid

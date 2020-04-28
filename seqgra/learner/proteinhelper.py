@@ -96,8 +96,8 @@ class ProteinHelper:
         is_valid: bool = True
         for seq in seqs:
             if not re.match("^[ARNDCEQGHILKMFPSTWYV]*$", seq):
-                logging.warn("example with invalid amino acid sequence "
-                             "(only uppercase single letter codes of 20 "
-                             "canonical amino acids allowed): " + seq)
+                logging.warning("example with invalid amino acid sequence "
+                                "(only uppercase single letter codes of 20 "
+                                "canonical amino acids allowed): %s", seq)
                 is_valid = False
         return is_valid

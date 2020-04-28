@@ -287,27 +287,27 @@ def run_seqgra(data_config_file: Optional[str],
                 results_exist: bool = os.path.exists(results_dir) and \
                     len(os.listdir(results_dir)) > 0
                 if results_exist:
-                    logging.info("skip evaluator " + evaluator_id +
-                                 ": results already saved to disk")
+                    logging.info("skip evaluator %s: results already saved "
+                                 "to disk", evaluator_id)
                     if new_model:
-                        logging.warn("results from evaluator " + evaluator_id +
-                                     " are based on an outdated model; "
-                                     "please delete '" + results_dir + "' "
-                                     "and run seqgra again to get results "
-                                     "from " + evaluator_id +
-                                     " on current model")
+                        logging.warning("results from evaluator %s are based "
+                                        "on an outdated model; please delete "
+                                        "'%s' and run seqgra again to get "
+                                        "results from %s on current model",
+                                        evaluator_id, results_dir,
+                                        evaluator_id)
                 else:
                     evaluator: Evaluator = get_evaluator(evaluator_id,
                                                          learner,
                                                          evaluation_dir)
-                    #logging.info("running evaluator " + evaluator_id +
-                    #             " on training set")
-                    #evaluator.evaluate_model("training")
-                    #logging.info("running evaluator " + evaluator_id +
-                    #             " on validation set")
-                    #evaluator.evaluate_model("validation")
-                    logging.info("running evaluator " + evaluator_id +
-                                 " on test set")
+                    logging.info("running evaluator %s on training set",
+                                 evaluator_id)
+                    evaluator.evaluate_model("training")
+                    logging.info("running evaluator %s on validation set",
+                                 evaluator_id)
+                    evaluator.evaluate_model("validation")
+                    logging.info("running evaluator %s on test set",
+                                 evaluator_id)
                     evaluator.evaluate_model("test")
         else:
             logging.info("skipping evaluation step: no evaluator specified")
