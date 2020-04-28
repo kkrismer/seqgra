@@ -12,6 +12,7 @@ import random
 
 import numpy as np
 
+import seqgra.constants as c
 from seqgra.model.data import Rule
 from seqgra.model.data import Condition
 from seqgra.model.data import Background
@@ -23,13 +24,12 @@ from seqgra.simulator import BackgroundGenerator
 class ExampleGenerator:
     @staticmethod
     def generate_example(conditions: List[Condition], set_name: str,
-                         background: Background,
-                         background_character: str = "_") -> Example:
+                         background: Background) -> Example:
         if conditions is None:
             background: str = \
                 BackgroundGenerator.generate_background(background, None,
                                                         set_name)
-            annotation: str = "".join([background_character] * len(background))
+            annotation: str = "".join([c.PositionType.BACKGROUND] * len(background))
             example: Example = Example(background, annotation)
         else:
             # randomly shuffle the order of the conditions,
@@ -41,7 +41,7 @@ class ExampleGenerator:
                 BackgroundGenerator.generate_background(background,
                                                         conditions[0],
                                                         set_name)
-            annotation: str = "".join([background_character] * len(background))
+            annotation: str = "".join([c.PositionType.BACKGROUND] * len(background))
             example: Example = Example(background, annotation)
 
             for condition in conditions:
@@ -142,11 +142,10 @@ class ExampleGenerator:
         return example
 
     @staticmethod
-    def add_element(example: Example, element: str, position: int,
-                    grammar_character: str = "G") -> Example:
+    def add_element(example: Example, element: str, position: int) -> Example:
         example.sequence = example.sequence[:position] + element + \
             example.sequence[position + len(element):]
         example.annotation = example.annotation[:position] + \
-            (grammar_character * len(element)) + \
+            (c.PositionType.GRAMMAR * len(element)) + \
             example.annotation[position + len(element):]
         return example

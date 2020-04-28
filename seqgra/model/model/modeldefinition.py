@@ -2,15 +2,41 @@ from __future__ import annotations
 
 from typing import List, Dict, Optional
 
+import seqgra.constants as c
 from seqgra.model.model import Architecture
 
 
 class ModelDefinition:
+    """TODO
+
+    Attributes:
+        id (str): learner ID, used for output folder name
+        name (str): learner name
+        description (str): concise description of the model architecture
+        task (str): one of the following: multi-class classification,
+            multi-label classification, multiple regression, multivariate
+            regression
+        sequence_space (str): one of the following: DNA, protein
+        library (str): one of the following: TensorFlow, PyTorch
+        implementation (Optional[str]): class name of the learner implementation,
+            e.g., `KerasDNAMultiLabelClassificationLearner`
+        labels (List[str]): class labels expected from output layer
+        seed (int): seed for Python, NumPy, and machine learning library
+        architecture (Architecture): model architecture
+        loss_hyperparameters (Dict[str, str]): hyperparmeters for loss
+            function, e.g., type of loss function
+        optimizer_hyperparameters (Dict[str, str]): hyperparmeters for
+            optimizer, e.g., optimizer type
+        training_process_hyperparameters (Dict[str, str]): hyperparmeters
+            regarding the training process, e.g., batch size
+
+    """
+
     def __init__(self, model_id: str = "", name: str = "",
                  description: str = "",
-                 task: str = "multi-class classification",
-                 sequence_space: str = "DNA",
-                 library: str = "PyTorch",
+                 task: str = c.TaskType.MULTI_CLASS_CLASSIFICATION,
+                 sequence_space: str = c.SequenceSpaceType.DNA,
+                 library: str = c.LibraryType.TORCH,
                  implementation: Optional[str] = None,
                  labels: Optional[List[str]] = None,
                  seed: int = 0,

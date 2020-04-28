@@ -20,8 +20,8 @@ from ignite.engine import create_supervised_evaluator
 from ignite.metrics import Accuracy, Loss
 from ignite.handlers import EarlyStopping, ModelCheckpoint
 
+import seqgra.constants as c
 from seqgra.learner import Learner
-from seqgra.model.model import Architecture
 
 
 class TorchHelper:
@@ -414,7 +414,7 @@ class TorchHelper:
 
     @staticmethod
     def get_metrics(learner: Learner):
-        is_multilabel = learner.definition.task == "multi-label classification"
+        is_multilabel = learner.definition.task == c.TaskType.MULTI_LABEL_CLASSIFICATION
         metrics_dict = dict()
         for metric in learner.metrics:
             metric = metric.lower().strip()

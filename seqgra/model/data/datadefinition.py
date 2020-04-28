@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from typing import List, Optional
 
+import seqgra.constants as c
 from seqgra.model.data import Background
 from seqgra.model.data import DataGeneration
 from seqgra.model.data import Condition
@@ -10,8 +11,8 @@ from seqgra.model.data import SequenceElement
 
 class DataDefinition:
     def __init__(self, grammar_id: str = "", name: str = "", description: str = "",
-                 task: str = "multi-class classification",
-                 sequence_space: str = "DNA",
+                 task: str = c.TaskType.MULTI_CLASS_CLASSIFICATION,
+                 sequence_space: str = c.SequenceSpaceType.DNA,
                  seed: int = 0,
                  background: Optional[Background] = None,
                  data_generation: Optional[DataGeneration] = None,

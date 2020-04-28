@@ -16,6 +16,7 @@ import logging
 import os
 from typing import List, Optional
 
+import seqgra.constants as c
 from seqgra.learner import Learner
 from seqgra.model import DataDefinition
 from seqgra.model import ModelDefinition
@@ -51,22 +52,22 @@ def get_learner(model_definition: ModelDefinition,
     # imports are inside if branches to only depend on TensorFlow and PyTorch
     # when required
     if model_definition.implementation is None:
-        if model_definition.task == "multi-class classification":
-            if model_definition.sequence_space == "DNA":
-                if model_definition.library == "TensorFlow":
+        if model_definition.task == c.TaskType.MULTI_CLASS_CLASSIFICATION:
+            if model_definition.sequence_space == c.SequenceSpaceType.DNA:
+                if model_definition.library == c.LibraryType.TENSORFLOW:
                     from seqgra.learner.tensorflow import KerasDNAMultiClassClassificationLearner   # pylint: disable=import-outside-toplevel
                     return KerasDNAMultiClassClassificationLearner(model_definition, data_dir, output_dir)
-                elif model_definition.library == "PyTorch":
+                elif model_definition.library == c.LibraryType.TORCH:
                     from seqgra.learner.torch import TorchDNAMultiClassClassificationLearner   # pylint: disable=import-outside-toplevel
                     return TorchDNAMultiClassClassificationLearner(model_definition, data_dir, output_dir)
                 else:
                     raise Exception("invalid library: " +
                                     model_definition.library)
-            elif model_definition.sequence_space == "protein":
-                if model_definition.library == "TensorFlow":
+            elif model_definition.sequence_space == c.SequenceSpaceType.PROTEIN:
+                if model_definition.library == c.LibraryType.TENSORFLOW:
                     from seqgra.learner.tensorflow import KerasProteinMultiClassClassificationLearner   # pylint: disable=import-outside-toplevel
                     return KerasProteinMultiClassClassificationLearner(model_definition, data_dir, output_dir)
-                elif model_definition.library == "PyTorch":
+                elif model_definition.library == c.LibraryType.TORCH:
                     from seqgra.learner.torch import TorchProteinMultiClassClassificationLearner   # pylint: disable=import-outside-toplevel
                     return TorchProteinMultiClassClassificationLearner(model_definition, data_dir, output_dir)
                 else:
@@ -75,22 +76,22 @@ def get_learner(model_definition: ModelDefinition,
             else:
                 raise Exception("invalid model sequence space: " +
                                 model_definition.sequence_space)
-        elif model_definition.task == "multi-label classification":
-            if model_definition.sequence_space == "DNA":
-                if model_definition.library == "TensorFlow":
+        elif model_definition.task == c.TaskType.MULTI_LABEL_CLASSIFICATION:
+            if model_definition.sequence_space == c.SequenceSpaceType.DNA:
+                if model_definition.library == c.LibraryType.TENSORFLOW:
                     from seqgra.learner.tensorflow import KerasDNAMultiLabelClassificationLearner   # pylint: disable=import-outside-toplevel
                     return KerasDNAMultiLabelClassificationLearner(model_definition, data_dir, output_dir)
-                elif model_definition.library == "PyTorch":
+                elif model_definition.library == c.LibraryType.TORCH:
                     from seqgra.learner.torch import TorchDNAMultiLabelClassificationLearner   # pylint: disable=import-outside-toplevel
                     return TorchDNAMultiLabelClassificationLearner(model_definition, data_dir, output_dir)
                 else:
                     raise Exception("invalid library: " +
                                     model_definition.library)
-            elif model_definition.sequence_space == "protein":
-                if model_definition.library == "TensorFlow":
+            elif model_definition.sequence_space == c.SequenceSpaceType.PROTEIN:
+                if model_definition.library == c.LibraryType.TENSORFLOW:
                     from seqgra.learner.tensorflow import KerasProteinMultiLabelClassificationLearner   # pylint: disable=import-outside-toplevel
                     return KerasProteinMultiLabelClassificationLearner(model_definition, data_dir, output_dir)
-                elif model_definition.library == "PyTorch":
+                elif model_definition.library == c.LibraryType.TORCH:
                     from seqgra.learner.torch import TorchProteinMultiLabelClassificationLearner   # pylint: disable=import-outside-toplevel
                     return TorchProteinMultiLabelClassificationLearner(model_definition, data_dir, output_dir)
                 else:
@@ -99,10 +100,10 @@ def get_learner(model_definition: ModelDefinition,
             else:
                 raise Exception("invalid model sequence space: " +
                                 model_definition.sequence_space)
-        elif model_definition.task == "multiple regression":
+        elif model_definition.task == c.TaskType.MULTIPLE_REGRESSION:
             raise NotImplementedError("implementation for multiple "
                                       "regression not available")
-        elif model_definition.task == "multivariate regression":
+        elif model_definition.task == c.TaskType.MULTIVARIATE_REGRESSION:
             raise NotImplementedError("implementation for multivariate "
                                       "regression not available")
         else:
@@ -299,12 +300,12 @@ def run_seqgra(data_config_file: Optional[str],
                     evaluator: Evaluator = get_evaluator(evaluator_id,
                                                          learner,
                                                          evaluation_dir)
-                    logging.info("running evaluator " + evaluator_id +
-                                 " on training set")
-                    evaluator.evaluate_model("training")
-                    logging.info("running evaluator " + evaluator_id +
-                                 " on validation set")
-                    evaluator.evaluate_model("validation")
+                    #logging.info("running evaluator " + evaluator_id +
+                    #             " on training set")
+                    #evaluator.evaluate_model("training")
+                    #logging.info("running evaluator " + evaluator_id +
+                    #             " on validation set")
+                    #evaluator.evaluate_model("validation")
                     logging.info("running evaluator " + evaluator_id +
                                  " on test set")
                     evaluator.evaluate_model("test")

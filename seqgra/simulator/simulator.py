@@ -17,6 +17,7 @@ import numpy as np
 import pkg_resources
 import ushuffle
 
+import seqgra.constants as c
 from seqgra import MiscHelper
 from seqgra.model import DataDefinition
 from seqgra.model.data import ExampleSet
@@ -64,8 +65,7 @@ class Simulator:
 
     def __add_shuffled_examples(self, set_name: str,
                                 preserve_frequencies_for_kmer: int,
-                                labels_value: str,
-                                background_character: str = "_") -> None:
+                                labels_value: str) -> None:
         # write shuffled examples
         with open(self.output_dir + "/" + set_name + ".txt", "r") as data_file:
             with open(self.output_dir + "/" + set_name + "-shuffled.txt", "w") as shuffled_data_file:
@@ -83,7 +83,7 @@ class Simulator:
                 for line in annotation_file:
                     columns = line.split("\t")
                     shuffled_annotation_file.write(
-                        "".join([background_character] * len(columns[0])) +
+                        "".join([c.PositionType.BACKGROUND] * len(columns[0])) +
                         "\t" + labels_value + "\n")
 
         # merge files

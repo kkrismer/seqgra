@@ -19,6 +19,7 @@ from typing import Any, List, Optional, Tuple
 import pandas as pd
 
 from seqgra import MiscHelper
+import seqgra.constants as c
 from seqgra.model import ModelDefinition
 
 
@@ -26,24 +27,8 @@ class Learner(ABC):
     """Abstract base class for all learners.
 
     Attributes:
-        id (str): learner ID, used for output folder name
-        name (str): learner name
-        description (str): concise description of the model architecture
-        library (str): TensorFlow or PyTorch
-        seed (int): seed for Python, NumPy, and machine learning library
-        learner_type (str): one of the following: multi-class classification,
-            multi-label classification, multiple regression, multivariate
-            regression
-        learner_implementation (str): class name of the learner implementation,
-            KerasDNAMultiLabelClassificationLearner
-        labels (List[str]): class labels expected from output layer
-        architecture (Architecture): model architecture
-        loss_hyperparameters (Dict[str, str]): hyperparmeters for loss
-            function, e.g., type of loss function
-        optimizer_hyperparameters (Dict[str, str]): hyperparmeters for
-            optimizer, e.g., optimizer type
-        training_process_hyperparameters (Dict[str, str]): hyperparmeters
-            regarding the training process, e.g., batch size
+        definition (ModelDefinition): contains model meta info,
+            architecture and hyperparameters
         data_dir (str): directory with data files, e.g., `training.txt`
         output_dir (str): model output directory,
             `{OUTPUTDIR}/models/{GRAMMAR ID}/{MODEL ID}/`
@@ -72,7 +57,8 @@ class Learner(ABC):
         set_seed
 
     Arguments:
-        parser (ModelParser): parser for model definition
+        model_definition (ModelDefinition): contains model meta info,
+            architecture and hyperparameters
         data_dir (str): directory with data files,
             `{OUTPUTDIR}/input/{GRAMMAR ID}`
         output_dir (str): model output directory without model folder,
@@ -357,24 +343,8 @@ class MultiClassClassificationLearner(Learner):
     mututally exclusive class labels.
 
     Attributes:
-        id (str): learner ID, used for output folder name
-        name (str): learner name
-        description (str): concise description of the model architecture
-        library (str): TensorFlow or PyTorch
-        seed (int): seed for Python, NumPy, and machine learning library
-        learner_type (str): one of the following: multi-class classification,
-            multi-label classification, multiple regression, multivariate
-            regression
-        learner_implementation (str): class name of the learner implementation,
-            KerasDNAMultiLabelClassificationLearner
-        labels (List[str]): class labels expected from output layer
-        architecture (Architecture): model architecture
-        loss_hyperparameters (Dict[str, str]): hyperparmeters for loss
-            function, e.g., type of loss function
-        optimizer_hyperparameters (Dict[str, str]): hyperparmeters for
-            optimizer, e.g., optimizer type
-        training_process_hyperparameters (Dict[str, str]): hyperparmeters
-            regarding the training process, e.g., batch size
+        definition (ModelDefinition): contains model meta info,
+            architecture and hyperparameters
         data_dir (str): directory with data files, e.g., `training.txt`
         output_dir (str): model output directory,
             `{OUTPUTDIR}/models/{GRAMMAR ID}/{MODEL ID}/`
@@ -404,7 +374,8 @@ class MultiClassClassificationLearner(Learner):
         evaluate_model
 
     Arguments:
-        parser (ModelParser): parser for model definition
+        model_definition (ModelDefinition): contains model meta info,
+            architecture and hyperparameters
         data_dir (str): directory with data files,
             `{OUTPUTDIR}/input/{GRAMMAR ID}`
         output_dir (str): model output directory without model folder,
@@ -416,7 +387,7 @@ class MultiClassClassificationLearner(Learner):
                  output_dir: str) -> None:
         super().__init__(model_definition, data_dir, output_dir)
 
-        if self.definition.task != "multi-class classification":
+        if self.definition.task != c.TaskType.MULTI_CLASS_CLASSIFICATION:
             raise Exception("task of model definition must be multi-class "
                             "classification, but is '" +
                             self.definition.task + "' instead")
@@ -460,24 +431,8 @@ class MultiLabelClassificationLearner(Learner):
     labels that are not mututally exclusive.
 
     Attributes:
-        id (str): learner ID, used for output folder name
-        name (str): learner name
-        description (str): concise description of the model architecture
-        library (str): TensorFlow or PyTorch
-        seed (int): seed for Python, NumPy, and machine learning library
-        learner_type (str): one of the following: multi-class classification,
-            multi-label classification, multiple regression, multivariate
-            regression
-        learner_implementation (str): class name of the learner implementation,
-            KerasDNAMultiLabelClassificationLearner
-        labels (List[str]): class labels expected from output layer
-        architecture (Architecture): model architecture
-        loss_hyperparameters (Dict[str, str]): hyperparmeters for loss
-            function, e.g., type of loss function
-        optimizer_hyperparameters (Dict[str, str]): hyperparmeters for
-            optimizer, e.g., optimizer type
-        training_process_hyperparameters (Dict[str, str]): hyperparmeters
-            regarding the training process, e.g., batch size
+        definition (ModelDefinition): contains model meta info,
+            architecture and hyperparameters
         data_dir (str): directory with data files, e.g., `training.txt`
         output_dir (str): model output directory,
             `{OUTPUTDIR}/models/{GRAMMAR ID}/{MODEL ID}/`
@@ -507,7 +462,8 @@ class MultiLabelClassificationLearner(Learner):
         evaluate_model
 
     Arguments:
-        parser (ModelParser): parser for model definition
+        model_definition (ModelDefinition): contains model meta info,
+            architecture and hyperparameters
         data_dir (str): directory with data files,
             `{OUTPUTDIR}/input/{GRAMMAR ID}`
         output_dir (str): model output directory without model folder,
@@ -519,7 +475,7 @@ class MultiLabelClassificationLearner(Learner):
                  output_dir: str) -> None:
         super().__init__(model_definition, data_dir, output_dir)
 
-        if self.definition.task != "multi-label classification":
+        if self.definition.task != c.TaskType.MULTI_LABEL_CLASSIFICATION:
             raise Exception("task of model definition must be multi-label "
                             "classification, but is '" +
                             self.definition.task, "' instead")
@@ -564,24 +520,8 @@ class MultipleRegressionLearner(Learner):
     one dependent real-valued variable (:math:`x \\in R`).
 
     Attributes:
-        id (str): learner ID, used for output folder name
-        name (str): learner name
-        description (str): concise description of the model architecture
-        library (str): TensorFlow or PyTorch
-        seed (int): seed for Python, NumPy, and machine learning library
-        learner_type (str): one of the following: multi-class classification,
-            multi-label classification, multiple regression, multivariate
-            regression
-        learner_implementation (str): class name of the learner implementation,
-            KerasDNAMultiLabelClassificationLearner
-        labels (List[str]): class labels expected from output layer
-        architecture (Architecture): model architecture
-        loss_hyperparameters (Dict[str, str]): hyperparmeters for loss
-            function, e.g., type of loss function
-        optimizer_hyperparameters (Dict[str, str]): hyperparmeters for
-            optimizer, e.g., optimizer type
-        training_process_hyperparameters (Dict[str, str]): hyperparmeters
-            regarding the training process, e.g., batch size
+        definition (ModelDefinition): contains model meta info,
+            architecture and hyperparameters
         data_dir (str): directory with data files, e.g., `training.txt`
         output_dir (str): model output directory,
             `{OUTPUTDIR}/models/{GRAMMAR ID}/{MODEL ID}/`
@@ -611,7 +551,8 @@ class MultipleRegressionLearner(Learner):
         evaluate_model
 
     Arguments:
-        parser (ModelParser): parser for model definition
+        model_definition (ModelDefinition): contains model meta info,
+            architecture and hyperparameters
         data_dir (str): directory with data files,
             `{OUTPUTDIR}/input/{GRAMMAR ID}`
         output_dir (str): model output directory without model folder,
@@ -623,7 +564,7 @@ class MultipleRegressionLearner(Learner):
                  output_dir: str) -> None:
         super().__init__(model_definition, data_dir, output_dir)
 
-        if self.definition.task != "multiple regression":
+        if self.definition.task != c.TaskType.MULTIPLE_REGRESSION:
             raise Exception("task of model definition must be multiple "
                             "regression, but is '" +
                             self.definition.task, "' instead")
@@ -667,24 +608,8 @@ class MultivariateRegressionLearner(Learner):
     multiple dependent real-valued variables (:math:`y \\in R^n`).
 
     Attributes:
-        id (str): learner ID, used for output folder name
-        name (str): learner name
-        description (str): concise description of the model architecture
-        library (str): TensorFlow or PyTorch
-        seed (int): seed for Python, NumPy, and machine learning library
-        learner_type (str): one of the following: multi-class classification,
-            multi-label classification, multiple regression, multivariate
-            regression
-        learner_implementation (str): class name of the learner implementation,
-            KerasDNAMultiLabelClassificationLearner
-        labels (List[str]): class labels expected from output layer
-        architecture (Architecture): model architecture
-        loss_hyperparameters (Dict[str, str]): hyperparmeters for loss
-            function, e.g., type of loss function
-        optimizer_hyperparameters (Dict[str, str]): hyperparmeters for
-            optimizer, e.g., optimizer type
-        training_process_hyperparameters (Dict[str, str]): hyperparmeters
-            regarding the training process, e.g., batch size
+        definition (ModelDefinition): contains model meta info,
+            architecture and hyperparameters
         data_dir (str): directory with data files, e.g., `training.txt`
         output_dir (str): model output directory,
             `{OUTPUTDIR}/models/{GRAMMAR ID}/{MODEL ID}/`
@@ -714,7 +639,8 @@ class MultivariateRegressionLearner(Learner):
         evaluate_model
 
     Arguments:
-        parser (ModelParser): parser for model definition
+        model_definition (ModelDefinition): contains model meta info,
+            architecture and hyperparameters
         data_dir (str): directory with data files,
             `{OUTPUTDIR}/input/{GRAMMAR ID}`
         output_dir (str): model output directory without model folder,
@@ -726,7 +652,7 @@ class MultivariateRegressionLearner(Learner):
                  output_dir: str) -> None:
         super().__init__(model_definition, data_dir, output_dir)
 
-        if self.definition.task != "multivariate regression":
+        if self.definition.task != c.TaskType.MULTIVARIATE_REGRESSION:
             raise Exception("task of model definition must be multivariate "
                             "regression, but is '" +
                             self.definition.task, "' instead")

@@ -15,6 +15,7 @@ import pandas as pd
 import pkg_resources
 import subprocess
 
+import seqgra.constants as c
 from seqgra.evaluator import Evaluator
 from seqgra.evaluator.sis import make_empty_boolean_mask_broadcast_over_axis
 from seqgra.evaluator.sis import produce_masked_inputs
@@ -22,19 +23,10 @@ from seqgra.evaluator.sis import sis_collection
 from seqgra.learner import Learner
 
 
-class PositionClass:
-    GRAMMAR: str = "G"
-    BACKGROUND: str = "_"
-    CONFOUNDER: str = "C"
-    DNA_MASKED: str = "N"
-    AA_MASKED: str = "X"
-
-
 class SISEvaluator(Evaluator):
     def __init__(self, learner: Learner, output_dir: str) -> None:
         super().__init__("sis", learner, output_dir)
-        self.threshold: float = 0.5
-        self.create_plots: bool = True
+        self.supported_tasks: List[str] = [c.TaskType.MULTI_CLASS_CLASSIFICATION]
 
     def _evaluate_model(self, x: List[str], y: List[str],
                         annotations: List[str]) -> Any:
@@ -102,10 +94,10 @@ class SISEvaluator(Evaluator):
             self.visualize_agreement(results, set_name)
 
     def __get_agreement_group(self, annotation_position: str,
-                            sis_position: str) -> str:
+                              sis_position: str) -> str:
         masked_letter: str = self.__get_masked_letter()
 
-        if annotation_position == PositionClass.GRAMMAR:
+        if annotation_position == c.PositionType.GRAMMAR:
             if sis_position == masked_letter:
                 return "FN (grammar position, not part of SIS)"
             else:
@@ -130,8 +122,8 @@ class SISEvaluator(Evaluator):
         for example_id, row in enumerate(results.itertuples(), 1):
             example_column += [example_id] * len(row.annotation)
             position_column += list(range(1, len(row.annotation) + 1))
-            group_column += [self.__get_agreement_group(c, row.sis_collapsed[i])
-                             for i, c in enumerate(row.annotation)]
+            group_column += [self.__get_agreement_group(char, row.sis_collapsed[i])
+                             for i, char in enumerate(row.annotation)]
             label_column += [row.y] * len(row.annotation)
             precision_column += [row.precision] * len(row.annotation)
             recall_column += [row.recall] * len(row.annotation)
@@ -150,8 +142,10 @@ class SISEvaluator(Evaluator):
                            "n": n_column})
         df["precision"] = df.groupby("label")["precision"].transform("mean")
         df["recall"] = df.groupby("label")["recall"].transform("mean")
-        df["sensitivity"] = df.groupby("label")["sensitivity"].transform("mean")
-        df["specificity"] = df.groupby("label")["specificity"].transform("mean")
+        df["sensitivity"] = df.groupby(
+            "label")["sensitivity"].transform("mean")
+        df["specificity"] = df.groupby(
+            "label")["specificity"].transform("mean")
         df["n"] = round(df.groupby("label")["n"].transform("sum"))
         df.to_csv(file_name, sep="\t", index=False)
 
@@ -184,10 +178,10 @@ class SISEvaluator(Evaluator):
             for i in range(len(encoded_x))]
 
     def __get_masked_letter(self) -> str:
-        if self.learner.definition.sequence_space == "DNA":
-            return PositionClass.DNA_MASKED
+        if self.learner.definition.sequence_space == c.SequenceSpaceType.DNA:
+            return c.PositionType.DNA_MASKED
         else:
-            return PositionClass.AA_MASKED
+            return c.PositionType.AA_MASKED
 
     def __calculate_precision(self, sis: str, annotation: str) -> float:
         masked_letter: str = self.__get_masked_letter()
@@ -197,10 +191,10 @@ class SISEvaluator(Evaluator):
         else:
             num_selected: int = 0
             num_selected_relevant: int = 0
-            for i, c in enumerate(sis):
-                if c != masked_letter:
+            for i, char in enumerate(sis):
+                if char != masked_letter:
                     num_selected += 1
-                    if annotation[i] == PositionClass.GRAMMAR:
+                    if annotation[i] == c.PositionType.GRAMMAR:
                         num_selected_relevant += 1
 
             if num_selected == 0:
@@ -221,8 +215,8 @@ class SISEvaluator(Evaluator):
         num_relevent: int = 0
 
         if sis == "":
-            for i, c in enumerate(annotation):
-                if c == PositionClass.GRAMMAR:
+            for i, char in enumerate(annotation):
+                if char == c.PositionType.GRAMMAR:
                     num_relevent += 1
             if num_relevent == 0:
                 return 1.0
@@ -230,8 +224,8 @@ class SISEvaluator(Evaluator):
                 return 0.0
         else:
             num_relevant_selected: int = 0
-            for i, c in enumerate(annotation):
-                if c == PositionClass.GRAMMAR:
+            for i, char in enumerate(annotation):
+                if char == c.PositionType.GRAMMAR:
                     num_relevent += 1
                     if sis[i] != masked_letter:
                         num_relevant_selected += 1
@@ -255,16 +249,16 @@ class SISEvaluator(Evaluator):
         num_false_negative: int = 0
 
         if sis == "":
-            for i, c in enumerate(annotation):
-                if c == PositionClass.GRAMMAR:
+            for i, char in enumerate(annotation):
+                if char == c.PositionType.GRAMMAR:
                     num_false_negative += 1
             if num_false_negative == 0:
                 return 1.0
             else:
                 return 0.0
         else:
-            for i, c in enumerate(annotation):
-                if c == PositionClass.GRAMMAR:
+            for i, char in enumerate(annotation):
+                if char == c.PositionType.GRAMMAR:
                     if sis[i] == masked_letter:
                         num_false_negative += 1
                     else:
@@ -289,16 +283,18 @@ class SISEvaluator(Evaluator):
         num_false_positive: int = 0
 
         if sis == "":
-            for i, c in enumerate(annotation):
-                if c == PositionClass.BACKGROUND or c == PositionClass.CONFOUNDER:
+            for i, char in enumerate(annotation):
+                if char == c.PositionType.BACKGROUND or \
+                        char == c.PositionType.CONFOUNDER:
                     num_true_negative += 1
             if num_true_negative > 0:
                 return 1.0
             else:
                 return 0.0
         else:
-            for i, c in enumerate(annotation):
-                if c == PositionClass.BACKGROUND or c == PositionClass.CONFOUNDER:
+            for i, char in enumerate(annotation):
+                if char == c.PositionType.BACKGROUND or \
+                        char == c.PositionType.CONFOUNDER:
                     if sis[i] == masked_letter:
                         num_true_negative += 1
                     else:
@@ -327,8 +323,8 @@ class SISEvaluator(Evaluator):
         else:
             collapsed_sis: str = sis[0]
             sis.pop(0)
-            for i, c in enumerate(collapsed_sis):
-                if c == masked_letter:
+            for i, char in enumerate(collapsed_sis):
+                if char == masked_letter:
                     for s in sis:
                         if s[i] != masked_letter:
                             collapsed_sis = collapsed_sis[:i] + \

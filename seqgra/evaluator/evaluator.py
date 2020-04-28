@@ -12,6 +12,7 @@ from typing import Any, List, Optional, Set, Tuple
 
 import numpy as np
 
+import seqgra.constants as c
 from seqgra import MiscHelper
 from seqgra.learner import Learner
 
@@ -19,17 +20,45 @@ from seqgra.learner import Learner
 class Evaluator(ABC):
     @abstractmethod
     def __init__(self, evaluator_id: str, learner: Learner,
-                 output_dir: str) -> None:
+                 output_dir: str, threshold: float = 0.5,
+                 create_plots: bool = True,
+                 supported_tasks: Optional[Set[str]] = None,
+                 supported_sequence_spaces: Optional[Set[str]] = None,
+                 supported_libraries: Optional[Set[str]] = None) -> None:
         self.evaluator_id: str = evaluator_id
         self.learner: Learner = learner
         self.output_dir = MiscHelper.prepare_path(output_dir + "/" +
                                                   self.evaluator_id,
                                                   allow_exists=False)
+        self.threshold: float = threshold
+        self.create_plots: bool = create_plots
+        if supported_tasks is None:
+            self.supported_tasks: Set[str] = c.TaskType.ALL_TASKS
+        else:
+            self.supported_tasks: Set[str] = set(supported_tasks)
+        if supported_sequence_spaces is None:
+            self.supported_sequence_spaces: Set[str] = c.SequenceSpaceType.ALL_SEQUENCE_SPACES
+        else:
+            self.supported_sequence_spaces: Set[str] = set(
+                supported_sequence_spaces)
+        if supported_libraries is None:
+            self.supported_libraries: Set[str] = c.LibraryType.ALL_LIBRARIES
+        else:
+            self.supported_libraries: Set[str] = set(supported_libraries)
+        self.__detect_incompatibilities()
+
+    def __detect_incompatibilities(self):
+        if not self.learner.definition.task in self.supported_tasks:
+            logging.warn("learner task incompatible with evaluator")
+        if not self.learner.definition.sequence_space in self.supported_sequence_spaces:
+            logging.warn("learner sequence space incompatible with evaluator")
+        if not self.learner.definition.library in self.supported_libraries:
+            logging.warn("learner library incompatible with evaluator")
 
     def evaluate_model(self, set_name: str = "test",
                        subset_idx: Optional[List[int]] = None) -> None:
         # TODO get from outside
-        subset_idx = [0, 1, 2]
+        subset_idx = [0, 1, 2, 4, 5]
         x, y, annotations = self._load_data(set_name, subset_idx)
         results = self._evaluate_model(x, y, annotations)
         self._save_results(results, set_name)
@@ -59,7 +88,7 @@ class Evaluator(ABC):
 
     @staticmethod
     def _subset(idx: List[int], x: List[str], y: List[str],
-                 annotations: List[str]) -> Tuple[List[str], List[str], List[str]]:
+                annotations: List[str]) -> Tuple[List[str], List[str], List[str]]:
         if len(x) != len(y) or len(x) != len(annotations):
             raise Exception("x, y, and annotations have to be the same length")
 
@@ -72,15 +101,15 @@ class Evaluator(ABC):
 
         return (x, y, annotations)
 
-    def select_examples(self, threshold: float, set_name: str = "test",
+    def select_examples(self, set_name: str = "test",
                         labels: Optional[Set[str]] = None) -> Tuple[List[str], List[str], List[str]]:
         """Returns all correctly classified examples that exceed the threshold.
 
         for the specified labels
         and set that exceed the threshold.
 
-        Parameters: 
-            TODO 
+        Parameters:
+            TODO
 
         Returns:
             TODO
@@ -103,53 +132,66 @@ class Evaluator(ABC):
 
         # discard misclassified / mislabeled examples and
         # examples below threshold
+        # TODO fix: i should be label index in model
         subset_idx = [i
                       for i in range(len(encoded_y))
                       if np.argmax(y_hat[i]) == np.argmax(encoded_y[i]) and
-                      np.max(y_hat[i]) > threshold]
+                      np.max(y_hat[i]) > self.threshold]
         x, y, annotations = self._subset(subset_idx, x, y, annotations)
 
         return (x, y, annotations)
 
-    def select_n_examples(self, n: int, threshold: float,
+    def select_n_examples(self, n: int,
                           set_name: str = "test",
                           labels: Optional[Set[str]] = None,
+                          per_label: bool = True,
                           shuffle: bool = True) -> Tuple[List[str], List[str], List[str]]:
-        x, y, annotations = self.select_examples(
-            threshold, set_name, labels)
-
-        if len(x) == 0:
-            if labels is None:
-                logging.warn("no correctly labeled example with prediction "
-                             "threshold > " + str(threshold) +
-                             " in set '" + set_name + "'")
-            else:
-                logging.warn("no correctly labeled example with prediction "
-                             "threshold > " + str(threshold) +
-                             " in set '" + set_name + "' that has one of the"
-                             "following labels: " + labels)
-            return (None, None, None)
-        elif n > len(x):
-            if labels is None:
-                logging.warn("n (" + str(n) + ") is larger than the number "
-                             "of correctly labeled examples with prediction "
-                             "threshold > " + str(threshold) +
-                             " in set '" + set_name + "' (" + str(len(x)) +
-                             "): reset n to " + str(len(x)))
-            else:
-                logging.warn("n (" + str(n) + ") is larger than the number "
-                             "of correctly labeled examples with prediction "
-                             "threshold > " + str(threshold) +
-                             " in set '" + set_name + "' (" + str(len(x)) +
-                             ") for the labels specified: reset n to " +
-                             str(len(x)))
-            n = len(x)
-
-        if shuffle:
-            subset_idx: List[int] = list(range(len(x)))
-            random.shuffle(subset_idx)
-            subset_idx = subset_idx[:n]
+        if labels is not None and per_label:
+            x: List[str] = list()
+            y: List[str] = list()
+            annotations: List[str] = list()
+            for label in labels:
+                examples = self.select_n_examples(n, set_name, label,
+                                                  shuffle)
+                x += examples.x
+                y += examples.y
+                annotations += examples.annotations
+            return x, y, annotations
         else:
-            subset_idx: List[int] = list(range(n))
+            x, y, annotations = self.select_examples(set_name, labels)
 
-        return self._subset(subset_idx, x, y, annotations)
+            if len(x) == 0:
+                if labels is None:
+                    logging.warn("no correctly labeled example with prediction "
+                                 "threshold > " + str(self.threshold) +
+                                 " in set '" + set_name + "'")
+                else:
+                    logging.warn("no correctly labeled example with prediction "
+                                 "threshold > " + str(self.threshold) +
+                                 " in set '" + set_name + "' that has one of the"
+                                 "following labels: " + labels)
+                return (None, None, None)
+            elif n > len(x):
+                if labels is None:
+                    logging.warn("n (" + str(n) + ") is larger than the number "
+                                 "of correctly labeled examples with prediction "
+                                 "threshold > " + str(self.threshold) +
+                                 " in set '" + set_name + "' (" + str(len(x)) +
+                                 "): reset n to " + str(len(x)))
+                else:
+                    logging.warn("n (" + str(n) + ") is larger than the number "
+                                 "of correctly labeled examples with prediction "
+                                 "threshold > " + str(self.threshold) +
+                                 " in set '" + set_name + "' (" + str(len(x)) +
+                                 ") for the labels specified: reset n to " +
+                                 str(len(x)))
+                n = len(x)
+
+            if shuffle:
+                subset_idx: List[int] = list(range(len(x)))
+                random.shuffle(subset_idx)
+                subset_idx = subset_idx[:n]
+            else:
+                subset_idx: List[int] = list(range(n))
+
+            return self._subset(subset_idx, x, y, annotations)
