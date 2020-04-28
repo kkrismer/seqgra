@@ -10,13 +10,16 @@ from __future__ import annotations
 from typing import Any, List
 
 import numpy as np
+import os
 import pandas as pd
+import pkg_resources
+import subprocess
 
-from seqgra.learner import Learner
 from seqgra.evaluator import Evaluator
-from seqgra.evaluator.sis import sis_collection
 from seqgra.evaluator.sis import make_empty_boolean_mask_broadcast_over_axis
 from seqgra.evaluator.sis import produce_masked_inputs
+from seqgra.evaluator.sis import sis_collection
+from seqgra.learner import Learner
 
 
 class PositionClass:
@@ -30,23 +33,21 @@ class PositionClass:
 class SISEvaluator(Evaluator):
     def __init__(self, learner: Learner, output_dir: str) -> None:
         super().__init__("sis", learner, output_dir)
+        self.threshold: float = 0.5
+        self.create_plots: bool = True
 
     def _evaluate_model(self, x: List[str], y: List[str],
                         annotations: List[str]) -> Any:
-        # TODO get selected labels, not all
-        labels: List[str] = self.learner.definition.labels
-
-        # TODO use class attribute threshold
-        threshold = 0.5
-
         x_column: List[str] = list()
         y_column: List[str] = list()
         annotations_column: List[str] = list()
         sis_collapsed_column: List[str] = list()
         precision_column: List[str] = list()
         recall_column: List[str] = list()
+        sensitivity_column: List[str] = list()
+        specificity_column: List[str] = list()
         sis_separated_column: List[str] = list()
-        for i, selected_label in enumerate(labels):
+        for i, selected_label in enumerate(set(y)):
             # select x, y, annotations of examples with label
             subset_idx = [i
                           for i, label in enumerate(y)
@@ -55,15 +56,17 @@ class SISEvaluator(Evaluator):
                 self._subset(subset_idx, x, y, annotations)
 
             sis_results: List[List[str]] = self.find_sis(
-                selected_x, threshold, i)
+                selected_x, i)
             sis_collapsed: List[str] = [self.__collapse_sis(sis_col)
                                         for sis_col in sis_results]
-            precision: List[float] = [self.calculate_precision(sis, anno)
-                                      for sis, anno in zip(sis_collapsed,
-                                                           selected_annotations)]
-            recall: List[float] = [self.calculate_recall(sis, anno)
-                                   for sis, anno in zip(sis_collapsed,
-                                                        selected_annotations)]
+            precision: List[float] = self.calculate_precision(
+                sis_collapsed, selected_annotations)
+            recall: List[float] = self.calculate_recall(
+                sis_collapsed, selected_annotations)
+            sensitivity: List[float] = self.calculate_sensitivity(
+                sis_collapsed, selected_annotations)
+            specificity: List[float] = self.calculate_specificity(
+                sis_collapsed, selected_annotations)
             sis_separated: List[str] = [";".join(sis_col)
                                         for sis_col in sis_results]
 
@@ -73,6 +76,8 @@ class SISEvaluator(Evaluator):
             sis_collapsed_column += sis_collapsed
             precision_column += precision
             recall_column += recall
+            sensitivity_column += sensitivity
+            specificity_column += specificity
             sis_separated_column += sis_separated
 
         return pd.DataFrame({"x": x_column,
@@ -81,6 +86,8 @@ class SISEvaluator(Evaluator):
                              "sis_collapsed": sis_collapsed_column,
                              "precision": precision_column,
                              "recall": recall_column,
+                             "sensitivity": sensitivity_column,
+                             "specificity": specificity_column,
                              "sis_separated": sis_separated_column})
 
     def _save_results(self, results, set_name: str = "test") -> None:
@@ -91,9 +98,75 @@ class SISEvaluator(Evaluator):
 
         results.to_csv(self.output_dir + set_name + ".txt", sep="\t",
                        index=False)
+        if self.create_plots and len(results.index) > 0:
+            self.visualize_agreement(results, set_name)
 
-    def find_sis(self, x: List[str], threshold: float,
-                 label_index: int) -> List[List[str]]:
+    def __get_agreement_group(self, annotation_position: str,
+                            sis_position: str) -> str:
+        masked_letter: str = self.__get_masked_letter()
+
+        if annotation_position == PositionClass.GRAMMAR:
+            if sis_position == masked_letter:
+                return "FN (grammar position, not part of SIS)"
+            else:
+                return "TP (grammar position, part of SIS)"
+        else:
+            if sis_position == masked_letter:
+                return "TN (background position, not part of SIS)"
+            else:
+                return "FP (background position, part of SIS)"
+
+    def __prepare_r_data_frame(self, results, file_name):
+        example_column: List[int] = list()
+        position_column: List[int] = list()
+        group_column: List[int] = list()
+        label_column: List[int] = list()
+        precision_column: List[int] = list()
+        recall_column: List[int] = list()
+        sensitivity_column: List[int] = list()
+        specificity_column: List[int] = list()
+        n_column: List[float] = list()
+
+        for example_id, row in enumerate(results.itertuples(), 1):
+            example_column += [example_id] * len(row.annotation)
+            position_column += list(range(1, len(row.annotation) + 1))
+            group_column += [self.__get_agreement_group(c, row.sis_collapsed[i])
+                             for i, c in enumerate(row.annotation)]
+            label_column += [row.y] * len(row.annotation)
+            precision_column += [row.precision] * len(row.annotation)
+            recall_column += [row.recall] * len(row.annotation)
+            sensitivity_column += [row.sensitivity] * len(row.annotation)
+            specificity_column += [row.specificity] * len(row.annotation)
+            n_column += [1.0 / len(row.annotation)] * len(row.annotation)
+
+        df = pd.DataFrame({"example": example_column,
+                           "position": position_column,
+                           "group": group_column,
+                           "label": label_column,
+                           "precision": precision_column,
+                           "recall": recall_column,
+                           "sensitivity": sensitivity_column,
+                           "specificity": specificity_column,
+                           "n": n_column})
+        df["precision"] = df.groupby("label")["precision"].transform("mean")
+        df["recall"] = df.groupby("label")["recall"].transform("mean")
+        df["sensitivity"] = df.groupby("label")["sensitivity"].transform("mean")
+        df["specificity"] = df.groupby("label")["specificity"].transform("mean")
+        df["n"] = round(df.groupby("label")["n"].transform("sum"))
+        df.to_csv(file_name, sep="\t", index=False)
+
+    def visualize_agreement(self, results, set_name: str = "test") -> None:
+        plot_script: str = pkg_resources.resource_filename(
+            "seqgra", "evaluator/sis/plotsis.R")
+        temp_file_name: str = self.output_dir + set_name + "-temp.txt"
+        pdf_file_name: str = self.output_dir + set_name + "-agreement.pdf"
+        self.__prepare_r_data_frame(results, temp_file_name)
+
+        cmd = ["Rscript", plot_script, temp_file_name, pdf_file_name]
+        subprocess.check_output(cmd, universal_newlines=True)
+        os.remove(temp_file_name)
+
+    def find_sis(self, x: List[str], label_index: int) -> List[List[str]]:
         encoded_x = self.learner.encode_x(x)
 
         def sis_predict(x):
@@ -106,15 +179,18 @@ class SISEvaluator(Evaluator):
             input_shape, 1)
 
         return [self.__produce_masked_inputs(
-            encoded_x[i], sis_predict, threshold,
+            encoded_x[i], sis_predict,
             fully_masked_input, initial_mask)
             for i in range(len(encoded_x))]
 
-    def __calculate_precision(self, sis: str, annotation: str) -> float:
+    def __get_masked_letter(self) -> str:
         if self.learner.definition.sequence_space == "DNA":
-            masked_letter: str = PositionClass.DNA_MASKED
+            return PositionClass.DNA_MASKED
         else:
-            masked_letter: str = PositionClass.AA_MASKED
+            return PositionClass.AA_MASKED
+
+    def __calculate_precision(self, sis: str, annotation: str) -> float:
+        masked_letter: str = self.__get_masked_letter()
 
         if sis == "":
             return 1.0
@@ -141,11 +217,7 @@ class SISEvaluator(Evaluator):
                     for s, anno in zip(sis, annotations)]
 
     def __calculate_recall(self, sis: str, annotation: str) -> float:
-        if self.learner.definition.sequence_space == "DNA":
-            masked_letter: str = PositionClass.DNA_MASKED
-        else:
-            masked_letter: str = PositionClass.AA_MASKED
-
+        masked_letter: str = self.__get_masked_letter()
         num_relevent: int = 0
 
         if sis == "":
@@ -177,11 +249,76 @@ class SISEvaluator(Evaluator):
             return [self.__calculate_recall(s, anno)
                     for s, anno in zip(sis, annotations)]
 
-    def __collapse_sis(self, sis: List[str]) -> str:
-        if self.learner.definition.sequence_space == "DNA":
-            masked_letter: str = PositionClass.DNA_MASKED
+    def __calculate_sensitivity(self, sis: str, annotation: str) -> float:
+        masked_letter: str = self.__get_masked_letter()
+        num_true_positive: int = 0
+        num_false_negative: int = 0
+
+        if sis == "":
+            for i, c in enumerate(annotation):
+                if c == PositionClass.GRAMMAR:
+                    num_false_negative += 1
+            if num_false_negative == 0:
+                return 1.0
+            else:
+                return 0.0
         else:
-            masked_letter: str = PositionClass.AA_MASKED
+            for i, c in enumerate(annotation):
+                if c == PositionClass.GRAMMAR:
+                    if sis[i] == masked_letter:
+                        num_false_negative += 1
+                    else:
+                        num_true_positive += 1
+
+        if num_true_positive == 0 and num_false_negative == 0:
+            return 0.0
+        else:
+            return num_true_positive / (num_true_positive + num_false_negative)
+
+    def calculate_sensitivity(self, sis: List[str],
+                              annotations: List[str]) -> List[float]:
+        if sis is None:
+            return list()
+        else:
+            return [self.__calculate_sensitivity(s, anno)
+                    for s, anno in zip(sis, annotations)]
+
+    def __calculate_specificity(self, sis: str, annotation: str) -> float:
+        masked_letter: str = self.__get_masked_letter()
+        num_true_negative: int = 0
+        num_false_positive: int = 0
+
+        if sis == "":
+            for i, c in enumerate(annotation):
+                if c == PositionClass.BACKGROUND or c == PositionClass.CONFOUNDER:
+                    num_true_negative += 1
+            if num_true_negative > 0:
+                return 1.0
+            else:
+                return 0.0
+        else:
+            for i, c in enumerate(annotation):
+                if c == PositionClass.BACKGROUND or c == PositionClass.CONFOUNDER:
+                    if sis[i] == masked_letter:
+                        num_true_negative += 1
+                    else:
+                        num_false_positive += 1
+
+        if num_true_negative == 0 and num_false_positive == 0:
+            return 0.0
+        else:
+            return num_true_negative / (num_true_negative + num_false_positive)
+
+    def calculate_specificity(self, sis: List[str],
+                              annotations: List[str]) -> List[float]:
+        if sis is None:
+            return list()
+        else:
+            return [self.__calculate_specificity(s, anno)
+                    for s, anno in zip(sis, annotations)]
+
+    def __collapse_sis(self, sis: List[str]) -> str:
+        masked_letter: str = self.__get_masked_letter()
 
         if len(sis) == 0:
             return ""
@@ -198,10 +335,9 @@ class SISEvaluator(Evaluator):
                                 s[i] + collapsed_sis[(i + 1):]
             return collapsed_sis
 
-    def __produce_masked_inputs(self, x, sis_predict, threshold,
-                                fully_masked_input,
+    def __produce_masked_inputs(self, x, sis_predict, fully_masked_input,
                                 initial_mask) -> List[str]:
-        collection = sis_collection(sis_predict, threshold, x,
+        collection = sis_collection(sis_predict, self.threshold, x,
                                     fully_masked_input,
                                     initial_mask=initial_mask)
 
