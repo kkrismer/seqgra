@@ -43,26 +43,27 @@ class SISEvaluator(Evaluator):
         y_column: List[str] = list()
         annotations_column: List[str] = list()
         sis_collapsed_column: List[str] = list()
-        sis_column: List[str] = list()
+        precision_column: List[str] = list()
+        recall_column: List[str] = list()
+        sis_separated_column: List[str] = list()
         for i, selected_label in enumerate(labels):
             # select x, y, annotations of examples with label
             subset_idx = [i
                           for i, label in enumerate(y)
                           if label == selected_label]
             selected_x, selected_y, selected_annotations = \
-                self.__subset(subset_idx, x, y, annotations)
+                self._subset(subset_idx, x, y, annotations)
 
             sis_results: List[List[str]] = self.find_sis(
                 selected_x, threshold, i)
             sis_collapsed: List[str] = [self.__collapse_sis(sis_col)
                                         for sis_col in sis_results]
-
-            sis_anno = zip(sis_collapsed, selected_annotations)
             precision: List[float] = [self.calculate_precision(sis, anno)
-                                      for sis, anno in sis_anno]
+                                      for sis, anno in zip(sis_collapsed,
+                                                           selected_annotations)]
             recall: List[float] = [self.calculate_recall(sis, anno)
-                                   for sis, anno in sis_anno]
-
+                                   for sis, anno in zip(sis_collapsed,
+                                                        selected_annotations)]
             sis_separated: List[str] = [";".join(sis_col)
                                         for sis_col in sis_results]
 
@@ -80,7 +81,7 @@ class SISEvaluator(Evaluator):
                              "sis_collapsed": sis_collapsed_column,
                              "precision": precision_column,
                              "recall": recall_column,
-                             "sis_separated": sis_column})
+                             "sis_separated": sis_separated_column})
 
     def _save_results(self, results, set_name: str = "test") -> None:
         if results is None:
@@ -110,7 +111,7 @@ class SISEvaluator(Evaluator):
             for i in range(len(encoded_x))]
 
     def __calculate_precision(self, sis: str, annotation: str) -> float:
-        if self.learner.definition.sequence_type == "DNA":
+        if self.learner.definition.sequence_space == "DNA":
             masked_letter: str = PositionClass.DNA_MASKED
         else:
             masked_letter: str = PositionClass.AA_MASKED
@@ -140,7 +141,7 @@ class SISEvaluator(Evaluator):
                     for s, anno in zip(sis, annotations)]
 
     def __calculate_recall(self, sis: str, annotation: str) -> float:
-        if self.learner.definition.sequence_type == "DNA":
+        if self.learner.definition.sequence_space == "DNA":
             masked_letter: str = PositionClass.DNA_MASKED
         else:
             masked_letter: str = PositionClass.AA_MASKED
@@ -170,14 +171,14 @@ class SISEvaluator(Evaluator):
 
     def calculate_recall(self, sis: List[str],
                          annotations: List[str]) -> List[float]:
-        if x is None:
+        if sis is None:
             return list()
         else:
             return [self.__calculate_recall(s, anno)
                     for s, anno in zip(sis, annotations)]
 
     def __collapse_sis(self, sis: List[str]) -> str:
-        if self.learner.definition.sequence_type == "DNA":
+        if self.learner.definition.sequence_space == "DNA":
             masked_letter: str = PositionClass.DNA_MASKED
         else:
             masked_letter: str = PositionClass.AA_MASKED

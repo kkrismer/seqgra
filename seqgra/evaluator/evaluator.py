@@ -28,6 +28,8 @@ class Evaluator(ABC):
 
     def evaluate_model(self, set_name: str = "test",
                        subset_idx: Optional[List[int]] = None) -> None:
+        # TODO get from outside
+        subset_idx = [0, 1, 2]
         x, y, annotations = self._load_data(set_name, subset_idx)
         results = self._evaluate_model(x, y, annotations)
         self._save_results(results, set_name)
@@ -44,7 +46,7 @@ class Evaluator(ABC):
         if subset_idx is None:
             return (x, y, annotations)
         else:
-            return self.__subset(subset_idx, x, y, annotations)
+            return self._subset(subset_idx, x, y, annotations)
 
     @abstractmethod
     def _evaluate_model(self, x: List[str], y: List[str],
@@ -56,7 +58,7 @@ class Evaluator(ABC):
         pass
 
     @staticmethod
-    def __subset(idx: List[int], x: List[str], y: List[str],
+    def _subset(idx: List[int], x: List[str], y: List[str],
                  annotations: List[str]) -> Tuple[List[str], List[str], List[str]]:
         if len(x) != len(y) or len(x) != len(annotations):
             raise Exception("x, y, and annotations have to be the same length")
@@ -93,7 +95,7 @@ class Evaluator(ABC):
             subset_idx = [i
                           for i, label in enumerate(y)
                           if label in labels]
-            x, y, annotations = self.__subset(subset_idx, x, y, annotations)
+            x, y, annotations = self._subset(subset_idx, x, y, annotations)
 
         # predict with learner
         encoded_y = self.learner.encode_y(y)
@@ -105,7 +107,7 @@ class Evaluator(ABC):
                       for i in range(len(encoded_y))
                       if np.argmax(y_hat[i]) == np.argmax(encoded_y[i]) and
                       np.max(y_hat[i]) > threshold]
-        x, y, annotations = self.__subset(subset_idx, x, y, annotations)
+        x, y, annotations = self._subset(subset_idx, x, y, annotations)
 
         return (x, y, annotations)
 
@@ -150,4 +152,4 @@ class Evaluator(ABC):
         else:
             subset_idx: List[int] = list(range(n))
 
-        return self.__subset(subset_idx, x, y, annotations)
+        return self._subset(subset_idx, x, y, annotations)
