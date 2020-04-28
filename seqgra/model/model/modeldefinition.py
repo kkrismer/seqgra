@@ -45,9 +45,10 @@ class ModelDefinition:
             str_rep += ["\t\t\t", self.description, "\n"]
         str_rep += ["\t\tTask: ", self.task, "\n",
                     "\t\tSequence space: ", self.sequence_space, "\n",
-                    "\t\tLibrary: ", self.library, "\n",
-                    "\t\tImplementation: ", self.implementation, "\n",
-                    "\t\tLabels:\n"]
+                    "\t\tLibrary: ", self.library, "\n"]
+        if self.implementation:
+            str_rep += ["\t\tImplementation: ", self.implementation, "\n"]
+        str_rep += ["\t\tLabels:\n"]
         if self.labels is not None and len(self.labels) > 0:
             str_rep += ["\t\t\t" + label + "\n" for label in self.labels]
         str_rep += ["\t\tSeed: ", str(self.seed), "\n"]
