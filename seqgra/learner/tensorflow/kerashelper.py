@@ -170,7 +170,7 @@ class KerasHelper:
 
     @staticmethod
     def save_model(learner: Learner, model_name: str = "") -> None:
-        if model_name != "":
+        if model_name:
             os.makedirs(learner.output_dir + model_name)
 
         # save whole model (TensorFlow format)

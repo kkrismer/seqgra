@@ -152,9 +152,9 @@ class SISResult(
 
         Args:
           other: A SISResult instance.
-          rtol: Float, the relative tolerance parameter used when comparing 
+          rtol: Float, the relative tolerance parameter used when comparing
           `values_over_entire_backselect` (see documentation for np.allclose).
-          atol: Float, the absolute tolerance parameter used when comparing 
+          atol: Float, the absolute tolerance parameter used when comparing
           `values_over_entire_backselect` (see documentation for np.allclose).
 
         Returns:
@@ -197,11 +197,11 @@ def make_empty_boolean_mask_broadcast_over_axis(shape, axis):
 
       Given an input of shape (2, 3):
 
-      - A broadcastable mask over columns (to mask entire columns at a time 
-        during the SIS procedure) has shape (1, 3) and is created using 
+      - A broadcastable mask over columns (to mask entire columns at a time
+        during the SIS procedure) has shape (1, 3) and is created using
         make_empty_boolean_mask_broadcast_over_axis((2, 3), 0).
-      - A broadcastable mask over rows (to mask entire rows at a time during 
-        SIS) has shape (2, 1) and is created using 
+      - A broadcastable mask over rows (to mask entire rows at a time during
+        SIS) has shape (2, 1) and is created using
         make_empty_boolean_mask_broadcast_over_axis((2, 3), 1).
 
     Args:
@@ -313,7 +313,7 @@ def _produce_next_masks(current_mask):
 
     next_masks_idxs = np.transpose(np.nonzero(current_mask))
 
-    if next_masks_idxs.size == 0:
+    if not next_masks_idxs.size:
         next_masks = np.array([])
         next_masks_idxs = np.array([])
     else:

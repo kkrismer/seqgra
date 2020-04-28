@@ -61,8 +61,7 @@ class DataGeneration:
         sets_str_rep = ''.join(sets_string)
         str_rep += ["\t\t" + s + "\n" for s in sets_str_rep.splitlines()]
         str_rep += ["\tPost-processing operations:\n"]
-        if self.postprocessing_operations is None or \
-                len(self.postprocessing_operations) == 0:
+        if not self.postprocessing_operations:
             str_rep += ["\t\tnone\n"]
         else:
             operations_string: List[str] = [str(operation)

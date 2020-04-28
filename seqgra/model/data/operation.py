@@ -3,7 +3,7 @@ MIT - CSAIL - Gifford Lab - seqgra
 
 Each instance of PostProcessingOperation has a name
 (e.g., "kmer-frequency-preserving-shuffle"), a value used as label (e.g.,
-"background" or "class1|class2|class3"), and zero or more parameters (e.g., 
+"background" or "class1|class2|class3"), and zero or more parameters (e.g.,
 {"k": "3"} for a trimer frequency preserving shuffle).
 
 @author: Konstantin Krismer
@@ -25,7 +25,7 @@ class PostprocessingOperation:
         config += ["\tname: ", self.name, "\n"]
         config += ["\tlabels: ", self.labels, "\n"]
         config += ["\tparameters:\n"]
-        if self.parameters is None or len(self.parameters) == 0:
+        if not self.parameters:
             config += ["\t\tnone\n"]
         else:
             params: List[str] = [("\t\t" + param_name + ": " + param_value + "\n")

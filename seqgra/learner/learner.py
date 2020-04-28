@@ -134,7 +134,7 @@ class Learner(ABC):
                             file_name: str) -> Tuple[List[str], List[str]]:
         """Abstract method to parse examples data file.
 
-        Checks validity of sequences with sequence data type specific 
+        Checks validity of sequences with sequence data type specific
         implementations provided for DNA and amino acid sequences.
 
         Arguments:

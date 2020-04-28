@@ -67,13 +67,13 @@ class XMLDataDefinitionWriter(DataDefinitionWriter):
         if not ad.set_independent:
             ad_element.set("setname", ad.set_name)
 
-        if ad.letters is None or len(ad.letters) == 0:
-            raise Exception("no letters in alphabet")
-        else:
+        if ad.letters:
             for letter in ad.letters:
                 letter_element = etree.SubElement(ad_element, "letter",
                                                   {"probability": str(letter[1])})
                 letter_element.text = letter[0]
+        else:
+            raise Exception("no letters in alphabet")
 
     @staticmethod
     def attach_background_element(root, background: Background) -> None:
@@ -88,13 +88,12 @@ class XMLDataDefinitionWriter(DataDefinitionWriter):
         ads_element = etree.SubElement(background_element,
                                        "alphabetdistributions")
 
-        if background.alphabet_distributions is None or \
-                len(background.alphabet_distributions) == 0:
-            raise Exception("no alphabet distribution specified")
-        else:
+        if background.alphabet_distributions:
             for ad in background.alphabet_distributions:
                 XMLDataDefinitionWriter.attach_alphabet_distribution(
                     ads_element, ad)
+        else:
+            raise Exception("no alphabet distribution specified")
 
     @staticmethod
     def attach_set_element(sets_element, example_set: ExampleSet) -> None:
@@ -103,10 +102,7 @@ class XMLDataDefinitionWriter(DataDefinitionWriter):
                             " (valid set names: training, validation, test)")
         set_element = etree.SubElement(sets_element, "set",
                                        {"name": example_set.name})
-        if example_set.examples is None or \
-                len(example_set.examples) == 0:
-            raise Exception("no examples specified in set " + example_set.name)
-        else:
+        if example_set.examples:
             for example in example_set.examples:
                 example_element = etree.SubElement(
                     set_element, "example", {"samples": str(example.samples)})
@@ -115,6 +111,8 @@ class XMLDataDefinitionWriter(DataDefinitionWriter):
                         condition_element = etree.SubElement(
                             example_element, "conditionref",
                             {"cid": condition.condition_id})
+        else:
+            raise Exception("no examples specified in set " + example_set.name)
 
     @staticmethod
     def attach_data_generation_element(root,
@@ -122,16 +120,14 @@ class XMLDataDefinitionWriter(DataDefinitionWriter):
         dg_element = etree.SubElement(root, "datageneration")
 
         sets_element = etree.SubElement(dg_element, "sets")
-        if data_generation.sets is None or \
-                len(data_generation.sets) == 0:
-            raise Exception("no training, validation, test sets specified")
-        else:
+        if data_generation.sets:
             for example_set in data_generation.sets:
                 XMLDataDefinitionWriter.attach_set_element(
                     sets_element, example_set)
+        else:
+            raise Exception("no training, validation, test sets specified")
 
-        if data_generation.postprocessing_operations is not None and \
-                len(data_generation.postprocessing_operations) > 0:
+        if data_generation.postprocessing_operations:
             postprocessing_element = etree.SubElement(
                 dg_element, "postprocessing")
             for op in data_generation.postprocessing_operations:
@@ -139,7 +135,7 @@ class XMLDataDefinitionWriter(DataDefinitionWriter):
                                               "operation",
                                               {"labels": op.labels})
                 op_element.text = op.name
-                if op.parameters is not None and len(op.parameters) > 0:
+                if op.parameters:
                     for param_name, param_value in op.parameters.items():
                         op_element.set(param_name, param_value)
 
@@ -163,17 +159,15 @@ class XMLDataDefinitionWriter(DataDefinitionWriter):
         probability_element.text = str(rule.probability)
 
         se_refs_element = etree.SubElement(rule_element, "sequenceelementrefs")
-        if rule.sequence_elements is None or \
-                len(rule.sequence_elements) == 0:
-            raise Exception("no sequence elements specified in rule")
-        else:
+        if rule.sequence_elements:
             for sequence_element in rule.sequence_elements:
                 se_ref_element = etree.SubElement(
                     se_refs_element, "sequenceelementref",
                     {"sid": sequence_element.sid})
+        else:
+            raise Exception("no sequence elements specified in rule")
 
-        if rule.spacing_constraints is not None and \
-                len(rule.spacing_constraints) > 0:
+        if rule.spacing_constraints:
             scs_element = etree.SubElement(rule_element, "spacingconstraints")
             for spacing_constraint in rule.spacing_constraints:
                 XMLDataDefinitionWriter.attach_sc_element(
@@ -193,37 +187,36 @@ class XMLDataDefinitionWriter(DataDefinitionWriter):
 
         grammar_element = etree.SubElement(condition_element, "grammar")
 
-        if condition.grammar is None or \
-                len(condition.grammar) == 0:
-            raise Exception("no grammar specified for condition " +
-                            condition.condition_id)
-        else:
+        if condition.grammar:
             for rule in condition.grammar:
                 XMLDataDefinitionWriter.attach_rule_element(
                     grammar_element, rule)
+        else:
+            raise Exception("no grammar specified for condition " +
+                            condition.condition_id)
 
     @staticmethod
     def attach_conditions_element(root,
                                   conditions: List[Condition]) -> None:
         conditions_element = etree.SubElement(root, "conditions")
-        if conditions is None or len(conditions) == 0:
-            raise Exception("no conditions specified")
-        else:
+        if conditions:
             for condition in conditions:
                 XMLDataDefinitionWriter.attach_condition_element(
                     conditions_element, condition)
+        else:
+            raise Exception("no conditions specified")
 
     @staticmethod
     def attach_matrix_position_element(matrix_element,
                                        letters: List[Tuple[str, float]]) -> None:
         position_element = etree.SubElement(matrix_element, "position")
-        if letters is None or len(letters) == 0:
-            raise Exception("no letters specified in position weight matrix")
-        else:
+        if letters:
             for letter in letters:
                 letter_element = etree.SubElement(position_element, "letter",
                                                   {"probability": str(letter[1])})
                 letter_element.text = letter[0]
+        else:
+            raise Exception("no letters specified in position weight matrix")
 
     @staticmethod
     def attach_se_element(ses_element,
@@ -246,12 +239,12 @@ class XMLDataDefinitionWriter(DataDefinitionWriter):
     def attach_ses_element(root,
                            sequence_elements: List[SequenceElement]) -> None:
         ses_element = etree.SubElement(root, "sequenceelements")
-        if sequence_elements is None or len(sequence_elements) == 0:
-            raise Exception("no sequence elements specified")
-        else:
+        if sequence_elements:
             for sequence_element in sequence_elements:
                 XMLDataDefinitionWriter.attach_se_element(
                     ses_element, sequence_element)
+        else:
+            raise Exception("no sequence elements specified")
 
     @staticmethod
     def write_data_definition_to_file(data_definition: DataDefinition,

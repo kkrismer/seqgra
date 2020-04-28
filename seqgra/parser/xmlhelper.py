@@ -11,7 +11,7 @@ class XMLHelper():
     @staticmethod
     def read_text_node(parent_node, node_name) -> Optional[str]:
         node = parent_node.getElementsByTagName(node_name)
-        if len(node) == 0:
+        if not node:
             return None
         elif node[0].firstChild is None:
             return ""

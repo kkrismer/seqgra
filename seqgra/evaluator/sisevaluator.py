@@ -187,7 +187,7 @@ class SISEvaluator(Evaluator):
     def __calculate_precision(self, sis: str, annotation: str) -> float:
         masked_letter: str = self.__get_masked_letter()
 
-        if sis == "":
+        if not sis:
             return 1.0
         else:
             num_selected: int = 0
@@ -198,7 +198,7 @@ class SISEvaluator(Evaluator):
                     if annotation[i] == c.PositionType.GRAMMAR:
                         num_selected_relevant += 1
 
-            if num_selected == 0:
+            if not num_selected:
                 return 1.0
 
             return num_selected_relevant / num_selected
@@ -215,11 +215,11 @@ class SISEvaluator(Evaluator):
         masked_letter: str = self.__get_masked_letter()
         num_relevent: int = 0
 
-        if sis == "":
+        if not sis:
             for i, char in enumerate(annotation):
                 if char == c.PositionType.GRAMMAR:
                     num_relevent += 1
-            if num_relevent == 0:
+            if not num_relevent:
                 return 1.0
             else:
                 return 0.0
@@ -231,7 +231,7 @@ class SISEvaluator(Evaluator):
                     if sis[i] != masked_letter:
                         num_relevant_selected += 1
 
-            if num_relevent == 0:
+            if not num_relevent:
                 return 1.0
 
             return num_relevant_selected / num_relevent
@@ -249,11 +249,11 @@ class SISEvaluator(Evaluator):
         num_true_positive: int = 0
         num_false_negative: int = 0
 
-        if sis == "":
+        if not sis:
             for i, char in enumerate(annotation):
                 if char == c.PositionType.GRAMMAR:
                     num_false_negative += 1
-            if num_false_negative == 0:
+            if not num_false_negative:
                 return 1.0
             else:
                 return 0.0
@@ -265,7 +265,7 @@ class SISEvaluator(Evaluator):
                     else:
                         num_true_positive += 1
 
-        if num_true_positive == 0 and num_false_negative == 0:
+        if not num_true_positive and not num_false_negative:
             return 0.0
         else:
             return num_true_positive / (num_true_positive + num_false_negative)
@@ -283,7 +283,7 @@ class SISEvaluator(Evaluator):
         num_true_negative: int = 0
         num_false_positive: int = 0
 
-        if sis == "":
+        if not sis:
             for i, char in enumerate(annotation):
                 if char == c.PositionType.BACKGROUND or \
                         char == c.PositionType.CONFOUNDER:
@@ -301,7 +301,7 @@ class SISEvaluator(Evaluator):
                     else:
                         num_false_positive += 1
 
-        if num_true_negative == 0 and num_false_positive == 0:
+        if not num_true_negative and not num_false_positive:
             return 0.0
         else:
             return num_true_negative / (num_true_negative + num_false_positive)
@@ -317,7 +317,7 @@ class SISEvaluator(Evaluator):
     def __collapse_sis(self, sis: List[str]) -> str:
         masked_letter: str = self.__get_masked_letter()
 
-        if len(sis) == 0:
+        if not sis:
             return ""
         elif len(sis) == 1:
             return sis[0]

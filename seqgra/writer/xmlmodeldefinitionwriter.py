@@ -59,11 +59,11 @@ class XMLModelDefinitionWriter(ModelDefinitionWriter):
                                                     "implementation")
             implementation_element.text = model_definition.implementation
 
-        if model_definition.labels is None or len(model_definition.labels) == 0:
-            raise Exception("no labels specified")
-        else:
+        if model_definition.labels:
             XMLModelDefinitionWriter.attach_labels_element(
                 general_element, model_definition.labels)
+        else:
+            raise Exception("no labels specified")
 
         seed_element = etree.SubElement(general_element, "seed")
         seed_element.text = str(model_definition.seed)
@@ -77,23 +77,21 @@ class XMLModelDefinitionWriter(ModelDefinitionWriter):
 
     @staticmethod
     def attach_architecture_element(root, architecture: Architecture) -> None:
-        if (architecture.operations is not None or
-            architecture.hyperparameters is not None) and \
-            (architecture.external_model_path is not None or
-                architecture.external_model_format is not None or
-             architecture.external_model_class_name is not None):
+        if (architecture.operations or
+            architecture.hyperparameters) and \
+            (architecture.external_model_path or
+                architecture.external_model_format or
+             architecture.external_model_class_name):
             raise Exception("cannot both specify operations / "
                             "hyperparameters and external model")
 
         architecture_element = etree.SubElement(root, "architecture")
 
-        if architecture.operations is not None and \
-                len(architecture.operations) > 0:
+        if architecture.operations:
             sequential_element = etree.SubElement(
                 architecture_element, "sequential")
             for operation in architecture.operations:
-                if operation.parameters is not None and \
-                        len(operation.parameters) > 0:
+                if operation.parameters:
                     op_element = etree.SubElement(sequential_element,
                                                   "operation",
                                                   operation.parameters)
@@ -102,26 +100,25 @@ class XMLModelDefinitionWriter(ModelDefinitionWriter):
                                                   "operation")
                 op_element.text = operation.name
 
-        if architecture.hyperparameters is not None and \
-                len(architecture.hyperparameters) > 0:
+        if architecture.hyperparameters:
             hps_element = etree.SubElement(
                 architecture_element, "hyperparameters")
             XMLModelDefinitionWriter.attach_hp_element(
                 hps_element, architecture.hyperparameters)
 
-        if architecture.external_model_path is not None:
+        if architecture.external_model_path:
             external_element = etree.SubElement(
                 architecture_element, "external",
                 {"format": architecture.external_model_format})
             external_element.text = architecture.external_model_path
 
-            if architecture.external_model_class_name is not None:
+            if architecture.external_model_class_name:
                 external_element.set("classname",
                                      architecture.external_model_class_name)
 
     @staticmethod
     def attach_loss_element(root, loss_hp: Optional[Dict[str, str]]) -> None:
-        if loss_hp is not None and len(loss_hp) > 0:
+        if loss_hp:
             loss_element = etree.SubElement(root, "loss")
             XMLModelDefinitionWriter.attach_hp_element(
                 loss_element, loss_hp)
@@ -129,14 +126,14 @@ class XMLModelDefinitionWriter(ModelDefinitionWriter):
     @staticmethod
     def attach_optimizer_element(root,
                                  optimizer_hp: Optional[Dict[str, str]]) -> None:
-        if optimizer_hp is not None and len(optimizer_hp) > 0:
+        if optimizer_hp:
             optimizer_element = etree.SubElement(root, "optimizer")
             XMLModelDefinitionWriter.attach_hp_element(
                 optimizer_element, optimizer_hp)
 
     @staticmethod
     def attach_tp_element(root, tp_hp: Optional[Dict[str, str]]) -> None:
-        if tp_hp is not None and len(tp_hp) > 0:
+        if tp_hp:
             tp_element = etree.SubElement(root, "trainingprocess")
             XMLModelDefinitionWriter.attach_hp_element(tp_element, tp_hp)
 

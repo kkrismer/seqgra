@@ -161,7 +161,7 @@ class Evaluator(ABC):
         else:
             x, y, annotations = self.select_examples(set_name, labels)
 
-            if len(x) == 0:
+            if not x:
                 if labels is None:
                     logging.warning("no correctly labeled example with "
                                     "prediction threshold > %s in set '%s'",

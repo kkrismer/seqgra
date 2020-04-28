@@ -359,9 +359,9 @@ class Simulator:
                             logging.error("condition %s [cid], rule %s, "
                                           "spacing constraint %s: sequence "
                                           "element %s [sid] not among "
-                                          "sequence elements of rule", 
-                                          condition.condition_id, 
-                                          i + 1, j + 1, 
+                                          "sequence elements of rule",
+                                          condition.condition_id,
+                                          i + 1, j + 1,
                                           spacing_constraint.sequence_element2.sid)
 
         return valid

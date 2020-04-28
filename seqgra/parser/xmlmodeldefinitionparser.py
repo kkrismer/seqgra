@@ -1,7 +1,7 @@
 """
 MIT - CSAIL - Gifford Lab - seqgra
 
-Implementation of Parser for XML configuration files 
+Implementation of Parser for XML configuration files
 (using Strategy design pattern)
 
 @author: Konstantin Krismer
@@ -55,10 +55,10 @@ class XMLModelDefinitionParser(ModelDefinitionParser):
 
     def get_description(self) -> str:
         return XMLHelper.read_text_node(self._general_element, "description")
-        
+
     def get_task(self) -> str:
         return XMLHelper.read_text_node(self._general_element, "task")
-        
+
     def get_sequence_space(self) -> str:
         return XMLHelper.read_text_node(self._general_element, "sequencespace")
 
