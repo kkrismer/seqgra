@@ -25,8 +25,9 @@ from seqgra.learner import Learner
 
 class SISEvaluator(Evaluator):
     def __init__(self, learner: Learner, output_dir: str) -> None:
-        super().__init__("sis", learner, output_dir)
-        self.supported_tasks: List[str] = [c.TaskType.MULTI_CLASS_CLASSIFICATION]
+        super().__init__(
+            "sis", learner, output_dir,
+            supported_tasks=[c.TaskType.MULTI_CLASS_CLASSIFICATION])
 
     def _evaluate_model(self, x: List[str], y: List[str],
                         annotations: List[str]) -> Any:

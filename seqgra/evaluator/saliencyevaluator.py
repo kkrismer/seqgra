@@ -11,6 +11,7 @@ from typing import Any, List
 import numpy as np
 import torch
 
+import seqgra.constants as c
 from seqgra.learner import Learner
 from seqgra.evaluator import Evaluator
 from seqgra.evaluator.explainer.backprop import VanillaGradExplainer
@@ -26,7 +27,8 @@ from seqgra.evaluator.explainer.ebp import ContrastiveExcitationBackpropExplaine
 
 class GradientBasedEvaluator(Evaluator):
     def __init__(self, evaluator_id: str, learner: Learner, output_dir: str) -> None:
-        super().__init__(evaluator_id, learner, output_dir)
+        super().__init__(evaluator_id, learner, output_dir,
+                         supported_libraries=[c.LibraryType.TORCH])
         self.explainer = None
 
     def _evaluate_model(self, x: List[str], y: List[str],
@@ -74,7 +76,7 @@ class GradientBasedEvaluator(Evaluator):
         print(type(result))
         print(result.shape)
         return result
-        
+
     def _save_results(self, results, set_name: str = "test") -> None:
         pass
 
