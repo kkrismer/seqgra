@@ -7,10 +7,7 @@ MIT - CSAIL - Gifford Lab - seqgra
 """
 from __future__ import annotations
 
-import os
-import logging
-from typing import List
-import random
+from typing import Any, List
 
 import numpy as np
 import pandas as pd
@@ -22,232 +19,101 @@ from seqgra.evaluator.sis import make_empty_boolean_mask_broadcast_over_axis
 from seqgra.evaluator.sis import produce_masked_inputs
 
 
+class PositionClass:
+    GRAMMAR: str = "G"
+    BACKGROUND: str = "_"
+    CONFOUNDER: str = "C"
+    DNA_MASKED: str = "N"
+    AA_MASKED: str = "X"
+
+
 class SISEvaluator(Evaluator):
     def __init__(self, learner: Learner, output_dir: str) -> None:
         super().__init__("sis", learner, output_dir)
 
-    def evaluate_model(self, set_name: str = "test") -> None:
+    def _evaluate_model(self, x: List[str], y: List[str],
+                        annotations: List[str]) -> Any:
+        # TODO get selected labels, not all
         labels: List[str] = self.learner.definition.labels
 
-        for i in range(len(labels)):
-            sis_results = self.find_sis(
-                labels[i], i, set_name, n=10,
-                select_randomly=True, threshold=0.5)
-            self.save_results(sis_results, set_name + "-" + labels[i])
-            print(labels[i])
-            print("precision:")
-            print(self.calculate_precision(sis_results))
-            print("recall:")
-            print(self.calculate_recall(sis_results))
+        # TODO use class attribute threshold
+        threshold = 0.5
 
-    def save_results(self, results, name: str) -> None:
+        x_column: List[str] = list()
+        y_column: List[str] = list()
+        annotations_column: List[str] = list()
+        sis_collapsed_column: List[str] = list()
+        sis_column: List[str] = list()
+        for i, selected_label in enumerate(labels):
+            # select x, y, annotations of examples with label
+            subset_idx = [i
+                          for i, label in enumerate(y)
+                          if label == selected_label]
+            selected_x, selected_y, selected_annotations = \
+                self.__subset(subset_idx, x, y, annotations)
+
+            sis_results: List[List[str]] = self.find_sis(
+                selected_x, threshold, i)
+            sis_collapsed: List[str] = [self.__collapse_sis(sis_col)
+                                        for sis_col in sis_results]
+
+            sis_anno = zip(sis_collapsed, selected_annotations)
+            precision: List[float] = [self.calculate_precision(sis, anno)
+                                      for sis, anno in sis_anno]
+            recall: List[float] = [self.calculate_recall(sis, anno)
+                                   for sis, anno in sis_anno]
+
+            sis_separated: List[str] = [";".join(sis_col)
+                                        for sis_col in sis_results]
+
+            x_column += selected_x
+            y_column += selected_y
+            annotations_column += selected_annotations
+            sis_collapsed_column += sis_collapsed
+            precision_column += precision
+            recall_column += recall
+            sis_separated_column += sis_separated
+
+        return pd.DataFrame({"x": x_column,
+                             "y": y_column,
+                             "annotation": annotations_column,
+                             "sis_collapsed": sis_collapsed_column,
+                             "precision": precision_column,
+                             "recall": recall_column,
+                             "sis_separated": sis_column})
+
+    def _save_results(self, results, set_name: str = "test") -> None:
         if results is None:
-            df = pd.DataFrame([], columns=["input", "annotation", "sis"])
-        else:
-            tmp = results.copy()
-            for i in range(len(tmp)):
-                result = tmp[i]
-                tmp[i] = (result[0], result[1], ";".join(result[2]))
+            results = pd.DataFrame([], columns=["x", "y", "annotation",
+                                                "sis_collapsed", "precision",
+                                                "recall", "sis_separated"])
 
-            df = pd.DataFrame(tmp, columns=["input", "annotation", "sis"])
+        results.to_csv(self.output_dir + set_name + ".txt", sep="\t",
+                       index=False)
 
-        df.to_csv(self.output_dir + name + ".txt", sep="\t", index=False)
-
-    def load_results(self, name: str):
-        df = pd.read_csv(self.output_dir + name + ".txt", sep="\t")
-
-        results = [tuple(x) for x in df.values]
-        for i in range(len(results)):
-            result = results[i]
-            results[i] = (result[0], result[1], result[2].split(";"))
-        return results
-
-    def plot_sis_heatmap(self, results, name: str, image_format: str = "pdf",
-                         grammar_letter: str = "G", background_letter: str = "_", masked_letter: str = "N"):
-        pass
-        # if results is not None and len(results) > 0:
-        #     n = len(results[0][0])
-
-        #     # heatmap = np.zeros((len(results), n), dtype = object)
-        #     # for i in range(len(results)):
-        #     #     annotation = results[i][1]
-        #     #     sis = results[i][2]
-        #     #     for j in range(n):
-        #     #         if annotation[j] == grammar_letter:
-        #     #             # grammar position only, until overridden
-        #     #             heatmap[i, j] = "grammar, not part of SIS"
-
-        #     #             for k in range(len(sis)):
-        #     #                 if len(sis[k]) == n and sis[k][j] != masked_letter:
-        #     #                     # grammar and SIS position only
-        #     #                     heatmap[i, j] = "grammar, part of SIS"
-        #     #         else:
-        #     #             # neither grammar nor SIS position, until overridden
-        #     #             heatmap[i, j] = "background, not part of SIS"
-
-        #     #             for k in range(len(sis)):
-        #     #                 if len(sis[k]) == n and sis[k][j] != masked_letter:
-        #     #                     # SIS position only
-        #     #                     heatmap[i, j] = "background, part of SIS"
-
-        #     df = pd.DataFrame(columns=["example", "position", "group"])
-
-        #     for i in range(len(results)):
-        #         annotation = results[i][1]
-        #         sis = results[i][2]
-        #         for j in range(n):
-        #             if annotation[j] == grammar_letter:
-        #                 # grammar position only, until overridden
-        #                 group_label = "grammar, not part of SIS"
-
-        #                 for k in range(len(sis)):
-        #                     if len(sis[k]) == n and sis[k][j] != masked_letter:
-        #                         # grammar and SIS position only
-        #                         group_label = "grammar, part of SIS"
-        #             else:
-        #                 # neither grammar nor SIS position, until overridden
-        #                 group_label = "background, not part of SIS"
-
-        #                 for k in range(len(sis)):
-        #                     if len(sis[k]) == n and sis[k][j] != masked_letter:
-        #                         # SIS position only
-        #                         group_label = "background, part of SIS"
-
-        #             df = df.append({"example": i + 1, "position": j + 1, "group": group_label}, ignore_index=True)
-
-        #     p = ggplot(df, aes(x = "position", y = "example", fill = "factor(group)")) + \
-        #         geom_tile() + \
-        #         scale_x_discrete(breaks=np.arange(0, n + 1, 25).tolist()) + \
-        #         scale_fill_manual(values = ["white", "green", "yellow", "red"],
-        #                           labels = ["background, not part of SIS", "grammar, part of SIS", "grammar, not part of SIS", "background, part of SIS"],
-        #                           drop = False) + \
-        #         theme(legend_title = element_blank())
-        #     ggsave(plot=p, filename = self.output_dir + name + "." + image_format)
-
-        # idx = {"background, not part of SIS": 0,
-        #        "grammar, part of SIS": 1,
-        #        "grammar, not part of SIS": 2,
-        #        "background, part of SIS": 3}
-
-        # aninv =  { val: key for key, val in idx.items()  }
-        # f = lambda x: idx[x]
-        # fv = np.vectorize(f)
-        # Z = fv(heatmap)
-
-        # plt.figure(figsize = (5,5))
-
-        # #cmap = mpl.colors.ListedColormap(["white", "green", "blue", "yellow"])
-        # #im = ax.imshow(Z, cmap = cmap)
-
-        # #bounds = [0, 1, 2, 3]
-        # #norm = mpl.colors.BoundaryNorm(bounds, cmap.N)
-        # #cb2 = mpl.colorbar.ColorbarBase(ax, cmap=cmap,
-        # #                               norm=norm,
-        # #                               boundaries=[0] + bounds + [13],
-        # #                               extend='both',
-        # #                               ticks=bounds,
-        # #                               spacing='proportional',
-        # #                               orientation='horizontal')
-
-        # im = plt.imshow(Z, interpolation='none', aspect='auto')
-        # #im = ax.imshow(Z, cmap = plt.cm.get_cmap("Blues", 4), interpolation='none')
-
-        # ax = plt.gca()
-        # ax.set_yticks(np.arange(0, len(results)).tolist())
-        # ax.set_yticklabels(np.arange(1, len(results) + 1).tolist())
-        # ax.set_xlabel("position")
-        # ax.set_ylabel("example")
-
-        # ax.set_yticks(np.arange(-.5, 10, 1), minor=True)
-
-        # values = list(idx.values())
-        # values2 = list(idx.keys())
-        # # get the colors of the values, according to the
-        # # colormap used by imshow
-        # colors = [ im.cmap(im.norm(value)) for value in list(idx.values())]
-        # # create a patch (proxy artist) for every color
-        # patches = [ mpl.patches.Patch(color=colors[i], label="Level {l}".format(l=values2[i]) ) for i in range(len(idx)) ]
-        # # put those patched as legend-handles into the legend
-        # plt.legend(handles=patches, bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0. )
-
-        #color_bar = fig.colorbar(im, ticks=np.arange(0, 4), ax=ax)
-        # color_bar.set_ticks(list(idx.values()))
-        # color_bar.set_ticklabels(list(idx.keys()))
-
-        # We want to show all ticks...
-        # ax.set_xticks(np.arange(len(farmers)))
-        # ax.set_yticks(np.arange(len(vegetables)))
-        # ... and label them with the respective list entries
-        # ax.set_xticklabels(farmers)
-        # ax.set_yticklabels(vegetables)
-
-        # Loop over data dimensions and create text annotations.
-        # for i in range(len(vegetables)):
-        #    for j in range(len(farmers)):
-        #        text = ax.text(j, i, heatmap[i, j],
-        #                    ha="center", va="center", color="w")
-
-        # plt.tight_layout()
-        #plt.savefig(self.output_dir + name + "." + image_format, bbox_inches="tight")
-
-    def find_sis(self, for_label, label_index, for_set, n=10,
-                 select_randomly=False,
-                 threshold=0.9):
-        if select_randomly:
-            examples = self.select_random_n_examples(
-                for_label, for_set, n, threshold)
-        else:
-            examples = self.select_first_n_examples(
-                for_label, for_set, n, threshold)
-
-        decoded_examples = examples[0]
-        annotations = examples[1]
-
-        if decoded_examples is None:
-            return None
-
-        encoded_examples = self.learner.encode_x(decoded_examples)
+    def find_sis(self, x: List[str], threshold: float,
+                 label_index: int) -> List[List[str]]:
+        encoded_x = self.learner.encode_x(x)
 
         def sis_predict(x):
-            return np.array(self.learner.predict(x, encode=False))[:, label_index]
+            return np.array(self.learner.predict(
+                x, encode=False))[:, label_index]
 
-        input_shape = encoded_examples[0].shape
+        input_shape = encoded_x[0].shape
         fully_masked_input = np.ones(input_shape) * 0.25
         initial_mask = make_empty_boolean_mask_broadcast_over_axis(
             input_shape, 1)
 
-        return [(decoded_examples[i],
-                 annotations[i],
-                 self.__produce_masked_inputs(encoded_examples[i],
-                                              sis_predict,
-                                              threshold,
-                                              fully_masked_input,
-                                              initial_mask))
-                for i in range(len(encoded_examples))]
+        return [self.__produce_masked_inputs(
+            encoded_x[i], sis_predict, threshold,
+            fully_masked_input, initial_mask)
+            for i in range(len(encoded_x))]
 
-    def calculate_precision(self, x, grammar_letter="G", background_letter="_", masked_letter="N") -> List[float]:
-        if x is None:
-            precision_values: List[float] = []
+    def __calculate_precision(self, sis: str, annotation: str) -> float:
+        if self.learner.definition.sequence_type == "DNA":
+            masked_letter: str = PositionClass.DNA_MASKED
         else:
-            precision_values: List[float] = [self.__calculate_precision(sis,
-                                                                        grammar_letter=grammar_letter,
-                                                                        background_letter=background_letter,
-                                                                        masked_letter=masked_letter) for sis in x]
-        return precision_values
-
-    def calculate_recall(self, x, grammar_letter="G", background_letter="_", masked_letter="N") -> List[float]:
-        if x is None:
-            recall_values: List[float] = []
-        else:
-            recall_values: List[float] = [self.__calculate_recall(sis,
-                                                                  grammar_letter=grammar_letter,
-                                                                  background_letter=background_letter,
-                                                                  masked_letter=masked_letter) for sis in x]
-        return recall_values
-
-    def __calculate_precision(self, x, grammar_letter="G", background_letter="_", masked_letter="N") -> float:
-        annotation: str = x[1]
-        sis: str = self.__collapse_sis(x[2], masked_letter=masked_letter)
+            masked_letter: str = PositionClass.AA_MASKED
 
         if sis == "":
             return 1.0
@@ -257,7 +123,7 @@ class SISEvaluator(Evaluator):
             for i, c in enumerate(sis):
                 if c != masked_letter:
                     num_selected += 1
-                    if annotation[i] == grammar_letter:
+                    if annotation[i] == PositionClass.GRAMMAR:
                         num_selected_relevant += 1
 
             if num_selected == 0:
@@ -265,14 +131,25 @@ class SISEvaluator(Evaluator):
 
             return num_selected_relevant / num_selected
 
-    def __calculate_recall(self, x, grammar_letter="G", background_letter="_", masked_letter="N") -> float:
-        annotation: str = x[1]
-        sis: str = self.__collapse_sis(x[2], masked_letter=masked_letter)
+    def calculate_precision(self, sis: List[str],
+                            annotations: List[str]) -> List[float]:
+        if sis is None:
+            return list()
+        else:
+            return [self.__calculate_precision(s, anno)
+                    for s, anno in zip(sis, annotations)]
+
+    def __calculate_recall(self, sis: str, annotation: str) -> float:
+        if self.learner.definition.sequence_type == "DNA":
+            masked_letter: str = PositionClass.DNA_MASKED
+        else:
+            masked_letter: str = PositionClass.AA_MASKED
+
         num_relevent: int = 0
 
         if sis == "":
             for i, c in enumerate(annotation):
-                if c == grammar_letter:
+                if c == PositionClass.GRAMMAR:
                     num_relevent += 1
             if num_relevent == 0:
                 return 1.0
@@ -281,7 +158,7 @@ class SISEvaluator(Evaluator):
         else:
             num_relevant_selected: int = 0
             for i, c in enumerate(annotation):
-                if c == grammar_letter:
+                if c == PositionClass.GRAMMAR:
                     num_relevent += 1
                     if sis[i] != masked_letter:
                         num_relevant_selected += 1
@@ -291,7 +168,20 @@ class SISEvaluator(Evaluator):
 
             return num_relevant_selected / num_relevent
 
-    def __collapse_sis(self, sis: List[str], masked_letter: str = "N") -> str:
+    def calculate_recall(self, sis: List[str],
+                         annotations: List[str]) -> List[float]:
+        if x is None:
+            return list()
+        else:
+            return [self.__calculate_recall(s, anno)
+                    for s, anno in zip(sis, annotations)]
+
+    def __collapse_sis(self, sis: List[str]) -> str:
+        if self.learner.definition.sequence_type == "DNA":
+            masked_letter: str = PositionClass.DNA_MASKED
+        else:
+            masked_letter: str = PositionClass.AA_MASKED
+
         if len(sis) == 0:
             return ""
         elif len(sis) == 1:
@@ -307,23 +197,17 @@ class SISEvaluator(Evaluator):
                                 s[i] + collapsed_sis[(i + 1):]
             return collapsed_sis
 
-    def __produce_masked_inputs(self, x, sis_predict, threshold, fully_masked_input, initial_mask) -> List[str]:
+    def __produce_masked_inputs(self, x, sis_predict, threshold,
+                                fully_masked_input,
+                                initial_mask) -> List[str]:
         collection = sis_collection(sis_predict, threshold, x,
                                     fully_masked_input,
                                     initial_mask=initial_mask)
 
         if len(collection) > 0:
-            sis_masked_inputs = produce_masked_inputs(x,
-                                                      fully_masked_input,
-                                                      [sr.mask for sr in collection])
+            sis_masked_inputs = produce_masked_inputs(
+                x, fully_masked_input,
+                [sr.mask for sr in collection])
             return self.learner.decode_x(sis_masked_inputs).tolist()
         else:
             return list()
-
-    def __get_valid_file(self, data_file: str) -> str:
-        data_file = data_file.replace("\\", "/").replace("//", "/").strip()
-        if os.path.isfile(data_file):
-            return data_file
-        else:
-            raise Exception("file does not exist: " + data_file)
-
