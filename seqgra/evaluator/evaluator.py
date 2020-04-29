@@ -242,9 +242,9 @@ class FeatureImportanceEvaluator(Evaluator):
                 pdf_file_name: str = self.output_dir + set_name + "-agreement.pdf"
                 df: pd.DataFrame = self._prepare_r_data_frame(df)
                 df.to_csv(temp_file_name, sep="\t", index=False)
-                cmd = ["Rscript", plot_script, temp_file_name, pdf_file_name,
-                       self.evaluator_name]
-                subprocess.check_output(cmd, universal_newlines=True)
+                cmd = ["Rscript", "--vanilla", plot_script, temp_file_name,
+                       pdf_file_name, self.evaluator_name]
+                subprocess.call(cmd, universal_newlines=True)
                 os.remove(temp_file_name)
 
     def select_examples(self, set_name: str = "test",

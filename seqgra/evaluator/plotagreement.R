@@ -1,5 +1,22 @@
 #!/usr/bin/env Rscript
 
+library(methods)
+
+# hack apparently necessary on Windows if Sys.getenv("HOME") returns
+# C:/Users/[User] instead of C:/Users/[User]\Documents
+user_site_path <- Sys.getenv("R_LIBS_USER")
+if (!dir.exists(user_site_path)) {
+    warning(paste0("R_LIBS_USER environment variable set incorrectly"))
+    user_site_path <- gsub("//", "/", gsub("\\", "/", user_site_path, fixed = TRUE), fixed = TRUE)
+    home_path <- gsub("//", "/", gsub("\\", "/", Sys.getenv("HOME"), fixed = TRUE), fixed = TRUE)
+    user_site_path <- gsub(home_path, "", user_site_path)
+    user_site_path <- gsub("//", "/", paste0(home_path, "/Documents/", user_site_path), fixed = TRUE)
+    .libPaths(c(.libPaths(), user_site_path))
+}
+
+library(ggplot2)
+library(scales)
+
 plot_agreement <- function(input_file_name, output_file_name, title = NULL) {
     # df with example, position, group, label, precision, recall, 
     # specificity, f1, n
@@ -30,33 +47,33 @@ plot_agreement <- function(input_file_name, output_file_name, title = NULL) {
                        ", F1 = ", round(df$f1, digits = 3),
                        ", n = ", df$n)
     df$example <- as.factor(df$example)
-    p <- ggplot2::ggplot(df, ggplot2::aes(x = position, y = example, 
+    p <- ggplot(df, aes(x = position, y = example, 
                                           fill = group)) + 
-        ggplot2::geom_tile() + 
-        ggplot2::scale_x_continuous(breaks = scales::pretty_breaks(n = 5), 
+        geom_tile() + 
+        scale_x_continuous(breaks = pretty_breaks(n = 5), 
                                     expand = c(0, 0)) + 
-        ggplot2::scale_y_discrete(expand = c(0, 0)) + 
-        ggplot2::scale_fill_manual(values = c("#B5EAD7", "#FFDAC1", 
+        scale_y_discrete(expand = c(0, 0)) + 
+        scale_fill_manual(values = c("#B5EAD7", "#FFDAC1", 
                                               "#FF9AA2", "#FFFFFF"), 
                                    labels = levels,
                                    drop = FALSE) +
-        ggplot2::facet_wrap(ggplot2::vars(label), ncol = 1, 
+        facet_wrap(vars(label), ncol = 1, 
                             scales = "free_y") +
-        ggplot2::guides(fill = ggplot2::guide_legend(nrow = 2, byrow = TRUE)) + 
-        ggplot2::theme_bw() +
-        ggplot2::theme(axis.text.y = ggplot2::element_blank(),
-                       axis.ticks.y = ggplot2::element_blank(),
-                       legend.title = ggplot2::element_blank(),
+        guides(fill = guide_legend(nrow = 2, byrow = TRUE)) + 
+        theme_bw() +
+        theme(axis.text.y = element_blank(),
+                       axis.ticks.y = element_blank(),
+                       legend.title = element_blank(),
                        legend.position = "top",
-                       legend.key = ggplot2::element_rect(fill = "white", 
+                       legend.key = element_rect(fill = "white", 
                                                           color = "black"),
-                       panel.grid.major = ggplot2::element_blank(),
-                       panel.grid.minor = ggplot2::element_blank(),
-                       strip.background = ggplot2::element_blank(),
-                       plot.margin = ggplot2::margin(t = 10, r = 15, b = 10, 
+                       panel.grid.major = element_blank(),
+                       panel.grid.minor = element_blank(),
+                       strip.background = element_blank(),
+                       plot.margin = margin(t = 10, r = 15, b = 10, 
                                                      l = 10, unit = "pt")) +
-        ggplot2::labs(y = NULL, title = title)
-    ggplot2::ggsave(plot = p, filename = output_file_name, width = 7,
+        labs(y = NULL, title = title)
+    ggsave(plot = p, filename = output_file_name, width = 7,
                     height = 1.5 + length(unique(df$label)) * 1.2)
 }
 
