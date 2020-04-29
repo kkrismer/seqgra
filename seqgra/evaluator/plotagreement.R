@@ -29,14 +29,13 @@ plot_agreement <- function(input_file_name, output_file_name, title = NULL) {
                        ", specificity = ", round(df$specificity, digits = 3), 
                        ", F1 = ", round(df$f1, digits = 3),
                        ", n = ", df$n)
-    
+    df$example <- as.factor(df$example)
     p <- ggplot2::ggplot(df, ggplot2::aes(x = position, y = example, 
                                           fill = group)) + 
         ggplot2::geom_tile() + 
         ggplot2::scale_x_continuous(breaks = scales::pretty_breaks(n = 5), 
                                     expand = c(0, 0)) + 
-        ggplot2::scale_y_reverse(breaks = scales::pretty_breaks(n = 5), 
-                                 expand = c(0, 0)) + 
+        ggplot2::scale_y_discrete(expand = c(0, 0)) + 
         ggplot2::scale_fill_manual(values = c("#B5EAD7", "#FFDAC1", 
                                               "#FF9AA2", "#FFFFFF"), 
                                    labels = levels,
