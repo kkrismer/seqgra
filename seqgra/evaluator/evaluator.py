@@ -7,21 +7,25 @@ MIT - CSAIL - Gifford Lab - seqgra
 """
 from abc import ABC, abstractmethod
 import logging
+import os
 import random
+import pkg_resources
+import subprocess
 from typing import Any, List, Optional, Set
 
 import numpy as np
+import pandas as pd
 
 import seqgra.constants as c
 from seqgra import AnnotatedExampleSet
 from seqgra import MiscHelper
 from seqgra.learner import Learner
 
+
 class Evaluator(ABC):
     @abstractmethod
     def __init__(self, evaluator_id: str, learner: Learner,
-                 output_dir: str, threshold: float = 0.5,
-                 create_plots: bool = True,
+                 output_dir: str,
                  supported_tasks: Optional[Set[str]] = None,
                  supported_sequence_spaces: Optional[Set[str]] = None,
                  supported_libraries: Optional[Set[str]] = None) -> None:
@@ -30,8 +34,6 @@ class Evaluator(ABC):
         self.output_dir = MiscHelper.prepare_path(output_dir + "/" +
                                                   self.evaluator_id,
                                                   allow_exists=False)
-        self.threshold: float = threshold
-        self.create_plots: bool = create_plots
         if supported_tasks is None:
             self.supported_tasks: Set[str] = c.TaskType.ALL_TASKS
         else:
@@ -100,6 +102,150 @@ class Evaluator(ABC):
         annotations = [annotations[i] for i in idx]
 
         return AnnotatedExampleSet(x, y, annotations)
+
+
+class FeatureImportanceEvaluator(Evaluator):
+    def __init__(self, evaluator_id: str, learner: Learner,
+                 output_dir: str,
+                 supported_tasks: Optional[Set[str]] = None,
+                 supported_sequence_spaces: Optional[Set[str]] = None,
+                 supported_libraries: Optional[Set[str]] = None,
+                 threshold: float = 0.5,
+                 is_ggplot_available: bool = True) -> None:
+        super().__init__(evaluator_id, learner, output_dir,
+                         supported_tasks,
+                         supported_sequence_spaces,
+                         supported_libraries)
+        self.threshold: float = threshold
+        self.is_ggplot_available: bool = is_ggplot_available
+
+    def evaluate_model(self, set_name: str = "test",
+                       subset_idx: Optional[List[int]] = None) -> None:
+        # TODO get from outside
+        subset_idx = [0, 1, 2, 4, 5]
+        x, y, annotations = self._load_data(set_name, subset_idx)
+        results = self._evaluate_model(x, y, annotations)
+        self._save_results(results, set_name)
+        self._visualize_agreement(results, set_name)
+
+    @abstractmethod
+    def _convert_to_data_frame(self, results) -> pd.DataFrame:
+        """Takes evaluator-specific results and turns them into a pandas
+        data frame.
+
+        The data frame must have at least the following columns:
+            - example_column (int): example index
+            - position (int): position within example (one-based)
+            - group (str): group label, one of the following:
+                - "TP": grammar position, important for model prediction
+                - "FN": grammar position, not important for model prediction,
+                - "FP": background position, important for model prediction,
+                - "TN": background position, not important for model prediction
+            - label (str): label of example, e.g., "cell type 1"
+        """
+
+    @staticmethod
+    def _calculate_precision(positions: List[str]) -> float:
+        num_true_positive: int = positions.count("TP")
+        num_false_positive: int = positions.count("FP")
+        num_false_negative: int = positions.count("FN")
+
+        if not num_true_positive and not num_false_positive and \
+                not num_false_negative:
+            return 1.0
+        elif not num_true_positive and not num_false_positive:
+            return 0.0
+        else:
+            return num_true_positive / (num_true_positive + num_false_positive)
+
+    @staticmethod
+    def _calculate_recall(positions: List[str]) -> float:
+        num_true_positive: int = positions.count("TP")
+        num_false_positive: int = positions.count("FP")
+        num_false_negative: int = positions.count("FN")
+
+        if not num_true_positive and not num_false_positive and \
+                not num_false_negative:
+            return 1.0
+        elif not num_true_positive and not num_false_negative:
+            return 0.0
+        else:
+            return num_true_positive / (num_true_positive + num_false_negative)
+
+    @staticmethod
+    def _calculate_specificity(positions: List[str]) -> float:
+        num_true_negative: int = positions.count("TN")
+        num_false_positive: int = positions.count("FP")
+        num_false_negative: int = positions.count("FN")
+
+        if not num_true_negative and not num_false_positive and \
+                not num_false_negative:
+            return 1.0
+        if not num_true_negative and not num_false_positive:
+            return 0.0
+        else:
+            return num_true_negative / (num_true_negative + num_false_positive)
+
+    @staticmethod
+    def _calculate_f1(positions: List[str]) -> float:
+        precision: float = FeatureImportanceEvaluator._calculate_precision(
+            positions)
+        recall: float = FeatureImportanceEvaluator._calculate_recall(positions)
+
+        if not precision and not recall:
+            return 0.0
+        else:
+            return 2.0 * ((precision * recall) / (precision + recall))
+
+    def _prepare_r_data_frame(self, df: pd.DataFrame) -> pd.DataFrame:
+        df["precision"] = 0.0
+        df["recall"] = 0.0
+        df["specificity"] = 0.0
+        df["f1"] = 0.0
+        df["n"] = 0
+
+        for example_id in set(df.example.tolist()):
+            example_df = df.loc[df.example == example_id]
+            conf_matrix: List[str] = example_df.group.tolist()
+            df.loc[df.example == example_id, "precision"] = \
+                FeatureImportanceEvaluator._calculate_precision(conf_matrix)
+            df.loc[df.example == example_id, "recall"] = \
+                FeatureImportanceEvaluator._calculate_recall(conf_matrix)
+            df.loc[df.example == example_id, "specificity"] = \
+                FeatureImportanceEvaluator._calculate_specificity(conf_matrix)
+            df.loc[df.example == example_id, "f1"] = \
+                FeatureImportanceEvaluator._calculate_f1(conf_matrix)
+            df.loc[df.example == example_id, "n"] = 1.0 / len(example_df.index)
+            
+        df["precision"] = df.groupby("label")["precision"].transform("mean")
+        df["recall"] = df.groupby("label")["recall"].transform("mean")
+        df["specificity"] = df.groupby(
+            "label")["specificity"].transform("mean")
+        df["f1"] = df.groupby("label")["f1"].transform("mean")
+        df["n"] = round(df.groupby("label")["n"].transform("sum"))
+
+        return df
+
+    def _get_agreement_plot_title(self):
+        return "Sufficient Input Subsets" + self.evaluator_id  # TODO
+
+    def _visualize_agreement(self, results, set_name: str = "test") -> None:
+        df: pd.DataFrame = self._convert_to_data_frame(results)
+        if len(results.index) > 0:
+            df.to_csv(self.output_dir + set_name + "-agreement-df.txt",
+                      sep="\t", index=False)
+
+            if self.is_ggplot_available:
+                plot_script: str = pkg_resources.resource_filename(
+                    "seqgra", "evaluator/plotagreement.R")
+                temp_file_name: str = self.output_dir + set_name + "-temp.txt"
+                pdf_file_name: str = self.output_dir + set_name + "-agreement.pdf"
+                df: pd.DataFrame = self._prepare_r_data_frame(df)
+                df.to_csv(temp_file_name, sep="\t", index=False)
+                cmd = ["Rscript", plot_script, temp_file_name, pdf_file_name,
+                       self._get_agreement_plot_title()]
+                subprocess.check_output(cmd, universal_newlines=True)
+                os.remove(temp_file_name)
 
     def select_examples(self, set_name: str = "test",
                         labels: Optional[Set[str]] = None) -> AnnotatedExampleSet:

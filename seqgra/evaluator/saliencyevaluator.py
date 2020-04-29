@@ -13,7 +13,7 @@ import torch
 
 import seqgra.constants as c
 from seqgra.learner import Learner
-from seqgra.evaluator import Evaluator
+from seqgra.evaluator import FeatureImportanceEvaluator
 from seqgra.evaluator.explainer.backprop import VanillaGradExplainer
 from seqgra.evaluator.explainer.backprop import GradxInputExplainer
 from seqgra.evaluator.explainer.backprop import SaliencyExplainer
@@ -25,7 +25,7 @@ from seqgra.evaluator.explainer.ebp import ExcitationBackpropExplainer
 from seqgra.evaluator.explainer.ebp import ContrastiveExcitationBackpropExplainer
 
 
-class GradientBasedEvaluator(Evaluator):
+class GradientBasedEvaluator(FeatureImportanceEvaluator):
     def __init__(self, evaluator_id: str, learner: Learner, output_dir: str) -> None:
         super().__init__(evaluator_id, learner, output_dir,
                          supported_libraries=[c.LibraryType.TORCH])
