@@ -99,7 +99,8 @@ class XMLDataDefinitionWriter(DataDefinitionWriter):
     def attach_set_element(sets_element, example_set: DataGenerationSet) -> None:
         if example_set.name not in c.DataSet.ALL_SETS:
             raise Exception("invalid set name: " + example_set.name +
-                            " (valid set names: training, validation, test)")
+                            " (valid set names: " +
+                            ", ".join(c.DataSet.ALL_SETS) + ")")
         set_element = etree.SubElement(sets_element, "set",
                                        {"name": example_set.name})
         if example_set.examples:

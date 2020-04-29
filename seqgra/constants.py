@@ -1,4 +1,4 @@
-from typing import FrozenSet
+from typing import FrozenSet, List
 
 
 class PositionType:
@@ -35,7 +35,7 @@ class DataSet:
     TRAINING: str = "training"
     VALIDATION: str = "validation"
     TEST: str = "test"
-    ALL_SETS: FrozenSet[str] = [TRAINING, VALIDATION, TEST]
+    ALL_SETS: List[str] = list([TRAINING, VALIDATION, TEST])
 
 class EvaluatorID:
     METRICS: str = "metrics"

@@ -209,7 +209,8 @@ def run_seqgra(data_config_file: Optional[str],
                data_folder: Optional[str],
                model_config_file: Optional[str],
                evaluator_ids: Optional[List[str]],
-               output_dir: str) -> None:
+               output_dir: str,
+               eval_sets: Optional[List[str]]) -> None:
     output_dir = format_output_dir(output_dir.strip())
     new_data: bool = False
     new_model: bool = False
@@ -264,8 +265,10 @@ def run_seqgra(data_config_file: Optional[str],
             logging.info("training model")
 
             # load data
-            training_set_file: str = learner.get_examples_file(c.DataSet.TRAINING)
-            validation_set_file: str = learner.get_examples_file(c.DataSet.VALIDATION)
+            training_set_file: str = learner.get_examples_file(
+                c.DataSet.TRAINING)
+            validation_set_file: str = learner.get_examples_file(
+                c.DataSet.VALIDATION)
             x_train, y_train = learner.parse_examples_data(training_set_file)
             x_val, y_val = learner.parse_examples_data(validation_set_file)
 
@@ -278,6 +281,17 @@ def run_seqgra(data_config_file: Optional[str],
 
         if evaluator_ids is not None and len(evaluator_ids) > 0:
             logging.info("evaluating model using interpretability methods")
+
+            if eval_sets:
+                for eval_set in eval_sets:
+                    if not eval_set in c.DataSet.ALL_SETS:
+                        raise Exception(
+                            "invalid set selected for evaluation: " +
+                            eval_set + "; only the following sets are "
+                            "allowed: " +
+                            ", ".join(c.DataSet.ALL_SETS))
+            else:
+                eval_sets: List[str] = c.DataSet.ALL_SETS
 
             evaluation_dir: str = output_dir + "evaluation/" + \
                 grammar_id + "/" + learner.definition.model_id
@@ -300,15 +314,10 @@ def run_seqgra(data_config_file: Optional[str],
                     evaluator: Evaluator = get_evaluator(evaluator_id,
                                                          learner,
                                                          evaluation_dir)
-                    logging.info("running evaluator %s on training set",
-                                 evaluator_id)
-                    evaluator.evaluate_model(c.DataSet.TRAINING)
-                    logging.info("running evaluator %s on validation set",
-                                 evaluator_id)
-                    evaluator.evaluate_model(c.DataSet.VALIDATION)
-                    logging.info("running evaluator %s on test set",
-                                 evaluator_id)
-                    evaluator.evaluate_model(c.DataSet.TEST)
+                    for eval_set in eval_sets:
+                        logging.info("running evaluator %s on %s set",
+                                    evaluator_id, eval_set)
+                        evaluator.evaluate_model(eval_set)
         else:
             logging.info("skipping evaluation step: no evaluator specified")
 
@@ -363,6 +372,15 @@ def main():
         help="output directory, subdirectories are created for generated "
         "data, trained model, and model evaluation"
     )
+    parser.add_argument(
+        "--eval-sets",
+        type=str,
+        default=c.DataSet.ALL_SETS,
+        nargs="+",
+        help="either one or more of the following: training, validation, "
+        "test; selects data set for evaluation; this evaluator argument "
+        "will be passed to all evaluators"
+    )
     args = parser.parse_args()
 
     if args.datafolder and args.modelconfigfile is None:
@@ -381,7 +399,8 @@ def main():
                args.datafolder,
                args.modelconfigfile,
                args.evaluators,
-               args.outputdir)
+               args.outputdir,
+               args.eval_sets)
 
 
 if __name__ == "__main__":
