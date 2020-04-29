@@ -125,7 +125,7 @@ class FeatureImportanceEvaluator(Evaluator):
     def evaluate_model(self, set_name: str = "test",
                        subset_idx: Optional[List[int]] = None) -> None:
         # TODO get from outside
-        subset_idx = [0, 1, 2, 4, 5]
+        subset_idx = list(range(100))
         x, y, annotations = self._load_data(set_name, subset_idx)
         results = self._evaluate_model(x, y, annotations)
         self._save_results(results, set_name)
@@ -231,7 +231,7 @@ class FeatureImportanceEvaluator(Evaluator):
 
     def _visualize_agreement(self, results, set_name: str = "test") -> None:
         df: pd.DataFrame = self._convert_to_data_frame(results)
-        if len(results.index) > 0:
+        if len(df.index) > 0:
             df.to_csv(self.output_dir + set_name + "-agreement-df.txt",
                       sep="\t", index=False)
 

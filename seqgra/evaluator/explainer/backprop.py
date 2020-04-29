@@ -6,6 +6,7 @@ import torch
 
 import seqgra.evaluator.explainer.path as path
 
+
 class VanillaDifferenceGradExplainer(object):
     def __init__(self, model):
         self.model = model
@@ -16,7 +17,7 @@ class VanillaDifferenceGradExplainer(object):
             ind1 = output.data.max(1)[1]
         if ind2 is None:
             index0 = torch.LongTensor([0]).cuda()
-            ind2 = output.data.topk(k=2,sorted=True)[1][0][0].unsqueeze(0)
+            ind2 = output.data.topk(k=2, sorted=True)[1][0][0].unsqueeze(0)
 
         grad_out1 = output.data.clone()
         grad_out1.fill_(0.0)
@@ -32,32 +33,19 @@ class VanillaDifferenceGradExplainer(object):
     def explain(self, inp, ind1=None, ind2=None):
         return self._backprop(inp, ind1, ind2)
 
-    
+
 class VanillaGradExplainer(object):
     def __init__(self, model):
         self.model = model
 
     def _backprop(self, inp, ind):
-        print("init")
-        print("input size (inp): " + str(inp.size()))
-        print("label size (ind): " + str(ind.size()))
         output = self.model(inp)
-        print("backprop after model inference")
         if ind is None:
             ind = output.data.max(1)[1].unsqueeze(0)
-        print("output size (output): " + str(output.size()))
         grad_out = output.data.clone()
-        print("grad_out size: " + str(grad_out.size()))
         grad_out.fill_(0.0)
-        print("grad_out size after fill: " + str(grad_out.size()))
-        print("ind size: " + str(ind.size()))
         grad_out.scatter_(1, ind, 1.0)
-        print("grad_out size after scatter_: " + str(grad_out.size()))
         output.backward(grad_out)
-        print("output after backward: " + str(output.size()))
-        print("grad_out after backward: " + str(grad_out.size()))
-        print("inp after backward: " + str(inp.size()))
-        print("inp.grad.data after backward: " + str(inp.grad.data.size()))
         return inp.grad.data
 
     def explain(self, inp, ind=None, blank=None):
@@ -81,24 +69,26 @@ class SaliencyExplainer(VanillaGradExplainer):
         grad = self._backprop(inp, ind)
         return grad.abs()
 
+
 class NonlinearIntegrateGradExplainer(VanillaGradExplainer):
     def __init__(self, model, data, k=5, reference=None, path_generator=None):
         super(NonlinearIntegrateGradExplainer, self).__init__(model)
-        self.reference=reference
+        self.reference = reference
         if path_generator != None:
             self._path_fnc = path_generator
         else:
-            self._path_fnc = lambda args: path.sequence_path(args,data,k)
-            
+            self._path_fnc = lambda args: path.sequence_path(args, data, k)
+
     def explain(self, inp, ind=None):
         if self.reference == None:
             self.reference = inp.data.clone()
-            self.reference = self.reference[:,:,torch.randperm(self.reference.size()[2])]
-        
+            self.reference = self.reference[:, :, torch.randperm(
+                self.reference.size()[2])]
+
         grad = 0
         inp_data = inp.data.clone()
-        new_data,nsteps = self._path_fnc((inp_data.cpu().numpy(),
-                                          self.reference.cpu().numpy()))
+        new_data, nsteps = self._path_fnc((inp_data.cpu().numpy(),
+                                           self.reference.cpu().numpy()))
         for i in range(nsteps):
             new_inp = torch.from_numpy(new_data[i])
             new_inp = new_inp.float()
@@ -108,7 +98,7 @@ class NonlinearIntegrateGradExplainer(VanillaGradExplainer):
 
         return grad * inp_data / nsteps
 
-    
+
 class IntegrateGradExplainer(VanillaGradExplainer):
     def __init__(self, model, steps=100):
         super(IntegrateGradExplainer, self).__init__(model)
@@ -188,7 +178,7 @@ class GuidedBackpropExplainer(VanillaGradExplainer):
 # modified from https://github.com/PAIR-code/saliency/blob/master/saliency/base.py#L80
 class SmoothGradExplainer(object):
     def __init__(self, base_explainer, stdev_spread=0.15,
-                nsamples=25, magnitude=True):
+                 nsamples=25, magnitude=True):
         self.base_explainer = base_explainer
         self.stdev_spread = stdev_spread
         self.nsamples = nsamples
@@ -204,7 +194,7 @@ class SmoothGradExplainer(object):
             noise = torch.randn(inp.size()).cuda() * stdev
             inp.data.copy_(noise + origin_inp_data)
             grad = self.base_explainer.explain(inp, ind1, ind2)
-                
+
             if self.magnitude:
                 total_gradients += grad ** 2
             else:

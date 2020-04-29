@@ -32,6 +32,7 @@ class GradientBasedEvaluator(FeatureImportanceEvaluator):
         super().__init__(evaluator_id, evaluator_name, learner, output_dir,
                          supported_libraries=[c.LibraryType.TORCH])
         self.explainer = None
+        self.relevance_threshold = 0.1
 
     def _evaluate_model(self, x: List[str], y: List[str],
                         annotations: List[str]) -> Any:
@@ -55,6 +56,7 @@ class GradientBasedEvaluator(FeatureImportanceEvaluator):
         # (1, 1, 100, 4) -> (1, 4, 1, 100)
         encoded_x = np.transpose(encoded_x, (1, 3, 0, 2))
 
+        self._check_tensor_dimensions(encoded_x)
         # convert np array to torch tensor
         encoded_x = torch.from_numpy(encoded_x)
         encoded_y = torch.from_numpy(encoded_y)
@@ -70,14 +72,10 @@ class GradientBasedEvaluator(FeatureImportanceEvaluator):
         # enable inference mode
         self.explainer.model.eval()
 
-        print("final sizes:")
-        print("x: " + str(encoded_x.size()))
-        print("y: " + str(encoded_y.size()))
         result = self.calculate_saliency(encoded_x, encoded_y)
 
-        print(type(result))
-        print(result.shape)
-        return (result, annotations)
+        self._check_tensor_dimensions(result)
+        return (result, y, annotations)
 
     def _save_results(self, results, set_name: str = "test") -> None:
         np.save(self.output_dir + set_name + ".npy", results[0])
@@ -88,6 +86,64 @@ class GradientBasedEvaluator(FeatureImportanceEvaluator):
 
     def _explainer_transform(self, data, result):
         return result.cpu().numpy()
+
+    def __get_agreement_group(self, annotation_position: str,
+                              importance_vector) -> str:
+        if annotation_position == c.PositionType.GRAMMAR:
+            if np.max(importance_vector) < self.relevance_threshold:
+                return "FN"
+            else:
+                return "TP"
+        else:
+            if np.max(importance_vector) < self.relevance_threshold:
+                return "TN"
+            else:
+                return "FP"
+
+    def _check_tensor_dimensions(self, tensor) -> None:
+        if self.learner.definition.library == c.LibraryType.TENSORFLOW:
+            expected_shape: str = "(N, W, C) or (N, 1, W, C)"
+            channel_dim: int = 2
+            channel_dim_with_height: int = 3
+            height_dim: int = 1
+        elif self.learner.definition.library == c.LibraryType.TORCH:
+            expected_shape: str = "(N, C, W) or (N, C, 1, W)"
+            channel_dim: int = 1
+            channel_dim_with_height: int = 1
+            height_dim: int = 2
+
+        if len(tensor.shape) == 3:
+            if self.learner.definition.sequence_space == c.SequenceSpaceType.DNA:
+                if tensor.shape[channel_dim] != 4:
+                    raise Exception("tensor shape invalid for DNA "
+                                    "sequence space: expected 4 channels, got " +
+                                    str(tensor.shape[channel_dim]))
+            elif self.learner.definition.sequence_space == c.SequenceSpaceType.PROTEIN:
+                if tensor.shape[channel_dim] != 20:
+                    raise Exception("tensor shape invalid for protein "
+                                    "sequence space: expected 20 "
+                                    "channels, got " +
+                                    str(tensor.shape[channel_dim]))
+        elif len(tensor.shape) == 4:
+            if self.learner.definition.sequence_space == c.SequenceSpaceType.DNA:
+                if tensor.shape[channel_dim_with_height] != 4:
+                    raise Exception("tensor shape invalid for DNA "
+                                    "sequence space: expected 4 channels, got " +
+                                    str(tensor.shape[channel_dim_with_height]))
+            elif self.learner.definition.sequence_space == c.SequenceSpaceType.PROTEIN:
+                if tensor.shape[channel_dim_with_height] != 20:
+                    raise Exception("tensor shape invalid for protein "
+                                    "sequence space: expected 20 "
+                                    "channels, got " +
+                                    str(tensor.shape[channel_dim_with_height]))
+            if tensor.shape[height_dim] != 1:
+                raise Exception("tensor shape invalid: expected "
+                                "height dimension size of none or 1, got " +
+                                str(tensor.shape[height_dim]))
+        else:
+            raise Exception("tensor shape invalid: expected " +
+                            expected_shape + ", got " +
+                            str(tensor.shape))
 
     def _convert_to_data_frame(self, results) -> pd.DataFrame:
         """Takes gradient-based evaluator-specific results and turns them into
@@ -103,24 +159,30 @@ class GradientBasedEvaluator(FeatureImportanceEvaluator):
                 - "TN": background position, not important for model prediction
             - label (str): label of example, e.g., "cell type 1"
         """
-        importance_matrix = results[0]  # [5, 4, 1, 100]
-        annotations: List[str] = results[1]
+        importance_matrix = results[0]
+        y: List[str] = results[1]
+        annotations: List[str] = results[2]
+
+        # remove empty height dimension
+        if len(importance_matrix.shape) == 4:
+            if self.learner.definition.library == c.LibraryType.TENSORFLOW:
+                height_dim: int = 1
+            elif self.learner.definition.library == c.LibraryType.TORCH:
+                height_dim: int = 2
+            importance_matrix = np.squeeze(importance_matrix, axis=height_dim)
 
         example_column: List[int] = list()
         position_column: List[int] = list()
         group_column: List[str] = list()
         label_column: List[str] = list()
 
-        for example_id, row in enumerate(results.itertuples(), 1):
-            example_column += [example_id] * len(row.annotation)
-            position_column += list(range(1, len(row.annotation) + 1))
-            if row.sis_collapsed:
-                group_column += [self.__get_agreement_group(char, row.sis_collapsed[i])
-                                 for i, char in enumerate(row.annotation)]
-            else:
-                group_column += [self.__get_agreement_group(char, self.__get_masked_letter())
-                                 for i, char in enumerate(row.annotation)]
-            label_column += [row.y] * len(row.annotation)
+        for example_id, annotation in enumerate(annotations):
+            example_column += [example_id] * len(annotation)
+            position_column += list(range(1, len(annotation) + 1))
+            group_column += [self.__get_agreement_group(
+                char, importance_matrix[example_id, :, i])
+                for i, char in enumerate(annotation)]
+            label_column += [y[example_id]] * len(annotation)
 
         df = pd.DataFrame({"example": example_column,
                            "position": position_column,
