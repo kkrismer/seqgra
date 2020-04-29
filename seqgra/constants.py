@@ -31,6 +31,11 @@ class LibraryType:
     TORCH: str = "PyTorch"
     ALL_LIBRARIES: FrozenSet[str] = frozenset([TENSORFLOW, TORCH])
 
+class DataSet:
+    TRAINING: str = "training"
+    VALIDATION: str = "validation"
+    TEST: str = "test"
+    ALL_SETS: FrozenSet[str] = [TRAINING, VALIDATION, TEST]
 
 class EvaluatorID:
     METRICS: str = "metrics"

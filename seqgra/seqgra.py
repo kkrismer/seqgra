@@ -264,8 +264,8 @@ def run_seqgra(data_config_file: Optional[str],
             logging.info("training model")
 
             # load data
-            training_set_file: str = learner.get_examples_file("training")
-            validation_set_file: str = learner.get_examples_file("validation")
+            training_set_file: str = learner.get_examples_file(c.DataSet.TRAINING)
+            validation_set_file: str = learner.get_examples_file(c.DataSet.VALIDATION)
             x_train, y_train = learner.parse_examples_data(training_set_file)
             x_val, y_val = learner.parse_examples_data(validation_set_file)
 
@@ -302,13 +302,13 @@ def run_seqgra(data_config_file: Optional[str],
                                                          evaluation_dir)
                     logging.info("running evaluator %s on training set",
                                  evaluator_id)
-                    evaluator.evaluate_model("training")
+                    evaluator.evaluate_model(c.DataSet.TRAINING)
                     logging.info("running evaluator %s on validation set",
                                  evaluator_id)
-                    evaluator.evaluate_model("validation")
+                    evaluator.evaluate_model(c.DataSet.VALIDATION)
                     logging.info("running evaluator %s on test set",
                                  evaluator_id)
-                    evaluator.evaluate_model("test")
+                    evaluator.evaluate_model(c.DataSet.TEST)
         else:
             logging.info("skipping evaluation step: no evaluator specified")
 

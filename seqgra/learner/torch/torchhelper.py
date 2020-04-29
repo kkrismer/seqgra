@@ -224,8 +224,8 @@ class TorchHelper:
         for epoch in range(num_epochs):
             print("epoch {}/{}".format(epoch + 1, num_epochs))
 
-            for phase in ["training", "validation"]:
-                if phase == "training":
+            for phase in [c.DataSet.TRAINING, c.DataSet.VALIDATION]:
+                if phase == c.DataSet.TRAINING:
                     learner.model.train()
                     data_loader = training_loader
                 else:
@@ -245,12 +245,12 @@ class TorchHelper:
 
                     # forward
                     # track history if only in train
-                    with torch.set_grad_enabled(phase == "training"):
+                    with torch.set_grad_enabled(phase == c.DataSet.TRAINING):
                         outputs = learner.model(x)
                         loss = learner.criterion(outputs, y)
 
                         # backward + optimize only if in training phase
-                        if phase == "training":
+                        if phase == c.DataSet.TRAINING:
                             loss.backward()
                             learner.optimizer.step()
 

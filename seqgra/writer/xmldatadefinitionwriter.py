@@ -5,10 +5,11 @@ Abstract base class for configuration file writer
 
 @author: Konstantin Krismer
 """
-from typing import Dict, List
+from typing import List
 
 from lxml import etree
 
+import seqgra.constants as c
 from seqgra import ProbabilisticToken
 from seqgra.model import DataDefinition
 from seqgra.model.data import Background
@@ -96,7 +97,7 @@ class XMLDataDefinitionWriter(DataDefinitionWriter):
 
     @staticmethod
     def attach_set_element(sets_element, example_set: DataGenerationSet) -> None:
-        if example_set.name not in {"training", "validation", "test"}:
+        if example_set.name not in c.DataSet.ALL_SETS:
             raise Exception("invalid set name: " + example_set.name +
                             " (valid set names: training, validation, test)")
         set_element = etree.SubElement(sets_element, "set",
