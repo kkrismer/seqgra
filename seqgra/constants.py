@@ -39,11 +39,11 @@ class EvaluatorID:
     PR: str = "pr"
     SIS: str = "sis"
     GRADIENT: str = "gradient"
-    GRADIENTX_INPUT: str = "gradientx-input"
+    GRADIENT_X_INPUT: str = "gradient-x-input"
     SALIENCY: str = "saliency"
-    INTEGRATED_GRADIENT: str = "integrated-gradient"
-    NONLINEAR_INTEGRATED_GRADIENT: str = "nonlinear-integrated-gradient"
-    GRAD_CAM_GRADIENT: str = "grad-cam-gradient"
+    INTEGRATED_GRADIENTS: str = "integrated-gradients"
+    NONLINEAR_INTEGRATED_GRADIENTS: str = "nonlinear-integrated-gradients"
+    GRAD_CAM: str = "grad-cam"
     DEEP_LIFT: str = "deep-lift"
     EXCITATION_BACKPROP: str = "excitation-backprop"
     CONTRASTIVE_EXCITATION_BACKPROP: str = "contrastive-excitation-backprop"
@@ -52,10 +52,10 @@ class EvaluatorID:
     MODEL_AGNOSTIC_EVALUATORS: FrozenSet[str] = frozenset(
         [METRICS, PREDICT, ROC, PR, SIS])
     FEATURE_IMPORTANCE_EVALUATORS: FrozenSet[str] = frozenset(
-        [SIS, GRADIENT, GRADIENTX_INPUT, SALIENCY,
-         INTEGRATED_GRADIENT, NONLINEAR_INTEGRATED_GRADIENT, GRAD_CAM_GRADIENT,
+        [SIS, GRADIENT, GRADIENT_X_INPUT, SALIENCY,
+         INTEGRATED_GRADIENTS, NONLINEAR_INTEGRATED_GRADIENTS, GRAD_CAM,
          DEEP_LIFT, EXCITATION_BACKPROP, CONTRASTIVE_EXCITATION_BACKPROP])
     ALL_EVALUATOR_IDS: FrozenSet[str] = frozenset(
-        [METRICS, PREDICT, ROC, PR, SIS, GRADIENT, GRADIENTX_INPUT, SALIENCY,
-         INTEGRATED_GRADIENT, NONLINEAR_INTEGRATED_GRADIENT, GRAD_CAM_GRADIENT,
+        [METRICS, PREDICT, ROC, PR, SIS, GRADIENT, GRADIENT_X_INPUT, SALIENCY,
+         INTEGRATED_GRADIENTS, NONLINEAR_INTEGRATED_GRADIENTS, GRAD_CAM,
          DEEP_LIFT, EXCITATION_BACKPROP, CONTRASTIVE_EXCITATION_BACKPROP])

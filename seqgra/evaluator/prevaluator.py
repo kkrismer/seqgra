@@ -12,13 +12,15 @@ import matplotlib.pyplot as plt
 from sklearn.metrics import precision_recall_curve
 from sklearn.metrics import average_precision_score
 
+import seqgra.constants as c
 from seqgra.learner import Learner
 from seqgra.evaluator import Evaluator
 
 
 class PREvaluator(Evaluator):
     def __init__(self, learner: Learner, output_dir: str) -> None:
-        super().__init__("pr", learner, output_dir)
+        super().__init__(c.EvaluatorID.PR, "Precision-recall curve",
+                         learner, output_dir)
 
     def _evaluate_model(self, x: List[str], y: List[str],
                         annotations: List[str]) -> Any:

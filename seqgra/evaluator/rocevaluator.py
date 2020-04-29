@@ -12,13 +12,14 @@ import matplotlib.pyplot as plt
 from sklearn.metrics import roc_curve, auc
 from scipy import interp
 
+import seqgra.constants as c
 from seqgra.learner import Learner
 from seqgra.evaluator import Evaluator
 
 
 class ROCEvaluator(Evaluator):
     def __init__(self, learner: Learner, output_dir: str) -> None:
-        super().__init__("roc", learner, output_dir)
+        super().__init__(c.EvaluatorID.ROC, "ROC curve", learner, output_dir)
 
     def _evaluate_model(self, x: List[str], y: List[str],
                         annotations: List[str]) -> Any:

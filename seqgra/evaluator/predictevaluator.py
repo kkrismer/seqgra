@@ -9,13 +9,14 @@ from typing import Any, List
 
 import pandas as pd
 
+import seqgra.constants as c
 from seqgra.learner import Learner
 from seqgra.evaluator import Evaluator
 
 
 class PredictEvaluator(Evaluator):
     def __init__(self, learner: Learner, output_dir: str) -> None:
-        super().__init__("predict", learner, output_dir)
+        super().__init__(c.EvaluatorID.PREDICT, "Prediction", learner, output_dir)
 
     def _evaluate_model(self, x: List[str], y: List[str],
                         annotations: List[str]) -> Any:

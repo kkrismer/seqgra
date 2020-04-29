@@ -162,19 +162,19 @@ def get_evaluator(evaluator_id: str, learner: Learner,
     elif evaluator_id == c.EvaluatorID.GRADIENT:
         from seqgra.evaluator import GradientEvaluator  # pylint: disable=import-outside-toplevel
         return GradientEvaluator(learner, output_dir)
-    elif evaluator_id == c.EvaluatorID.GRADIENTX_INPUT:
+    elif evaluator_id == c.EvaluatorID.GRADIENT_X_INPUT:
         from seqgra.evaluator import GradientxInputEvaluator  # pylint: disable=import-outside-toplevel
         return GradientxInputEvaluator(learner, output_dir)
     elif evaluator_id == c.EvaluatorID.SALIENCY:
         from seqgra.evaluator import SaliencyEvaluator  # pylint: disable=import-outside-toplevel
         return SaliencyEvaluator(learner, output_dir)
-    elif evaluator_id == c.EvaluatorID.INTEGRATED_GRADIENT:
+    elif evaluator_id == c.EvaluatorID.INTEGRATED_GRADIENTS:
         from seqgra.evaluator import IntegratedGradientEvaluator  # pylint: disable=import-outside-toplevel
         return IntegratedGradientEvaluator(learner, output_dir)
-    elif evaluator_id == c.EvaluatorID.NONLINEAR_INTEGRATED_GRADIENT:
+    elif evaluator_id == c.EvaluatorID.NONLINEAR_INTEGRATED_GRADIENTS:
         from seqgra.evaluator import NonlinearIntegratedGradientEvaluator  # pylint: disable=import-outside-toplevel
         return NonlinearIntegratedGradientEvaluator(learner, output_dir)
-    elif evaluator_id == c.EvaluatorID.GRAD_CAM_GRADIENT:
+    elif evaluator_id == c.EvaluatorID.GRAD_CAM:
         from seqgra.evaluator import GradCamGradientEvaluator  # pylint: disable=import-outside-toplevel
         return GradCamGradientEvaluator(learner, output_dir)
     elif evaluator_id == c.EvaluatorID.DEEP_LIFT:

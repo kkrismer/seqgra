@@ -24,12 +24,14 @@ from seqgra.learner import Learner
 
 class Evaluator(ABC):
     @abstractmethod
-    def __init__(self, evaluator_id: str, learner: Learner,
+    def __init__(self, evaluator_id: str, evaluator_name: str,
+                 learner: Learner,
                  output_dir: str,
                  supported_tasks: Optional[Set[str]] = None,
                  supported_sequence_spaces: Optional[Set[str]] = None,
                  supported_libraries: Optional[Set[str]] = None) -> None:
         self.evaluator_id: str = evaluator_id
+        self.evaluator_name: str = evaluator_name
         self.learner: Learner = learner
         self.output_dir = MiscHelper.prepare_path(output_dir + "/" +
                                                   self.evaluator_id,
@@ -105,14 +107,15 @@ class Evaluator(ABC):
 
 
 class FeatureImportanceEvaluator(Evaluator):
-    def __init__(self, evaluator_id: str, learner: Learner,
+    def __init__(self, evaluator_id: str, evaluator_name: str,
+                 learner: Learner,
                  output_dir: str,
                  supported_tasks: Optional[Set[str]] = None,
                  supported_sequence_spaces: Optional[Set[str]] = None,
                  supported_libraries: Optional[Set[str]] = None,
                  threshold: float = 0.5,
                  is_ggplot_available: bool = True) -> None:
-        super().__init__(evaluator_id, learner, output_dir,
+        super().__init__(evaluator_id, evaluator_name, learner, output_dir,
                          supported_tasks,
                          supported_sequence_spaces,
                          supported_libraries)
@@ -216,7 +219,7 @@ class FeatureImportanceEvaluator(Evaluator):
             df.loc[df.example == example_id, "f1"] = \
                 FeatureImportanceEvaluator._calculate_f1(conf_matrix)
             df.loc[df.example == example_id, "n"] = 1.0 / len(example_df.index)
-            
+
         df["precision"] = df.groupby("label")["precision"].transform("mean")
         df["recall"] = df.groupby("label")["recall"].transform("mean")
         df["specificity"] = df.groupby(
@@ -225,9 +228,6 @@ class FeatureImportanceEvaluator(Evaluator):
         df["n"] = round(df.groupby("label")["n"].transform("sum"))
 
         return df
-
-    def _get_agreement_plot_title(self):
-        return "Sufficient Input Subsets" + self.evaluator_id  # TODO
 
     def _visualize_agreement(self, results, set_name: str = "test") -> None:
         df: pd.DataFrame = self._convert_to_data_frame(results)
@@ -243,7 +243,7 @@ class FeatureImportanceEvaluator(Evaluator):
                 df: pd.DataFrame = self._prepare_r_data_frame(df)
                 df.to_csv(temp_file_name, sep="\t", index=False)
                 cmd = ["Rscript", plot_script, temp_file_name, pdf_file_name,
-                       self._get_agreement_plot_title()]
+                       self.evaluator_name]
                 subprocess.check_output(cmd, universal_newlines=True)
                 os.remove(temp_file_name)
 

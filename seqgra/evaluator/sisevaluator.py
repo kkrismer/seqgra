@@ -23,7 +23,7 @@ from seqgra.learner import Learner
 class SISEvaluator(FeatureImportanceEvaluator):
     def __init__(self, learner: Learner, output_dir: str) -> None:
         super().__init__(
-            "sis", learner, output_dir,
+            c.EvaluatorID.SIS, "Sufficient Input Subsets", learner, output_dir,
             supported_tasks=[c.TaskType.MULTI_CLASS_CLASSIFICATION])
 
     def _evaluate_model(self, x: List[str], y: List[str],
@@ -41,6 +41,7 @@ class SISEvaluator(FeatureImportanceEvaluator):
             selected_x, selected_y, selected_annotations = \
                 self._subset(subset_idx, x, y, annotations)
 
+            # TODO i should be label index of model
             sis_results: List[List[str]] = self.find_sis(
                 selected_x, i)
             sis_collapsed: List[str] = [self.__collapse_sis(sis_col)
@@ -85,10 +86,23 @@ class SISEvaluator(FeatureImportanceEvaluator):
                 return "FP"
 
     def _convert_to_data_frame(self, results) -> pd.DataFrame:
+        """Takes SIS evaluator-specific results and turns them into a pandas
+        data frame.
+
+        The data frame has the following columns:
+            - example_column (int): example index
+            - position (int): position within example (one-based)
+            - group (str): group label, one of the following:
+                - "TP": grammar position, important for model prediction
+                - "FN": grammar position, not important for model prediction,
+                - "FP": background position, important for model prediction,
+                - "TN": background position, not important for model prediction
+            - label (str): label of example, e.g., "cell type 1"
+        """
         example_column: List[int] = list()
         position_column: List[int] = list()
-        group_column: List[int] = list()
-        label_column: List[int] = list()
+        group_column: List[str] = list()
+        label_column: List[str] = list()
 
         for example_id, row in enumerate(results.itertuples(), 1):
             example_column += [example_id] * len(row.annotation)
