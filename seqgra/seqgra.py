@@ -144,46 +144,46 @@ def get_evaluator(evaluator_id: str, learner: Learner,
     if learner is None:
         raise Exception("no learner specified")
 
-    if evaluator_id == "metrics":
+    if evaluator_id == c.EvaluatorID.METRICS:
         from seqgra.evaluator import MetricsEvaluator  # pylint: disable=import-outside-toplevel
         return MetricsEvaluator(learner, output_dir)
-    elif evaluator_id == "predict":
+    elif evaluator_id == c.EvaluatorID.PREDICT:
         from seqgra.evaluator import PredictEvaluator  # pylint: disable=import-outside-toplevel
         return PredictEvaluator(learner, output_dir)
-    elif evaluator_id == "roc":
+    elif evaluator_id == c.EvaluatorID.ROC:
         from seqgra.evaluator import ROCEvaluator  # pylint: disable=import-outside-toplevel
         return ROCEvaluator(learner, output_dir)
-    elif evaluator_id == "pr":
+    elif evaluator_id == c.EvaluatorID.PR:
         from seqgra.evaluator import PREvaluator  # pylint: disable=import-outside-toplevel
         return PREvaluator(learner, output_dir)
-    elif evaluator_id == "sis":
+    elif evaluator_id == c.EvaluatorID.SIS:
         from seqgra.evaluator import SISEvaluator  # pylint: disable=import-outside-toplevel
         return SISEvaluator(learner, output_dir)
-    elif evaluator_id == "gradient":
+    elif evaluator_id == c.EvaluatorID.GRADIENT:
         from seqgra.evaluator import GradientEvaluator  # pylint: disable=import-outside-toplevel
         return GradientEvaluator(learner, output_dir)
-    elif evaluator_id == "gradientx-input":
+    elif evaluator_id == c.EvaluatorID.GRADIENTX_INPUT:
         from seqgra.evaluator import GradientxInputEvaluator  # pylint: disable=import-outside-toplevel
         return GradientxInputEvaluator(learner, output_dir)
-    elif evaluator_id == "saliency":
+    elif evaluator_id == c.EvaluatorID.SALIENCY:
         from seqgra.evaluator import SaliencyEvaluator  # pylint: disable=import-outside-toplevel
         return SaliencyEvaluator(learner, output_dir)
-    elif evaluator_id == "integrated-gradient":
+    elif evaluator_id == c.EvaluatorID.INTEGRATED_GRADIENT:
         from seqgra.evaluator import IntegratedGradientEvaluator  # pylint: disable=import-outside-toplevel
         return IntegratedGradientEvaluator(learner, output_dir)
-    elif evaluator_id == "nonlinear-integrated-gradient":
+    elif evaluator_id == c.EvaluatorID.NONLINEAR_INTEGRATED_GRADIENT:
         from seqgra.evaluator import NonlinearIntegratedGradientEvaluator  # pylint: disable=import-outside-toplevel
         return NonlinearIntegratedGradientEvaluator(learner, output_dir)
-    elif evaluator_id == "grad-cam-gradient":
+    elif evaluator_id == c.EvaluatorID.GRAD_CAM_GRADIENT:
         from seqgra.evaluator import GradCamGradientEvaluator  # pylint: disable=import-outside-toplevel
         return GradCamGradientEvaluator(learner, output_dir)
-    elif evaluator_id == "deep-lift":
+    elif evaluator_id == c.EvaluatorID.DEEP_LIFT:
         from seqgra.evaluator import DeepLiftEvaluator  # pylint: disable=import-outside-toplevel
         return DeepLiftEvaluator(learner, output_dir)
-    elif evaluator_id == "excitation-backprop":
+    elif evaluator_id == c.EvaluatorID.EXCITATION_BACKPROP:
         from seqgra.evaluator import ExcitationBackpropEvaluator  # pylint: disable=import-outside-toplevel
         return ExcitationBackpropEvaluator(learner, output_dir)
-    elif evaluator_id == "contrastive-excitation-backprop":
+    elif evaluator_id == c.EvaluatorID.CONTRASTIVE_EXCITATION_BACKPROP:
         from seqgra.evaluator import ContrastiveExcitationBackpropEvaluator  # pylint: disable=import-outside-toplevel
         return ContrastiveExcitationBackpropEvaluator(learner, output_dir)
     else:
@@ -349,11 +349,11 @@ def main():
         type=str,
         default=None,
         nargs="+",
-        help="evaluator ID or IDs of interpretability method - valid "
-        "evaluator IDs include metrics, roc, pr, sis, gradient, "
-        "gradientx-input, saliency, integrated-gradient, "
-        "nonlinear-integrated-gradient, grad-cam-gradient, deep-lift, "
-        "excitation-backprop, contrastive-excitation-backprop"
+        help="evaluator ID or IDs: IDs of "
+        "conventional evaluators include " +
+        ", ".join(sorted(c.EvaluatorID.CONVENTIONAL_EVALUATORS)) +
+        "; IDs of feature importance evaluators include " +
+        ", ".join(sorted(c.EvaluatorID.FEATURE_IMPORTANCE_EVALUATORS))
     )
     parser.add_argument(
         "-o",
@@ -373,14 +373,7 @@ def main():
 
     if args.evaluators is not None:
         for evaluator in args.evaluators:
-            if evaluator not in frozenset(["metrics", "predict", "roc",
-                                           "pr", "sis", "gradient",
-                                           "gradientx-input", "saliency",
-                                           "integrated-gradient",
-                                           "nonlinear-integrated-gradient",
-                                           "grad-cam-gradient", "deep-lift",
-                                           "excitation-backprop",
-                                           "contrastive-excitation-backprop"]):
+            if evaluator not in c.EvaluatorID.ALL_EVALUATOR_IDS:
                 raise ValueError(
                     "invalid evaluator ID {s!r}".format(s=evaluator))
 
