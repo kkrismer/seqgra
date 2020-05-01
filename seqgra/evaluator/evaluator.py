@@ -61,12 +61,28 @@ class Evaluator(ABC):
             logging.warning("learner library incompatible with evaluator")
 
     def evaluate_model(self, set_name: str = "test",
-                       subset_idx: Optional[List[int]] = None) -> None:
-        # TODO get from outside
-        subset_idx = [0, 1, 2, 4, 5]
-        x, y, annotations = self._load_data(set_name, subset_idx)
+                       subset_idx: Optional[List[int]] = None,
+                       subset_n: Optional[int] = None,
+                       subset_labels: Optional[List[str]] = None,
+                       subset_n_per_label: bool = True,
+                       subset_shuffle: bool = True,
+                       subset_threshold: Optional[float] = None) -> Any:
+        if subset_idx:
+            x, y, annotations = self._load_data(set_name, subset_idx)
+        elif subset_n or subset_labels or \
+                subset_n_per_label or subset_threshold:
+            x, y, annotations = self.select_n_examples(set_name, subset_n,
+                                                       subset_labels,
+                                                       subset_n_per_label,
+                                                       subset_shuffle,
+                                                       subset_threshold)
+        else:
+            x, y, annotations = self._load_data(set_name)
+
         results = self._evaluate_model(x, y, annotations)
         self._save_results(results, set_name)
+
+        return results
 
     def _load_data(self, set_name: str = "test",
                    subset_idx: Optional[List[int]] = None) -> AnnotatedExampleSet:
@@ -105,6 +121,101 @@ class Evaluator(ABC):
 
         return AnnotatedExampleSet(x, y, annotations)
 
+    def select_examples(self, set_name: str = "test",
+                        labels: Optional[Set[str]] = None,
+                        threshold: Optional[float] = None) -> AnnotatedExampleSet:
+        """Returns all correctly classified examples that exceed the threshold.
+
+        for the specified labels
+        and set that exceed the threshold.
+
+        Parameters:
+            TODO
+
+        Returns:
+            TODO
+        """
+        examples_file: str = self.learner.get_examples_file(set_name)
+        annotations_file: str = self.learner.get_annotations_file(set_name)
+        x, y = self.learner.parse_examples_data(examples_file)
+        annotations, _ = self.learner.parse_annotations_data(annotations_file)
+
+        if labels is not None:
+            # discard examples with y not in labels
+            subset_idx = [i
+                          for i, label in enumerate(y)
+                          if label in labels]
+            x, y, annotations = self._subset(subset_idx, x, y, annotations)
+
+        if threshold:
+            # predict with learner
+            encoded_y = self.learner.encode_y(y)
+            y_hat = self.learner.predict(x)
+
+            # discard misclassified / mislabeled examples and
+            # examples below threshold
+            subset_idx = [i
+                          for i in range(len(x))
+                          if np.argmax(y_hat[i]) == np.argmax(encoded_y[i]) and
+                          np.max(y_hat[i]) > threshold]
+            x, y, annotations = self._subset(subset_idx, x, y, annotations)
+
+        return AnnotatedExampleSet(x, y, annotations)
+
+    def select_n_examples(self, set_name: str = "test",
+                          n: Optional[int] = None,
+                          labels: Optional[Set[str]] = None,
+                          n_per_label: bool = True,
+                          shuffle: bool = True,
+                          threshold: Optional[float] = None) -> AnnotatedExampleSet:
+        if n_per_label:
+            if labels is None:
+                labels = self.learner.definition.labels
+            x: List[str] = list()
+            y: List[str] = list()
+            annotations: List[str] = list()
+            for label in labels:
+                examples = self.select_n_examples(set_name, n, label, False,
+                                                  shuffle, threshold)
+                x += examples.x
+                y += examples.y
+                annotations += examples.annotations
+            return AnnotatedExampleSet(x, y, annotations)
+        else:
+            x, y, annotations = self.select_examples(set_name, labels,
+                                                     threshold)
+            if n is None:
+                n = len(x)
+
+            if not x:
+                if labels is None and threshold is None:
+                    logging.warning("no example in set '%s'", set_name)
+                elif labels is None and threshold is not None:
+                    logging.warning("no correctly labeled example with "
+                                    "prediction threshold > %s in set '%s'",
+                                    threshold, set_name)
+                elif labels is not None and threshold is None:
+                    logging.warning("no example in set '%s' "
+                                    "that has one of the following labels: %s",
+                                    set_name, labels)
+                elif labels is not None and threshold is not None:
+                    logging.warning("no correctly labeled example with "
+                                    "prediction threshold > %s in set '%s' "
+                                    "that has one of the following labels: %s",
+                                    threshold, set_name, labels)
+                return AnnotatedExampleSet(None, None, None)
+            elif n > len(x):
+                n = len(x)
+
+            if shuffle:
+                subset_idx: List[int] = list(range(len(x)))
+                random.shuffle(subset_idx)
+                subset_idx = subset_idx[:n]
+            else:
+                subset_idx: List[int] = list(range(n))
+
+            return self._subset(subset_idx, x, y, annotations)
+
 
 class FeatureImportanceEvaluator(Evaluator):
     def __init__(self, evaluator_id: str, evaluator_name: str,
@@ -113,23 +224,25 @@ class FeatureImportanceEvaluator(Evaluator):
                  supported_tasks: Optional[Set[str]] = None,
                  supported_sequence_spaces: Optional[Set[str]] = None,
                  supported_libraries: Optional[Set[str]] = None,
-                 threshold: float = 0.5,
                  is_ggplot_available: bool = True) -> None:
         super().__init__(evaluator_id, evaluator_name, learner, output_dir,
                          supported_tasks,
                          supported_sequence_spaces,
                          supported_libraries)
-        self.threshold: float = threshold
         self.is_ggplot_available: bool = is_ggplot_available
 
     def evaluate_model(self, set_name: str = "test",
-                       subset_idx: Optional[List[int]] = None) -> None:
-        # TODO get from outside
-        subset_idx = list(range(100))
-        x, y, annotations = self._load_data(set_name, subset_idx)
-        results = self._evaluate_model(x, y, annotations)
-        self._save_results(results, set_name)
+                       subset_idx: Optional[List[int]] = None,
+                       subset_n: Optional[int] = None,
+                       subset_labels: Optional[List[str]] = None,
+                       subset_n_per_label: bool = True,
+                       subset_shuffle: bool = True,
+                       subset_threshold: Optional[float] = None) -> Any:
+        results = super().evaluate_model(set_name, subset_idx, subset_n,
+                                       subset_labels, subset_n_per_label, 
+                                       subset_shuffle, subset_threshold)
         self._visualize_agreement(results, set_name)
+        return results
 
     @abstractmethod
     def _convert_to_data_frame(self, results) -> pd.DataFrame:
@@ -246,99 +359,3 @@ class FeatureImportanceEvaluator(Evaluator):
                        pdf_file_name, self.evaluator_name]
                 subprocess.call(cmd, universal_newlines=True)
                 os.remove(temp_file_name)
-
-    def select_examples(self, set_name: str = "test",
-                        labels: Optional[Set[str]] = None) -> AnnotatedExampleSet:
-        """Returns all correctly classified examples that exceed the threshold.
-
-        for the specified labels
-        and set that exceed the threshold.
-
-        Parameters:
-            TODO
-
-        Returns:
-            TODO
-        """
-        examples_file: str = self.learner.get_examples_file(set_name)
-        annotations_file: str = self.learner.get_annotations_file(set_name)
-        x, y = self.learner.parse_examples_data(examples_file)
-        annotations, _ = self.learner.parse_annotations_data(annotations_file)
-
-        if labels is not None:
-            # discard examples with y not in labels
-            subset_idx = [i
-                          for i, label in enumerate(y)
-                          if label in labels]
-            x, y, annotations = self._subset(subset_idx, x, y, annotations)
-
-        # predict with learner
-        encoded_y = self.learner.encode_y(y)
-        y_hat = self.learner.predict(x)
-
-        # discard misclassified / mislabeled examples and
-        # examples below threshold
-        # TODO fix: i should be label index in model
-        subset_idx = [i
-                      for i in range(len(encoded_y))
-                      if np.argmax(y_hat[i]) == np.argmax(encoded_y[i]) and
-                      np.max(y_hat[i]) > self.threshold]
-        x, y, annotations = self._subset(subset_idx, x, y, annotations)
-
-        return AnnotatedExampleSet(x, y, annotations)
-
-    def select_n_examples(self, n: int,
-                          set_name: str = "test",
-                          labels: Optional[Set[str]] = None,
-                          per_label: bool = True,
-                          shuffle: bool = True) -> AnnotatedExampleSet:
-        if labels is not None and per_label:
-            x: List[str] = list()
-            y: List[str] = list()
-            annotations: List[str] = list()
-            for label in labels:
-                examples = self.select_n_examples(n, set_name, label,
-                                                  shuffle)
-                x += examples.x
-                y += examples.y
-                annotations += examples.annotations
-            return AnnotatedExampleSet(x, y, annotations)
-        else:
-            x, y, annotations = self.select_examples(set_name, labels)
-
-            if not x:
-                if labels is None:
-                    logging.warning("no correctly labeled example with "
-                                    "prediction threshold > %s in set '%s'",
-                                    self.threshold, set_name)
-                else:
-                    logging.warning("no correctly labeled example with "
-                                    "prediction threshold > %s in set '%s' "
-                                    "that has one of the following labels: %s",
-                                    self.threshold, set_name, labels)
-                return AnnotatedExampleSet(None, None, None)
-            elif n > len(x):
-                if labels is None:
-                    logging.warning("n (%s) is larger than the number "
-                                    "of correctly labeled examples with "
-                                    "prediction threshold > %s in set '%s' "
-                                    "(%s): reset n to %s",
-                                    n, self.threshold, set_name,
-                                    len(x), len(x))
-                else:
-                    logging.warning("n (%s) is larger than the number "
-                                    "of correctly labeled examples with "
-                                    "prediction threshold > %s in set '%s' "
-                                    "(%s) for the labels specified: reset n "
-                                    "to %s", n, self.threshold, set_name,
-                                    len(x), len(x))
-                n = len(x)
-
-            if shuffle:
-                subset_idx: List[int] = list(range(len(x)))
-                random.shuffle(subset_idx)
-                subset_idx = subset_idx[:n]
-            else:
-                subset_idx: List[int] = list(range(n))
-
-            return self._subset(subset_idx, x, y, annotations)

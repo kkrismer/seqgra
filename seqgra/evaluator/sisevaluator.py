@@ -7,7 +7,7 @@ MIT - CSAIL - Gifford Lab - seqgra
 """
 from __future__ import annotations
 
-from typing import Any, List
+from typing import Any, List, Optional
 
 import numpy as np
 import pandas as pd
@@ -21,10 +21,16 @@ from seqgra.learner import Learner
 
 
 class SISEvaluator(FeatureImportanceEvaluator):
-    def __init__(self, learner: Learner, output_dir: str) -> None:
+    def __init__(self, learner: Learner, output_dir: str,
+                 predict_threshold: Optional[float]) -> None:
         super().__init__(
             c.EvaluatorID.SIS, "Sufficient Input Subsets", learner, output_dir,
             supported_tasks=[c.TaskType.MULTI_CLASS_CLASSIFICATION])
+
+        if predict_threshold:
+            self.predict_threshold = predict_threshold
+        else:
+            self.predict_threshold = 0.5
 
     def _evaluate_model(self, x: List[str], y: List[str],
                         annotations: List[str]) -> Any:
@@ -165,7 +171,7 @@ class SISEvaluator(FeatureImportanceEvaluator):
 
     def __produce_masked_inputs(self, x, sis_predict, fully_masked_input,
                                 initial_mask) -> List[str]:
-        collection = sis_collection(sis_predict, self.threshold, x,
+        collection = sis_collection(sis_predict, self.predict_threshold, x,
                                     fully_masked_input,
                                     initial_mask=initial_mask)
 

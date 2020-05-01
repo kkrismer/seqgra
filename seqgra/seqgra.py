@@ -17,6 +17,8 @@ import os
 from typing import List, Optional
 
 import seqgra.constants as c
+from seqgra.evaluator import Evaluator
+from seqgra.evaluator import FeatureImportanceEvaluator
 from seqgra.learner import Learner
 from seqgra.model import DataDefinition
 from seqgra.model import ModelDefinition
@@ -25,7 +27,6 @@ from seqgra.parser import XMLDataDefinitionParser
 from seqgra.parser import ModelDefinitionParser
 from seqgra.parser import XMLModelDefinitionParser
 from seqgra.simulator import Simulator
-from seqgra.evaluator import Evaluator
 
 
 def read_config_file(file_name: str) -> str:
@@ -138,7 +139,8 @@ def get_learner(model_definition: ModelDefinition,
 
 
 def get_evaluator(evaluator_id: str, learner: Learner,
-                  output_dir: str) -> Evaluator:
+                  output_dir: str,
+                  eval_sis_predict_threshold: Optional[float]) -> Evaluator:
     evaluator_id = evaluator_id.lower().strip()
 
     if learner is None:
@@ -158,7 +160,7 @@ def get_evaluator(evaluator_id: str, learner: Learner,
         return PREvaluator(learner, output_dir)
     elif evaluator_id == c.EvaluatorID.SIS:
         from seqgra.evaluator import SISEvaluator  # pylint: disable=import-outside-toplevel
-        return SISEvaluator(learner, output_dir)
+        return SISEvaluator(learner, output_dir, eval_sis_predict_threshold)
     elif evaluator_id == c.EvaluatorID.GRADIENT:
         from seqgra.evaluator import GradientEvaluator  # pylint: disable=import-outside-toplevel
         return GradientEvaluator(learner, output_dir)
@@ -210,7 +212,11 @@ def run_seqgra(data_config_file: Optional[str],
                model_config_file: Optional[str],
                evaluator_ids: Optional[List[str]],
                output_dir: str,
-               eval_sets: Optional[List[str]]) -> None:
+               eval_sets: Optional[List[str]],
+               eval_n: Optional[int],
+               eval_n_per_label: Optional[int],
+               eval_fi_predict_threshold: Optional[float],
+               eval_sis_predict_threshold: Optional[float]) -> None:
     output_dir = format_output_dir(output_dir.strip())
     new_data: bool = False
     new_model: bool = False
@@ -279,7 +285,7 @@ def run_seqgra(data_config_file: Optional[str],
             learner.save_model()
             new_model = True
 
-        if evaluator_ids is not None and len(evaluator_ids) > 0:
+        if evaluator_ids:
             logging.info("evaluating model using interpretability methods")
 
             if eval_sets:
@@ -311,13 +317,29 @@ def run_seqgra(data_config_file: Optional[str],
                                         evaluator_id, results_dir,
                                         evaluator_id)
                 else:
-                    evaluator: Evaluator = get_evaluator(evaluator_id,
-                                                         learner,
-                                                         evaluation_dir)
+                    evaluator: Evaluator = get_evaluator(
+                        evaluator_id, learner, evaluation_dir,
+                        eval_sis_predict_threshold)
+                    if eval_n_per_label:
+                        eval_n = eval_n_per_label
+
                     for eval_set in eval_sets:
-                        logging.info("running evaluator %s on %s set",
-                                    evaluator_id, eval_set)
-                        evaluator.evaluate_model(eval_set)
+                        is_fi_evaluator: bool = isinstance(
+                            evaluator, FeatureImportanceEvaluator)
+                        if is_fi_evaluator:
+                            logging.info("running feature importance "
+                                         "evaluator %s on %s set",
+                                         evaluator_id, eval_set)
+                        else:
+                            eval_fi_predict_threshold = None
+                            logging.info("running evaluator %s on %s set",
+                                         evaluator_id, eval_set)
+
+                        evaluator.evaluate_model(
+                            eval_set,
+                            subset_n=eval_n,
+                            subset_n_per_label=eval_n_per_label is not None,
+                            subset_threshold=eval_fi_predict_threshold)
         else:
             logging.info("skipping evaluation step: no evaluator specified")
 
@@ -375,11 +397,43 @@ def main():
     parser.add_argument(
         "--eval-sets",
         type=str,
-        default=c.DataSet.ALL_SETS,
+        default=[c.DataSet.TEST],
         nargs="+",
         help="either one or more of the following: training, validation, "
         "test; selects data set for evaluation; this evaluator argument "
         "will be passed to all evaluators"
+    )
+    parser.add_argument(
+        "--eval-n",
+        type=int,
+        help="maximum number of examples to be evaluated per set (defaults "
+        "to the total number of examples); this evaluator argument "
+        "will be passed to all evaluators"
+    )
+    parser.add_argument(
+        "--eval-n-per-label",
+        type=int,
+        help="maximum number of examples to be evaluated for each label and "
+        "set (defaults to the total number of examples unless eval-n is set, "
+        "overrules eval-n); "
+        "this evaluator argument will be passed to all evaluators"
+    )
+    parser.add_argument(
+        "--eval-fi-predict-threshold",
+        type=float,
+        default=0.5,
+        help="prediction threshold used to select examples for evaluation, "
+        "only examples with predict(x) > threshold will be passed on to "
+        "evaluators (defaults to 0.5); "
+        "this evaluator argument will be passed to feature importance "
+        "evaluators only"
+    )
+    parser.add_argument(
+        "--eval-sis-predict-threshold",
+        type=float,
+        default=0.5,
+        help="prediction threshold for Sufficient Input Subsets; "
+        "this evaluator argument is only visible to the SIS evaluator"
     )
     args = parser.parse_args()
 
@@ -400,7 +454,11 @@ def main():
                args.modelconfigfile,
                args.evaluators,
                args.outputdir,
-               args.eval_sets)
+               args.eval_sets,
+               args.eval_n,
+               args.eval_n_per_label,
+               args.eval_fi_predict_threshold,
+               args.eval_sis_predict_threshold)
 
 
 if __name__ == "__main__":
