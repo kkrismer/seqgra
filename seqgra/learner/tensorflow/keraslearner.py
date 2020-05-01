@@ -6,6 +6,8 @@ TensorFlow Keras learners
 """
 from typing import List, Any
 
+import numpy as np
+
 from seqgra.learner import DNAMultiClassClassificationLearner
 from seqgra.learner import DNAMultiLabelClassificationLearner
 from seqgra.learner import ProteinMultiClassClassificationLearner
@@ -52,6 +54,22 @@ class KerasDNAMultiClassClassificationLearner(
     def _evaluate_model(self, x: List[str], y: List[str]):
         return KerasHelper.evaluate_model(self, x, y)
 
+    def encode_x(self, x: List[str]):
+        encoded_x = super().encode_x(x)
+
+        if self.definition.input_encoding == "2D":
+            # from (N, W, C) to (N, H, W, C)
+            encoded_x = np.expand_dims(encoded_x, axis=1)
+
+        return encoded_x
+
+    def decode_x(self, x):
+        if self.definition.input_encoding == "2D":
+            # from (N, H, W, C) to (N, W, C)
+            x = np.squeeze(x, axis=1)
+
+        return super().decode_x(x)
+
 
 class KerasDNAMultiLabelClassificationLearner(
         DNAMultiLabelClassificationLearner):
@@ -90,6 +108,22 @@ class KerasDNAMultiLabelClassificationLearner(
 
     def _evaluate_model(self, x: List[str], y: List[str]):
         return KerasHelper.evaluate_model(self, x, y)
+
+    def encode_x(self, x: List[str]):
+        encoded_x = super().encode_x(x)
+
+        if self.definition.input_encoding == "2D":
+            # from (N, W, C) to (N, H, W, C)
+            encoded_x = np.expand_dims(encoded_x, axis=1)
+
+        return encoded_x
+
+    def decode_x(self, x):
+        if self.definition.input_encoding == "2D":
+            # from (N, H, W, C) to (N, W, C)
+            x = np.squeeze(x, axis=1)
+
+        return super().decode_x(x)
 
 
 class KerasProteinMultiClassClassificationLearner(
@@ -130,6 +164,22 @@ class KerasProteinMultiClassClassificationLearner(
     def _evaluate_model(self, x: List[str], y: List[str]):
         return KerasHelper.evaluate_model(self, x, y)
 
+    def encode_x(self, x: List[str]):
+        encoded_x = super().encode_x(x)
+
+        if self.definition.input_encoding == "2D":
+            # from (N, W, C) to (N, H, W, C)
+            encoded_x = np.expand_dims(encoded_x, axis=1)
+
+        return encoded_x
+
+    def decode_x(self, x):
+        if self.definition.input_encoding == "2D":
+            # from (N, H, W, C) to (N, W, C)
+            x = np.squeeze(x, axis=1)
+
+        return super().decode_x(x)
+
 
 class KerasProteinMultiLabelClassificationLearner(
         ProteinMultiLabelClassificationLearner):
@@ -168,3 +218,19 @@ class KerasProteinMultiLabelClassificationLearner(
 
     def _evaluate_model(self, x: List[str], y: List[str]):
         return KerasHelper.evaluate_model(self, x, y)
+
+    def encode_x(self, x: List[str]):
+        encoded_x = super().encode_x(x)
+
+        if self.definition.input_encoding == "2D":
+            # from (N, W, C) to (N, H, W, C)
+            encoded_x = np.expand_dims(encoded_x, axis=1)
+
+        return encoded_x
+
+    def decode_x(self, x):
+        if self.definition.input_encoding == "2D":
+            # from (N, H, W, C) to (N, W, C)
+            x = np.squeeze(x, axis=1)
+
+        return super().decode_x(x)

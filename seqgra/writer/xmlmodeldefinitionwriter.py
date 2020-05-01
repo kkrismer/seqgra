@@ -5,6 +5,7 @@ Abstract base class for configuration file writer
 
 @author: Konstantin Krismer
 """
+import logging
 from typing import Dict, List, Optional
 
 from lxml import etree
@@ -56,8 +57,17 @@ class XMLModelDefinitionWriter(ModelDefinitionWriter):
 
         if model_definition.implementation is not None:
             implementation_element = etree.SubElement(general_element,
-                                                    "implementation")
+                                                      "implementation")
             implementation_element.text = model_definition.implementation
+
+        if model_definition.input_encoding is not None:
+            if model_definition.input_encoding in {"1D", "2D"}:
+                input_encoding_element = etree.SubElement(general_element,
+                                                          "inputencoding")
+                input_encoding_element.text = model_definition.input_encoding
+            else:
+                logging.warning("invalid input encoding: %s; valid values: "
+                                "1D, 2D", model_definition.input_encoding)
 
         if model_definition.labels:
             XMLModelDefinitionWriter.attach_labels_element(

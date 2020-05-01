@@ -135,7 +135,7 @@ class SISEvaluator(FeatureImportanceEvaluator):
 
     def find_sis(self, x: List[str], label_index: int) -> List[List[str]]:
         encoded_x = self.learner.encode_x(x)
-
+            
         def sis_predict(x):
             return np.array(self.learner.predict(
                 x, encode=False))[:, label_index]

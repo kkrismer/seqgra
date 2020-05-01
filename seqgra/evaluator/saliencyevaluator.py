@@ -46,16 +46,6 @@ class GradientBasedEvaluator(FeatureImportanceEvaluator):
         encoded_x = encoded_x.astype(np.float32)
         encoded_y = encoded_y.astype(np.int64)
 
-        # add H dimension?
-        # e.g., for 100 nt window, 1 example, TensorFlow format (N, H, W, C):
-        # (1, 100, 4) -> (1, 1, 100, 4)
-        encoded_x = np.expand_dims(encoded_x, axis=0)
-
-        # TensorFlow format to Torch format (N, C, H, W):
-        # e.g., for 100 nt window, 1 example, added height dimension:
-        # (1, 1, 100, 4) -> (1, 4, 1, 100)
-        encoded_x = np.transpose(encoded_x, (1, 3, 0, 2))
-
         self._check_tensor_dimensions(encoded_x)
         # convert np array to torch tensor
         encoded_x = torch.from_numpy(encoded_x)
@@ -102,48 +92,48 @@ class GradientBasedEvaluator(FeatureImportanceEvaluator):
 
     def _check_tensor_dimensions(self, tensor) -> None:
         if self.learner.definition.library == c.LibraryType.TENSORFLOW:
-            expected_shape: str = "(N, W, C) or (N, 1, W, C)"
-            channel_dim: int = 2
-            channel_dim_with_height: int = 3
-            height_dim: int = 1
+            if self.learner.definition.input_encoding == "2D":
+                expected_shape: str = "(N, 1, W, C)"
+                channel_dim: int = 3
+                height_dim: int = 1
+                n_dims: int = 4
+            else:
+                expected_shape: str = "(N, W, C)"
+                channel_dim: int = 2
+                height_dim: int = None
+                n_dims: int = 3
         elif self.learner.definition.library == c.LibraryType.TORCH:
-            expected_shape: str = "(N, C, W) or (N, C, 1, W)"
             channel_dim: int = 1
-            channel_dim_with_height: int = 1
-            height_dim: int = 2
+            if self.learner.definition.input_encoding == "2D":
+                expected_shape: str = "(N, C, 1, W)"
+                height_dim: int = 2
+                n_dims: int = 4
+            else:
+                expected_shape: str = "(N, C, W)"
+                height_dim: int = None
+                n_dims: int = 3
 
-        if len(tensor.shape) == 3:
-            if self.learner.definition.sequence_space == c.SequenceSpaceType.DNA:
-                if tensor.shape[channel_dim] != 4:
-                    raise Exception("tensor shape invalid for DNA "
-                                    "sequence space: expected 4 channels, got " +
-                                    str(tensor.shape[channel_dim]))
-            elif self.learner.definition.sequence_space == c.SequenceSpaceType.PROTEIN:
-                if tensor.shape[channel_dim] != 20:
-                    raise Exception("tensor shape invalid for protein "
-                                    "sequence space: expected 20 "
-                                    "channels, got " +
-                                    str(tensor.shape[channel_dim]))
-        elif len(tensor.shape) == 4:
-            if self.learner.definition.sequence_space == c.SequenceSpaceType.DNA:
-                if tensor.shape[channel_dim_with_height] != 4:
-                    raise Exception("tensor shape invalid for DNA "
-                                    "sequence space: expected 4 channels, got " +
-                                    str(tensor.shape[channel_dim_with_height]))
-            elif self.learner.definition.sequence_space == c.SequenceSpaceType.PROTEIN:
-                if tensor.shape[channel_dim_with_height] != 20:
-                    raise Exception("tensor shape invalid for protein "
-                                    "sequence space: expected 20 "
-                                    "channels, got " +
-                                    str(tensor.shape[channel_dim_with_height]))
-            if tensor.shape[height_dim] != 1:
-                raise Exception("tensor shape invalid: expected "
-                                "height dimension size of none or 1, got " +
-                                str(tensor.shape[height_dim]))
-        else:
+        if len(tensor.shape) != n_dims:
             raise Exception("tensor shape invalid: expected " +
                             expected_shape + ", got " +
                             str(tensor.shape))
+
+        if height_dim and tensor.shape[height_dim] != 1:
+            raise Exception("tensor shape invalid: expected "
+                            "height dimension size of 1, got " +
+                            str(tensor.shape[height_dim]))
+
+        if self.learner.definition.sequence_space == c.SequenceSpaceType.DNA:
+            if tensor.shape[channel_dim] != 4:
+                raise Exception("tensor shape invalid for DNA "
+                                "sequence space: expected 4 channels, got " +
+                                str(tensor.shape[channel_dim]))
+        elif self.learner.definition.sequence_space == c.SequenceSpaceType.PROTEIN:
+            if tensor.shape[channel_dim] != 20:
+                raise Exception("tensor shape invalid for protein "
+                                "sequence space: expected 20 "
+                                "channels, got " +
+                                str(tensor.shape[channel_dim]))
 
     def _convert_to_data_frame(self, results) -> pd.DataFrame:
         """Takes gradient-based evaluator-specific results and turns them into

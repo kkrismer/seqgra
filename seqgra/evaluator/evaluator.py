@@ -239,8 +239,8 @@ class FeatureImportanceEvaluator(Evaluator):
                        subset_shuffle: bool = True,
                        subset_threshold: Optional[float] = None) -> Any:
         results = super().evaluate_model(set_name, subset_idx, subset_n,
-                                       subset_labels, subset_n_per_label, 
-                                       subset_shuffle, subset_threshold)
+                                         subset_labels, subset_n_per_label,
+                                         subset_shuffle, subset_threshold)
         self._visualize_agreement(results, set_name)
         return results
 

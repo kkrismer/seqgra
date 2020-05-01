@@ -43,6 +43,10 @@ class ModelDefinitionParser(ABC):
         pass
 
     @abstractmethod
+    def get_input_encoding(self) -> str:
+        pass
+
+    @abstractmethod
     def get_labels(self) -> List[str]:
         pass
 

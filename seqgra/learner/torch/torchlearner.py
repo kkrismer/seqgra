@@ -6,6 +6,8 @@ PyTorch learners
 """
 from typing import List, Any
 
+import numpy as np
+
 from seqgra.learner import DNAMultiClassClassificationLearner
 from seqgra.learner import DNAMultiLabelClassificationLearner
 from seqgra.learner import ProteinMultiClassClassificationLearner
@@ -36,10 +38,17 @@ class TorchDNAMultiClassClassificationLearner(
     def _train_model(self,
                      x_train: List[str], y_train: List[str],
                      x_val: List[str], y_val: List[str]) -> None:
+        # one hot encode input and labels
+        encoded_x_train = self.encode_x(x_train)
+        encoded_y_train = self.encode_y(y_train)
+        encoded_x_val = self.encode_x(x_val)
+        encoded_y_val = self.encode_y(y_val)
+
         training_dataset: DNAMultiClassDataSet = DNAMultiClassDataSet(
-            x_train, y_train, self.definition.labels, True)
+            encoded_x_train, encoded_y_train, self.definition.labels)
         validation_dataset: DNAMultiClassDataSet = DNAMultiClassDataSet(
-            x_val, y_val, self.definition.labels, True)
+            encoded_x_val, encoded_y_val, self.definition.labels)
+
         TorchHelper.train_model(self, training_dataset, validation_dataset)
 
     def save_model(self, model_name: str = "") -> None:
@@ -52,17 +61,49 @@ class TorchDNAMultiClassClassificationLearner(
         TorchHelper.load_model(self, model_name)
 
     def predict(self, x: Any, encode: bool = True):
+        if encode:
+            x = self.encode_x(x)
+
         dataset: DNAMultiClassDataSet = DNAMultiClassDataSet(
-            x, encode_data=encode)
+            x, labels=self.definition.labels)
+
         return TorchHelper.predict(self, dataset, "softmax")
 
     def get_num_params(self):
         return TorchHelper.get_num_params(self)
 
     def _evaluate_model(self, x: List[str], y: List[str]):
+        encoded_x = self.encode_x(x)
+        encoded_y = self.encode_y(y)
+
         dataset: DNAMultiClassDataSet = DNAMultiClassDataSet(
-            x, y, self.definition.labels, True)
+            encoded_x, encoded_y, self.definition.labels)
+
         return TorchHelper.evaluate_model(self, dataset)
+
+    def encode_x(self, x: List[str]):
+        encoded_x = super().encode_x(x)
+
+        if self.definition.input_encoding == "2D":
+            # from (N, W, C) to (H, N, W, C)
+            encoded_x = np.expand_dims(encoded_x, axis=0)
+            # from (H, N, W, C) to (N, C, H, W)
+            encoded_x = np.transpose(encoded_x, (1, 3, 0, 2))
+        else:
+            # from (N, W, C) to (N, C, W)
+            encoded_x = np.transpose(encoded_x, (0, 2, 1))
+
+        return encoded_x
+
+    def decode_x(self, x):
+        if self.definition.input_encoding == "2D":
+            # from (N, C, H, W) to (N, C, W)
+            x = np.squeeze(x, axis=2)
+
+        # from (N, C, W) to (N, W, C)
+        x = np.transpose(x, (0, 2, 1))
+
+        return super().decode_x(x)
 
 
 class TorchDNAMultiLabelClassificationLearner(
@@ -83,10 +124,17 @@ class TorchDNAMultiLabelClassificationLearner(
     def _train_model(self,
                      x_train: List[str], y_train: List[str],
                      x_val: List[str], y_val: List[str]) -> None:
+        # one hot encode input and labels
+        encoded_x_train = self.encode_x(x_train)
+        encoded_y_train = self.encode_y(y_train)
+        encoded_x_val = self.encode_x(x_val)
+        encoded_y_val = self.encode_y(y_val)
+
         training_dataset: DNAMultiLabelDataSet = DNAMultiLabelDataSet(
-            x_train, y_train, self.definition.labels, True)
+            encoded_x_train, encoded_y_train, self.definition.labels)
         validation_dataset: DNAMultiLabelDataSet = DNAMultiLabelDataSet(
-            x_val, y_val, self.definition.labels, True)
+            encoded_x_val, encoded_y_val, self.definition.labels)
+
         TorchHelper.train_model(self, training_dataset, validation_dataset)
 
     def save_model(self, model_name: str = "") -> None:
@@ -99,17 +147,49 @@ class TorchDNAMultiLabelClassificationLearner(
         TorchHelper.load_model(self, model_name)
 
     def predict(self, x: Any, encode: bool = True):
+        if encode:
+            x = self.encode_x(x)
+
         dataset: DNAMultiLabelDataSet = DNAMultiLabelDataSet(
-            x, encode_data=encode)
+            x, labels=self.definition.labels)
+
         return TorchHelper.predict(self, dataset, "sigmoid")
 
     def get_num_params(self):
         return TorchHelper.get_num_params(self)
 
     def _evaluate_model(self, x: List[str], y: List[str]):
+        encoded_x = self.encode_x(x)
+        encoded_y = self.encode_y(y)
+
         dataset: DNAMultiLabelDataSet = DNAMultiLabelDataSet(
-            x, y, self.definition.labels, True)
+            encoded_x, encoded_y, self.definition.labels)
+
         return TorchHelper.evaluate_model(self, dataset)
+
+    def encode_x(self, x: List[str]):
+        encoded_x = super().encode_x(x)
+
+        if self.definition.input_encoding == "2D":
+            # from (N, W, C) to (H, N, W, C)
+            encoded_x = np.expand_dims(encoded_x, axis=0)
+            # from (H, N, W, C) to (N, C, H, W)
+            encoded_x = np.transpose(encoded_x, (1, 3, 0, 2))
+        else:
+            # from (N, W, C) to (N, C, W)
+            encoded_x = np.transpose(encoded_x, (0, 2, 1))
+
+        return encoded_x
+
+    def decode_x(self, x):
+        if self.definition.input_encoding == "2D":
+            # from (N, C, H, W) to (N, C, W)
+            x = np.squeeze(x, axis=2)
+
+        # from (N, C, W) to (N, W, C)
+        x = np.transpose(x, (0, 2, 1))
+
+        return super().decode_x(x)
 
 
 class TorchProteinMultiClassClassificationLearner(
@@ -130,10 +210,17 @@ class TorchProteinMultiClassClassificationLearner(
     def _train_model(self,
                      x_train: List[str], y_train: List[str],
                      x_val: List[str], y_val: List[str]) -> None:
+        # one hot encode input and labels
+        encoded_x_train = self.encode_x(x_train)
+        encoded_y_train = self.encode_y(y_train)
+        encoded_x_val = self.encode_x(x_val)
+        encoded_y_val = self.encode_y(y_val)
+
         training_dataset: ProteinMultiClassDataSet = ProteinMultiClassDataSet(
-            x_train, y_train, self.definition.labels, True)
+            encoded_x_train, encoded_y_train, self.definition.labels)
         validation_dataset: ProteinMultiClassDataSet = ProteinMultiClassDataSet(
-            x_val, y_val, self.definition.labels, True)
+            encoded_x_val, encoded_y_val, self.definition.labels)
+
         TorchHelper.train_model(self, training_dataset, validation_dataset)
 
     def save_model(self, model_name: str = "") -> None:
@@ -146,17 +233,49 @@ class TorchProteinMultiClassClassificationLearner(
         TorchHelper.load_model(self, model_name)
 
     def predict(self, x: Any, encode: bool = True):
+        if encode:
+            x = self.encode_x(x)
+
         dataset: ProteinMultiClassDataSet = ProteinMultiClassDataSet(
-            x, encode_data=encode)
+            x, labels=self.definition.labels)
+
         return TorchHelper.predict(self, dataset, "softmax")
 
     def get_num_params(self):
         return TorchHelper.get_num_params(self)
 
     def _evaluate_model(self, x: List[str], y: List[str]):
+        encoded_x = self.encode_x(x)
+        encoded_y = self.encode_y(y)
+
         dataset: ProteinMultiClassDataSet = ProteinMultiClassDataSet(
-            x, y, self.definition.labels, True)
+            encoded_x, encoded_y, self.definition.labels)
+
         return TorchHelper.evaluate_model(self, dataset)
+
+    def encode_x(self, x: List[str]):
+        encoded_x = super().encode_x(x)
+
+        if self.definition.input_encoding == "2D":
+            # from (N, W, C) to (H, N, W, C)
+            encoded_x = np.expand_dims(encoded_x, axis=0)
+            # from (H, N, W, C) to (N, C, H, W)
+            encoded_x = np.transpose(encoded_x, (1, 3, 0, 2))
+        else:
+            # from (N, W, C) to (N, C, W)
+            encoded_x = np.transpose(encoded_x, (0, 2, 1))
+
+        return encoded_x
+
+    def decode_x(self, x):
+        if self.definition.input_encoding == "2D":
+            # from (N, C, H, W) to (N, C, W)
+            x = np.squeeze(x, axis=2)
+
+        # from (N, C, W) to (N, W, C)
+        x = np.transpose(x, (0, 2, 1))
+
+        return super().decode_x(x)
 
 
 class TorchProteinMultiLabelClassificationLearner(
@@ -177,10 +296,17 @@ class TorchProteinMultiLabelClassificationLearner(
     def _train_model(self,
                      x_train: List[str], y_train: List[str],
                      x_val: List[str], y_val: List[str]) -> None:
+        # one hot encode input and labels
+        encoded_x_train = self.encode_x(x_train)
+        encoded_y_train = self.encode_y(y_train)
+        encoded_x_val = self.encode_x(x_val)
+        encoded_y_val = self.encode_y(y_val)
+
         training_dataset: ProteinMultiLabelDataSet = ProteinMultiLabelDataSet(
-            x_train, y_train, self.definition.labels, True)
+            encoded_x_train, encoded_y_train, self.definition.labels)
         validation_dataset: ProteinMultiLabelDataSet = ProteinMultiLabelDataSet(
-            x_val, y_val, self.definition.labels, True)
+            encoded_x_val, encoded_y_val, self.definition.labels)
+
         TorchHelper.train_model(self, training_dataset, validation_dataset)
 
     def save_model(self, model_name: str = "") -> None:
@@ -193,14 +319,46 @@ class TorchProteinMultiLabelClassificationLearner(
         TorchHelper.load_model(self, model_name)
 
     def predict(self, x: Any, encode: bool = True):
+        if encode:
+            x = self.encode_x(x)
+
         dataset: ProteinMultiLabelDataSet = ProteinMultiLabelDataSet(
-            x, encode_data=encode)
+            x, labels=self.definition.labels)
+
         return TorchHelper.predict(self, dataset, "sigmoid")
 
     def get_num_params(self):
         return TorchHelper.get_num_params(self)
 
     def _evaluate_model(self, x: List[str], y: List[str]):
+        encoded_x = self.encode_x(x)
+        encoded_y = self.encode_y(y)
+
         dataset: ProteinMultiLabelDataSet = ProteinMultiLabelDataSet(
-            x, y, self.definition.labels, True)
+            encoded_x, encoded_y, self.definition.labels)
+
         return TorchHelper.evaluate_model(self, dataset)
+
+    def encode_x(self, x: List[str]):
+        encoded_x = super().encode_x(x)
+
+        if self.definition.input_encoding == "2D":
+            # from (N, W, C) to (H, N, W, C)
+            encoded_x = np.expand_dims(encoded_x, axis=0)
+            # from (H, N, W, C) to (N, C, H, W)
+            encoded_x = np.transpose(encoded_x, (1, 3, 0, 2))
+        else:
+            # from (N, W, C) to (N, C, W)
+            encoded_x = np.transpose(encoded_x, (0, 2, 1))
+
+        return encoded_x
+
+    def decode_x(self, x):
+        if self.definition.input_encoding == "2D":
+            # from (N, C, H, W) to (N, C, W)
+            x = np.squeeze(x, axis=2)
+
+        # from (N, C, W) to (N, W, C)
+        x = np.transpose(x, (0, 2, 1))
+
+        return super().decode_x(x)

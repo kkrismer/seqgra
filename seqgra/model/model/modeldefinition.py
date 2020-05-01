@@ -38,6 +38,7 @@ class ModelDefinition:
                  sequence_space: str = c.SequenceSpaceType.DNA,
                  library: str = c.LibraryType.TORCH,
                  implementation: Optional[str] = None,
+                 input_encoding: Optional[str] = "1D",
                  labels: Optional[List[str]] = None,
                  seed: int = 0,
                  architecture: Optional[Architecture] = None,
@@ -51,6 +52,7 @@ class ModelDefinition:
         self.sequence_space: str = sequence_space
         self.library: str = library
         self.implementation: Optional[str] = implementation
+        self.input_encoding: Optional[str] = input_encoding
         self.labels: Optional[List[str]] = labels
         self.seed: int = seed
         self.architecture: Optional[Architecture] = architecture
@@ -74,6 +76,8 @@ class ModelDefinition:
                     "\t\tLibrary: ", self.library, "\n"]
         if self.implementation:
             str_rep += ["\t\tImplementation: ", self.implementation, "\n"]
+        if self.input_encoding:
+            str_rep += ["\t\tInput encoding: ", self.input_encoding, "\n"]
         str_rep += ["\t\tLabels:\n"]
         if self.labels is not None and len(self.labels) > 0:
             str_rep += ["\t\t\t" + label + "\n" for label in self.labels]

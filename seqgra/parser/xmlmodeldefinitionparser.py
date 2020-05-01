@@ -68,6 +68,9 @@ class XMLModelDefinitionParser(ModelDefinitionParser):
     def get_implementation(self) -> str:
         return XMLHelper.read_text_node(self._general_element, "implementation")
 
+    def get_input_encoding(self) -> str:
+        return XMLHelper.read_text_node(self._general_element, "inputencoding")
+
     def get_labels(self) -> List[str]:
         labels_element: Any = \
             self._general_element.getElementsByTagName("labels")[0]
@@ -166,6 +169,7 @@ class XMLModelDefinitionParser(ModelDefinitionParser):
                                self.get_sequence_space(),
                                self.get_library(),
                                self.get_implementation(),
+                               self.get_input_encoding(),
                                self.get_labels(),
                                self.get_seed(),
                                self.get_architecture(),

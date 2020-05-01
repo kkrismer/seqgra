@@ -215,6 +215,7 @@ class KerasHelper:
         """
         if encode:
             x = learner.encode_x(x)
+
         return learner.model.predict(x)
 
     @staticmethod
@@ -228,6 +229,7 @@ class KerasHelper:
         # one hot encode input and labels
         encoded_x = learner.encode_x(x)
         encoded_y = learner.encode_y(y)
+
         loss, accuracy = learner.model.evaluate(encoded_x, encoded_y,
                                                 verbose=0)
         return {"loss": loss, "accuracy": accuracy}
