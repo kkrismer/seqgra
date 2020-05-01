@@ -320,10 +320,13 @@ def run_seqgra(data_config_file: Optional[str],
                     evaluator: Evaluator = get_evaluator(
                         evaluator_id, learner, evaluation_dir,
                         eval_sis_predict_threshold)
+
                     if eval_n_per_label:
                         eval_n = eval_n_per_label
 
                     for eval_set in eval_sets:
+                        learner.set_seed()
+
                         is_fi_evaluator: bool = isinstance(
                             evaluator, FeatureImportanceEvaluator)
                         if is_fi_evaluator:
