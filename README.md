@@ -274,12 +274,12 @@ seqgra -f DATAFOLDER \
        -m MODELCONFIGFILE \
        -e gradient gradient-x-input integrated-gradients saliency \
        -o OUTPUTDIR
-       --eval-sets training validation test
+       --eval-sets validation test
        --eval-n-per-label 500
 ```
 
 - the `-e` argument is used to specify a list of evaluators (by their IDs)
-- `--eval-sets` selects training, validation or test set for evaluation. Here we select all three, default value is test set only.
+- `--eval-sets` selects training, validation or test set for evaluation. Here we run evaluators on both validation and test set examples, default value is test set only.
 - `--eval-n-per-label` restricts the number of examples that the evaluators see. Here we evaluate 500 randomly select examples per label. 
 
 Generated files and folders (pre-existing folders and files in italics):
@@ -304,19 +304,31 @@ Generated files and folders (pre-existing folders and files in italics):
             |-- gradient
             |   |-- test.npy
             |   |-- test-agreement.pdf
-            |   +-- test-agreement-df.txt
+            |   |-- test-agreement-df.txt
+            |   |-- validation.npy
+            |   |-- validation-agreement.pdf
+            |   +-- validation-agreement-df.txt
             |-- gradient-x-input
             |   |-- test.npy
             |   |-- test-agreement.pdf
-            |   +-- test-agreement-df.txt
+            |   |-- test-agreement-df.txt
+            |   |-- validation.npy
+            |   |-- validation-agreement.pdf
+            |   +-- validation-agreement-df.txt
             |-- integrated-gradients
             |   |-- test.npy
             |   |-- test-agreement.pdf
-            |   +-- test-agreement-df.txt
+            |   |-- test-agreement-df.txt
+            |   |-- validation.npy
+            |   |-- validation-agreement.pdf
+            |   +-- validation-agreement-df.txt
             +-- saliency
                 |-- test.npy
                 |-- test-agreement.pdf
-                +-- test-agreement-df.txt
+                |-- test-agreement-df.txt
+                |-- validation.npy
+                |-- validation-agreement.pdf
+                +-- validation-agreement-df.txt
 </pre>
 
 \* model files are library-dependent
