@@ -8,8 +8,12 @@ MIT - CSAIL - Gifford Lab - seqgra
 """
 from typing import Any, List
 
+import math
 import numpy as np
+import os
 import pandas as pd
+import pkg_resources
+import subprocess
 import torch
 
 import seqgra.constants as c
@@ -90,10 +94,19 @@ class GradientBasedEvaluator(FeatureImportanceEvaluator):
         grammar_positions: List[int] = [i
                                         for i, char in enumerate(annotation)
                                         if char == c.PositionType.GRAMMAR]
+        non_grammar_positions: List[int] = [i
+                                        for i, char in enumerate(annotation)
+                                        if char != c.PositionType.GRAMMAR]
         total_fi: float = normalized_fi_vector.sum()
         grammar_fi: float = normalized_fi_vector[grammar_positions].sum()
+        non_grammar_fi: float = normalized_fi_vector[non_grammar_positions].sum()
 
-        return grammar_fi / total_fi
+        if not grammar_positions and not math.isclose(non_grammar_fi, 0.0):
+            return 1.0
+        elif not grammar_positions:
+            return 0.0
+        else:
+            return grammar_fi / total_fi
 
     @staticmethod
     def _calculate_smooth_recall(normalized_fi_vector,
@@ -101,9 +114,18 @@ class GradientBasedEvaluator(FeatureImportanceEvaluator):
         grammar_positions: List[int] = [i
                                         for i, char in enumerate(annotation)
                                         if char == c.PositionType.GRAMMAR]
+        non_grammar_positions: List[int] = [i
+                                        for i, char in enumerate(annotation)
+                                        if char != c.PositionType.GRAMMAR]
         grammar_fi: float = normalized_fi_vector[grammar_positions].sum()
+        non_grammar_fi: float = normalized_fi_vector[non_grammar_positions].sum()
 
-        return grammar_fi / float(len(grammar_positions))
+        if not grammar_positions and math.isclose(non_grammar_fi, 0.0):
+            return 1.0
+        elif not grammar_positions:
+            return 0.0
+        else:
+            return grammar_fi / float(len(grammar_positions))
 
     @staticmethod
     def _calculate_smooth_f1(normalized_fi_vector,
@@ -118,23 +140,54 @@ class GradientBasedEvaluator(FeatureImportanceEvaluator):
         else:
             return 2.0 * ((precision * recall) / (precision + recall))
 
+    @staticmethod
+    def _calculate_smooth_specificity(normalized_fi_vector,
+                                      annotation: str) -> float:
+        grammar_positions: List[int] = [i
+                                        for i, char in enumerate(annotation)
+                                        if char == c.PositionType.GRAMMAR]
+        non_grammar_positions: List[int] = [i
+                                        for i, char in enumerate(annotation)
+                                        if char != c.PositionType.GRAMMAR]
+        grammar_fi: float = normalized_fi_vector[grammar_positions].sum()
+        non_grammar_fi: float = normalized_fi_vector[non_grammar_positions].sum()
+        true_negative: float = float(len(non_grammar_positions)) - non_grammar_fi
+        false_negative: float = float(len(grammar_positions)) - grammar_fi
+
+        if math.isclose(true_negative, 0.0) and \
+            math.isclose(non_grammar_fi, 0.0) and \
+                math.isclose(false_negative, 0.0):
+            return 1.0
+        if math.isclose(true_negative, 0.0) and \
+            math.isclose(non_grammar_fi, 0.0):
+            return 0.0
+        else:
+            return true_negative / float(len(non_grammar_positions))
+
+    @staticmethod
+    def _prepare_normalized_fi_vector(fi_matrix) -> Any:
+        fi_matrix = np.clip(fi_matrix, a_min=0.0, a_max=None)
+        fi_vector = fi_matrix.sum(axis=1)
+        norm: float = fi_vector.max()
+        fi_vector = fi_vector * (1 / norm)
+        return fi_vector
+
     def _write_result_df(self, fi_matrix, x: List[str], y: List[str],
                          annotations: List[str], set_name: str = "test") -> None:
 
         precision_column: List[float] = list()
         recall_column: List[float] = list()
+        specificity_column: List[float] = list()
         f1_column: List[float] = list()
 
         for example_id, annotation in enumerate(annotations):
-            fi_example_matrix = fi_matrix[example_id, :, :]
-            fi_example_matrix = np.clip(fi_example_matrix,
-                                        a_min=0.0, a_max=None)
-            fi_vector = fi_example_matrix.sum(axis=1)
-            norm: float = fi_vector.max()
-            fi_vector = fi_vector * (1 / norm)
+            fi_vector = GradientBasedEvaluator._prepare_normalized_fi_vector(
+                fi_matrix[example_id, :, :])
             precision_column += [GradientBasedEvaluator._calculate_smooth_precision(
                 fi_vector, annotation)]
             recall_column += [GradientBasedEvaluator._calculate_smooth_recall(
+                fi_vector, annotation)]
+            specificity_column += [GradientBasedEvaluator._calculate_smooth_specificity(
                 fi_vector, annotation)]
             f1_column += [GradientBasedEvaluator._calculate_smooth_f1(
                 fi_vector, annotation)]
@@ -144,6 +197,7 @@ class GradientBasedEvaluator(FeatureImportanceEvaluator):
                            "annotation": annotations,
                            "precision": precision_column,
                            "recall": recall_column,
+                           "specificity": specificity_column,
                            "f1": f1_column})
 
         df.to_csv(self.output_dir + set_name + "-df.txt", sep="\t",
@@ -154,6 +208,63 @@ class GradientBasedEvaluator(FeatureImportanceEvaluator):
                 results[0])
         self._write_result_df(results[0], results[1], results[2], results[3],
                               set_name)
+
+    def _visualize_grammar_agreement(self, results,
+                                     set_name: str = "test") -> None:
+        super()._visualize_grammar_agreement(results, set_name)
+
+        df: pd.DataFrame = self._convert_to_unthresholded_data_frame(results)
+        if len(df.index) > 0:
+            df.to_csv(self.output_dir + set_name +
+                      "-grammar-agreement-df.txt",
+                      sep="\t", index=False)
+
+            if self.is_ggplot_available:
+                plot_script: str = pkg_resources.resource_filename(
+                    "seqgra", "evaluator/plotagreement.R")
+                temp_file_name: str = self.output_dir + set_name + "-temp.txt"
+                pdf_file_name: str = self.output_dir + set_name + \
+                    "-grammar-agreement.pdf"
+                df: pd.DataFrame = self._prepare_unthresholded_r_data_frame(df)
+                df.to_csv(temp_file_name, sep="\t", index=False)
+                cmd = ["Rscript", "--vanilla", plot_script, temp_file_name,
+                       pdf_file_name, self.evaluator_name]
+                subprocess.call(cmd, universal_newlines=True)
+                os.remove(temp_file_name)
+
+    def _prepare_unthresholded_r_data_frame(self, df: pd.DataFrame) -> pd.DataFrame:
+        df["precision"] = 0.0
+        df["recall"] = 0.0
+        df["specificity"] = 0.0
+        df["f1"] = 0.0
+        df["n"] = 0
+
+        for example_id in set(df.example.tolist()):
+            example_df = df.loc[df.example == example_id]
+            fi_vector = np.asarray(example_df.value.tolist(), dtype=np.float32)
+            annotation: str = "".join(example_df.group.tolist())
+            df.loc[df.example == example_id, "precision"] = \
+                GradientBasedEvaluator._calculate_smooth_precision(
+                    fi_vector, annotation)
+            df.loc[df.example == example_id, "recall"] = \
+                GradientBasedEvaluator._calculate_smooth_recall(
+                    fi_vector, annotation)
+            df.loc[df.example == example_id, "specificity"] = \
+                GradientBasedEvaluator._calculate_smooth_specificity(
+                    fi_vector, annotation)
+            df.loc[df.example == example_id, "f1"] = \
+                GradientBasedEvaluator._calculate_smooth_f1(
+                    fi_vector, annotation)
+            df.loc[df.example == example_id, "n"] = 1.0 / len(example_df.index)
+
+        df["precision"] = df.groupby("label")["precision"].transform("mean")
+        df["recall"] = df.groupby("label")["recall"].transform("mean")
+        df["specificity"] = df.groupby(
+            "label")["specificity"].transform("mean")
+        df["f1"] = df.groupby("label")["f1"].transform("mean")
+        df["n"] = round(df.groupby("label")["n"].transform("sum"))
+
+        return df
 
     def calculate_saliency(self, data, label):
         result = self.explainer.explain(data, label)
@@ -253,6 +364,47 @@ class GradientBasedEvaluator(FeatureImportanceEvaluator):
 
         df = pd.DataFrame({"example": example_column,
                            "position": position_column,
+                           "group": group_column,
+                           "label": label_column})
+
+        return df
+
+    def _convert_to_unthresholded_data_frame(self, results) -> pd.DataFrame:
+        """Takes gradient-based evaluator-specific results and turns them into
+        a pandas data frame.
+
+        The data frame has the following columns:
+            - example_column (int): example index
+            - position (int): position within example (one-based)
+            - value (float): normalized feature importance
+            - group (str): group label, one of the following:
+                - "G": grammar position
+                - "C": confounding position
+                - "_": background position
+            - label (str): label of example, e.g., "cell type 1"
+        """
+        fi_matrix = results[0]
+        y: List[str] = results[2]
+        annotations: List[str] = results[3]
+
+        example_column: List[int] = list()
+        position_column: List[int] = list()
+        value_column: List[int] = list()
+        group_column: List[str] = list()
+        label_column: List[str] = list()
+
+        for example_id, annotation in enumerate(annotations):
+            example_column += [example_id] * len(annotation)
+            position_column += list(range(1, len(annotation) + 1))
+            fi_vector = GradientBasedEvaluator._prepare_normalized_fi_vector(
+                fi_matrix[example_id, :, :])
+            value_column += list(fi_vector)
+            group_column += list(annotation)
+            label_column += [y[example_id]] * len(annotation)
+
+        df = pd.DataFrame({"example": example_column,
+                           "position": position_column,
+                           "value": value_column,
                            "group": group_column,
                            "label": label_column})
 

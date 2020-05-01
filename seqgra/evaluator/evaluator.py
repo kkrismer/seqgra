@@ -241,7 +241,7 @@ class FeatureImportanceEvaluator(Evaluator):
         results = super().evaluate_model(set_name, subset_idx, subset_n,
                                          subset_labels, subset_n_per_label,
                                          subset_shuffle, subset_threshold)
-        self._visualize_agreement(results, set_name)
+        self._visualize_grammar_agreement(results, set_name)
         return results
 
     @abstractmethod
@@ -342,7 +342,8 @@ class FeatureImportanceEvaluator(Evaluator):
 
         return df
 
-    def _visualize_agreement(self, results, set_name: str = "test") -> None:
+    def _visualize_grammar_agreement(self, results,
+                                     set_name: str = "test") -> None:
         df: pd.DataFrame = self._convert_to_data_frame(results)
         if len(df.index) > 0:
             df.to_csv(self.output_dir + set_name +
@@ -352,7 +353,8 @@ class FeatureImportanceEvaluator(Evaluator):
             if self.is_ggplot_available:
                 plot_script: str = pkg_resources.resource_filename(
                     "seqgra", "evaluator/plotagreement.R")
-                temp_file_name: str = self.output_dir + set_name + "-temp.txt"
+                temp_file_name: str = self.output_dir + set_name + \
+                    "-thresholded-temp.txt"
                 pdf_file_name: str = self.output_dir + set_name + \
                     "-grammar-agreement-thresholded.pdf"
                 df: pd.DataFrame = self._prepare_r_data_frame(df)

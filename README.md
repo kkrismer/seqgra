@@ -260,9 +260,9 @@ Generated files and folders (pre-existing folders and files in italics):
     +-- {GRAMMAR ID}
         +-- {MODEL ID}
             +-- sis
-                |-- test.txt
-                |-- test-agreement.pdf
-                +-- test-agreement-df.txt
+                |-- test-df.txt
+                |-- test-grammar-agreement-thresholded.pdf
+                +-- test-grammar-agreement-thresholded-df.txt
 </pre>
 
 \* model files are library-dependent
@@ -302,33 +302,41 @@ Generated files and folders (pre-existing folders and files in italics):
     +-- {GRAMMAR ID}
         +-- {MODEL ID}
             |-- gradient
-            |   |-- test.npy
-            |   |-- test-agreement.pdf
-            |   |-- test-agreement-df.txt
-            |   |-- validation.npy
-            |   |-- validation-agreement.pdf
-            |   +-- validation-agreement-df.txt
+            |   |-- test-df.txt
+            |   |-- test-feature-importance-matrix.npy
+            |   |-- test-grammar-agreement-thresholded.pdf
+            |   |-- test-grammar-agreement-thresholded-df.txt
+            |   |-- validation-df.txt
+            |   |-- validation-feature-importance-matrix.npy
+            |   |-- validation-grammar-agreement-thresholded.pdf
+            |   +-- validation-grammar-agreement-thresholded-df.txt
             |-- gradient-x-input
-            |   |-- test.npy
-            |   |-- test-agreement.pdf
-            |   |-- test-agreement-df.txt
-            |   |-- validation.npy
-            |   |-- validation-agreement.pdf
-            |   +-- validation-agreement-df.txt
+            |   |-- test-df.txt
+            |   |-- test-feature-importance-matrix.npy
+            |   |-- test-grammar-agreement-thresholded.pdf
+            |   |-- test-grammar-agreement-thresholded-df.txt
+            |   |-- validation-df.txt
+            |   |-- validation-feature-importance-matrix.npy
+            |   |-- validation-grammar-agreement-thresholded.pdf
+            |   +-- validation-grammar-agreement-thresholded-df.txt
             |-- integrated-gradients
-            |   |-- test.npy
-            |   |-- test-agreement.pdf
-            |   |-- test-agreement-df.txt
-            |   |-- validation.npy
-            |   |-- validation-agreement.pdf
-            |   +-- validation-agreement-df.txt
+            |   |-- test-df.txt
+            |   |-- test-feature-importance-matrix.npy
+            |   |-- test-grammar-agreement-thresholded.pdf
+            |   |-- test-grammar-agreement-thresholded-df.txt
+            |   |-- validation-df.txt
+            |   |-- validation-feature-importance-matrix.npy
+            |   |-- validation-grammar-agreement-thresholded.pdf
+            |   +-- validation-grammar-agreement-thresholded-df.txt
             +-- saliency
-                |-- test.npy
-                |-- test-agreement.pdf
-                |-- test-agreement-df.txt
-                |-- validation.npy
-                |-- validation-agreement.pdf
-                +-- validation-agreement-df.txt
+                |-- test-df.txt
+                |-- test-feature-importance-matrix.npy
+                |-- test-grammar-grammar-agreement-thresholded.pdf
+                |-- test-grammar-agreement-thresholded-df.txt
+                |-- validation-df.txt
+                |-- validation-feature-importance-matrix.npy
+                |-- validation-grammar-agreement-thresholded.pdf
+                +-- validation-grammar-agreement-thresholded-df.txt
 </pre>
 
 \* model files are library-dependent
