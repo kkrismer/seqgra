@@ -39,7 +39,7 @@ class SISEvaluator(FeatureImportanceEvaluator):
         annotations_column: List[str] = list()
         sis_collapsed_column: List[str] = list()
         sis_separated_column: List[str] = list()
-        for i, selected_label in enumerate(set(y)):
+        for selected_label in set(y):
             # select x, y, annotations of examples with label
             subset_idx = [i
                           for i, label in enumerate(y)
@@ -47,9 +47,14 @@ class SISEvaluator(FeatureImportanceEvaluator):
             selected_x, selected_y, selected_annotations = \
                 self._subset(subset_idx, x, y, annotations)
 
-            # TODO i should be label index of model
+            if self.learner.definition.task == c.TaskType.MULTI_CLASS_CLASSIFICATION:
+                model_label_index: int = self.learner.definition.labels.index(selected_label)
+            elif self.learner.definition.task == c.TaskType.MULTI_LABEL_CLASSIFICATION:
+                # TODO fix multi-label classification and SIS
+                pass
+
             sis_results: List[List[str]] = self.find_sis(
-                selected_x, i)
+                selected_x, model_label_index)
             sis_collapsed: List[str] = [self.__collapse_sis(sis_col)
                                         for sis_col in sis_results]
             sis_separated: List[str] = [";".join(sis_col)
