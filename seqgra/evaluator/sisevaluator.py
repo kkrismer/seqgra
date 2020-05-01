@@ -78,7 +78,7 @@ class SISEvaluator(FeatureImportanceEvaluator):
                                                 "sis_collapsed",
                                                 "sis_separated"])
 
-        results.to_csv(self.output_dir + set_name + ".txt", sep="\t",
+        results.to_csv(self.output_dir + set_name + "-df.txt", sep="\t",
                        index=False)
 
     def __get_agreement_group(self, annotation_position: str,

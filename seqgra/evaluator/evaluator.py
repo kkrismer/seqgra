@@ -345,14 +345,16 @@ class FeatureImportanceEvaluator(Evaluator):
     def _visualize_agreement(self, results, set_name: str = "test") -> None:
         df: pd.DataFrame = self._convert_to_data_frame(results)
         if len(df.index) > 0:
-            df.to_csv(self.output_dir + set_name + "-agreement-df.txt",
+            df.to_csv(self.output_dir + set_name +
+                      "-grammar-agreement-thresholded-df.txt",
                       sep="\t", index=False)
 
             if self.is_ggplot_available:
                 plot_script: str = pkg_resources.resource_filename(
                     "seqgra", "evaluator/plotagreement.R")
                 temp_file_name: str = self.output_dir + set_name + "-temp.txt"
-                pdf_file_name: str = self.output_dir + set_name + "-agreement.pdf"
+                pdf_file_name: str = self.output_dir + set_name + \
+                    "-grammar-agreement-thresholded.pdf"
                 df: pd.DataFrame = self._prepare_r_data_frame(df)
                 df.to_csv(temp_file_name, sep="\t", index=False)
                 cmd = ["Rscript", "--vanilla", plot_script, temp_file_name,

@@ -71,9 +71,9 @@ class GradientBasedEvaluator(FeatureImportanceEvaluator):
 
     def _convert_to_nwc(self, x) -> Any:
         if self.learner.definition.library == c.LibraryType.TENSORFLOW and \
-            self.learner.definition.input_encoding == "2D":
-                # from (N, H, W, C) to (N, W, C)
-                x = np.squeeze(x, axis=1)
+                self.learner.definition.input_encoding == "2D":
+            # from (N, H, W, C) to (N, W, C)
+            x = np.squeeze(x, axis=1)
         elif self.learner.definition.library == c.LibraryType.TORCH:
             if self.learner.definition.input_encoding == "2D":
                 # from (N, C, 1, W) to (N, C, W)
@@ -81,11 +81,79 @@ class GradientBasedEvaluator(FeatureImportanceEvaluator):
 
             # from (N, C, W) to (N, W, C)
             x = np.transpose(x, (0, 2, 1))
-        
+
         return x
 
+    @staticmethod
+    def _calculate_smooth_precision(normalized_fi_vector,
+                                    annotation: str) -> float:
+        grammar_positions: List[int] = [i
+                                        for i, char in enumerate(annotation)
+                                        if char == c.PositionType.GRAMMAR]
+        total_fi: float = normalized_fi_vector.sum()
+        grammar_fi: float = normalized_fi_vector[grammar_positions].sum()
+
+        return grammar_fi / total_fi
+
+    @staticmethod
+    def _calculate_smooth_recall(normalized_fi_vector,
+                                 annotation: str) -> float:
+        grammar_positions: List[int] = [i
+                                        for i, char in enumerate(annotation)
+                                        if char == c.PositionType.GRAMMAR]
+        grammar_fi: float = normalized_fi_vector[grammar_positions].sum()
+
+        return grammar_fi / float(len(grammar_positions))
+
+    @staticmethod
+    def _calculate_smooth_f1(normalized_fi_vector,
+                             annotation: str) -> float:
+        precision: float = GradientBasedEvaluator._calculate_smooth_precision(
+            normalized_fi_vector, annotation)
+        recall: float = GradientBasedEvaluator._calculate_smooth_recall(
+            normalized_fi_vector, annotation)
+
+        if not precision and not recall:
+            return 0.0
+        else:
+            return 2.0 * ((precision * recall) / (precision + recall))
+
+    def _write_result_df(self, fi_matrix, x: List[str], y: List[str],
+                         annotations: List[str], set_name: str = "test") -> None:
+
+        precision_column: List[float] = list()
+        recall_column: List[float] = list()
+        f1_column: List[float] = list()
+
+        for example_id, annotation in enumerate(annotations):
+            fi_example_matrix = fi_matrix[example_id, :, :]
+            fi_example_matrix = np.clip(fi_example_matrix,
+                                        a_min=0.0, a_max=None)
+            fi_vector = fi_example_matrix.sum(axis=1)
+            norm: float = fi_vector.max()
+            fi_vector = fi_vector * (1 / norm)
+            precision_column += [GradientBasedEvaluator._calculate_smooth_precision(
+                fi_vector, annotation)]
+            recall_column += [GradientBasedEvaluator._calculate_smooth_recall(
+                fi_vector, annotation)]
+            f1_column += [GradientBasedEvaluator._calculate_smooth_f1(
+                fi_vector, annotation)]
+
+        df = pd.DataFrame({"x": x,
+                           "y": y,
+                           "annotation": annotations,
+                           "precision": precision_column,
+                           "recall": recall_column,
+                           "f1": f1_column})
+
+        df.to_csv(self.output_dir + set_name + "-df.txt", sep="\t",
+                  index=False)
+
     def _save_results(self, results, set_name: str = "test") -> None:
-        np.save(self.output_dir + set_name + ".npy", results[0])
+        np.save(self.output_dir + set_name + "-feature-importance-matrix.npy",
+                results[0])
+        self._write_result_df(results[0], results[1], results[2], results[3],
+                              set_name)
 
     def calculate_saliency(self, data, label):
         result = self.explainer.explain(data, label)
