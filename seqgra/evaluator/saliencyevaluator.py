@@ -62,10 +62,27 @@ class GradientBasedEvaluator(FeatureImportanceEvaluator):
         # enable inference mode
         self.explainer.model.eval()
 
-        result = self.calculate_saliency(encoded_x, encoded_y)
+        fi_matrix = self.calculate_saliency(encoded_x, encoded_y)
 
-        self._check_tensor_dimensions(result)
-        return (result, y, annotations)
+        self._check_tensor_dimensions(fi_matrix)
+        fi_matrix = self._convert_to_nwc(fi_matrix)
+
+        return (fi_matrix, x, y, annotations)
+
+    def _convert_to_nwc(self, x) -> Any:
+        if self.learner.definition.library == c.LibraryType.TENSORFLOW and \
+            self.learner.definition.input_encoding == "2D":
+                # from (N, H, W, C) to (N, W, C)
+                x = np.squeeze(x, axis=1)
+        elif self.learner.definition.library == c.LibraryType.TORCH:
+            if self.learner.definition.input_encoding == "2D":
+                # from (N, C, 1, W) to (N, C, W)
+                x = np.squeeze(x, axis=2)
+
+            # from (N, C, W) to (N, W, C)
+            x = np.transpose(x, (0, 2, 1))
+        
+        return x
 
     def _save_results(self, results, set_name: str = "test") -> None:
         np.save(self.output_dir + set_name + ".npy", results[0])
@@ -149,17 +166,9 @@ class GradientBasedEvaluator(FeatureImportanceEvaluator):
                 - "TN": background position, not important for model prediction
             - label (str): label of example, e.g., "cell type 1"
         """
-        importance_matrix = results[0]
-        y: List[str] = results[1]
-        annotations: List[str] = results[2]
-
-        # remove empty height dimension
-        if len(importance_matrix.shape) == 4:
-            if self.learner.definition.library == c.LibraryType.TENSORFLOW:
-                height_dim: int = 1
-            elif self.learner.definition.library == c.LibraryType.TORCH:
-                height_dim: int = 2
-            importance_matrix = np.squeeze(importance_matrix, axis=height_dim)
+        fi_matrix = results[0]
+        y: List[str] = results[2]
+        annotations: List[str] = results[3]
 
         example_column: List[int] = list()
         position_column: List[int] = list()
@@ -170,7 +179,7 @@ class GradientBasedEvaluator(FeatureImportanceEvaluator):
             example_column += [example_id] * len(annotation)
             position_column += list(range(1, len(annotation) + 1))
             group_column += [self.__get_agreement_group(
-                char, importance_matrix[example_id, :, i])
+                char, fi_matrix[example_id, i, :])
                 for i, char in enumerate(annotation)]
             label_column += [y[example_id]] * len(annotation)
 
