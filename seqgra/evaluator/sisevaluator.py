@@ -7,7 +7,7 @@ MIT - CSAIL - Gifford Lab - seqgra
 """
 from __future__ import annotations
 
-from typing import Any, List, Optional
+from typing import Any, List, Optional, Set
 
 import numpy as np
 import pandas as pd
@@ -25,7 +25,8 @@ class SISEvaluator(FeatureImportanceEvaluator):
                  predict_threshold: Optional[float]) -> None:
         super().__init__(
             c.EvaluatorID.SIS, "Sufficient Input Subsets", learner, output_dir,
-            supported_tasks=[c.TaskType.MULTI_CLASS_CLASSIFICATION])
+            supported_tasks=[c.TaskType.MULTI_CLASS_CLASSIFICATION,
+                             c.TaskType.MULTI_LABEL_CLASSIFICATION])
 
         if predict_threshold:
             self.predict_threshold = predict_threshold
@@ -39,20 +40,14 @@ class SISEvaluator(FeatureImportanceEvaluator):
         annotations_column: List[str] = list()
         sis_collapsed_column: List[str] = list()
         sis_separated_column: List[str] = list()
-        for selected_label in set(y):
-            # select x, y, annotations of examples with label
-            subset_idx = [i
-                          for i, label in enumerate(y)
-                          if label == selected_label]
-            selected_x, selected_y, selected_annotations = \
-                self._subset(subset_idx, x, y, annotations)
 
-            if self.learner.definition.task == c.TaskType.MULTI_CLASS_CLASSIFICATION:
-                model_label_index: int = self.learner.definition.labels.index(
-                    selected_label)
-            elif self.learner.definition.task == c.TaskType.MULTI_LABEL_CLASSIFICATION:
-                # TODO fix multi-label classification and SIS
-                pass
+        for selected_label in self.learner.get_label_set(y):
+            # select x, y, annotations of examples with label
+            selected_x, selected_y, selected_annotations = \
+                self._subset_by_label(x, y, annotations, {selected_label})
+
+            model_label_index: int = self.learner.definition.labels.index(
+                selected_label)
 
             sis_results: List[List[str]] = self.find_sis(
                 selected_x, model_label_index)

@@ -168,38 +168,28 @@ class Learner(ABC):
         Learner.check_annotations(annotations)
         return AnnotationSet(annotations, y)
 
+    @abstractmethod
+    def get_label_set(self, y: List[str]) -> Set[str]:
+        pass
+
     def check_labels(self, y: List[str], throw_exception: bool = True) -> bool:
         is_valid: bool = True
-        unique_labels: Set[str] = set(y)
+        if isinstance(self.definition.labels, list):
+            model_labels: Set[str] = set(self.definition.labels)
+        else:
+            model_labels: Set[str] = {self.definition.labels}
 
-        if self.definition.task == c.TaskType.MULTI_CLASS_CLASSIFICATION:
-            for unique_label in unique_labels:
-                if not unique_label in set(self.definition.labels):
-                    message: str = "examples with invalid label: " + \
-                        unique_label + " (valid labels are " + \
-                        ", ".join(self.definition.labels) + ")"
-                    if throw_exception:
-                        raise Exception(message)
+        for label in self.get_label_set(y):
+            if not label in model_labels:
+                message: str = "examples with invalid label: " + \
+                    label + " (valid labels are " + \
+                    ", ".join(self.definition.labels) + ")"
+                if throw_exception:
+                    raise Exception(message)
 
-                    logging.warning(message)
-                    is_valid = False
-        elif self.definition.task == c.TaskType.MULTI_LABEL_CLASSIFICATION:
-            labels: List[str] = list()
-            for unique_label in unique_labels:
-                if len(unique_label) > 0:
-                    labels += unique_label.split("|")
-
-            for unique_label in set(labels):
-                if not unique_label in set(self.definition.labels):
-                    message: str = "examples with invalid label: " + \
-                        unique_label + " (valid labels are " + \
-                        ", ".join(self.definition.labels) + ")"
-                    if throw_exception:
-                        raise Exception(message)
-
-                    logging.warning(message)
-                    is_valid = False
-
+                logging.warning(message)
+                is_valid = False
+        
         return is_valid
 
     @staticmethod
@@ -459,6 +449,12 @@ class MultiClassClassificationLearner(Learner):
     def _evaluate_model(self, x: List[str], y: List[str]):
         pass
 
+    def get_label_set(self, y: List[str]) -> Set[str]:
+        if isinstance(y, list):
+            return set(y)
+        else:
+            return {y}
+
 
 class MultiLabelClassificationLearner(Learner):
     """Abstract class for multi-label classification learners.
@@ -546,6 +542,18 @@ class MultiLabelClassificationLearner(Learner):
     @abstractmethod
     def _evaluate_model(self, x: List[str], y: List[List[str]]):
         pass
+
+    def get_label_set(self, y: List[str]) -> Set[str]:
+        if isinstance(y, list):
+            multilabels = set(y)
+        else:
+            multilabels = {y}
+
+        temp: List[str] = list()
+        for multilabel in multilabels:
+            if len(multilabel) > 0:
+                temp += multilabel.split("|")
+        return set(temp)
 
 
 class MultipleRegressionLearner(Learner):
@@ -635,6 +643,22 @@ class MultipleRegressionLearner(Learner):
     def _evaluate_model(self, x: List[str], y: List[float]):
         pass
 
+    def get_label_set(self, y: List[str]) -> Set[str]:
+        return set()
+
+    def check_labels(self, y: List[str], throw_exception: bool = True) -> bool:
+        try:
+            for value in y:
+                float(value)
+            return True
+        except ValueError:
+            message: str = "all labels must be numeric in regression"
+            if throw_exception:
+                raise Exception(message)
+
+            logging.warning(message)
+            return False
+
 
 class MultivariateRegressionLearner(Learner):
     """Abstract class for multivariate regression learners.
@@ -723,3 +747,9 @@ class MultivariateRegressionLearner(Learner):
     @abstractmethod
     def _evaluate_model(self, x: List[str], y: List[float]):
         pass
+
+    def get_label_set(self, y: List[str]) -> Set[str]:
+        return set()
+
+    def check_labels(self, y: List[str], throw_exception: bool = True) -> bool:
+        raise NotImplementedError()

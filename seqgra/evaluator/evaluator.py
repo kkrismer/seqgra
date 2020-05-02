@@ -39,26 +39,30 @@ class Evaluator(ABC):
         if supported_tasks is None:
             self.supported_tasks: Set[str] = c.TaskType.ALL_TASKS
         else:
-            self.supported_tasks: Set[str] = set(supported_tasks)
+            self.supported_tasks: Set[str] = supported_tasks
         if supported_sequence_spaces is None:
             self.supported_sequence_spaces: Set[str] = c.SequenceSpaceType.ALL_SEQUENCE_SPACES
         else:
-            self.supported_sequence_spaces: Set[str] = set(
-                supported_sequence_spaces)
+            self.supported_sequence_spaces: Set[str] = supported_sequence_spaces
         if supported_libraries is None:
             self.supported_libraries: Set[str] = c.LibraryType.ALL_LIBRARIES
         else:
-            self.supported_libraries: Set[str] = set(supported_libraries)
+            self.supported_libraries: Set[str] = supported_libraries
         self.__detect_incompatibilities()
 
-    def __detect_incompatibilities(self):
+    def __detect_incompatibilities(self, throw_exception: bool = True):
+        message: str = ""
         if not self.learner.definition.task in self.supported_tasks:
-            logging.warning("learner task incompatible with evaluator")
+            message: str = "learner task incompatible with evaluator"
         if not self.learner.definition.sequence_space in self.supported_sequence_spaces:
-            logging.warning("learner sequence space incompatible with "
-                            "evaluator")
+            message: str = "learner sequence space incompatible with evaluator"
         if not self.learner.definition.library in self.supported_libraries:
-            logging.warning("learner library incompatible with evaluator")
+            message: str = "learner library incompatible with evaluator"
+
+        if message:
+            if throw_exception:
+                raise Exception(message)
+            logging.warning(message)
 
     def evaluate_model(self, set_name: str = "test",
                        subset_idx: Optional[List[int]] = None,
@@ -123,6 +127,30 @@ class Evaluator(ABC):
 
         return AnnotatedExampleSet(x, y, annotations)
 
+    def _subset_by_label(self, x: List[str], y: List[str],
+                         annotations: List[str],
+                         valid_labels: Set[str]) -> AnnotatedExampleSet:
+        if self.learner.definition.task == c.TaskType.MULTI_CLASS_CLASSIFICATION:
+            subset_idx = [i
+                          for i, label in enumerate(y)
+                          if label in valid_labels]
+        elif self.learner.definition.task == c.TaskType.MULTI_LABEL_CLASSIFICATION:
+            subset_idx: List[int] = list()
+            for i, label in enumerate(y):
+                is_valid: bool = False
+                for example_label in label.split("|"):
+                    if example_label in valid_labels:
+                        is_valid = True
+                if is_valid:
+                    subset_idx += [i]
+
+        return self._subset(subset_idx, x, y, annotations)
+
+    def _subset_by_compatibility(
+            self, x: List[str], y: List[str],
+            annotations: List[str]) -> AnnotatedExampleSet:
+        return AnnotatedExampleSet(x, y, annotations)
+
     def select_examples(self, set_name: str = "test",
                         labels: Optional[Set[str]] = None,
                         threshold: Optional[float] = None) -> AnnotatedExampleSet:
@@ -144,10 +172,8 @@ class Evaluator(ABC):
 
         if labels is not None:
             # discard examples with y not in labels
-            subset_idx = [i
-                          for i, label in enumerate(y)
-                          if label in labels]
-            x, y, annotations = self._subset(subset_idx, x, y, annotations)
+            x, y, annotations = self._subset_by_label(x, y, annotations,
+                                                      labels)
 
         if threshold:
             # predict with learner
@@ -156,11 +182,32 @@ class Evaluator(ABC):
 
             # discard misclassified / mislabeled examples and
             # examples below threshold
-            subset_idx = [i
-                          for i in range(len(x))
-                          if np.argmax(y_hat[i]) == np.argmax(encoded_y[i]) and
-                          np.max(y_hat[i]) > threshold]
+            if self.learner.definition.task == c.TaskType.MULTI_CLASS_CLASSIFICATION:
+                subset_idx = [i
+                              for i in range(len(x))
+                              if np.argmax(y_hat[i]) == np.argmax(encoded_y[i]) and
+                              np.max(y_hat[i]) > threshold]
+            elif self.learner.definition.task == c.TaskType.MULTI_LABEL_CLASSIFICATION:
+                subset_idx: List[int] = list()
+                # example is mislabeled if prediction for one label is wrong
+                # correctly labeled example:
+                # if label == True -> prediction > threshold
+                # if label == False -> prediction < (1 - threshold)
+                for example_index in range(len(x)):
+                    is_valid: bool = True
+                    for label_index in range(len(self.learner.definition.labels)):
+                        if (encoded_y[example_index, label_index] and
+                            y_hat[example_index, label_index] < threshold) or \
+                                (not encoded_y[example_index, label_index] and
+                                    y_hat[example_index, label_index] > (1 - threshold)):
+                            is_valid = False
+
+                    if is_valid:
+                        subset_idx += [example_index]
+
             x, y, annotations = self._subset(subset_idx, x, y, annotations)
+
+        x, y, annotations = self._subset_by_compatibility(x, y, annotations)
 
         return AnnotatedExampleSet(x, y, annotations)
 
@@ -248,6 +295,18 @@ class FeatureImportanceEvaluator(Evaluator):
         if not suppress_plots:
             self._visualize_grammar_agreement(results, set_name)
         return results
+
+    def _subset_by_compatibility(
+            self, x: List[str], y: List[str],
+            annotations: List[str]) -> AnnotatedExampleSet:
+        # remove examples without positive labels
+        if self.learner.definition.task == c.TaskType.MULTI_LABEL_CLASSIFICATION:
+            subset_idx = [i
+                          for i, label in enumerate(y)
+                          if label]
+            return self._subset(subset_idx, x, y, annotations)
+        else:
+            return AnnotatedExampleSet(x, y, annotations)
 
     @abstractmethod
     def _convert_to_data_frame(self, results) -> pd.DataFrame:

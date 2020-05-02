@@ -142,17 +142,18 @@ class TorchHelper:
 
         @trainer.on(Events.EPOCH_COMPLETED)
         def log_training_results(trainer):
-            print("epoch {}/{}".format(trainer.state.epoch, num_epochs))
+            logging.info("epoch {}/{}".format(trainer.state.epoch, num_epochs))
             train_evaluator.run(training_loader)
             metrics = train_evaluator.state.metrics
-            print(TorchHelper._format_metrics_output(metrics, "training set"))
+            logging.info(TorchHelper._format_metrics_output(
+                metrics, "training set"))
 
         @trainer.on(Events.EPOCH_COMPLETED)
         def log_validation_results(trainer):
             val_evaluator.run(validation_loader)
             metrics = val_evaluator.state.metrics
-            print(TorchHelper._format_metrics_output(metrics,
-                                                     "validation set"))
+            logging.info(TorchHelper._format_metrics_output(metrics,
+                                                            "validation set"))
 
         # save best model
         def score_fn(engine):
@@ -222,7 +223,7 @@ class TorchHelper:
             learner.definition.training_process_hyperparameters["epochs"])
 
         for epoch in range(num_epochs):
-            print("epoch {}/{}".format(epoch + 1, num_epochs))
+            logging.info("epoch {}/{}".format(epoch + 1, num_epochs))
 
             for phase in [c.DataSet.TRAINING, c.DataSet.VALIDATION]:
                 if phase == c.DataSet.TRAINING:
@@ -262,8 +263,8 @@ class TorchHelper:
                 epoch_loss = running_loss / len(data_loader.dataset)
                 epoch_acc = running_correct.float() / len(data_loader.dataset)
 
-                print("{} - loss: {:.3f}, accuracy: {:.3f}".format(
-                      phase, epoch_loss, epoch_acc))
+                logging.info("{} - loss: {:.3f}, accuracy: {:.3f}".format(
+                    phase, epoch_loss, epoch_acc))
 
     @staticmethod
     def save_model(learner: Learner, model_name: str = "") -> None:
