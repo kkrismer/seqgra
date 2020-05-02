@@ -54,13 +54,10 @@ plot_agreement <- function(input_file_name, output_file_name, title = NULL) {
       scale_fill_manual(values = c("#B5EAD7", "#FFDAC1", 
                                    "#FF9AA2", "#FFFFFF"), 
                         labels = levels, drop = FALSE) +
-      labs(y = NULL, title = title)
+      labs(y = NULL, title = title) +
+      guides(fill = guide_legend(nrow = 2, byrow = TRUE))
   } else {
-    if (sum(toupper(df$group) == "C") == 0) {
-      legend_label <- "solid black border (grammar position), no border (background position)"
-    } else {
-      legend_label <- "solid black border (grammar position), dashed gray border (confounding position), no border (background position)"
-    }
+    df$value <- df$value * ifelse(df$group == "G", 1, -1)
     levels <- c("Grammar position",
                 "Confounding position",
                 "Background position")
@@ -69,21 +66,18 @@ plot_agreement <- function(input_file_name, output_file_name, title = NULL) {
     df$group[toupper(df$group) == "_"] <- levels[3]
     df$group <- factor(df$group, levels = levels, ordered = TRUE)
     
-    p <- ggplot(df, aes(x = position, y = example, fill = value,
-                        linetype = group, color = group)) + 
-      scale_fill_gradient(low = "white", high = muted("blue")) +
-      scale_linetype_manual(values = c("solid", "dashed", "blank"), 
-                            labels = levels, drop = FALSE, guide = FALSE) +
-      scale_color_manual(values = c("black", "gray", "transparent"), 
-                         labels = levels, drop = FALSE, guide = FALSE) +
-      labs(y = NULL, title = title, caption = legend_label)
+
+    p <- ggplot(df, aes(x = position, y = example, fill = value)) + 
+      scale_fill_gradient2(low = muted("red"), mid = "white",
+                           high = muted("green"), midpoint = 0,
+                           limits = c(-1, 1), guide = FALSE) +
+      labs(y = NULL, title = title, caption = "luminosity encodes feature importance: from light (low feature importance) to dark (high feature importance)\nhue encodes annotation: green (grammar position), red (background position)")
   }
   
   p <- p + geom_tile() + 
     scale_x_continuous(breaks = pretty_breaks(n = 5), expand = c(0, 0)) + 
     facet_wrap(vars(label), ncol = 1, scales = "free_y") +
-    scale_y_discrete(expand = c(0, 0)) + 
-    guides(fill = guide_legend(nrow = 2, byrow = TRUE)) + 
+    scale_y_discrete(expand = c(0, 0)) +  
     theme_bw() +
     theme(axis.text.y = element_blank(),
           axis.ticks.y = element_blank(),
