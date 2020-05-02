@@ -57,6 +57,7 @@ class DNAMultiClassClassificationLearner(MultiClassClassificationLearner):
         y: List[str] = df["y"].tolist()
 
         DNAHelper.check_sequence(x)
+        self.check_labels(y)
         return ExampleSet(x, y)
 
 
@@ -102,4 +103,5 @@ class DNAMultiLabelClassificationLearner(MultiLabelClassificationLearner):
         y: List[str] = df["y"].replace(np.nan, "", regex=True).tolist()
 
         DNAHelper.check_sequence(x)
+        self.check_labels(y)
         return ExampleSet(x, y)

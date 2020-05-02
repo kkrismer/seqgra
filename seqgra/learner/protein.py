@@ -57,6 +57,7 @@ class ProteinMultiClassClassificationLearner(MultiClassClassificationLearner):
         y: List[str] = df["y"].tolist()
 
         ProteinHelper.check_sequence(x)
+        self.check_labels(y)
         return ExampleSet(x, y)
 
 
@@ -102,4 +103,5 @@ class ProteinMultiLabelClassificationLearner(MultiLabelClassificationLearner):
         y: List[str] = df["y"].replace(np.nan, "", regex=True).tolist()
 
         ProteinHelper.check_sequence(x)
+        self.check_labels(y)
         return ExampleSet(x, y)

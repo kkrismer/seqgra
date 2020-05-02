@@ -14,7 +14,7 @@ from abc import ABC, abstractmethod
 import logging
 import os
 import re
-from typing import Any, List, Optional
+from typing import Any, List, Optional, Set
 
 import pandas as pd
 
@@ -162,8 +162,43 @@ class Learner(ABC):
         annotations: List[str] = df["annotation"].tolist()
         y: List[str] = df["y"].tolist()
 
+        self.check_labels(y)
         Learner.check_annotations(annotations)
         return AnnotationSet(annotations, y)
+
+    def check_labels(self, y: List[str], throw_exception: bool = True) -> bool:
+        is_valid: bool = True
+        unique_labels: Set[str] = set(y)
+
+        if self.definition.task == c.TaskType.MULTI_CLASS_CLASSIFICATION:
+            for unique_label in unique_labels:
+                if not unique_label in set(self.definition.labels):
+                    message: str = "examples with invalid label: " + \
+                        unique_label + " (valid labels are " + \
+                        ", ".join(self.definition.labels) + ")"
+                    if throw_exception:
+                        raise Exception(message)
+                    
+                    logging.warning(message)
+                    is_valid = False
+        elif self.definition.task == c.TaskType.MULTI_LABEL_CLASSIFICATION:
+            labels: List[str] = list()
+            for unique_label in unique_labels:
+                if unique_label:
+                    labels += unique_label.split("|")
+
+            for unique_label in set(labels):
+                if not unique_label in set(self.definition.labels):
+                    message: str = "examples with invalid label: " + \
+                        unique_label + " (valid labels are " + \
+                        ", ".join(self.definition.labels) + ")"
+                    if throw_exception:
+                        raise Exception(message)
+                    
+                    logging.warning(message)
+                    is_valid = False
+
+        return is_valid
 
     @staticmethod
     def check_annotations(annotations: List[str]) -> bool:
@@ -175,6 +210,7 @@ class Learner(ABC):
                                 "confounding position, and '_' for background "
                                 "position allowed): %s", annotation)
                 is_valid = False
+
         return is_valid
 
     def get_examples_file(self, set_name: str = "test") -> str:
