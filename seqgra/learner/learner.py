@@ -158,7 +158,9 @@ class Learner(ABC):
                 annotations (List[str]): annotations
                 y (List[str]): labels
         """
-        df = pd.read_csv(file_name, sep="\t")
+        df = pd.read_csv(file_name, sep="\t", dtype={"annotation": "string",
+                                                     "y": "string"})
+        df = df.fillna("")
         annotations: List[str] = df["annotation"].tolist()
         y: List[str] = df["y"].tolist()
 
@@ -178,13 +180,13 @@ class Learner(ABC):
                         ", ".join(self.definition.labels) + ")"
                     if throw_exception:
                         raise Exception(message)
-                    
+
                     logging.warning(message)
                     is_valid = False
         elif self.definition.task == c.TaskType.MULTI_LABEL_CLASSIFICATION:
             labels: List[str] = list()
             for unique_label in unique_labels:
-                if unique_label:
+                if len(unique_label) > 0:
                     labels += unique_label.split("|")
 
             for unique_label in set(labels):
@@ -194,7 +196,7 @@ class Learner(ABC):
                         ", ".join(self.definition.labels) + ")"
                     if throw_exception:
                         raise Exception(message)
-                    
+
                     logging.warning(message)
                     is_valid = False
 

@@ -52,7 +52,9 @@ class DNAMultiClassClassificationLearner(MultiClassClassificationLearner):
         return decoded_y
 
     def parse_examples_data(self, file_name: str) -> ExampleSet:
-        df = pd.read_csv(file_name, sep="\t")
+        df = pd.read_csv(file_name, sep="\t", dtype={"x": "string",
+                                                     "y": "string"})
+        df = df.fillna("")
         x: List[str] = df["x"].tolist()
         y: List[str] = df["y"].tolist()
 
@@ -98,7 +100,9 @@ class DNAMultiLabelClassificationLearner(MultiLabelClassificationLearner):
         return decoded_y
 
     def parse_examples_data(self, file_name: str) -> ExampleSet:
-        df = pd.read_csv(file_name, sep="\t")
+        df = pd.read_csv(file_name, sep="\t", dtype={"x": "string",
+                                                     "y": "string"})
+        df = df.fillna("")
         x: List[str] = df["x"].tolist()
         y: List[str] = df["y"].replace(np.nan, "", regex=True).tolist()
 
