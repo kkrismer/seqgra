@@ -31,7 +31,7 @@ class ROCEvaluator(Evaluator):
     def _save_results(self, results, set_name: str = "test",
                       suppress_plots: bool = False) -> None:
         if not suppress_plots:
-            self.create_roc_curve(results[0], results[0],
+            self.create_roc_curve(results[0], results[1],
                                   self.output_dir + set_name +
                                   "-roc-curve.pdf")
 
