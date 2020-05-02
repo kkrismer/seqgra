@@ -215,6 +215,7 @@ def run_seqgra(data_config_file: Optional[str],
                eval_sets: Optional[List[str]],
                eval_n: Optional[int],
                eval_n_per_label: Optional[int],
+               eval_suppress_plots: Optional[bool],
                eval_fi_predict_threshold: Optional[float],
                eval_sis_predict_threshold: Optional[float]) -> None:
     output_dir = format_output_dir(output_dir.strip())
@@ -342,7 +343,8 @@ def run_seqgra(data_config_file: Optional[str],
                             eval_set,
                             subset_n=eval_n,
                             subset_n_per_label=eval_n_per_label is not None,
-                            subset_threshold=eval_fi_predict_threshold)
+                            subset_threshold=eval_fi_predict_threshold,
+                            suppress_plots=eval_suppress_plots)
         else:
             logging.info("skipping evaluation step: no evaluator specified")
 
@@ -422,6 +424,12 @@ def main():
         "this evaluator argument will be passed to all evaluators"
     )
     parser.add_argument(
+        "--eval-suppress-plots",
+        action="store_true",
+        help="if this flag is set, plots are suppressed globally; "
+        "this evaluator argument will be passed to all evaluators"
+    )
+    parser.add_argument(
         "--eval-fi-predict-threshold",
         type=float,
         default=0.5,
@@ -460,6 +468,7 @@ def main():
                args.eval_sets,
                args.eval_n,
                args.eval_n_per_label,
+               args.eval_suppress_plots,
                args.eval_fi_predict_threshold,
                args.eval_sis_predict_threshold)
 

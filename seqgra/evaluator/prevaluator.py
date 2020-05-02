@@ -29,10 +29,12 @@ class PREvaluator(Evaluator):
 
         return (encoded_y, y_hat)
 
-    def _save_results(self, results, set_name: str = "test") -> None:
-        self.create_precision_recall_curve(results[0], results[0],
-                                           self.output_dir + set_name +
-                                           "-pr-curve.pdf")
+    def _save_results(self, results, set_name: str = "test",
+                      suppress_plots: bool = False) -> None:
+        if not suppress_plots:
+            self.create_precision_recall_curve(results[0], results[0],
+                                               self.output_dir + set_name +
+                                               "-pr-curve.pdf")
 
     def create_precision_recall_curve(self, y_true, y_hat,
                                       file_name: str) -> None:

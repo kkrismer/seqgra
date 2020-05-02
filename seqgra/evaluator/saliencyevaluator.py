@@ -95,11 +95,12 @@ class GradientBasedEvaluator(FeatureImportanceEvaluator):
                                         for i, char in enumerate(annotation)
                                         if char == c.PositionType.GRAMMAR]
         non_grammar_positions: List[int] = [i
-                                        for i, char in enumerate(annotation)
-                                        if char != c.PositionType.GRAMMAR]
+                                            for i, char in enumerate(annotation)
+                                            if char != c.PositionType.GRAMMAR]
         total_fi: float = normalized_fi_vector.sum()
         grammar_fi: float = normalized_fi_vector[grammar_positions].sum()
-        non_grammar_fi: float = normalized_fi_vector[non_grammar_positions].sum()
+        non_grammar_fi: float = normalized_fi_vector[non_grammar_positions].sum(
+        )
 
         if not grammar_positions and not math.isclose(non_grammar_fi, 0.0):
             return 1.0
@@ -115,10 +116,11 @@ class GradientBasedEvaluator(FeatureImportanceEvaluator):
                                         for i, char in enumerate(annotation)
                                         if char == c.PositionType.GRAMMAR]
         non_grammar_positions: List[int] = [i
-                                        for i, char in enumerate(annotation)
-                                        if char != c.PositionType.GRAMMAR]
+                                            for i, char in enumerate(annotation)
+                                            if char != c.PositionType.GRAMMAR]
         grammar_fi: float = normalized_fi_vector[grammar_positions].sum()
-        non_grammar_fi: float = normalized_fi_vector[non_grammar_positions].sum()
+        non_grammar_fi: float = normalized_fi_vector[non_grammar_positions].sum(
+        )
 
         if not grammar_positions and math.isclose(non_grammar_fi, 0.0):
             return 1.0
@@ -147,11 +149,13 @@ class GradientBasedEvaluator(FeatureImportanceEvaluator):
                                         for i, char in enumerate(annotation)
                                         if char == c.PositionType.GRAMMAR]
         non_grammar_positions: List[int] = [i
-                                        for i, char in enumerate(annotation)
-                                        if char != c.PositionType.GRAMMAR]
+                                            for i, char in enumerate(annotation)
+                                            if char != c.PositionType.GRAMMAR]
         grammar_fi: float = normalized_fi_vector[grammar_positions].sum()
-        non_grammar_fi: float = normalized_fi_vector[non_grammar_positions].sum()
-        true_negative: float = float(len(non_grammar_positions)) - non_grammar_fi
+        non_grammar_fi: float = normalized_fi_vector[non_grammar_positions].sum(
+        )
+        true_negative: float = float(
+            len(non_grammar_positions)) - non_grammar_fi
         false_negative: float = float(len(grammar_positions)) - grammar_fi
 
         if math.isclose(true_negative, 0.0) and \
@@ -159,7 +163,7 @@ class GradientBasedEvaluator(FeatureImportanceEvaluator):
                 math.isclose(false_negative, 0.0):
             return 1.0
         if math.isclose(true_negative, 0.0) and \
-            math.isclose(non_grammar_fi, 0.0):
+                math.isclose(non_grammar_fi, 0.0):
             return 0.0
         else:
             return true_negative / float(len(non_grammar_positions))
@@ -203,7 +207,8 @@ class GradientBasedEvaluator(FeatureImportanceEvaluator):
         df.to_csv(self.output_dir + set_name + "-df.txt", sep="\t",
                   index=False)
 
-    def _save_results(self, results, set_name: str = "test") -> None:
+    def _save_results(self, results, set_name: str = "test",
+                      suppress_plots: bool = False) -> None:
         np.save(self.output_dir + set_name + "-feature-importance-matrix.npy",
                 results[0])
         self._write_result_df(results[0], results[1], results[2], results[3],

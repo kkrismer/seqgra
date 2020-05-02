@@ -25,7 +25,8 @@ class MetricsEvaluator(Evaluator):
                         annotations: List[str]) -> Any:
         return self.learner.evaluate_model(x=x, y=y)
 
-    def _save_results(self, results, set_name: str = "test") -> None:
+    def _save_results(self, results, set_name: str = "test",
+                      suppress_plots: bool = False) -> None:
         if results is None:
             df = pd.DataFrame([], columns=["set", "metric", "value"])
         else:

@@ -48,7 +48,8 @@ class SISEvaluator(FeatureImportanceEvaluator):
                 self._subset(subset_idx, x, y, annotations)
 
             if self.learner.definition.task == c.TaskType.MULTI_CLASS_CLASSIFICATION:
-                model_label_index: int = self.learner.definition.labels.index(selected_label)
+                model_label_index: int = self.learner.definition.labels.index(
+                    selected_label)
             elif self.learner.definition.task == c.TaskType.MULTI_LABEL_CLASSIFICATION:
                 # TODO fix multi-label classification and SIS
                 pass
@@ -72,7 +73,8 @@ class SISEvaluator(FeatureImportanceEvaluator):
                              "sis_collapsed": sis_collapsed_column,
                              "sis_separated": sis_separated_column})
 
-    def _save_results(self, results, set_name: str = "test") -> None:
+    def _save_results(self, results, set_name: str = "test",
+                      suppress_plots: bool = False) -> None:
         if results is None:
             results = pd.DataFrame([], columns=["x", "y", "annotation",
                                                 "sis_collapsed",
@@ -135,7 +137,7 @@ class SISEvaluator(FeatureImportanceEvaluator):
 
     def find_sis(self, x: List[str], label_index: int) -> List[List[str]]:
         encoded_x = self.learner.encode_x(x)
-            
+
         def sis_predict(x):
             return np.array(self.learner.predict(
                 x, encode=False))[:, label_index]

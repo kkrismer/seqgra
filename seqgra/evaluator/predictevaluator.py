@@ -22,7 +22,8 @@ class PredictEvaluator(Evaluator):
                         annotations: List[str]) -> Any:
         return self.learner.predict(x)
 
-    def _save_results(self, results, set_name: str = "test") -> None:
+    def _save_results(self, results, set_name: str = "test",
+                      suppress_plots: bool = False) -> None:
         if results is None:
             results = []
 

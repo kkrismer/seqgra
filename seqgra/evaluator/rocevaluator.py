@@ -28,10 +28,12 @@ class ROCEvaluator(Evaluator):
 
         return (encoded_y, y_hat)
 
-    def _save_results(self, results, set_name: str = "test") -> None:
-        self.create_roc_curve(results[0], results[0],
-                              self.output_dir + set_name +
-                              "-roc-curve.pdf")
+    def _save_results(self, results, set_name: str = "test",
+                      suppress_plots: bool = False) -> None:
+        if not suppress_plots:
+            self.create_roc_curve(results[0], results[0],
+                                  self.output_dir + set_name +
+                                  "-roc-curve.pdf")
 
     def create_roc_curve(self, y_true, y_hat, file_name) -> None:
         """Create ROC curve.

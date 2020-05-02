@@ -66,7 +66,8 @@ class Evaluator(ABC):
                        subset_labels: Optional[List[str]] = None,
                        subset_n_per_label: bool = True,
                        subset_shuffle: bool = True,
-                       subset_threshold: Optional[float] = None) -> Any:
+                       subset_threshold: Optional[float] = None,
+                       suppress_plots: bool = False) -> Any:
         if subset_idx:
             x, y, annotations = self._load_data(set_name, subset_idx)
         elif subset_n or subset_labels or \
@@ -80,7 +81,7 @@ class Evaluator(ABC):
             x, y, annotations = self._load_data(set_name)
 
         results = self._evaluate_model(x, y, annotations)
-        self._save_results(results, set_name)
+        self._save_results(results, set_name, suppress_plots)
 
         return results
 
@@ -103,7 +104,8 @@ class Evaluator(ABC):
         pass
 
     @abstractmethod
-    def _save_results(self, results, set_name: str = "test") -> None:
+    def _save_results(self, results, set_name: str = "test",
+                      suppress_plots: bool = False) -> None:
         pass
 
     @staticmethod
@@ -237,11 +239,14 @@ class FeatureImportanceEvaluator(Evaluator):
                        subset_labels: Optional[List[str]] = None,
                        subset_n_per_label: bool = True,
                        subset_shuffle: bool = True,
-                       subset_threshold: Optional[float] = None) -> Any:
+                       subset_threshold: Optional[float] = None,
+                       suppress_plots: bool = False) -> Any:
         results = super().evaluate_model(set_name, subset_idx, subset_n,
                                          subset_labels, subset_n_per_label,
-                                         subset_shuffle, subset_threshold)
-        self._visualize_grammar_agreement(results, set_name)
+                                         subset_shuffle, subset_threshold,
+                                         suppress_plots)
+        if not suppress_plots:
+            self._visualize_grammar_agreement(results, set_name)
         return results
 
     @abstractmethod
