@@ -15,11 +15,12 @@ can be installed with pip:
 pip install seqgra
 ```
 
-For now, download this seqgra repository and call the following pip command 
-inside the seqgra root directory:
+For now, install seqgra from this repository directly:
 
 ```
-pip install -e .
+git clone https://github.com/kkrismer/seqgra
+cd seqgra
+pip install .
 ```
 
 ## Usage
