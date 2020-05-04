@@ -50,6 +50,9 @@ def get_learner(model_definition: ModelDefinition,
                             ", grammar sequence space: " +
                             data_definition.sequence_space + ")")
 
+    if model_definition.library == c.LibraryType.TENSORFLOW:
+        os.environ["TF_CPP_MIN_LOG_LEVEL"] = "1"
+
     # imports are inside if branches to only depend on TensorFlow and PyTorch
     # when required
     if model_definition.implementation is None:
@@ -212,7 +215,7 @@ def run_seqgra(data_config_file: Optional[str],
                model_config_file: Optional[str],
                evaluator_ids: Optional[List[str]],
                output_dir: str,
-               print_definitions: bool,
+               print_info: bool,
                eval_sets: Optional[List[str]],
                eval_n: Optional[int],
                eval_n_per_label: Optional[int],
@@ -234,7 +237,7 @@ def run_seqgra(data_config_file: Optional[str],
             data_config)
         data_definition: DataDefinition = data_def_parser.get_data_definition()
         grammar_id: str = data_definition.grammar_id
-        if print_definitions:
+        if print_info:
             print(data_definition)
 
         simulator = Simulator(data_definition, output_dir + "input")
@@ -253,7 +256,7 @@ def run_seqgra(data_config_file: Optional[str],
         model_def_parser: ModelDefinitionParser = XMLModelDefinitionParser(
             model_config)
         model_definition: ModelDefinition = model_def_parser.get_model_definition()
-        if print_definitions:
+        if print_info:
             print(model_definition)
 
         learner: Learner = get_learner(model_definition, data_definition,
@@ -283,7 +286,8 @@ def run_seqgra(data_config_file: Optional[str],
             x_val, y_val = learner.parse_examples_data(validation_set_file)
 
             learner.create_model()
-            learner.print_model_summary()
+            if print_info:
+                learner.print_model_summary()
             learner.train_model(x_train=x_train, y_train=y_train,
                                 x_val=x_val, y_val=y_val)
             learner.save_model()
@@ -406,7 +410,8 @@ def main():
         "-p",
         "--print",
         action="store_true",
-        help="if this flag is set, data and model definitions are printed"
+        help="if this flag is set, data definition, model definition, and "
+        "model summary are printed"
     )
     parser.add_argument(
         "--eval-sets",
