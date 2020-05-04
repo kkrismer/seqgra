@@ -49,7 +49,8 @@ class TorchDNAMultiClassClassificationLearner(
         validation_dataset: DNAMultiClassDataSet = DNAMultiClassDataSet(
             encoded_x_val, encoded_y_val, self.definition.labels)
 
-        TorchHelper.train_model(self, training_dataset, validation_dataset)
+        TorchHelper.train_model(self, training_dataset,
+                                validation_dataset, "softmax")
 
     def save_model(self, model_name: str = "") -> None:
         TorchHelper.save_model(self, model_name)
@@ -79,7 +80,7 @@ class TorchDNAMultiClassClassificationLearner(
         dataset: DNAMultiClassDataSet = DNAMultiClassDataSet(
             encoded_x, encoded_y, self.definition.labels)
 
-        return TorchHelper.evaluate_model(self, dataset)
+        return TorchHelper.evaluate_model(self, dataset, "softmax")
 
     def encode_x(self, x: List[str]):
         encoded_x = super().encode_x(x)
@@ -135,7 +136,8 @@ class TorchDNAMultiLabelClassificationLearner(
         validation_dataset: DNAMultiLabelDataSet = DNAMultiLabelDataSet(
             encoded_x_val, encoded_y_val, self.definition.labels)
 
-        TorchHelper.train_model(self, training_dataset, validation_dataset)
+        TorchHelper.train_model(self, training_dataset,
+                                validation_dataset, "sigmoid")
 
     def save_model(self, model_name: str = "") -> None:
         TorchHelper.save_model(self, model_name)
@@ -165,7 +167,7 @@ class TorchDNAMultiLabelClassificationLearner(
         dataset: DNAMultiLabelDataSet = DNAMultiLabelDataSet(
             encoded_x, encoded_y, self.definition.labels)
 
-        return TorchHelper.evaluate_model(self, dataset)
+        return TorchHelper.evaluate_model(self, dataset, "sigmoid")
 
     def encode_x(self, x: List[str]):
         encoded_x = super().encode_x(x)
@@ -221,7 +223,8 @@ class TorchProteinMultiClassClassificationLearner(
         validation_dataset: ProteinMultiClassDataSet = ProteinMultiClassDataSet(
             encoded_x_val, encoded_y_val, self.definition.labels)
 
-        TorchHelper.train_model(self, training_dataset, validation_dataset)
+        TorchHelper.train_model(self, training_dataset,
+                                validation_dataset, "softmax")
 
     def save_model(self, model_name: str = "") -> None:
         TorchHelper.save_model(self, model_name)
@@ -251,7 +254,7 @@ class TorchProteinMultiClassClassificationLearner(
         dataset: ProteinMultiClassDataSet = ProteinMultiClassDataSet(
             encoded_x, encoded_y, self.definition.labels)
 
-        return TorchHelper.evaluate_model(self, dataset)
+        return TorchHelper.evaluate_model(self, dataset, "softmax")
 
     def encode_x(self, x: List[str]):
         encoded_x = super().encode_x(x)
@@ -307,7 +310,8 @@ class TorchProteinMultiLabelClassificationLearner(
         validation_dataset: ProteinMultiLabelDataSet = ProteinMultiLabelDataSet(
             encoded_x_val, encoded_y_val, self.definition.labels)
 
-        TorchHelper.train_model(self, training_dataset, validation_dataset)
+        TorchHelper.train_model(self, training_dataset,
+                                validation_dataset, "sigmoid")
 
     def save_model(self, model_name: str = "") -> None:
         TorchHelper.save_model(self, model_name)
@@ -337,7 +341,7 @@ class TorchProteinMultiLabelClassificationLearner(
         dataset: ProteinMultiLabelDataSet = ProteinMultiLabelDataSet(
             encoded_x, encoded_y, self.definition.labels)
 
-        return TorchHelper.evaluate_model(self, dataset)
+        return TorchHelper.evaluate_model(self, dataset, "sigmoid")
 
     def encode_x(self, x: List[str]):
         encoded_x = super().encode_x(x)

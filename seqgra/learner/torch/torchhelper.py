@@ -4,7 +4,7 @@ PyTorch learner helper class
 
 @author: Konstantin Krismer
 """
-from typing import List
+from typing import List, Optional
 import os
 import sys
 import random
@@ -100,7 +100,8 @@ class TorchHelper:
     @staticmethod
     def train_model(learner: Learner,
                     training_dataset: torch.utils.data.Dataset,
-                    validation_dataset: torch.utils.data.Dataset) -> None:
+                    validation_dataset: torch.utils.data.Dataset,
+                    final_activation_function: Optional[str] = None) -> None:
         if learner.model is None:
             learner.create_model()
 
@@ -127,11 +128,13 @@ class TorchHelper:
                                             learner.criterion, device=device)
         train_evaluator = create_supervised_evaluator(
             learner.model,
-            metrics=TorchHelper.get_metrics(learner),
+            metrics=TorchHelper.get_metrics(
+                learner, final_activation_function),
             device=device)
         val_evaluator = create_supervised_evaluator(
             learner.model,
-            metrics=TorchHelper.get_metrics(learner),
+            metrics=TorchHelper.get_metrics(
+                learner, final_activation_function),
             device=device)
 
         logging.getLogger("ignite.engine.engine.Engine").setLevel(
@@ -196,7 +199,8 @@ class TorchHelper:
     @staticmethod
     def train_model_basic(learner: Learner,
                           training_dataset: torch.utils.data.Dataset,
-                          validation_dataset: torch.utils.data.Dataset) -> None:
+                          validation_dataset: torch.utils.data.Dataset,
+                          final_activation_function: Optional[str] = None) -> None:
         if learner.model is None:
             learner.create_model()
 
@@ -247,18 +251,34 @@ class TorchHelper:
                     # forward
                     # track history if only in train
                     with torch.set_grad_enabled(phase == c.DataSet.TRAINING):
-                        outputs = learner.model(x)
-                        loss = learner.criterion(outputs, y)
+                        y_hat = learner.model(x)
+                        loss = learner.criterion(y_hat, y)
 
                         # backward + optimize only if in training phase
                         if phase == c.DataSet.TRAINING:
                             loss.backward()
                             learner.optimizer.step()
 
+                        if final_activation_function is not None:
+                            if final_activation_function == "softmax":
+                                y_hat = torch.nn.functional.softmax(
+                                    y_hat, dim=1)
+                            elif final_activation_function == "sigmoid":
+                                y_hat = torch.sigmoid(y_hat)
+
                         # statistics
-                        y_hat = torch.argmax(outputs, dim=1)
+                        if learner.definition.task == c.TaskType.MULTI_CLASS_CLASSIFICATION:
+                            indices = torch.argmax(y_hat, dim=1)
+                            correct = torch.eq(indices, y).view(-1)
+                        elif learner.definition.task == c.TaskType.MULTI_LABEL_CLASSIFICATION:
+                            # binarize y_hat
+                            y_hat = torch.gt(y_hat, 0.5)
+                            y = y.type_as(y_hat)
+
+                            correct = torch.all(y == y_hat, dim=-1)
+
+                        running_correct += torch.sum(correct).item()
                         running_loss += loss.item() * x.size(0)
-                        running_correct += torch.sum(y_hat == y)
 
                 epoch_loss = running_loss / len(data_loader.dataset)
                 epoch_acc = running_correct.float() / len(data_loader.dataset)
@@ -294,7 +314,7 @@ class TorchHelper:
 
     @staticmethod
     def predict(learner: Learner, dataset: torch.utils.data.Dataset,
-                final_activation_function=None):
+                final_activation_function: Optional[str] = None):
         """ This is the forward calculation from x to y
         Returns:
             softmax_linear: Output tensor with the computed logits.
@@ -309,7 +329,7 @@ class TorchHelper:
         device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
         learner.model = learner.model.to(device)
 
-        preds = []
+        y_hat = []
         learner.model.eval()
         with torch.no_grad():
             for x in data_loader:
@@ -318,15 +338,14 @@ class TorchHelper:
 
                 raw_logits = learner.model(x)
                 if final_activation_function is None:
-                    preds += raw_logits.tolist()
+                    y_hat += raw_logits.tolist()
                 elif final_activation_function == "softmax":
-                    preds += \
+                    y_hat += \
                         torch.nn.functional.softmax(raw_logits, dim=1).tolist()
                 elif final_activation_function == "sigmoid":
-                    preds += \
-                        torch.sigmoid(raw_logits).tolist()
+                    y_hat += torch.sigmoid(raw_logits).tolist()
 
-        return np.array(preds)
+        return np.array(y_hat)
 
     @staticmethod
     def get_num_params(learner: Learner):
@@ -335,7 +354,8 @@ class TorchHelper:
         return len(learner.model.parameters())
 
     @staticmethod
-    def evaluate_model(learner: Learner, dataset: torch.utils.data.Dataset):
+    def evaluate_model(learner: Learner, dataset: torch.utils.data.Dataset,
+                       final_activation_function: Optional[str] = None):
         data_loader = torch.utils.data.DataLoader(
             dataset,
             batch_size=int(
@@ -359,6 +379,12 @@ class TorchHelper:
 
                 y_hat = learner.model(x)
                 loss = learner.criterion(y_hat, y)
+
+                if final_activation_function is not None:
+                    if final_activation_function == "softmax":
+                        y_hat = torch.nn.functional.softmax(y_hat, dim=1)
+                    elif final_activation_function == "sigmoid":
+                        y_hat = torch.sigmoid(y_hat)
 
                 if learner.definition.task == c.TaskType.MULTI_CLASS_CLASSIFICATION:
                     indices = torch.argmax(y_hat, dim=1)
@@ -424,7 +450,25 @@ class TorchHelper:
             raise Exception("no loss specified")
 
     @staticmethod
-    def get_metrics(learner: Learner):
+    def get_metrics(learner: Learner,
+                    final_activation_function: Optional[str] = None):
+        def thresholded_output_transform(output):
+            y_hat, y = output
+            y_hat = torch.round(y_hat)
+            return y_hat, y
+
+        def softmax_thresholded_output_transform(output):
+            y_hat, y = output
+            y_hat = torch.nn.functional.softmax(y_hat, dim=1)
+            y_hat = torch.round(y_hat)
+            return y_hat, y
+
+        def sigmoid_thresholded_output_transform(output):
+            y_hat, y = output
+            y_hat = torch.sigmoid(y_hat)
+            y_hat = torch.round(y_hat)
+            return y_hat, y
+
         is_multilabel = learner.definition.task == c.TaskType.MULTI_LABEL_CLASSIFICATION
         metrics_dict = dict()
         for metric in learner.metrics:
@@ -432,7 +476,22 @@ class TorchHelper:
             if metric == "loss":
                 metrics_dict[metric] = Loss(learner.criterion)
             elif metric == "accuracy":
-                metrics_dict[metric] = Accuracy(is_multilabel=is_multilabel)
+                if is_multilabel:
+                    if final_activation_function is None:
+                        metrics_dict[metric] = Accuracy(
+                            thresholded_output_transform,
+                            is_multilabel=is_multilabel)
+                    elif final_activation_function == "softmax":
+                        metrics_dict[metric] = Accuracy(
+                            softmax_thresholded_output_transform,
+                            is_multilabel=is_multilabel)
+                    elif final_activation_function == "sigmoid":
+                        metrics_dict[metric] = Accuracy(
+                            sigmoid_thresholded_output_transform,
+                            is_multilabel=is_multilabel)
+                else:
+                    metrics_dict[metric] = Accuracy(
+                        is_multilabel=is_multilabel)
             else:
                 logging.warning("unknown metric: %s", metric)
         return metrics_dict
