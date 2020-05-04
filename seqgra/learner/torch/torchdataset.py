@@ -48,6 +48,13 @@ class DNAMultiLabelDataSet(torch.utils.data.Dataset):
 
         self.x = np.array(self.x).astype(np.float32)
 
+        if self.y is not None:
+            if not isinstance(self.y, np.ndarray):
+                self.y = np.array(self.y)
+
+            if self.y.dtype == np.bool:
+                self.y = self.y.astype(np.float32)
+
     def __len__(self):
         return len(self.x)
 
@@ -98,6 +105,13 @@ class ProteinMultiLabelDataSet(torch.utils.data.Dataset):
         self.labels: Optional[List[str]] = labels
 
         self.x = np.array(self.x).astype(np.float32)
+
+        if self.y is not None:
+            if not isinstance(self.y, np.ndarray):
+                self.y = np.array(self.y)
+
+            if self.y.dtype == np.bool:
+                self.y = self.y.astype(np.float32)
 
     def __len__(self):
         return len(self.x)
