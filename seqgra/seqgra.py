@@ -212,6 +212,7 @@ def run_seqgra(data_config_file: Optional[str],
                model_config_file: Optional[str],
                evaluator_ids: Optional[List[str]],
                output_dir: str,
+               print_definitions: bool,
                eval_sets: Optional[List[str]],
                eval_n: Optional[int],
                eval_n_per_label: Optional[int],
@@ -233,7 +234,8 @@ def run_seqgra(data_config_file: Optional[str],
             data_config)
         data_definition: DataDefinition = data_def_parser.get_data_definition()
         grammar_id: str = data_definition.grammar_id
-        print(data_definition)
+        if print_definitions:
+            print(data_definition)
 
         simulator = Simulator(data_definition, output_dir + "input")
         synthetic_data_available: bool = \
@@ -251,7 +253,8 @@ def run_seqgra(data_config_file: Optional[str],
         model_def_parser: ModelDefinitionParser = XMLModelDefinitionParser(
             model_config)
         model_definition: ModelDefinition = model_def_parser.get_model_definition()
-        print(model_definition)
+        if print_definitions:
+            print(model_definition)
 
         learner: Learner = get_learner(model_definition, data_definition,
                                        output_dir + "input/" + grammar_id,
@@ -400,6 +403,12 @@ def main():
         "data, trained model, and model evaluation"
     )
     parser.add_argument(
+        "-p",
+        "--print",
+        action="store_true",
+        help="if this flag is set, data and model definitions are printed"
+    )
+    parser.add_argument(
         "--eval-sets",
         type=str,
         default=[c.DataSet.TEST],
@@ -465,6 +474,7 @@ def main():
                args.modelconfigfile,
                args.evaluators,
                args.outputdir,
+               args.print,
                args.eval_sets,
                args.eval_n,
                args.eval_n_per_label,

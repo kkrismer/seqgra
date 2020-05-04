@@ -59,10 +59,16 @@ models are used.
 
 ```
 seqgra -h
-usage: seqgra [-h] (-d DATACONFIGFILE | -f DATAFOLDER) [-m MODELCONFIGFILE] 
-              [-e EVALUATORS [EVALUATORS ...]] -o OUTPUTDIR 
-              [--eval-sets EVAL_SETS [EVAL_SETS ...]] [--eval-n EVAL_N] 
-              [--eval-n-per-label EVAL_N_PER_LABEL] 
+usage: seqgra [-h]
+              (-d DATACONFIGFILE | -f DATAFOLDER)
+              [-m MODELCONFIGFILE] 
+              [-e EVALUATORS [EVALUATORS ...]]
+              -o OUTPUTDIR
+              [-p]
+              [--eval-sets EVAL_SETS [EVAL_SETS ...]]
+              [--eval-n EVAL_N]
+              [--eval-n-per-label EVAL_N_PER_LABEL]
+              [--eval-suppress-plots]
               [--eval-fi-predict-threshold EVAL_FI_PREDICT_THRESHOLD]
               [--eval-sis-predict-threshold EVAL_SIS_PREDICT_THRESHOLD]
 
@@ -93,6 +99,8 @@ optional arguments:
   -o OUTPUTDIR, --outputdir OUTPUTDIR
                         output directory, subdirectories are created for 
                         generated data, trained model, and model evaluation
+  -p, --print           if this flag is set, data and model definitions are 
+                        printed
   --eval-sets EVAL_SETS [EVAL_SETS ...]
                         either one or more of the following: training, 
                         validation, test; selects data set for evaluation; 
@@ -101,6 +109,10 @@ optional arguments:
   --eval-n EVAL_N       maximum number of examples to be evaluated per set 
                         (defaults to the total number of examples); this 
                         evaluator argument will be passed to all evaluators
+  --eval-suppress-plots
+                        if this flag is set, plots are suppressed globally; 
+                        this evaluator argument will be passed to all 
+                        evaluators
   --eval-n-per-label EVAL_N_PER_LABEL
                         maximum number of examples to be evaluated for each 
                         label and set (defaults to the total number of 
