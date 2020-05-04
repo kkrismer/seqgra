@@ -324,7 +324,7 @@ class TorchHelper:
                         torch.nn.functional.softmax(raw_logits, dim=1).tolist()
                 elif final_activation_function == "sigmoid":
                     preds += \
-                        torch.nn.functional.sigmoid(raw_logits, dim=1).tolist()
+                        torch.sigmoid(raw_logits).tolist()
 
         return np.array(preds)
 
@@ -348,6 +348,7 @@ class TorchHelper:
 
         running_loss: float = 0.0
         running_correct: int = 0
+        num_examples: int = 0
 
         learner.model.eval()
         with torch.no_grad():
@@ -356,16 +357,25 @@ class TorchHelper:
                 x = x.to(device)
                 y = y.to(device)
 
-                outputs = learner.model(x)
-                loss = learner.criterion(outputs, y)
+                y_hat = learner.model(x)
+                loss = learner.criterion(y_hat, y)
 
-                # statistics
-                y_hat = torch.argmax(outputs, dim=1)
+                if learner.definition.task == c.TaskType.MULTI_CLASS_CLASSIFICATION:
+                    indices = torch.argmax(y_hat, dim=1)
+                    correct = torch.eq(indices, y).view(-1)
+                elif learner.definition.task == c.TaskType.MULTI_LABEL_CLASSIFICATION:
+                    # binarize y_hat
+                    y_hat = torch.gt(y_hat, 0.5)
+                    y = y.type_as(y_hat)
+
+                    correct = torch.all(y == y_hat, dim=-1)
+
+                running_correct += torch.sum(correct).item()
                 running_loss += loss.item() * x.size(0)
-                running_correct += torch.sum(y_hat == y)
+                num_examples += correct.shape[0]
 
-        overall_loss = running_loss / len(data_loader.dataset)
-        overall_accuracy = running_correct.float().item() / len(data_loader.dataset)
+        overall_loss = running_loss / num_examples
+        overall_accuracy = running_correct / num_examples
 
         return {"loss": overall_loss, "accuracy": overall_accuracy}
 
