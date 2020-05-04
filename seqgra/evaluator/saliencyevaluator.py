@@ -6,14 +6,15 @@ MIT - CSAIL - Gifford Lab - seqgra
 
 @author: Jennifer Hammelman
 """
+import logging
+import math
+import os
+import subprocess
 from typing import Any, List
 
-import math
 import numpy as np
-import os
 import pandas as pd
 import pkg_resources
-import subprocess
 import torch
 
 import seqgra.constants as c
@@ -234,7 +235,14 @@ class GradientBasedEvaluator(FeatureImportanceEvaluator):
                 df.to_csv(temp_file_name, sep="\t", index=False)
                 cmd = ["Rscript", "--vanilla", plot_script, temp_file_name,
                        pdf_file_name, self.evaluator_name]
-                subprocess.call(cmd, universal_newlines=True)
+                try:
+                    subprocess.call(cmd, universal_newlines=True)
+                except subprocess.CalledProcessError as exception:
+                    logging.warning("failed to create grammar-model-agreement "
+                                    "plots: %s", exception.output)
+                except FileNotFoundError as exception:
+                    logging.warning("Rscript not on PATH, skipping "
+                                    "grammar-model-agreement plots")
                 os.remove(temp_file_name)
 
     def _prepare_unthresholded_r_data_frame(self, df: pd.DataFrame) -> pd.DataFrame:
