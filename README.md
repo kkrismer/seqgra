@@ -23,6 +23,38 @@ cd seqgra
 pip install .
 ```
 
+### System requirements
+
+- Python 3.7 (or higher)
+- *R 3.5 (or higher)*
+    - *R package `ggplot2` 3.3.0 (or higher)*
+    - *R package `scales` 1.1.0 (or higher)*
+
+R is used to create the grammar-model-agreement plots and if not available,
+these plots will be skipped.
+
+### Python package dependencies
+
+- Cython>=0.29
+- lxml>=4.4.1
+- matplotlib>=3.1
+- numpy>=1.14
+- pandas>=0.25
+- PyYAML>=5.3
+- scikit-image>=0.16
+- scikit-learn>=0.21
+- scipy>=1.3
+- setuptools>=41.6
+- ushuffle>=1.1.2
+- *tensorflow>=2.0.0 (NOT automatically installed by pip)*
+- *torch>=1.4.0 (NOT automatically installed by pip)*
+- *pytorch-ignite>=0.3.0 (NOT automatically installed by pip)*
+
+The `tensorflow` package is only required if TensorFlow models are used and
+will not be automatically installed by `pip install seqgra`. Same is true for
+packages `torch` and `pytorch-ignite`, which are only required if PyTorch 
+models are used.
+
 ## Usage
 
 ```
