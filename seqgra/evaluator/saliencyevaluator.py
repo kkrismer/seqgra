@@ -225,25 +225,24 @@ class GradientBasedEvaluator(FeatureImportanceEvaluator):
                       "-grammar-agreement-df.txt",
                       sep="\t", index=False)
 
-            if self.is_ggplot_available:
-                plot_script: str = pkg_resources.resource_filename(
-                    "seqgra", "evaluator/plotagreement.R")
-                temp_file_name: str = self.output_dir + set_name + "-temp.txt"
-                pdf_file_name: str = self.output_dir + set_name + \
-                    "-grammar-agreement.pdf"
-                df: pd.DataFrame = self._prepare_unthresholded_r_data_frame(df)
-                df.to_csv(temp_file_name, sep="\t", index=False)
-                cmd = ["Rscript", "--vanilla", plot_script, temp_file_name,
-                       pdf_file_name, self.evaluator_name]
-                try:
-                    subprocess.call(cmd, universal_newlines=True)
-                except subprocess.CalledProcessError as exception:
-                    logging.warning("failed to create grammar-model-agreement "
-                                    "plots: %s", exception.output)
-                except FileNotFoundError as exception:
-                    logging.warning("Rscript not on PATH, skipping "
-                                    "grammar-model-agreement plots")
-                os.remove(temp_file_name)
+            plot_script: str = pkg_resources.resource_filename(
+                "seqgra", "evaluator/plotagreement.R")
+            temp_file_name: str = self.output_dir + set_name + "-temp.txt"
+            pdf_file_name: str = self.output_dir + set_name + \
+                "-grammar-agreement.pdf"
+            df: pd.DataFrame = self._prepare_unthresholded_r_data_frame(df)
+            df.to_csv(temp_file_name, sep="\t", index=False)
+            cmd = ["Rscript", "--vanilla", plot_script, temp_file_name,
+                    pdf_file_name, self.evaluator_name]
+            try:
+                subprocess.call(cmd, universal_newlines=True)
+            except subprocess.CalledProcessError as exception:
+                logging.warning("failed to create grammar-model-agreement "
+                                "plots: %s", exception.output)
+            except FileNotFoundError as exception:
+                logging.warning("Rscript not on PATH, skipping "
+                                "grammar-model-agreement plots")
+            os.remove(temp_file_name)
 
     def _prepare_unthresholded_r_data_frame(self, df: pd.DataFrame) -> pd.DataFrame:
         df["precision"] = 0.0

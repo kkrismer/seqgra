@@ -272,13 +272,11 @@ class FeatureImportanceEvaluator(Evaluator):
                  output_dir: str,
                  supported_tasks: Optional[Set[str]] = None,
                  supported_sequence_spaces: Optional[Set[str]] = None,
-                 supported_libraries: Optional[Set[str]] = None,
-                 is_ggplot_available: bool = True) -> None:
+                 supported_libraries: Optional[Set[str]] = None) -> None:
         super().__init__(evaluator_id, evaluator_name, learner, output_dir,
                          supported_tasks,
                          supported_sequence_spaces,
                          supported_libraries)
-        self.is_ggplot_available: bool = is_ggplot_available
 
     def evaluate_model(self, set_name: str = "test",
                        subset_idx: Optional[List[int]] = None,
@@ -414,23 +412,22 @@ class FeatureImportanceEvaluator(Evaluator):
                       "-grammar-agreement-thresholded-df.txt",
                       sep="\t", index=False)
 
-            if self.is_ggplot_available:
-                plot_script: str = pkg_resources.resource_filename(
-                    "seqgra", "evaluator/plotagreement.R")
-                temp_file_name: str = self.output_dir + set_name + \
-                    "-thresholded-temp.txt"
-                pdf_file_name: str = self.output_dir + set_name + \
-                    "-grammar-agreement-thresholded.pdf"
-                df: pd.DataFrame = self._prepare_r_data_frame(df)
-                df.to_csv(temp_file_name, sep="\t", index=False)
-                cmd = ["Rscript", "--vanilla", plot_script, temp_file_name,
-                       pdf_file_name, self.evaluator_name]
-                try:
-                    subprocess.call(cmd, universal_newlines=True)
-                except subprocess.CalledProcessError as exception:
-                    logging.warning("failed to create grammar-model-agreement "
-                                    "plots: %s", exception.output)
-                except FileNotFoundError as exception:
-                    logging.warning("Rscript not on PATH, skipping "
-                                    "grammar-model-agreement plots")
-                os.remove(temp_file_name)
+            plot_script: str = pkg_resources.resource_filename(
+                "seqgra", "evaluator/plotagreement.R")
+            temp_file_name: str = self.output_dir + set_name + \
+                "-thresholded-temp.txt"
+            pdf_file_name: str = self.output_dir + set_name + \
+                "-grammar-agreement-thresholded.pdf"
+            df: pd.DataFrame = self._prepare_r_data_frame(df)
+            df.to_csv(temp_file_name, sep="\t", index=False)
+            cmd = ["Rscript", "--vanilla", plot_script, temp_file_name,
+                    pdf_file_name, self.evaluator_name]
+            try:
+                subprocess.call(cmd, universal_newlines=True)
+            except subprocess.CalledProcessError as exception:
+                logging.warning("failed to create grammar-model-agreement "
+                                "plots: %s", exception.output)
+            except FileNotFoundError as exception:
+                logging.warning("Rscript not on PATH, skipping "
+                                "grammar-model-agreement plots")
+            os.remove(temp_file_name)
