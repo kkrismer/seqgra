@@ -37,6 +37,7 @@ class SISEvaluator(FeatureImportanceEvaluator):
                         annotations: List[str]) -> Any:
         x_column: List[str] = list()
         y_column: List[str] = list()
+        label_column: List[str] = list()
         annotations_column: List[str] = list()
         sis_collapsed_column: List[str] = list()
         sis_separated_column: List[str] = list()
@@ -58,12 +59,14 @@ class SISEvaluator(FeatureImportanceEvaluator):
 
             x_column += selected_x
             y_column += selected_y
+            label_column += [selected_label] * len(selected_x)
             annotations_column += selected_annotations
             sis_collapsed_column += sis_collapsed
             sis_separated_column += sis_separated
 
         return pd.DataFrame({"x": x_column,
                              "y": y_column,
+                             "label": label_column,
                              "annotation": annotations_column,
                              "sis_collapsed": sis_collapsed_column,
                              "sis_separated": sis_separated_column})
@@ -71,7 +74,8 @@ class SISEvaluator(FeatureImportanceEvaluator):
     def _save_results(self, results, set_name: str = "test",
                       suppress_plots: bool = False) -> None:
         if results is None:
-            results = pd.DataFrame([], columns=["x", "y", "annotation",
+            results = pd.DataFrame([], columns=["x", "y", "label",
+                                                "annotation",
                                                 "sis_collapsed",
                                                 "sis_separated"])
 
@@ -121,7 +125,7 @@ class SISEvaluator(FeatureImportanceEvaluator):
             else:
                 group_column += [self.__get_agreement_group(char, self.__get_masked_letter())
                                  for i, char in enumerate(row.annotation)]
-            label_column += [row.y] * len(row.annotation)
+            label_column += [row.label] * len(row.annotation)
 
         df = pd.DataFrame({"example": example_column,
                            "position": position_column,
