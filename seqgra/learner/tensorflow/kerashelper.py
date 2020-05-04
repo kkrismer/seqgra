@@ -5,7 +5,7 @@ TensorFlow Keras learner helper class
 @author: Konstantin Krismer
 """
 from ast import literal_eval
-from typing import List, Any
+from typing import Any, FrozenSet, List
 import os
 import sys
 import random
@@ -19,6 +19,25 @@ from seqgra.model.model import Architecture
 
 
 class KerasHelper:
+    MULTI_CLASS_CLASSIFICATION_LOSSES: FrozenSet[str] = frozenset(
+        ["categoricalhinge",
+         "categoricalcrossentropy",
+         "sparsecategoricalcrossentropy",
+         "kldivergence", "kullbackleiblerdivergence", "kld"])
+
+    MULTI_LABEL_CLASSIFICATION_LOSSES: FrozenSet[str] = frozenset(
+        ["hinge", "squaredhinge", "binarycrossentropy"])
+
+    MULTIPLE_REGRESSION_LOSSES: FrozenSet[str] = frozenset(
+        ["meansquarederror", "mse",
+         "meanabsoluteerror", "mae",
+         "meanabsolutepercentageerror", "mape",
+         "meansquaredlogarithmicerror", "msle"
+         "logcosh", "huber", "huberloss", "cosinesimilarity",
+         "poisson"])
+
+    MULTIVARIATE_REGRESSION_LOSSES: FrozenSet[str] = MULTIPLE_REGRESSION_LOSSES
+
     @staticmethod
     def to_bool(x: str) -> bool:
         x = x.strip()
@@ -1170,7 +1189,8 @@ class KerasHelper:
                 else:
                     delta = 1.0
                 return tf.keras.losses.Huber(delta=delta)
-            elif loss == "kldivergence" or loss == "kld":
+            elif loss == "kldivergence" or loss == "kld" or \
+                    loss == "kullbackleiblerdivergence":
                 return tf.keras.losses.KLDivergence()
             elif loss == "logcosh":
                 return tf.keras.losses.LogCosh()

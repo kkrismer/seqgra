@@ -4,7 +4,8 @@ TensorFlow Keras learners
 
 @author: Konstantin Krismer
 """
-from typing import List, Any
+import logging
+from typing import Any, List, Optional
 
 import numpy as np
 
@@ -21,6 +22,32 @@ class KerasDNAMultiClassClassificationLearner(
     def __init__(self, model_definition: ModelDefinition, data_dir: str,
                  output_dir: str) -> None:
         super().__init__(model_definition, data_dir, output_dir)
+        self._check_task_loss_compatibility()
+
+    def _check_task_loss_compatibility(self) -> None:
+        if "loss" in self.definition.loss_hyperparameters:
+            loss: str = self.definition.loss_hyperparameters["loss"]
+            loss = loss.lower().replace("_", "").strip()
+            if not loss in KerasHelper.MULTI_CLASS_CLASSIFICATION_LOSSES:
+                logging.warning("loss function '%s' is incompatible with "
+                                "multi-class classification models", loss)
+
+    def _get_output_layer_activation_function(self) -> Optional[str]:
+        if "from_logits" in self.definition.loss_hyperparameters and \
+            "loss" in self.definition.loss_hyperparameters:
+            from_logits: bool = bool(self.definition.loss_hyperparameters["from_logits"])
+            if from_logits:
+                loss: str = self.definition.loss_hyperparameters["loss"]
+                loss = loss.lower().replace("_", "").strip()
+                if loss == "categoricalcrossentropy" or \
+                    loss == "sparsecategoricalcrossentropy":
+                    return "softmax"
+                elif loss == "binarycrossentropy":
+                    logging.warning("activation function 'sigmoid' is "
+                                    "incompatible with multi-class "
+                                    "classification models")
+                    return "sigmoid"
+        return None
 
     def create_model(self) -> None:
         KerasHelper.create_model(self)
@@ -76,6 +103,32 @@ class KerasDNAMultiLabelClassificationLearner(
     def __init__(self, model_definition: ModelDefinition, data_dir: str,
                  output_dir: str) -> None:
         super().__init__(model_definition, data_dir, output_dir)
+        self._check_task_loss_compatibility()
+
+    def _check_task_loss_compatibility(self) -> None:
+        if "loss" in self.definition.loss_hyperparameters:
+            loss: str = self.definition.loss_hyperparameters["loss"]
+            loss = loss.lower().replace("_", "").strip()
+            if not loss in KerasHelper.MULTI_LABEL_CLASSIFICATION_LOSSES:
+                logging.warning("loss function '%s' is incompatible with "
+                                "multi-label classification models", loss)
+
+    def _get_output_layer_activation_function(self) -> Optional[str]:
+        if "from_logits" in self.definition.loss_hyperparameters and \
+            "loss" in self.definition.loss_hyperparameters:
+            from_logits: bool = bool(self.definition.loss_hyperparameters["from_logits"])
+            if from_logits:
+                loss: str = self.definition.loss_hyperparameters["loss"]
+                loss = loss.lower().replace("_", "").strip()
+                if loss == "categoricalcrossentropy" or \
+                    loss == "sparsecategoricalcrossentropy":
+                    logging.warning("activation function 'sofmax' is "
+                                    "incompatible with multi-label "
+                                    "classification models")
+                    return "softmax"
+                elif loss == "binarycrossentropy":
+                    return "sigmoid"
+        return None
 
     def create_model(self) -> None:
         KerasHelper.create_model(self)
@@ -131,6 +184,32 @@ class KerasProteinMultiClassClassificationLearner(
     def __init__(self, model_definition: ModelDefinition, data_dir: str,
                  output_dir: str) -> None:
         super().__init__(model_definition, data_dir, output_dir)
+        self._check_task_loss_compatibility()
+
+    def _check_task_loss_compatibility(self) -> None:
+        if "loss" in self.definition.loss_hyperparameters:
+            loss: str = self.definition.loss_hyperparameters["loss"]
+            loss = loss.lower().replace("_", "").strip()
+            if not loss in KerasHelper.MULTI_CLASS_CLASSIFICATION_LOSSES:
+                logging.warning("loss function '%s' is incompatible with "
+                                "multi-class classification models", loss)
+
+    def _get_output_layer_activation_function(self) -> Optional[str]:
+        if "from_logits" in self.definition.loss_hyperparameters and \
+            "loss" in self.definition.loss_hyperparameters:
+            from_logits: bool = bool(self.definition.loss_hyperparameters["from_logits"])
+            if from_logits:
+                loss: str = self.definition.loss_hyperparameters["loss"]
+                loss = loss.lower().replace("_", "").strip()
+                if loss == "categoricalcrossentropy" or \
+                    loss == "sparsecategoricalcrossentropy":
+                    return "softmax"
+                elif loss == "binarycrossentropy":
+                    logging.warning("activation function 'sigmoid' is "
+                                    "incompatible with multi-class "
+                                    "classification models")
+                    return "sigmoid"
+        return None
 
     def create_model(self) -> None:
         KerasHelper.create_model(self)
@@ -186,6 +265,32 @@ class KerasProteinMultiLabelClassificationLearner(
     def __init__(self, model_definition: ModelDefinition, data_dir: str,
                  output_dir: str) -> None:
         super().__init__(model_definition, data_dir, output_dir)
+        self._check_task_loss_compatibility()
+
+    def _check_task_loss_compatibility(self) -> None:
+        if "loss" in self.definition.loss_hyperparameters:
+            loss: str = self.definition.loss_hyperparameters["loss"]
+            loss = loss.lower().replace("_", "").strip()
+            if not loss in KerasHelper.MULTI_LABEL_CLASSIFICATION_LOSSES:
+                logging.warning("loss function '%s' is incompatible with "
+                                "multi-label classification models", loss)
+
+    def _get_output_layer_activation_function(self) -> Optional[str]:
+        if "from_logits" in self.definition.loss_hyperparameters and \
+            "loss" in self.definition.loss_hyperparameters:
+            from_logits: bool = bool(self.definition.loss_hyperparameters["from_logits"])
+            if from_logits:
+                loss: str = self.definition.loss_hyperparameters["loss"]
+                loss = loss.lower().replace("_", "").strip()
+                if loss == "categoricalcrossentropy" or \
+                    loss == "sparsecategoricalcrossentropy":
+                    logging.warning("activation function 'softmax' is "
+                                    "incompatible with multi-label "
+                                    "classification models")
+                    return "softmax"
+                elif loss == "binarycrossentropy":
+                    return "sigmoid"
+        return None
 
     def create_model(self) -> None:
         KerasHelper.create_model(self)

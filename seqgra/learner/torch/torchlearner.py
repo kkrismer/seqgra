@@ -4,7 +4,8 @@ PyTorch learners
 
 @author: Konstantin Krismer
 """
-from typing import List, Any
+import logging
+from typing import Any, List, Optional
 
 import numpy as np
 
@@ -25,6 +26,28 @@ class TorchDNAMultiClassClassificationLearner(
     def __init__(self, model_definition: ModelDefinition, data_dir: str,
                  output_dir: str) -> None:
         super().__init__(model_definition, data_dir, output_dir)
+        self._check_task_loss_compatibility()
+
+    def _check_task_loss_compatibility(self) -> None:
+        if "loss" in self.definition.loss_hyperparameters:
+            loss: str = self.definition.loss_hyperparameters["loss"]
+            loss = loss.lower().replace("_", "").strip()
+            if not loss in TorchHelper.MULTI_CLASS_CLASSIFICATION_LOSSES:
+                logging.warning("loss function '%s' is incompatible with "
+                                "multi-class classification models", loss)
+
+    def _get_output_layer_activation_function(self) -> Optional[str]:
+        if "loss" in self.definition.loss_hyperparameters:
+            loss: str = self.definition.loss_hyperparameters["loss"]
+            loss = loss.lower().replace("_", "").strip()
+            if loss == "crossentropyloss":
+                return "softmax"
+            elif loss == "bcewithlogitsloss":
+                logging.warning("activation function 'sigmoid' is "
+                                "incompatible with multi-class "
+                                "classification models")
+                return "sigmoid"
+        return None
 
     def create_model(self) -> None:
         TorchHelper.create_model(self)
@@ -50,7 +73,8 @@ class TorchDNAMultiClassClassificationLearner(
             encoded_x_val, encoded_y_val, self.definition.labels)
 
         TorchHelper.train_model(self, training_dataset,
-                                validation_dataset, "softmax")
+                                validation_dataset,
+                                self._get_output_layer_activation_function())
 
     def save_model(self, model_name: str = "") -> None:
         TorchHelper.save_model(self, model_name)
@@ -68,7 +92,8 @@ class TorchDNAMultiClassClassificationLearner(
         dataset: DNAMultiClassDataSet = DNAMultiClassDataSet(
             x, labels=self.definition.labels)
 
-        return TorchHelper.predict(self, dataset, "softmax")
+        return TorchHelper.predict(self, dataset,
+                                self._get_output_layer_activation_function())
 
     def get_num_params(self):
         return TorchHelper.get_num_params(self)
@@ -80,7 +105,8 @@ class TorchDNAMultiClassClassificationLearner(
         dataset: DNAMultiClassDataSet = DNAMultiClassDataSet(
             encoded_x, encoded_y, self.definition.labels)
 
-        return TorchHelper.evaluate_model(self, dataset, "softmax")
+        return TorchHelper.evaluate_model(self, dataset,
+                                self._get_output_layer_activation_function())
 
     def encode_x(self, x: List[str]):
         encoded_x = super().encode_x(x)
@@ -112,6 +138,28 @@ class TorchDNAMultiLabelClassificationLearner(
     def __init__(self, model_definition: ModelDefinition, data_dir: str,
                  output_dir: str) -> None:
         super().__init__(model_definition, data_dir, output_dir)
+        self._check_task_loss_compatibility()
+
+    def _check_task_loss_compatibility(self) -> None:
+        if "loss" in self.definition.loss_hyperparameters:
+            loss: str = self.definition.loss_hyperparameters["loss"]
+            loss = loss.lower().replace("_", "").strip()
+            if not loss in TorchHelper.MULTI_LABEL_CLASSIFICATION_LOSSES:
+                logging.warning("loss function '%s' is incompatible with "
+                                "multi-label classification models", loss)
+
+    def _get_output_layer_activation_function(self) -> Optional[str]:
+        if "loss" in self.definition.loss_hyperparameters:
+            loss: str = self.definition.loss_hyperparameters["loss"]
+            loss = loss.lower().replace("_", "").strip()
+            if loss == "crossentropyloss":
+                logging.warning("activation function 'softmax' is "
+                                "incompatible with multi-label "
+                                "classification models")
+                return "softmax"
+            elif loss == "bcewithlogitsloss":
+                return "sigmoid"
+        return None
 
     def create_model(self) -> None:
         TorchHelper.create_model(self)
@@ -137,7 +185,8 @@ class TorchDNAMultiLabelClassificationLearner(
             encoded_x_val, encoded_y_val, self.definition.labels)
 
         TorchHelper.train_model(self, training_dataset,
-                                validation_dataset, "sigmoid")
+                                validation_dataset,
+                                self._get_output_layer_activation_function())
 
     def save_model(self, model_name: str = "") -> None:
         TorchHelper.save_model(self, model_name)
@@ -155,7 +204,8 @@ class TorchDNAMultiLabelClassificationLearner(
         dataset: DNAMultiLabelDataSet = DNAMultiLabelDataSet(
             x, labels=self.definition.labels)
 
-        return TorchHelper.predict(self, dataset, "sigmoid")
+        return TorchHelper.predict(self, dataset,
+                                self._get_output_layer_activation_function())
 
     def get_num_params(self):
         return TorchHelper.get_num_params(self)
@@ -167,7 +217,8 @@ class TorchDNAMultiLabelClassificationLearner(
         dataset: DNAMultiLabelDataSet = DNAMultiLabelDataSet(
             encoded_x, encoded_y, self.definition.labels)
 
-        return TorchHelper.evaluate_model(self, dataset, "sigmoid")
+        return TorchHelper.evaluate_model(self, dataset,
+                                self._get_output_layer_activation_function())
 
     def encode_x(self, x: List[str]):
         encoded_x = super().encode_x(x)
@@ -199,6 +250,28 @@ class TorchProteinMultiClassClassificationLearner(
     def __init__(self, model_definition: ModelDefinition, data_dir: str,
                  output_dir: str) -> None:
         super().__init__(model_definition, data_dir, output_dir)
+        self._check_task_loss_compatibility()
+
+    def _check_task_loss_compatibility(self) -> None:
+        if "loss" in self.definition.loss_hyperparameters:
+            loss: str = self.definition.loss_hyperparameters["loss"]
+            loss = loss.lower().replace("_", "").strip()
+            if not loss in TorchHelper.MULTI_CLASS_CLASSIFICATION_LOSSES:
+                logging.warning("loss function '%s' is incompatible with "
+                                "multi-class classification models", loss)
+
+    def _get_output_layer_activation_function(self) -> Optional[str]:
+        if "loss" in self.definition.loss_hyperparameters:
+            loss: str = self.definition.loss_hyperparameters["loss"]
+            loss = loss.lower().replace("_", "").strip()
+            if loss == "crossentropyloss":
+                return "softmax"
+            elif loss == "bcewithlogitsloss":
+                logging.warning("activation function 'sigmoid' is "
+                                "incompatible with multi-class "
+                                "classification models")
+                return "sigmoid"
+        return None
 
     def create_model(self) -> None:
         TorchHelper.create_model(self)
@@ -224,7 +297,8 @@ class TorchProteinMultiClassClassificationLearner(
             encoded_x_val, encoded_y_val, self.definition.labels)
 
         TorchHelper.train_model(self, training_dataset,
-                                validation_dataset, "softmax")
+                                validation_dataset,
+                                self._get_output_layer_activation_function())
 
     def save_model(self, model_name: str = "") -> None:
         TorchHelper.save_model(self, model_name)
@@ -242,7 +316,8 @@ class TorchProteinMultiClassClassificationLearner(
         dataset: ProteinMultiClassDataSet = ProteinMultiClassDataSet(
             x, labels=self.definition.labels)
 
-        return TorchHelper.predict(self, dataset, "softmax")
+        return TorchHelper.predict(self, dataset,
+                                self._get_output_layer_activation_function())
 
     def get_num_params(self):
         return TorchHelper.get_num_params(self)
@@ -254,7 +329,8 @@ class TorchProteinMultiClassClassificationLearner(
         dataset: ProteinMultiClassDataSet = ProteinMultiClassDataSet(
             encoded_x, encoded_y, self.definition.labels)
 
-        return TorchHelper.evaluate_model(self, dataset, "softmax")
+        return TorchHelper.evaluate_model(self, dataset,
+                                self._get_output_layer_activation_function())
 
     def encode_x(self, x: List[str]):
         encoded_x = super().encode_x(x)
@@ -286,6 +362,28 @@ class TorchProteinMultiLabelClassificationLearner(
     def __init__(self, model_definition: ModelDefinition, data_dir: str,
                  output_dir: str) -> None:
         super().__init__(model_definition, data_dir, output_dir)
+        self._check_task_loss_compatibility()
+
+    def _check_task_loss_compatibility(self) -> None:
+        if "loss" in self.definition.loss_hyperparameters:
+            loss: str = self.definition.loss_hyperparameters["loss"]
+            loss = loss.lower().replace("_", "").strip()
+            if not loss in TorchHelper.MULTI_LABEL_CLASSIFICATION_LOSSES:
+                logging.warning("loss function '%s' is incompatible with "
+                                "multi-label classification models", loss)
+
+    def _get_output_layer_activation_function(self) -> Optional[str]:
+        if "loss" in self.definition.loss_hyperparameters:
+            loss: str = self.definition.loss_hyperparameters["loss"]
+            loss = loss.lower().replace("_", "").strip()
+            if loss == "crossentropyloss":
+                logging.warning("activation function 'softmax' is "
+                                "incompatible with multi-label "
+                                "classification models")
+                return "softmax"
+            elif loss == "bcewithlogitsloss":
+                return "sigmoid"
+        return None
 
     def create_model(self) -> None:
         TorchHelper.create_model(self)
@@ -311,7 +409,8 @@ class TorchProteinMultiLabelClassificationLearner(
             encoded_x_val, encoded_y_val, self.definition.labels)
 
         TorchHelper.train_model(self, training_dataset,
-                                validation_dataset, "sigmoid")
+                                validation_dataset,
+                                self._get_output_layer_activation_function())
 
     def save_model(self, model_name: str = "") -> None:
         TorchHelper.save_model(self, model_name)
@@ -329,7 +428,8 @@ class TorchProteinMultiLabelClassificationLearner(
         dataset: ProteinMultiLabelDataSet = ProteinMultiLabelDataSet(
             x, labels=self.definition.labels)
 
-        return TorchHelper.predict(self, dataset, "sigmoid")
+        return TorchHelper.predict(self, dataset,
+                                self._get_output_layer_activation_function())
 
     def get_num_params(self):
         return TorchHelper.get_num_params(self)
@@ -341,7 +441,8 @@ class TorchProteinMultiLabelClassificationLearner(
         dataset: ProteinMultiLabelDataSet = ProteinMultiLabelDataSet(
             encoded_x, encoded_y, self.definition.labels)
 
-        return TorchHelper.evaluate_model(self, dataset, "sigmoid")
+        return TorchHelper.evaluate_model(self, dataset,
+                                self._get_output_layer_activation_function())
 
     def encode_x(self, x: List[str]):
         encoded_x = super().encode_x(x)
