@@ -23,7 +23,8 @@ setuptools.setup(
         "Operating System :: OS Independent",
         "Programming Language :: Python :: 3"
     ],
-    package_data={seqgra.__name__: ["data-config.xsd", "model-config.xsd"]},
+    package_data={seqgra.__name__: ["data-config.xsd", "model-config.xsd",
+                                    "evaluator/plotagreement.R"]},
     install_requires=[
         "lxml>=4.4.1",
         "numpy>=1.14",
