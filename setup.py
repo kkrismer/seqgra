@@ -26,17 +26,17 @@ setuptools.setup(
     package_data={seqgra.__name__: ["data-config.xsd", "model-config.xsd",
                                     "evaluator/plotagreement.R"]},
     install_requires=[
+        "Cython>=0.29",
         "lxml>=4.4.1",
+        "matplotlib>=3.1",
         "numpy>=1.14",
-        "scikit-learn>=0.21.3",
-        "matplotlib>=3.1.1",
-        "scipy>=1.3.1",
-        "pandas>=0.25.2",
-        "setuptools>=41.6.0",
-        "pyyaml",
-        "Cython",
-        "ushuffle",
-        "scikit-image"
+        "pandas>=0.25",
+        "PyYAML>=5.3",
+        "scikit-image>=0.16",
+        "scikit-learn>=0.21",
+        "scipy>=1.3",
+        "setuptools>=41.6",
+        "ushuffle>=1.1.2"
     ],
     python_requires=">=3",
     entry_points={
