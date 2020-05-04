@@ -87,6 +87,34 @@ optional arguments:
                         evaluator
 ```
 
+## Commonly used suite of seqgra commands
+
+```
+seqgra -d DATACONFIGFILE \
+       -m MODELCONFIGFILE \
+       -o OUTPUTDIR
+seqgra -d DATACONFIGFILE \
+       -m MODELCONFIGFILE
+       -o OUTPUTDIR
+       -e metrics roc pr predict
+       --eval-sets training validation test
+seqgra -d DATACONFIGFILE
+       -m MODELCONFIGFILE
+       -o OUTPUTDIR
+       -e sis
+       --eval-n-per-label 20
+seqgra -d DATACONFIGFILE
+       -m MODELCONFIGFILE
+       -o OUTPUTDIR
+       -e gradient saliency gradient-x-input integrated-gradients
+       --eval-n-per-label 50
+```
+
+1. generate synthetic data and train model on it
+2. load previously trained model, call conventional evaluators (`metrics`, `roc`, `pr`, and `predict`) on all examples of training, validation, and test set
+3. load previously trained model, call SIS evaluator on 20 test set examples per label (SIS is the most computationally expensive evaluator)
+4. load previously trained model, call gradient-based evaluators (`gradient`, `saliency`, `gradient-x-input`, and `integrated-gradients`) on 50 test set examples per label
+
 ## Examples of seqgra analyses
 
 **Generate synthetic data only:**
