@@ -23,9 +23,10 @@ class XMLModelDefinitionWriter(ModelDefinitionWriter):
                                  "noNamespaceSchemaLocation")
         ns_map = {"xsi": "http://www.w3.org/2001/XMLSchema-instance"}
 
-        return etree.Element("seqgramodel",
-                             {attr_qname: "https://seqgra.mit.edu/model-config.xsd"},
-                             nsmap=ns_map)
+        return etree.Element(
+            "seqgramodel",
+            {attr_qname: "https://seqgra.mit.edu/model-config.xsd"},
+            nsmap=ns_map)
 
     @staticmethod
     def attach_labels_element(general_element, labels: List[str]) -> None:
@@ -35,7 +36,10 @@ class XMLModelDefinitionWriter(ModelDefinitionWriter):
             label_element.text = label
 
     @staticmethod
-    def attach_general_element(root, model_definition: ModelDefinition) -> None:
+    def attach_general_element(root,
+                               model_definition: ModelDefinition) -> None:
+        logger = logging.getLogger(__name__)
+
         general_element = etree.SubElement(root, "general",
                                            {"id": model_definition.model_id})
 
@@ -66,8 +70,8 @@ class XMLModelDefinitionWriter(ModelDefinitionWriter):
                                                           "inputencoding")
                 input_encoding_element.text = model_definition.input_encoding
             else:
-                logging.warning("invalid input encoding: %s; valid values: "
-                                "1D, 2D", model_definition.input_encoding)
+                logger.warning("invalid input encoding: %s; valid values: "
+                               "1D, 2D", model_definition.input_encoding)
 
         if model_definition.labels:
             XMLModelDefinitionWriter.attach_labels_element(
@@ -134,8 +138,8 @@ class XMLModelDefinitionWriter(ModelDefinitionWriter):
                 loss_element, loss_hp)
 
     @staticmethod
-    def attach_optimizer_element(root,
-                                 optimizer_hp: Optional[Dict[str, str]]) -> None:
+    def attach_optimizer_element(
+            root, optimizer_hp: Optional[Dict[str, str]]) -> None:
         if optimizer_hp:
             optimizer_element = etree.SubElement(root, "optimizer")
             XMLModelDefinitionWriter.attach_hp_element(

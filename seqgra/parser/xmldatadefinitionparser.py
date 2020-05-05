@@ -42,6 +42,7 @@ class XMLDataDefinitionParser(DataDefinitionParser):
     """
 
     def __init__(self, config: str) -> None:
+        self.logger = logging.getLogger(__name__)
         self._dom: Document = parseString(config)
         self._general_element: Any = \
             self._dom.getElementsByTagName("general")[0]
@@ -53,8 +54,8 @@ class XMLDataDefinitionParser(DataDefinitionParser):
         xmlschema = etree.XMLSchema(xmlschema_doc)
         xml_doc = etree.parse(io.BytesIO(xml_config.encode()))
         xmlschema.assertValid(xml_doc)
-        logging.info("seqgra data configuration XML "
-                     "file is well-formed and valid")
+        self.logger.info("seqgra data configuration XML "
+                         "file is well-formed and valid")
 
     def get_grammar_id(self) -> str:
         return self._general_element.getAttribute("id")
@@ -171,8 +172,9 @@ class XMLDataDefinitionParser(DataDefinitionParser):
         return DataGenerationSet(name, examples)
 
     @staticmethod
-    def __parse_example(example_element,
-                        valid_conditions: List[Condition]) -> DataGenerationExample:
+    def __parse_example(
+            example_element,
+            valid_conditions: List[Condition]) -> DataGenerationExample:
         samples: int = int(example_element.getAttribute("samples"))
         condition_elements: Any = \
             example_element.getElementsByTagName("conditionref")

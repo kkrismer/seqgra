@@ -116,12 +116,13 @@ class GradientBasedEvaluator(FeatureImportanceEvaluator):
         grammar_positions: List[int] = [i
                                         for i, char in enumerate(annotation)
                                         if char == c.PositionType.GRAMMAR]
-        non_grammar_positions: List[int] = [i
-                                            for i, char in enumerate(annotation)
-                                            if char != c.PositionType.GRAMMAR]
+        non_grammar_positions: List[int] = \
+            [i
+             for i, char in enumerate(annotation)
+             if char != c.PositionType.GRAMMAR]
         grammar_fi: float = normalized_fi_vector[grammar_positions].sum()
-        non_grammar_fi: float = normalized_fi_vector[non_grammar_positions].sum(
-        )
+        non_grammar_fi: float = \
+            normalized_fi_vector[non_grammar_positions].sum()
 
         if not grammar_positions and math.isclose(non_grammar_fi, 0.0):
             return 1.0
@@ -149,12 +150,13 @@ class GradientBasedEvaluator(FeatureImportanceEvaluator):
         grammar_positions: List[int] = [i
                                         for i, char in enumerate(annotation)
                                         if char == c.PositionType.GRAMMAR]
-        non_grammar_positions: List[int] = [i
-                                            for i, char in enumerate(annotation)
-                                            if char != c.PositionType.GRAMMAR]
+        non_grammar_positions: List[int] = \
+            [i
+             for i, char in enumerate(annotation)
+             if char != c.PositionType.GRAMMAR]
         grammar_fi: float = normalized_fi_vector[grammar_positions].sum()
-        non_grammar_fi: float = normalized_fi_vector[non_grammar_positions].sum(
-        )
+        non_grammar_fi: float = \
+            normalized_fi_vector[non_grammar_positions].sum()
         true_negative: float = float(
             len(non_grammar_positions)) - non_grammar_fi
         false_negative: float = float(len(grammar_positions)) - grammar_fi
@@ -177,8 +179,9 @@ class GradientBasedEvaluator(FeatureImportanceEvaluator):
         fi_vector = fi_vector * (1 / norm)
         return fi_vector
 
-    def _write_result_df(self, fi_matrix, x: List[str], y: List[str],
-                         annotations: List[str], set_name: str = "test") -> None:
+    def _write_result_df(
+            self, fi_matrix, x: List[str], y: List[str],
+            annotations: List[str], set_name: str = "test") -> None:
 
         precision_column: List[float] = list()
         recall_column: List[float] = list()
@@ -188,12 +191,14 @@ class GradientBasedEvaluator(FeatureImportanceEvaluator):
         for example_id, annotation in enumerate(annotations):
             fi_vector = GradientBasedEvaluator._prepare_normalized_fi_vector(
                 fi_matrix[example_id, :, :])
-            precision_column += [GradientBasedEvaluator._calculate_smooth_precision(
-                fi_vector, annotation)]
+            precision_column += \
+                [GradientBasedEvaluator._calculate_smooth_precision(
+                    fi_vector, annotation)]
             recall_column += [GradientBasedEvaluator._calculate_smooth_recall(
                 fi_vector, annotation)]
-            specificity_column += [GradientBasedEvaluator._calculate_smooth_specificity(
-                fi_vector, annotation)]
+            specificity_column += \
+                [GradientBasedEvaluator._calculate_smooth_specificity(
+                    fi_vector, annotation)]
             f1_column += [GradientBasedEvaluator._calculate_smooth_f1(
                 fi_vector, annotation)]
 
@@ -233,18 +238,19 @@ class GradientBasedEvaluator(FeatureImportanceEvaluator):
             df: pd.DataFrame = self._prepare_unthresholded_r_data_frame(df)
             df.to_csv(temp_file_name, sep="\t", index=False)
             cmd = ["Rscript", "--vanilla", plot_script, temp_file_name,
-                    pdf_file_name, self.evaluator_name]
+                   pdf_file_name, self.evaluator_name]
             try:
                 subprocess.call(cmd, universal_newlines=True)
             except subprocess.CalledProcessError as exception:
-                logging.warning("failed to create grammar-model-agreement "
-                                "plots: %s", exception.output)
+                self.logger.warning("failed to create grammar-model-agreement "
+                                    "plots: %s", exception.output)
             except FileNotFoundError as exception:
-                logging.warning("Rscript not on PATH, skipping "
-                                "grammar-model-agreement plots")
+                self.logger.warning("Rscript not on PATH, skipping "
+                                    "grammar-model-agreement plots")
             os.remove(temp_file_name)
 
-    def _prepare_unthresholded_r_data_frame(self, df: pd.DataFrame) -> pd.DataFrame:
+    def _prepare_unthresholded_r_data_frame(self,
+                                            df: pd.DataFrame) -> pd.DataFrame:
         df["precision"] = 0.0
         df["recall"] = 0.0
         df["specificity"] = 0.0

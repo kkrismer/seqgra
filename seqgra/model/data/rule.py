@@ -12,9 +12,10 @@ from seqgra.model.data import SpacingConstraint
 
 
 class Rule:
-    def __init__(self, position: str, probability: float,
-                 sequence_elements: List[SequenceElement],
-                 spacing_constraints: Optional[List[SpacingConstraint]] = None) -> None:
+    def __init__(
+            self, position: str, probability: float,
+            sequence_elements: List[SequenceElement],
+            spacing_constraints: Optional[List[SpacingConstraint]] = None) -> None:
         self.position: str = position
         self.probability: float = probability
         self.sequence_elements: List[SequenceElement] = sequence_elements

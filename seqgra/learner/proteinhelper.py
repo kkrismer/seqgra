@@ -93,11 +93,12 @@ class ProteinHelper:
 
     @staticmethod
     def check_sequence(seqs: List[str]) -> bool:
+        logger = logging.getLogger(__name__)
         is_valid: bool = True
         for seq in seqs:
             if not re.match("^[ARNDCEQGHILKMFPSTWYV]*$", seq):
-                logging.warning("example with invalid amino acid sequence "
-                                "(only uppercase single letter codes of 20 "
-                                "canonical amino acids allowed): %s", seq)
+                logger.warning("example with invalid amino acid sequence "
+                               "(only uppercase single letter codes of 20 "
+                               "canonical amino acids allowed): %s", seq)
                 is_valid = False
         return is_valid

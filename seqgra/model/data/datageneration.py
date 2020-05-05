@@ -33,7 +33,8 @@ class DataGenerationExample:
 
 
 class DataGenerationSet:
-    def __init__(self, name: str, examples: List[DataGenerationExample]) -> None:
+    def __init__(self, name: str,
+                 examples: List[DataGenerationExample]) -> None:
         self.name: str = name
         self.examples: List[DataGenerationExample] = examples
 

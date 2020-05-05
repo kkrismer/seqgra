@@ -75,8 +75,8 @@ class KerasHelper:
                 if os.path.isdir(path):
                     learner.model = tf.keras.models.load_model(path)
                 else:
-                    raise Exception("TF saved model directory does not exist: " +
-                                    path)
+                    raise Exception(
+                        "TF saved model directory does not exist: " + path)
             elif arch.external_model_format == "keras-json-architecture-only":
                 if os.path.isfile(path):
                     with open(path, "r") as json_config_file:
@@ -109,8 +109,6 @@ class KerasHelper:
                 learner.model.compile(
                     optimizer=KerasHelper.get_optimizer(
                         learner.definition.optimizer_hyperparameters),
-                    # use categorical_crossentropy for multi-class and
-                    # binary_crossentropy for multi-label
                     loss=KerasHelper.get_loss(
                         learner.definition.loss_hyperparameters),
                     metrics=local_metrics
@@ -215,8 +213,9 @@ class KerasHelper:
     @staticmethod
     def write_session_info(learner: Learner) -> None:
         with open(learner.output_dir + "session-info.txt", "w") as session_file:
-            session_file.write("seqgra package version: " +
-                               pkg_resources.require("seqgra")[0].version + "\n")
+            session_file.write(
+                "seqgra package version: " +
+                pkg_resources.require("seqgra")[0].version + "\n")
             session_file.write("TensorFlow version: " + tf.__version__ + "\n")
             session_file.write("NumPy version: " + np.version.version + "\n")
             session_file.write("Python version: " + sys.version + "\n")

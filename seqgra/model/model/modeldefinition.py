@@ -18,8 +18,8 @@ class ModelDefinition:
             regression
         sequence_space (str): one of the following: DNA, protein
         library (str): one of the following: TensorFlow, PyTorch
-        implementation (Optional[str]): class name of the learner implementation,
-            e.g., `KerasDNAMultiLabelClassificationLearner`
+        implementation (Optional[str]): class name of the learner
+            implementation, e.g., `KerasDNAMultiLabelClassificationLearner`
         labels (List[str]): class labels expected from output layer
         seed (int): seed for Python, NumPy, and machine learning library
         architecture (Architecture): model architecture
@@ -32,19 +32,20 @@ class ModelDefinition:
 
     """
 
-    def __init__(self, model_id: str = "", name: str = "",
-                 description: str = "",
-                 task: str = c.TaskType.MULTI_CLASS_CLASSIFICATION,
-                 sequence_space: str = c.SequenceSpaceType.DNA,
-                 library: str = c.LibraryType.TORCH,
-                 implementation: Optional[str] = None,
-                 input_encoding: Optional[str] = "1D",
-                 labels: Optional[List[str]] = None,
-                 seed: int = 0,
-                 architecture: Optional[Architecture] = None,
-                 loss_hyperparameters: Optional[Dict[str, str]] = None,
-                 optimizer_hyperparameters: Optional[Dict[str, str]] = None,
-                 training_process_hyperparameters: Optional[Dict[str, str]] = None) -> None:
+    def __init__(
+            self, model_id: str = "", name: str = "",
+            description: str = "",
+            task: str = c.TaskType.MULTI_CLASS_CLASSIFICATION,
+            sequence_space: str = c.SequenceSpaceType.DNA,
+            library: str = c.LibraryType.TORCH,
+            implementation: Optional[str] = None,
+            input_encoding: Optional[str] = "1D",
+            labels: Optional[List[str]] = None,
+            seed: int = 0,
+            architecture: Optional[Architecture] = None,
+            loss_hyperparameters: Optional[Dict[str, str]] = None,
+            optimizer_hyperparameters: Optional[Dict[str, str]] = None,
+            training_process_hyperparameters: Optional[Dict[str, str]] = None) -> None:
         self.model_id: str = model_id
         self.name: str = name
         self.description: str = description
@@ -56,12 +57,12 @@ class ModelDefinition:
         self.labels: Optional[List[str]] = labels
         self.seed: int = seed
         self.architecture: Optional[Architecture] = architecture
-        self.loss_hyperparameters: Optional[Dict[str,
-                                                 str]] = loss_hyperparameters
-        self.optimizer_hyperparameters: Optional[Dict[str,
-                                                      str]] = optimizer_hyperparameters
-        self.training_process_hyperparameters: Optional[Dict[str,
-                                                             str]] = training_process_hyperparameters
+        self.loss_hyperparameters: Optional[Dict[str, str]] = \
+            loss_hyperparameters
+        self.optimizer_hyperparameters: Optional[Dict[str, str]] = \
+            optimizer_hyperparameters
+        self.training_process_hyperparameters: Optional[Dict[str, str]] = \
+            training_process_hyperparameters
 
     def __str__(self):
         str_rep: List[str] = ["seqgra model definition:\n",

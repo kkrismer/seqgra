@@ -96,8 +96,9 @@ class ROCEvaluator(Evaluator):
         for i in range(n_classes):
             line, = plt.plot(fpr[i], tpr[i], linewidth=2)
             lines.append(line)
-            labels.append("condition {0} (area = {1:0.2f})"
-                          "".format(self.learner.definition.labels[i], roc_auc[i]))
+            labels.append(
+                "condition {0} (area = {1:0.2f})"
+                "".format(self.learner.definition.labels[i], roc_auc[i]))
 
         plt.plot([0, 1], [0, 1], "k--", linewidth=2)
         plt.xlim([0.0, 1.0])

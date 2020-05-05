@@ -20,8 +20,10 @@ class SpacingConstraint:
 
     def __str__(self):
         str_rep = ["Spacing constraint:\n",
-                   "\tFirst sequence element: ", self.sequence_element1.sid, " [sid]\n",
-                   "\tSecond sequence element: ", self.sequence_element2.sid, " [sid]\n",
+                   "\tFirst sequence element: ", self.sequence_element1.sid,
+                   " [sid]\n",
+                   "\tSecond sequence element: ", self.sequence_element2.sid,
+                   " [sid]\n",
                    "\tMinimum distance: ", str(self.min_distance), "\n",
                    "\tMaximum distance: ", str(self.max_distance), "\n",
                    "\tOrder: ", self.order, "\n"]

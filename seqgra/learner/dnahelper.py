@@ -17,11 +17,11 @@ class DNAHelper:
         nt_to_num = dict({"A": 0, "C": 1, "G": 2, "T": 3})
         seq = list(seq.upper())
         one_hot_encoded_seq = np.zeros((len(seq), len(nt_to_num)))
-        for ci,c in enumerate(seq):
-            if c in nt_to_num:
-                one_hot_encoded_seq[ci,nt_to_num[c]] = 1
+        for i, char in enumerate(seq):
+            if char in nt_to_num:
+                one_hot_encoded_seq[i, nt_to_num[char]] = 1
             else:
-                one_hot_encoded_seq[ci,:] = 0.25
+                one_hot_encoded_seq[i, :] = 0.25
         return one_hot_encoded_seq
 
     @staticmethod
@@ -40,10 +40,11 @@ class DNAHelper:
 
     @staticmethod
     def check_sequence(seqs: List[str]) -> bool:
+        logger = logging.getLogger(__name__)
         is_valid: bool = True
         for seq in seqs:
             if not re.match("^[actgnNACGT]*$", seq):
-                logging.warning("example with invalid DNA sequence "
-                                "(only 'A', 'C', 'G', 'T' allowed): %s", seq)
+                logger.warning("example with invalid DNA sequence "
+                               "(only 'A', 'C', 'G', 'T' allowed): %s", seq)
                 is_valid = False
         return is_valid

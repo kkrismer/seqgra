@@ -10,7 +10,8 @@ from seqgra.model.data import SequenceElement
 
 
 class DataDefinition:
-    def __init__(self, grammar_id: str = "", name: str = "", description: str = "",
+    def __init__(self, grammar_id: str = "", name: str = "",
+                 description: str = "",
                  task: str = c.TaskType.MULTI_CLASS_CLASSIFICATION,
                  sequence_space: str = c.SequenceSpaceType.DNA,
                  seed: int = 0,
@@ -53,7 +54,8 @@ class DataDefinition:
         else:
             str_rep += ["\t\tnone"]
         str_rep += ["\tSequence elements:\n"]
-        if self.sequence_elements is not None and len(self.sequence_elements) > 0:
+        if self.sequence_elements is not None and \
+                len(self.sequence_elements) > 0:
             for sequence_element in self.sequence_elements:
                 str_rep += ["\t\t" + s +
                             "\n" for s in str(sequence_element).splitlines()]

@@ -59,21 +59,25 @@ def get_learner(model_definition: ModelDefinition,
         if model_definition.task == c.TaskType.MULTI_CLASS_CLASSIFICATION:
             if model_definition.sequence_space == c.SequenceSpaceType.DNA:
                 if model_definition.library == c.LibraryType.TENSORFLOW:
-                    from seqgra.learner.tensorflow import KerasDNAMultiClassClassificationLearner   # pylint: disable=import-outside-toplevel
-                    return KerasDNAMultiClassClassificationLearner(model_definition, data_dir, output_dir)
+                    from seqgra.learner.tensorflow import KerasDNAMultiClassClassificationLearner  # pylint: disable=import-outside-toplevel
+                    return KerasDNAMultiClassClassificationLearner(
+                        model_definition, data_dir, output_dir)
                 elif model_definition.library == c.LibraryType.TORCH:
-                    from seqgra.learner.torch import TorchDNAMultiClassClassificationLearner   # pylint: disable=import-outside-toplevel
-                    return TorchDNAMultiClassClassificationLearner(model_definition, data_dir, output_dir)
+                    from seqgra.learner.torch import TorchDNAMultiClassClassificationLearner  # pylint: disable=import-outside-toplevel
+                    return TorchDNAMultiClassClassificationLearner(
+                        model_definition, data_dir, output_dir)
                 else:
                     raise Exception("invalid library: " +
                                     model_definition.library)
             elif model_definition.sequence_space == c.SequenceSpaceType.PROTEIN:
                 if model_definition.library == c.LibraryType.TENSORFLOW:
-                    from seqgra.learner.tensorflow import KerasProteinMultiClassClassificationLearner   # pylint: disable=import-outside-toplevel
-                    return KerasProteinMultiClassClassificationLearner(model_definition, data_dir, output_dir)
+                    from seqgra.learner.tensorflow import KerasProteinMultiClassClassificationLearner  # pylint: disable=import-outside-toplevel
+                    return KerasProteinMultiClassClassificationLearner(
+                        model_definition, data_dir, output_dir)
                 elif model_definition.library == c.LibraryType.TORCH:
-                    from seqgra.learner.torch import TorchProteinMultiClassClassificationLearner   # pylint: disable=import-outside-toplevel
-                    return TorchProteinMultiClassClassificationLearner(model_definition, data_dir, output_dir)
+                    from seqgra.learner.torch import TorchProteinMultiClassClassificationLearner  # pylint: disable=import-outside-toplevel
+                    return TorchProteinMultiClassClassificationLearner(
+                        model_definition, data_dir, output_dir)
                 else:
                     raise Exception("invalid library: " +
                                     model_definition.library)
@@ -83,21 +87,25 @@ def get_learner(model_definition: ModelDefinition,
         elif model_definition.task == c.TaskType.MULTI_LABEL_CLASSIFICATION:
             if model_definition.sequence_space == c.SequenceSpaceType.DNA:
                 if model_definition.library == c.LibraryType.TENSORFLOW:
-                    from seqgra.learner.tensorflow import KerasDNAMultiLabelClassificationLearner   # pylint: disable=import-outside-toplevel
-                    return KerasDNAMultiLabelClassificationLearner(model_definition, data_dir, output_dir)
+                    from seqgra.learner.tensorflow import KerasDNAMultiLabelClassificationLearner  # pylint: disable=import-outside-toplevel
+                    return KerasDNAMultiLabelClassificationLearner(
+                        model_definition, data_dir, output_dir)
                 elif model_definition.library == c.LibraryType.TORCH:
-                    from seqgra.learner.torch import TorchDNAMultiLabelClassificationLearner   # pylint: disable=import-outside-toplevel
-                    return TorchDNAMultiLabelClassificationLearner(model_definition, data_dir, output_dir)
+                    from seqgra.learner.torch import TorchDNAMultiLabelClassificationLearner  # pylint: disable=import-outside-toplevel
+                    return TorchDNAMultiLabelClassificationLearner(
+                        model_definition, data_dir, output_dir)
                 else:
                     raise Exception("invalid library: " +
                                     model_definition.library)
             elif model_definition.sequence_space == c.SequenceSpaceType.PROTEIN:
                 if model_definition.library == c.LibraryType.TENSORFLOW:
-                    from seqgra.learner.tensorflow import KerasProteinMultiLabelClassificationLearner   # pylint: disable=import-outside-toplevel
-                    return KerasProteinMultiLabelClassificationLearner(model_definition, data_dir, output_dir)
+                    from seqgra.learner.tensorflow import KerasProteinMultiLabelClassificationLearner  # pylint: disable=import-outside-toplevel
+                    return KerasProteinMultiLabelClassificationLearner(
+                        model_definition, data_dir, output_dir)
                 elif model_definition.library == c.LibraryType.TORCH:
-                    from seqgra.learner.torch import TorchProteinMultiLabelClassificationLearner   # pylint: disable=import-outside-toplevel
-                    return TorchProteinMultiLabelClassificationLearner(model_definition, data_dir, output_dir)
+                    from seqgra.learner.torch import TorchProteinMultiLabelClassificationLearner  # pylint: disable=import-outside-toplevel
+                    return TorchProteinMultiLabelClassificationLearner(
+                        model_definition, data_dir, output_dir)
                 else:
                     raise Exception("invalid library: " +
                                     model_definition.library)
@@ -114,29 +122,37 @@ def get_learner(model_definition: ModelDefinition,
             raise Exception("invalid model task: " + model_definition.task)
     else:
         if model_definition.implementation == "KerasDNAMultiClassClassificationLearner":
-            from seqgra.learner.tensorflow import KerasDNAMultiClassClassificationLearner   # pylint: disable=import-outside-toplevel
-            return KerasDNAMultiClassClassificationLearner(model_definition, data_dir, output_dir)
+            from seqgra.learner.tensorflow import KerasDNAMultiClassClassificationLearner  # pylint: disable=import-outside-toplevel
+            return KerasDNAMultiClassClassificationLearner(
+                model_definition, data_dir, output_dir)
         elif model_definition.implementation == "KerasDNAMultiLabelClassificationLearner":
-            from seqgra.learner.tensorflow import KerasDNAMultiLabelClassificationLearner   # pylint: disable=import-outside-toplevel
-            return KerasDNAMultiLabelClassificationLearner(model_definition, data_dir, output_dir)
+            from seqgra.learner.tensorflow import KerasDNAMultiLabelClassificationLearner  # pylint: disable=import-outside-toplevel
+            return KerasDNAMultiLabelClassificationLearner(
+                model_definition, data_dir, output_dir)
         elif model_definition.implementation == "TorchDNAMultiClassClassificationLearner":
-            from seqgra.learner.torch import TorchDNAMultiClassClassificationLearner   # pylint: disable=import-outside-toplevel
-            return TorchDNAMultiClassClassificationLearner(model_definition, data_dir, output_dir)
+            from seqgra.learner.torch import TorchDNAMultiClassClassificationLearner  # pylint: disable=import-outside-toplevel
+            return TorchDNAMultiClassClassificationLearner(
+                model_definition, data_dir, output_dir)
         elif model_definition.implementation == "TorchDNAMultiLabelClassificationLearner":
-            from seqgra.learner.torch import TorchDNAMultiLabelClassificationLearner   # pylint: disable=import-outside-toplevel
-            return TorchDNAMultiLabelClassificationLearner(model_definition, data_dir, output_dir)
+            from seqgra.learner.torch import TorchDNAMultiLabelClassificationLearner  # pylint: disable=import-outside-toplevel
+            return TorchDNAMultiLabelClassificationLearner(
+                model_definition, data_dir, output_dir)
         elif model_definition.implementation == "KerasProteinMultiClassClassificationLearner":
-            from seqgra.learner.tensorflow import KerasProteinMultiClassClassificationLearner   # pylint: disable=import-outside-toplevel
-            return KerasProteinMultiClassClassificationLearner(model_definition, data_dir, output_dir)
+            from seqgra.learner.tensorflow import KerasProteinMultiClassClassificationLearner  # pylint: disable=import-outside-toplevel
+            return KerasProteinMultiClassClassificationLearner(
+                model_definition, data_dir, output_dir)
         elif model_definition.implementation == "KerasProteinMultiLabelClassificationLearner":
-            from seqgra.learner.tensorflow import KerasProteinMultiLabelClassificationLearner   # pylint: disable=import-outside-toplevel
-            return KerasProteinMultiLabelClassificationLearner(model_definition, data_dir, output_dir)
+            from seqgra.learner.tensorflow import KerasProteinMultiLabelClassificationLearner  # pylint: disable=import-outside-toplevel
+            return KerasProteinMultiLabelClassificationLearner(
+                model_definition, data_dir, output_dir)
         elif model_definition.implementation == "TorchProteinMultiClassClassificationLearner":
-            from seqgra.learner.torch import TorchProteinMultiClassClassificationLearner   # pylint: disable=import-outside-toplevel
-            return TorchProteinMultiClassClassificationLearner(model_definition, data_dir, output_dir)
+            from seqgra.learner.torch import TorchProteinMultiClassClassificationLearner  # pylint: disable=import-outside-toplevel
+            return TorchProteinMultiClassClassificationLearner(
+                model_definition, data_dir, output_dir)
         elif model_definition.implementation == "TorchProteinMultiLabelClassificationLearner":
-            from seqgra.learner.torch import TorchProteinMultiLabelClassificationLearner   # pylint: disable=import-outside-toplevel
-            return TorchProteinMultiLabelClassificationLearner(model_definition, data_dir, output_dir)
+            from seqgra.learner.torch import TorchProteinMultiLabelClassificationLearner  # pylint: disable=import-outside-toplevel
+            return TorchProteinMultiLabelClassificationLearner(
+                model_definition, data_dir, output_dir)
         else:
             raise Exception("invalid learner ID")
 
@@ -222,6 +238,7 @@ def run_seqgra(data_config_file: Optional[str],
                eval_suppress_plots: Optional[bool],
                eval_fi_predict_threshold: Optional[float],
                eval_sis_predict_threshold: Optional[float]) -> None:
+    logger = logging.getLogger(__name__)
     output_dir = format_output_dir(output_dir.strip())
     new_data: bool = False
     new_model: bool = False
@@ -229,7 +246,7 @@ def run_seqgra(data_config_file: Optional[str],
     if data_config_file is None:
         data_definition: Optional[DataDefinition] = None
         grammar_id = data_folder.strip()
-        logging.info("loading experimental data")
+        logger.info("loading experimental data")
     else:
         # generate synthetic data
         data_config = read_config_file(data_config_file)
@@ -244,9 +261,9 @@ def run_seqgra(data_config_file: Optional[str],
         synthetic_data_available: bool = \
             len(os.listdir(simulator.output_dir)) > 0
         if synthetic_data_available:
-            logging.info("loading previously generated synthetic data")
+            logger.info("loading previously generated synthetic data")
         else:
-            logging.info("generating synthetic data")
+            logger.info("generating synthetic data")
             simulator.simulate_data()
             new_data = True
 
@@ -255,7 +272,8 @@ def run_seqgra(data_config_file: Optional[str],
         model_config = read_config_file(model_config_file)
         model_def_parser: ModelDefinitionParser = XMLModelDefinitionParser(
             model_config)
-        model_definition: ModelDefinition = model_def_parser.get_model_definition()
+        model_definition: ModelDefinition = \
+            model_def_parser.get_model_definition()
         if print_info:
             print(model_definition)
 
@@ -272,10 +290,10 @@ def run_seqgra(data_config_file: Optional[str],
                                 learner.output_dir +
                                 "' and run seqgra again to train new model "
                                 "on current data")
-            logging.info("loading previously trained model")
+            logger.info("loading previously trained model")
             learner.load_model()
         else:
-            logging.info("training model")
+            logger.info("training model")
 
             # load data
             training_set_file: str = learner.get_examples_file(
@@ -294,7 +312,7 @@ def run_seqgra(data_config_file: Optional[str],
             new_model = True
 
         if evaluator_ids:
-            logging.info("evaluating model using interpretability methods")
+            logger.info("evaluating model using interpretability methods")
 
             if eval_sets:
                 for eval_set in eval_sets:
@@ -315,15 +333,15 @@ def run_seqgra(data_config_file: Optional[str],
                 results_exist: bool = os.path.exists(results_dir) and \
                     len(os.listdir(results_dir)) > 0
                 if results_exist:
-                    logging.info("skip evaluator %s: results already saved "
-                                 "to disk", evaluator_id)
+                    logger.info("skip evaluator %s: results already saved "
+                                "to disk", evaluator_id)
                     if new_model:
-                        logging.warning("results from evaluator %s are based "
-                                        "on an outdated model; please delete "
-                                        "'%s' and run seqgra again to get "
-                                        "results from %s on current model",
-                                        evaluator_id, results_dir,
-                                        evaluator_id)
+                        logger.warning("results from evaluator %s are based "
+                                       "on an outdated model; please delete "
+                                       "'%s' and run seqgra again to get "
+                                       "results from %s on current model",
+                                       evaluator_id, results_dir,
+                                       evaluator_id)
                 else:
                     evaluator: Evaluator = get_evaluator(
                         evaluator_id, learner, evaluation_dir,
@@ -338,13 +356,13 @@ def run_seqgra(data_config_file: Optional[str],
                         is_fi_evaluator: bool = isinstance(
                             evaluator, FeatureImportanceEvaluator)
                         if is_fi_evaluator:
-                            logging.info("running feature importance "
-                                         "evaluator %s on %s set",
-                                         evaluator_id, eval_set)
+                            logger.info("running feature importance "
+                                        "evaluator %s on %s set",
+                                        evaluator_id, eval_set)
                         else:
                             eval_fi_predict_threshold = None
-                            logging.info("running evaluator %s on %s set",
-                                         evaluator_id, eval_set)
+                            logger.info("running evaluator %s on %s set",
+                                        evaluator_id, eval_set)
 
                         evaluator.evaluate_model(
                             eval_set,
@@ -353,7 +371,7 @@ def run_seqgra(data_config_file: Optional[str],
                             subset_threshold=eval_fi_predict_threshold,
                             suppress_plots=eval_suppress_plots)
         else:
-            logging.info("skipping evaluation step: no evaluator specified")
+            logger.info("skipping evaluation step: no evaluator specified")
 
 
 def main():

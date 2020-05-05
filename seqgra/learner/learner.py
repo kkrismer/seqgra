@@ -65,8 +65,8 @@ class Learner(ABC):
             `{OUTPUTDIR}/models/{GRAMMAR ID}`
 
     See Also:
-        :class:`MultiClassClassificationLearner`: for classification models with
-            mutually exclusive classes
+        :class:`MultiClassClassificationLearner`: for classification models 
+            with mutually exclusive classes
         MultiLabelClassificationLearner: for classification models with
             non-mutually exclusive classes
         MultipleRegressionLearner: for regression models with multiple
@@ -76,6 +76,7 @@ class Learner(ABC):
     @abstractmethod
     def __init__(self, model_definition: ModelDefinition, data_dir: str,
                  output_dir: str) -> None:
+        self.logger = logging.getLogger(__name__)
         self.definition: ModelDefinition = model_definition
         self.data_dir = MiscHelper.prepare_path(data_dir)
         self.output_dir = MiscHelper.prepare_path(output_dir + "/" +
@@ -165,7 +166,7 @@ class Learner(ABC):
         y: List[str] = df["y"].tolist()
 
         self.check_labels(y)
-        Learner.check_annotations(annotations)
+        self.check_annotations(annotations)
         return AnnotationSet(annotations, y)
 
     @abstractmethod
@@ -187,20 +188,20 @@ class Learner(ABC):
                 if throw_exception:
                     raise Exception(message)
 
-                logging.warning(message)
+                self.logger.warning(message)
                 is_valid = False
-        
+
         return is_valid
 
-    @staticmethod
-    def check_annotations(annotations: List[str]) -> bool:
+    def check_annotations(self, annotations: List[str]) -> bool:
         is_valid: bool = True
         for annotation in annotations:
             if not re.match("^[\_GC]*$", annotation):
-                logging.warning("example with invalid annotation "
-                                "(only 'G' for grammar position, 'C' for "
-                                "confounding position, and '_' for background "
-                                "position allowed): %s", annotation)
+                self.logger.warning("example with invalid annotation "
+                                    "(only 'G' for grammar position, 'C' for "
+                                    "confounding position, and '_' for "
+                                    "background "
+                                    "position allowed): %s", annotation)
                 is_valid = False
 
         return is_valid
@@ -656,7 +657,7 @@ class MultipleRegressionLearner(Learner):
             if throw_exception:
                 raise Exception(message)
 
-            logging.warning(message)
+            self.logger.warning(message)
             return False
 
 

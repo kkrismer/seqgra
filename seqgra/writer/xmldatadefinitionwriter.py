@@ -32,9 +32,10 @@ class XMLDataDefinitionWriter(DataDefinitionWriter):
                                  "noNamespaceSchemaLocation")
         ns_map = {"xsi": "http://www.w3.org/2001/XMLSchema-instance"}
 
-        return etree.Element("seqgradata",
-                             {attr_qname: "https://seqgra.mit.edu/data-config.xsd"},
-                             nsmap=ns_map)
+        return etree.Element(
+            "seqgradata",
+            {attr_qname: "https://seqgra.mit.edu/data-config.xsd"},
+            nsmap=ns_map)
 
     @staticmethod
     def attach_general_element(root, data_definition: DataDefinition) -> None:
@@ -69,8 +70,9 @@ class XMLDataDefinitionWriter(DataDefinitionWriter):
 
         if ad.letters:
             for letter in ad.letters:
-                letter_element = etree.SubElement(ad_element, "letter",
-                                                  {"probability": str(letter.probability)})
+                letter_element = etree.SubElement(
+                    ad_element, "letter",
+                    {"probability": str(letter.probability)})
                 letter_element.text = letter.token
         else:
             raise Exception("no letters in alphabet")
@@ -96,7 +98,8 @@ class XMLDataDefinitionWriter(DataDefinitionWriter):
             raise Exception("no alphabet distribution specified")
 
     @staticmethod
-    def attach_set_element(sets_element, example_set: DataGenerationSet) -> None:
+    def attach_set_element(sets_element,
+                           example_set: DataGenerationSet) -> None:
         if example_set.name not in c.DataSet.ALL_SETS:
             raise Exception("invalid set name: " + example_set.name +
                             " (valid set names: " +
@@ -107,7 +110,8 @@ class XMLDataDefinitionWriter(DataDefinitionWriter):
             for example in example_set.examples:
                 example_element = etree.SubElement(
                     set_element, "example", {"samples": str(example.samples)})
-                if example.conditions is not None and len(example.conditions) > 0:
+                if example.conditions is not None and \
+                        len(example.conditions) > 0:
                     for condition in example.conditions:
                         condition_element = etree.SubElement(
                             example_element, "conditionref",
@@ -116,8 +120,8 @@ class XMLDataDefinitionWriter(DataDefinitionWriter):
             raise Exception("no examples specified in set " + example_set.name)
 
     @staticmethod
-    def attach_data_generation_element(root,
-                                       data_generation: DataGeneration) -> None:
+    def attach_data_generation_element(
+            root, data_generation: DataGeneration) -> None:
         dg_element = etree.SubElement(root, "datageneration")
 
         sets_element = etree.SubElement(dg_element, "sets")
@@ -208,8 +212,8 @@ class XMLDataDefinitionWriter(DataDefinitionWriter):
             raise Exception("no conditions specified")
 
     @staticmethod
-    def attach_matrix_position_element(matrix_element,
-                                       letters: List[ProbabilisticToken]) -> None:
+    def attach_matrix_position_element(
+            matrix_element, letters: List[ProbabilisticToken]) -> None:
         position_element = etree.SubElement(matrix_element, "position")
         if letters:
             for letter in letters:

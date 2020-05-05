@@ -17,16 +17,17 @@ class Architecture:
                  external_model_format: Optional[str] = None,
                  external_model_class_name: Optional[str] = None) -> None:
         if (operations is not None or hyperparameters is not None) and \
-            (external_model_path is not None or \
-                external_model_format is not None or \
-                    external_model_class_name is not None):
-                raise Exception("cannot both specify operations / "
-                                "hyperparameters and external model")
+            (external_model_path is not None or
+                external_model_format is not None or
+             external_model_class_name is not None):
+            raise Exception("cannot both specify operations / "
+                            "hyperparameters and external model")
         self.operations: Optional[List[Operation]] = operations
         self.hyperparameters: Optional[Dict[str, str]] = hyperparameters
         self.external_model_path: Optional[str] = external_model_path
         self.external_model_format: Optional[str] = external_model_format
-        self.external_model_class_name: Optional[str] = external_model_class_name
+        self.external_model_class_name: Optional[str] = \
+            external_model_class_name
 
     def __str__(self):
         str_rep = ["Architecture:\n"]

@@ -30,20 +30,24 @@ class Evaluator(ABC):
                  supported_tasks: Optional[Set[str]] = None,
                  supported_sequence_spaces: Optional[Set[str]] = None,
                  supported_libraries: Optional[Set[str]] = None) -> None:
+        self.logger = logging.getLogger(__name__)
         self.evaluator_id: str = evaluator_id
         self.evaluator_name: str = evaluator_name
         self.learner: Learner = learner
         self.output_dir = MiscHelper.prepare_path(output_dir + "/" +
                                                   self.evaluator_id,
                                                   allow_exists=False)
+
         if supported_tasks is None:
             self.supported_tasks: Set[str] = c.TaskType.ALL_TASKS
         else:
             self.supported_tasks: Set[str] = supported_tasks
         if supported_sequence_spaces is None:
-            self.supported_sequence_spaces: Set[str] = c.SequenceSpaceType.ALL_SEQUENCE_SPACES
+            self.supported_sequence_spaces: Set[str] = \
+                c.SequenceSpaceType.ALL_SEQUENCE_SPACES
         else:
-            self.supported_sequence_spaces: Set[str] = supported_sequence_spaces
+            self.supported_sequence_spaces: Set[str] = \
+                supported_sequence_spaces
         if supported_libraries is None:
             self.supported_libraries: Set[str] = c.LibraryType.ALL_LIBRARIES
         else:
@@ -62,7 +66,7 @@ class Evaluator(ABC):
         if message:
             if throw_exception:
                 raise Exception(message)
-            logging.warning(message)
+            self.logger.warning(message)
 
     def evaluate_model(self, set_name: str = "test",
                        subset_idx: Optional[List[int]] = None,
@@ -89,8 +93,9 @@ class Evaluator(ABC):
 
         return results
 
-    def _load_data(self, set_name: str = "test",
-                   subset_idx: Optional[List[int]] = None) -> AnnotatedExampleSet:
+    def _load_data(
+            self, set_name: str = "test",
+            subset_idx: Optional[List[int]] = None) -> AnnotatedExampleSet:
         # load data
         examples_file: str = self.learner.get_examples_file(set_name)
         annotations_file: str = self.learner.get_annotations_file(set_name)
@@ -151,9 +156,10 @@ class Evaluator(ABC):
             annotations: List[str]) -> AnnotatedExampleSet:
         return AnnotatedExampleSet(x, y, annotations)
 
-    def select_examples(self, set_name: str = "test",
-                        labels: Optional[Set[str]] = None,
-                        threshold: Optional[float] = None) -> AnnotatedExampleSet:
+    def select_examples(
+            self, set_name: str = "test",
+            labels: Optional[Set[str]] = None,
+            threshold: Optional[float] = None) -> AnnotatedExampleSet:
         """Returns all correctly classified examples that exceed the threshold.
 
         for the specified labels
@@ -183,10 +189,11 @@ class Evaluator(ABC):
             # discard misclassified / mislabeled examples and
             # examples below threshold
             if self.learner.definition.task == c.TaskType.MULTI_CLASS_CLASSIFICATION:
-                subset_idx = [i
-                              for i in range(len(x))
-                              if np.argmax(y_hat[i]) == np.argmax(encoded_y[i]) and
-                              np.max(y_hat[i]) > threshold]
+                subset_idx = \
+                    [i
+                     for i in range(len(x))
+                     if np.argmax(y_hat[i]) == np.argmax(encoded_y[i]) and
+                     np.max(y_hat[i]) > threshold]
             elif self.learner.definition.task == c.TaskType.MULTI_LABEL_CLASSIFICATION:
                 subset_idx: List[int] = list()
                 # example is mislabeled if prediction for one label is wrong
@@ -211,12 +218,13 @@ class Evaluator(ABC):
 
         return AnnotatedExampleSet(x, y, annotations)
 
-    def select_n_examples(self, set_name: str = "test",
-                          n: Optional[int] = None,
-                          labels: Optional[Set[str]] = None,
-                          n_per_label: bool = True,
-                          shuffle: bool = True,
-                          threshold: Optional[float] = None) -> AnnotatedExampleSet:
+    def select_n_examples(
+            self, set_name: str = "test",
+            n: Optional[int] = None,
+            labels: Optional[Set[str]] = None,
+            n_per_label: bool = True,
+            shuffle: bool = True,
+            threshold: Optional[float] = None) -> AnnotatedExampleSet:
         if n_per_label:
             if labels is None:
                 labels = self.learner.definition.labels
@@ -238,20 +246,21 @@ class Evaluator(ABC):
 
             if not x:
                 if labels is None and threshold is None:
-                    logging.warning("no example in set '%s'", set_name)
+                    self.logger.warning("no example in set '%s'", set_name)
                 elif labels is None and threshold is not None:
-                    logging.warning("no correctly labeled example with "
-                                    "prediction threshold > %s in set '%s'",
-                                    threshold, set_name)
+                    self.logger.warning("no correctly labeled example with "
+                                        "prediction threshold > %s in set "
+                                        "'%s'", threshold, set_name)
                 elif labels is not None and threshold is None:
-                    logging.warning("no example in set '%s' "
-                                    "that has one of the following labels: %s",
-                                    set_name, labels)
+                    self.logger.warning("no example in set '%s' "
+                                        "that has one of the following "
+                                        "labels: %s", set_name, labels)
                 elif labels is not None and threshold is not None:
-                    logging.warning("no correctly labeled example with "
-                                    "prediction threshold > %s in set '%s' "
-                                    "that has one of the following labels: %s",
-                                    threshold, set_name, labels)
+                    self.logger.warning("no correctly labeled example with "
+                                        "prediction threshold > %s in set "
+                                        "'%s' that has one of the following "
+                                        "labels: %s", threshold, set_name,
+                                        labels)
                 return AnnotatedExampleSet(None, None, None)
             elif n > len(x):
                 n = len(x)
@@ -421,13 +430,13 @@ class FeatureImportanceEvaluator(Evaluator):
             df: pd.DataFrame = self._prepare_r_data_frame(df)
             df.to_csv(temp_file_name, sep="\t", index=False)
             cmd = ["Rscript", "--vanilla", plot_script, temp_file_name,
-                    pdf_file_name, self.evaluator_name]
+                   pdf_file_name, self.evaluator_name]
             try:
                 subprocess.call(cmd, universal_newlines=True)
             except subprocess.CalledProcessError as exception:
-                logging.warning("failed to create grammar-model-agreement "
-                                "plots: %s", exception.output)
+                self.logger.warning("failed to create grammar-model-agreement "
+                                    "plots: %s", exception.output)
             except FileNotFoundError as exception:
-                logging.warning("Rscript not on PATH, skipping "
-                                "grammar-model-agreement plots")
+                self.logger.warning("Rscript not on PATH, skipping "
+                                    "grammar-model-agreement plots")
             os.remove(temp_file_name)

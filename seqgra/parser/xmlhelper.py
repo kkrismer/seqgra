@@ -7,6 +7,7 @@ Implementation of static XML methods for parsers
 """
 from typing import Optional
 
+
 class XMLHelper():
     @staticmethod
     def read_text_node(parent_node, node_name) -> Optional[str]:
@@ -27,7 +28,8 @@ class XMLHelper():
 
     @staticmethod
     def read_int_node(parent_node, node_name) -> int:
-        node_value: Optional[str] = XMLHelper.read_text_node(parent_node, node_name)
+        node_value: Optional[str] = XMLHelper.read_text_node(parent_node,
+                                                             node_name)
         if node_value is None:
             return None
         else:
@@ -35,7 +37,8 @@ class XMLHelper():
 
     @staticmethod
     def read_float_node(parent_node, node_name) -> float:
-        node_value: Optional[str] = XMLHelper.read_text_node(parent_node, node_name)
+        node_value: Optional[str] = XMLHelper.read_text_node(parent_node,
+                                                             node_name)
         if node_value is None:
             return None
         else:

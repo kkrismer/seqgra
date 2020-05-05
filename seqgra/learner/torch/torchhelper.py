@@ -74,11 +74,12 @@ class TorchHelper:
                                                     class_name)
                         learner.model = torch_model_class()
                 else:
-                    raise Exception("PyTorch model class file does not exist: " +
-                                    path)
+                    raise Exception(
+                        "PyTorch model class file does not exist: " + path)
             else:
-                raise Exception("unsupported PyTorch model format: " +
-                                learner.definition.architecture.external_model_format)
+                raise Exception(
+                    "unsupported PyTorch model format: " +
+                    learner.definition.architecture.external_model_format)
         else:
             raise Exception("neither internal nor external architecture "
                             "definition provided")
@@ -110,10 +111,12 @@ class TorchHelper:
         torch.manual_seed(learner.definition.seed)
 
     @staticmethod
-    def train_model(learner: Learner,
-                    training_dataset: torch.utils.data.Dataset,
-                    validation_dataset: torch.utils.data.Dataset,
-                    output_layer_activation_function: Optional[str] = None) -> None:
+    def train_model(
+            learner: Learner,
+            training_dataset: torch.utils.data.Dataset,
+            validation_dataset: torch.utils.data.Dataset,
+            output_layer_activation_function: Optional[str] = None) -> None:
+        logger = logging.getLogger(__name__)
         if learner.model is None:
             learner.create_model()
 
@@ -157,18 +160,18 @@ class TorchHelper:
 
         @trainer.on(Events.EPOCH_COMPLETED)
         def log_training_results(trainer):
-            logging.info("epoch {}/{}".format(trainer.state.epoch, num_epochs))
+            logger.info("epoch {}/{}".format(trainer.state.epoch, num_epochs))
             train_evaluator.run(training_loader)
             metrics = train_evaluator.state.metrics
-            logging.info(TorchHelper._format_metrics_output(
+            logger.info(TorchHelper._format_metrics_output(
                 metrics, "training set"))
 
         @trainer.on(Events.EPOCH_COMPLETED)
         def log_validation_results(trainer):
             val_evaluator.run(validation_loader)
             metrics = val_evaluator.state.metrics
-            logging.info(TorchHelper._format_metrics_output(metrics,
-                                                            "validation set"))
+            logger.info(TorchHelper._format_metrics_output(metrics,
+                                                           "validation set"))
 
         # save best model
         def score_fn(engine):
@@ -209,10 +212,12 @@ class TorchHelper:
         return "".join(message).rstrip()
 
     @staticmethod
-    def train_model_basic(learner: Learner,
-                          training_dataset: torch.utils.data.Dataset,
-                          validation_dataset: torch.utils.data.Dataset,
-                          output_layer_activation_function: Optional[str] = None) -> None:
+    def train_model_basic(
+            learner: Learner,
+            training_dataset: torch.utils.data.Dataset,
+            validation_dataset: torch.utils.data.Dataset,
+            output_layer_activation_function: Optional[str] = None) -> None:
+        logger = logging.getLogger(__name__)
         if learner.model is None:
             learner.create_model()
 
@@ -239,7 +244,7 @@ class TorchHelper:
             learner.definition.training_process_hyperparameters["epochs"])
 
         for epoch in range(num_epochs):
-            logging.info("epoch {}/{}".format(epoch + 1, num_epochs))
+            logger.info("epoch {}/{}".format(epoch + 1, num_epochs))
 
             for phase in [c.DataSet.TRAINING, c.DataSet.VALIDATION]:
                 if phase == c.DataSet.TRAINING:
@@ -295,7 +300,7 @@ class TorchHelper:
                 epoch_loss = running_loss / len(data_loader.dataset)
                 epoch_acc = running_correct.float() / len(data_loader.dataset)
 
-                logging.info("{} - loss: {:.3f}, accuracy: {:.3f}".format(
+                logger.info("{} - loss: {:.3f}, accuracy: {:.3f}".format(
                     phase, epoch_loss, epoch_acc))
 
     @staticmethod
@@ -480,6 +485,8 @@ class TorchHelper:
     @staticmethod
     def get_metrics(learner: Learner,
                     output_layer_activation_function: Optional[str] = None):
+        logger = logging.getLogger(__name__)
+
         def thresholded_output_transform(output):
             y_hat, y = output
             y_hat = torch.round(y_hat)
@@ -521,5 +528,5 @@ class TorchHelper:
                     metrics_dict[metric] = Accuracy(
                         is_multilabel=is_multilabel)
             else:
-                logging.warning("unknown metric: %s", metric)
+                logger.warning("unknown metric: %s", metric)
         return metrics_dict

@@ -31,21 +31,21 @@ class XMLModelDefinitionParser(ModelDefinitionParser):
     """
 
     def __init__(self, config: str) -> None:
+        self.logger = logging.getLogger(__name__)
         self._dom: Document = parseString(config)
         self._general_element: Any = \
             self._dom.getElementsByTagName("general")[0]
-        XMLModelDefinitionParser.validate(config)
+        self.validate(config)
 
-    @staticmethod
-    def validate(xml_config: str) -> None:
+    def validate(self, xml_config: str) -> None:
         xsd_path = pkg_resources.resource_filename("seqgra",
                                                    "model-config.xsd")
         xmlschema_doc = etree.parse(xsd_path)
         xmlschema = etree.XMLSchema(xmlschema_doc)
         xml_doc = etree.parse(io.BytesIO(xml_config.encode()))
         xmlschema.assertValid(xml_doc)
-        logging.info("seqgra model configuration XML file "
-                     "is well-formed and valid")
+        self.logger.info("seqgra model configuration XML file "
+                         "is well-formed and valid")
 
     def get_model_id(self) -> str:
         return self._general_element.getAttribute("id")
@@ -66,7 +66,8 @@ class XMLModelDefinitionParser(ModelDefinitionParser):
         return XMLHelper.read_text_node(self._general_element, "library")
 
     def get_implementation(self) -> str:
-        return XMLHelper.read_text_node(self._general_element, "implementation")
+        return XMLHelper.read_text_node(self._general_element,
+                                        "implementation")
 
     def get_input_encoding(self) -> str:
         return XMLHelper.read_text_node(self._general_element, "inputencoding")
