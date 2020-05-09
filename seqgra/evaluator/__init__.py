@@ -4,14 +4,4 @@ from seqgra.evaluator.metricsevaluator import MetricsEvaluator
 from seqgra.evaluator.predictevaluator import PredictEvaluator
 from seqgra.evaluator.prevaluator import PREvaluator
 from seqgra.evaluator.rocevaluator import ROCEvaluator
-from seqgra.evaluator.saliencyevaluator import GradientBasedEvaluator
-from seqgra.evaluator.saliencyevaluator import GradientEvaluator
-from seqgra.evaluator.saliencyevaluator import GradientxInputEvaluator
-from seqgra.evaluator.saliencyevaluator import SaliencyEvaluator
-from seqgra.evaluator.saliencyevaluator import IntegratedGradientEvaluator
-from seqgra.evaluator.saliencyevaluator import NonlinearIntegratedGradientEvaluator
-from seqgra.evaluator.saliencyevaluator import GradCamGradientEvaluator
-from seqgra.evaluator.saliencyevaluator import DeepLiftEvaluator
-from seqgra.evaluator.saliencyevaluator import ExcitationBackpropEvaluator
-from seqgra.evaluator.saliencyevaluator import ContrastiveExcitationBackpropEvaluator
 from seqgra.evaluator.sisevaluator import SISEvaluator
