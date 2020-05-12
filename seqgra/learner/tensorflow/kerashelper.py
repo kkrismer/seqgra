@@ -5,14 +5,15 @@ TensorFlow Keras learner helper class
 @author: Konstantin Krismer
 """
 from ast import literal_eval
-from typing import Any, FrozenSet, List
+from distutils.util import strtobool
 import os
-import sys
 import random
+import sys
+from typing import Any, FrozenSet, List
 
-import tensorflow as tf
 import numpy as np
 import pkg_resources
+import tensorflow as tf
 
 from seqgra.learner import Learner
 from seqgra.model.model import Architecture
@@ -37,17 +38,6 @@ class KerasHelper:
          "poisson"])
 
     MULTIVARIATE_REGRESSION_LOSSES: FrozenSet[str] = MULTIPLE_REGRESSION_LOSSES
-
-    @staticmethod
-    def to_bool(x: str) -> bool:
-        x = x.strip()
-        if x == "True":
-            return True
-        elif x == "False":
-            return False
-        else:
-            raise Exception("'" + str(x) +
-                            "' must be either 'True' or 'False'")
 
     @staticmethod
     def create_model(learner: Learner) -> None:
@@ -165,7 +155,7 @@ class KerasHelper:
                                                        patience=2,
                                                        min_delta=0)
 
-        if bool(learner.definition.training_process_hyperparameters["early_stopping"]):
+        if bool(strtobool(learner.definition.training_process_hyperparameters["early_stopping"])):
             callbacks = [cp_callback, tensorboard_callback, es_callback]
         else:
             callbacks = [cp_callback, tensorboard_callback]
@@ -181,8 +171,8 @@ class KerasHelper:
             verbose=1,
             callbacks=callbacks,
             validation_data=(encoded_x_val, encoded_y_val),
-            shuffle=bool(
-                learner.definition.training_process_hyperparameters["shuffle"])
+            shuffle=bool(strtobool(
+                learner.definition.training_process_hyperparameters["shuffle"]))
         )
 
     @staticmethod
@@ -261,8 +251,7 @@ class KerasHelper:
             input_shape = None
 
         if "trainable" in operation.parameters:
-            trainable = KerasHelper.to_bool(
-                operation.parameters["trainable"])
+            trainable = bool(strtobool(operation.parameters["trainable"]))
         else:
             trainable = True
 
@@ -289,8 +278,7 @@ class KerasHelper:
                 activation = None
 
             if "use_bias" in operation.parameters:
-                use_bias = KerasHelper.to_bool(
-                    operation.parameters["use_bias"])
+                use_bias = bool(strtobool(operation.parameters["use_bias"]))
             else:
                 use_bias = True
 
@@ -364,8 +352,7 @@ class KerasHelper:
                 recurrent_activation = "sigmoid"
 
             if "use_bias" in operation.parameters:
-                use_bias = KerasHelper.to_bool(
-                    operation.parameters["use_bias"])
+                use_bias = bool(strtobool(operation.parameters["use_bias"]))
             else:
                 use_bias = True
 
@@ -388,9 +375,8 @@ class KerasHelper:
                 bias_initializer = "zeros"
 
             if "unit_forget_bias" in operation.parameters:
-                unit_forget_bias = \
-                    KerasHelper.to_bool(
-                        operation.parameters["unit_forget_bias"])
+                unit_forget_bias = bool(strtobool(
+                    operation.parameters["unit_forget_bias"]))
             else:
                 unit_forget_bias = True
 
@@ -436,44 +422,42 @@ class KerasHelper:
                 implementation = 2
 
             if "return_sequences" in operation.parameters:
-                return_sequences = \
-                    KerasHelper.to_bool(
-                        operation.parameters["return_sequences"])
+                return_sequences = bool(strtobool(
+                        operation.parameters["return_sequences"]))
             else:
                 return_sequences = False
 
             if "return_state" in operation.parameters:
-                return_state = \
-                    KerasHelper.to_bool(operation.parameters["return_state"])
+                return_state = bool(strtobool(
+                    operation.parameters["return_state"]))
             else:
                 return_state = False
 
             if "go_backwards" in operation.parameters:
-                go_backwards = \
-                    KerasHelper.to_bool(operation.parameters["go_backwards"])
+                go_backwards = bool(strtobool(
+                    operation.parameters["go_backwards"]))
             else:
                 go_backwards = False
 
             if "stateful" in operation.parameters:
-                stateful = KerasHelper.to_bool(
-                    operation.parameters["stateful"])
+                stateful = bool(strtobool(operation.parameters["stateful"]))
             else:
                 stateful = False
 
             if "time_major" in operation.parameters:
-                time_major = KerasHelper.to_bool(
-                    operation.parameters["time_major"])
+                time_major = bool(strtobool(
+                    operation.parameters["time_major"]))
             else:
                 time_major = False
 
             if "unroll" in operation.parameters:
-                unroll = KerasHelper.to_bool(operation.parameters["unroll"])
+                unroll = bool(strtobool(operation.parameters["unroll"]))
             else:
                 unroll = False
 
             if "bidirectional" in operation.parameters:
-                bidirectional = KerasHelper.to_bool(
-                    operation.parameters["bidirectional"])
+                bidirectional = bool(strtobool(
+                    operation.parameters["bidirectional"]))
             else:
                 bidirectional = False
 
@@ -569,8 +553,7 @@ class KerasHelper:
                 activation = None
 
             if "use_bias" in operation.parameters:
-                use_bias = KerasHelper.to_bool(
-                    operation.parameters["use_bias"])
+                use_bias = bool(strtobool(operation.parameters["use_bias"]))
             else:
                 use_bias = True
 
@@ -670,8 +653,7 @@ class KerasHelper:
                 activation = None
 
             if "use_bias" in operation.parameters:
-                use_bias = KerasHelper.to_bool(
-                    operation.parameters["use_bias"])
+                use_bias = bool(strtobool(operation.parameters["use_bias"]))
             else:
                 use_bias = True
 
@@ -885,8 +867,8 @@ class KerasHelper:
                         clipvalue=clipvalue)
             elif optimizer == "adam":
                 if "amsgrad" in optimizer_hyperparameters:
-                    amsgrad = KerasHelper.to_bool(
-                        optimizer_hyperparameters["amsgrad"])
+                    amsgrad = bool(strtobool(
+                        optimizer_hyperparameters["amsgrad"]))
                 else:
                     amsgrad = False
 
@@ -1060,8 +1042,8 @@ class KerasHelper:
                     momentum = 0.0
 
                 if "centered" in optimizer_hyperparameters:
-                    centered = KerasHelper.to_bool(
-                        optimizer_hyperparameters["centered"])
+                    centered = bool(strtobool(
+                        optimizer_hyperparameters["centered"]))
                 else:
                     centered = False
 
@@ -1101,8 +1083,8 @@ class KerasHelper:
                     momentum = 0.0
 
                 if "nesterov" in optimizer_hyperparameters:
-                    nesterov = KerasHelper.to_bool(
-                        optimizer_hyperparameters["nesterov"])
+                    nesterov = bool(strtobool(
+                        optimizer_hyperparameters["nesterov"]))
                 else:
                     nesterov = False
 
@@ -1143,8 +1125,8 @@ class KerasHelper:
                 "_", "").strip()
             if loss == "binarycrossentropy":
                 if "from_logits" in loss_hyperparameters:
-                    from_logits = KerasHelper.to_bool(
-                        loss_hyperparameters["from_logits"])
+                    from_logits = bool(strtobool(
+                        loss_hyperparameters["from_logits"]))
                 else:
                     from_logits = False
 
@@ -1158,8 +1140,8 @@ class KerasHelper:
                     label_smoothing=label_smoothing)
             elif loss == "categoricalcrossentropy":
                 if "from_logits" in loss_hyperparameters:
-                    from_logits = KerasHelper.to_bool(
-                        loss_hyperparameters["from_logits"])
+                    from_logits = bool(strtobool(
+                        loss_hyperparameters["from_logits"]))
                 else:
                     from_logits = False
 
@@ -1205,8 +1187,8 @@ class KerasHelper:
                 return tf.keras.losses.Poisson()
             elif loss == "sparsecategoricalcrossentropy":
                 if "from_logits" in loss_hyperparameters:
-                    from_logits = KerasHelper.to_bool(
-                        loss_hyperparameters["from_logits"])
+                    from_logits = bool(strtobool(
+                        loss_hyperparameters["from_logits"]))
                 else:
                     from_logits = False
                 return tf.keras.losses.SparseCategoricalCrossentropy(

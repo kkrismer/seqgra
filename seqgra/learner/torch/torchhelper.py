@@ -4,12 +4,13 @@ PyTorch learner helper class
 
 @author: Konstantin Krismer
 """
+from distutils.util import strtobool
 import importlib
 import logging
 import os
 import random
-from typing import FrozenSet, List, Optional
 import sys
+from typing import FrozenSet, List, Optional
 
 from ignite.engine import Events
 from ignite.engine import create_supervised_trainer
@@ -36,17 +37,6 @@ class TorchHelper:
         ["l1loss", "mseloss", "smoothl1loss"])
 
     MULTIVARIATE_REGRESSION_LOSSES: FrozenSet[str] = MULTIPLE_REGRESSION_LOSSES
-
-    @staticmethod
-    def to_bool(x: str) -> bool:
-        x = x.strip()
-        if x == "True":
-            return True
-        elif x == "False":
-            return False
-        else:
-            raise Exception("'" + str(x) +
-                            "' must be either 'True' or 'False'")
 
     @staticmethod
     def create_model(learner: Learner) -> None:
@@ -127,7 +117,8 @@ class TorchHelper:
         training_loader = torch.utils.data.DataLoader(
             training_dataset,
             batch_size=batch_size,
-            shuffle=bool(learner.definition.training_process_hyperparameters["shuffle"]))
+            shuffle=bool(strtobool(
+                learner.definition.training_process_hyperparameters["shuffle"])))
 
         validation_loader = torch.utils.data.DataLoader(
             validation_dataset,
@@ -195,7 +186,7 @@ class TorchHelper:
                                         {"model": learner.model})
 
         # early stopping callback
-        if bool(learner.definition.training_process_hyperparameters["early_stopping"]):
+        if bool(strtobool(learner.definition.training_process_hyperparameters["early_stopping"])):
             es_handler = EarlyStopping(patience=2,
                                        score_function=score_fn,
                                        trainer=trainer,
@@ -228,7 +219,8 @@ class TorchHelper:
         training_loader = torch.utils.data.DataLoader(
             training_dataset,
             batch_size=batch_size,
-            shuffle=bool(learner.definition.training_process_hyperparameters["shuffle"]))
+            shuffle=bool(strtobool(
+                learner.definition.training_process_hyperparameters["shuffle"])))
 
         validation_loader = torch.utils.data.DataLoader(
             validation_dataset,

@@ -4,6 +4,7 @@ TensorFlow Keras learners
 
 @author: Konstantin Krismer
 """
+from distutils.util import strtobool
 from typing import Any, List, Optional
 
 import numpy as np
@@ -34,8 +35,8 @@ class KerasDNAMultiClassClassificationLearner(
     def _get_output_layer_activation_function(self) -> Optional[str]:
         if "from_logits" in self.definition.loss_hyperparameters and \
                 "loss" in self.definition.loss_hyperparameters:
-            from_logits: bool = bool(
-                self.definition.loss_hyperparameters["from_logits"])
+            from_logits: bool = bool(strtobool(
+                self.definition.loss_hyperparameters["from_logits"]))
             if from_logits:
                 loss: str = self.definition.loss_hyperparameters["loss"]
                 loss = loss.lower().replace("_", "").strip()
@@ -116,8 +117,8 @@ class KerasDNAMultiLabelClassificationLearner(
     def _get_output_layer_activation_function(self) -> Optional[str]:
         if "from_logits" in self.definition.loss_hyperparameters and \
                 "loss" in self.definition.loss_hyperparameters:
-            from_logits: bool = bool(
-                self.definition.loss_hyperparameters["from_logits"])
+            from_logits: bool = bool(strtobool(
+                self.definition.loss_hyperparameters["from_logits"]))
             if from_logits:
                 loss: str = self.definition.loss_hyperparameters["loss"]
                 loss = loss.lower().replace("_", "").strip()
@@ -198,8 +199,8 @@ class KerasProteinMultiClassClassificationLearner(
     def _get_output_layer_activation_function(self) -> Optional[str]:
         if "from_logits" in self.definition.loss_hyperparameters and \
                 "loss" in self.definition.loss_hyperparameters:
-            from_logits: bool = bool(
-                self.definition.loss_hyperparameters["from_logits"])
+            from_logits: bool = bool(strtobool(
+                self.definition.loss_hyperparameters["from_logits"]))
             if from_logits:
                 loss: str = self.definition.loss_hyperparameters["loss"]
                 loss = loss.lower().replace("_", "").strip()
@@ -280,8 +281,8 @@ class KerasProteinMultiLabelClassificationLearner(
     def _get_output_layer_activation_function(self) -> Optional[str]:
         if "from_logits" in self.definition.loss_hyperparameters and \
                 "loss" in self.definition.loss_hyperparameters:
-            from_logits: bool = bool(
-                self.definition.loss_hyperparameters["from_logits"])
+            from_logits: bool = bool(strtobool(
+                self.definition.loss_hyperparameters["from_logits"]))
             if from_logits:
                 loss: str = self.definition.loss_hyperparameters["loss"]
                 loss = loss.lower().replace("_", "").strip()
