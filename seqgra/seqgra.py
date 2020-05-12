@@ -14,6 +14,7 @@ seqgra complete pipeline:
 import argparse
 import logging
 import os
+import shutil
 from typing import List, Optional
 
 import seqgra.constants as c
@@ -232,6 +233,7 @@ def run_seqgra(data_config_file: Optional[str],
                evaluator_ids: Optional[List[str]],
                output_dir: str,
                print_info: bool,
+               remove_existing_data: bool,
                eval_sets: Optional[List[str]],
                eval_n: Optional[int],
                eval_n_per_label: Optional[int],
@@ -246,7 +248,7 @@ def run_seqgra(data_config_file: Optional[str],
     if data_config_file is None:
         data_definition: Optional[DataDefinition] = None
         grammar_id = data_folder.strip()
-        logger.info("loading experimental data")
+        logger.info("loaded experimental data")
     else:
         # generate synthetic data
         data_config = read_config_file(data_config_file)
@@ -257,11 +259,17 @@ def run_seqgra(data_config_file: Optional[str],
         if print_info:
             print(data_definition)
 
+        if remove_existing_data:
+            simulator_output_dir: str = output_dir + "input/" + grammar_id
+            if os.path.exists(simulator_output_dir):
+                shutil.rmtree(simulator_output_dir, ignore_errors=True)
+                logger.info("removed existing synthetic data")
+
         simulator = Simulator(data_definition, output_dir + "input")
         synthetic_data_available: bool = \
             len(os.listdir(simulator.output_dir)) > 0
         if synthetic_data_available:
-            logger.info("loading previously generated synthetic data")
+            logger.info("loaded previously generated synthetic data")
         else:
             logger.info("generating synthetic data")
             simulator.simulate_data()
@@ -277,6 +285,13 @@ def run_seqgra(data_config_file: Optional[str],
         if print_info:
             print(model_definition)
 
+        if remove_existing_data:
+            learner_output_dir: str = output_dir + "models/" + grammar_id + \
+                "/" + model_definition.model_id
+            if os.path.exists(learner_output_dir):
+                shutil.rmtree(learner_output_dir, ignore_errors=True)
+                logger.info("removed pretrained model")
+
         learner: Learner = get_learner(model_definition, data_definition,
                                        output_dir + "input/" + grammar_id,
                                        output_dir + "models/" + grammar_id)
@@ -290,8 +305,8 @@ def run_seqgra(data_config_file: Optional[str],
                                 learner.output_dir +
                                 "' and run seqgra again to train new model "
                                 "on current data")
-            logger.info("loading previously trained model")
             learner.load_model()
+            logger.info("loaded previously trained model")
         else:
             logger.info("training model")
 
@@ -310,6 +325,14 @@ def run_seqgra(data_config_file: Optional[str],
                                 x_val=x_val, y_val=y_val)
             learner.save_model()
             new_model = True
+
+
+        if remove_existing_data:
+            evaluator_output_dir: str = output_dir + "evaluation/" + \
+                grammar_id + "/" + model_definition.model_id
+            if os.path.exists(evaluator_output_dir):
+                shutil.rmtree(evaluator_output_dir, ignore_errors=True)
+                logger.info("removed evaluator results")
 
         if evaluator_ids:
             logger.info("evaluating model using interpretability methods")
@@ -432,6 +455,16 @@ def main():
         "model summary are printed"
     )
     parser.add_argument(
+        "-r",
+        "--remove",
+        action="store_true",
+        help="if this flag is set, previously stored data for this grammar - "
+        "model combination will be removed prior to the analysis run. This "
+        "includes the folders input/[grammar ID], "
+        "models/[grammar ID]/[model ID], and "
+        "evaluation/[grammar ID]/[model ID]."
+    )
+    parser.add_argument(
         "--eval-sets",
         type=str,
         default=[c.DataSet.TEST],
@@ -498,6 +531,7 @@ def main():
                args.evaluators,
                args.outputdir,
                args.print,
+               args.remove,
                args.eval_sets,
                args.eval_n,
                args.eval_n_per_label,
