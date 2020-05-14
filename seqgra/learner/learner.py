@@ -65,7 +65,7 @@ class Learner(ABC):
             `{OUTPUTDIR}/models/{GRAMMAR ID}`
 
     See Also:
-        :class:`MultiClassClassificationLearner`: for classification models 
+        :class:`MultiClassClassificationLearner`: for classification models
             with mutually exclusive classes
         MultiLabelClassificationLearner: for classification models with
             non-mutually exclusive classes
@@ -75,13 +75,14 @@ class Learner(ABC):
 
     @abstractmethod
     def __init__(self, model_definition: ModelDefinition, data_dir: str,
-                 output_dir: str) -> None:
+                 output_dir: str, validate_data: bool = True) -> None:
         self.logger = logging.getLogger(__name__)
         self.definition: ModelDefinition = model_definition
-        self.data_dir = MiscHelper.prepare_path(data_dir)
-        self.output_dir = MiscHelper.prepare_path(output_dir + "/" +
+        self.data_dir: str = MiscHelper.prepare_path(data_dir)
+        self.output_dir: str = MiscHelper.prepare_path(output_dir + "/" +
                                                   self.definition.model_id,
                                                   allow_exists=True)
+        self.validate_data: bool = validate_data
         self.model = None
         self.optimizer = None
         self.criterion = None
@@ -165,8 +166,9 @@ class Learner(ABC):
         annotations: List[str] = df["annotation"].tolist()
         y: List[str] = df["y"].tolist()
 
-        self.check_labels(y)
-        self.check_annotations(annotations)
+        if self.validate_data:
+            self.check_annotations(annotations)
+            self.check_labels(y)
         return AnnotationSet(annotations, y)
 
     @abstractmethod
@@ -411,8 +413,8 @@ class MultiClassClassificationLearner(Learner):
 
     @abstractmethod
     def __init__(self, model_definition: ModelDefinition, data_dir: str,
-                 output_dir: str) -> None:
-        super().__init__(model_definition, data_dir, output_dir)
+                 output_dir: str, validate_data: bool = True) -> None:
+        super().__init__(model_definition, data_dir, output_dir, validate_data)
 
         if self.definition.task != c.TaskType.MULTI_CLASS_CLASSIFICATION:
             raise Exception("task of model definition must be multi-class "
@@ -505,8 +507,8 @@ class MultiLabelClassificationLearner(Learner):
 
     @abstractmethod
     def __init__(self, model_definition: ModelDefinition, data_dir: str,
-                 output_dir: str) -> None:
-        super().__init__(model_definition, data_dir, output_dir)
+                 output_dir: str, validate_data: bool = True) -> None:
+        super().__init__(model_definition, data_dir, output_dir, validate_data)
 
         if self.definition.task != c.TaskType.MULTI_LABEL_CLASSIFICATION:
             raise Exception("task of model definition must be multi-label "
@@ -606,8 +608,8 @@ class MultipleRegressionLearner(Learner):
 
     @abstractmethod
     def __init__(self, model_definition: ModelDefinition, data_dir: str,
-                 output_dir: str) -> None:
-        super().__init__(model_definition, data_dir, output_dir)
+                 output_dir: str, validate_data: bool = True) -> None:
+        super().__init__(model_definition, data_dir, output_dir, validate_data)
 
         if self.definition.task != c.TaskType.MULTIPLE_REGRESSION:
             raise Exception("task of model definition must be multiple "
@@ -710,8 +712,8 @@ class MultivariateRegressionLearner(Learner):
 
     @abstractmethod
     def __init__(self, model_definition: ModelDefinition, data_dir: str,
-                 output_dir: str) -> None:
-        super().__init__(model_definition, data_dir, output_dir)
+                 output_dir: str, validate_data: bool = True) -> None:
+        super().__init__(model_definition, data_dir, output_dir, validate_data)
 
         if self.definition.task != c.TaskType.MULTIVARIATE_REGRESSION:
             raise Exception("task of model definition must be multivariate "

@@ -34,9 +34,9 @@ class Evaluator(ABC):
         self.evaluator_id: str = evaluator_id
         self.evaluator_name: str = evaluator_name
         self.learner: Learner = learner
-        self.output_dir = MiscHelper.prepare_path(output_dir + "/" +
-                                                  self.evaluator_id,
-                                                  allow_exists=False)
+        self.output_dir: str = MiscHelper.prepare_path(output_dir + "/" +
+                                                       self.evaluator_id,
+                                                       allow_exists=False)
 
         if supported_tasks is None:
             self.supported_tasks: Set[str] = c.TaskType.ALL_TASKS

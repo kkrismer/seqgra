@@ -23,8 +23,8 @@ from seqgra.model import ModelDefinition
 
 class DNAMultiClassClassificationLearner(MultiClassClassificationLearner):
     def __init__(self, model_definition: ModelDefinition, data_dir: str,
-                 output_dir: str) -> None:
-        super().__init__(model_definition, data_dir, output_dir)
+                 output_dir: str, validate_data: bool = True) -> None:
+        super().__init__(model_definition, data_dir, output_dir, validate_data)
 
     def encode_x(self, x: List[str]):
         return np.stack([DNAHelper.convert_dense_to_one_hot_encoding(seq)
@@ -58,15 +58,16 @@ class DNAMultiClassClassificationLearner(MultiClassClassificationLearner):
         x: List[str] = df["x"].tolist()
         y: List[str] = df["y"].tolist()
 
-        DNAHelper.check_sequence(x)
-        self.check_labels(y)
+        if self.validate_data:
+            DNAHelper.check_sequence(x)
+            self.check_labels(y)
         return ExampleSet(x, y)
 
 
 class DNAMultiLabelClassificationLearner(MultiLabelClassificationLearner):
     def __init__(self, model_definition: ModelDefinition, data_dir: str,
-                 output_dir: str) -> None:
-        super().__init__(model_definition, data_dir, output_dir)
+                 output_dir: str, validate_data: bool = True) -> None:
+        super().__init__(model_definition, data_dir, output_dir, validate_data)
 
     def encode_x(self, x: List[str]):
         return np.stack([DNAHelper.convert_dense_to_one_hot_encoding(seq)
@@ -106,6 +107,7 @@ class DNAMultiLabelClassificationLearner(MultiLabelClassificationLearner):
         x: List[str] = df["x"].tolist()
         y: List[str] = df["y"].replace(np.nan, "", regex=True).tolist()
 
-        DNAHelper.check_sequence(x)
-        self.check_labels(y)
+        if self.validate_data:
+            DNAHelper.check_sequence(x)
+            self.check_labels(y)
         return ExampleSet(x, y)

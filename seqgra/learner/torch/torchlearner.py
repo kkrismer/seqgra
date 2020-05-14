@@ -23,8 +23,8 @@ from seqgra.model import ModelDefinition
 class TorchDNAMultiClassClassificationLearner(
         DNAMultiClassClassificationLearner):
     def __init__(self, model_definition: ModelDefinition, data_dir: str,
-                 output_dir: str) -> None:
-        super().__init__(model_definition, data_dir, output_dir)
+                 output_dir: str, validate_data: bool = True) -> None:
+        super().__init__(model_definition, data_dir, output_dir, validate_data)
         self._check_task_loss_compatibility()
 
     def _check_task_loss_compatibility(self) -> None:
@@ -135,8 +135,8 @@ class TorchDNAMultiClassClassificationLearner(
 class TorchDNAMultiLabelClassificationLearner(
         DNAMultiLabelClassificationLearner):
     def __init__(self, model_definition: ModelDefinition, data_dir: str,
-                 output_dir: str) -> None:
-        super().__init__(model_definition, data_dir, output_dir)
+                 output_dir: str, validate_data: bool = True) -> None:
+        super().__init__(model_definition, data_dir, output_dir, validate_data)
         self._check_task_loss_compatibility()
 
     def _check_task_loss_compatibility(self) -> None:
@@ -247,8 +247,8 @@ class TorchDNAMultiLabelClassificationLearner(
 class TorchProteinMultiClassClassificationLearner(
         ProteinMultiClassClassificationLearner):
     def __init__(self, model_definition: ModelDefinition, data_dir: str,
-                 output_dir: str) -> None:
-        super().__init__(model_definition, data_dir, output_dir)
+                 output_dir: str, validate_data: bool = True) -> None:
+        super().__init__(model_definition, data_dir, output_dir, validate_data)
         self._check_task_loss_compatibility()
 
     def _check_task_loss_compatibility(self) -> None:
@@ -359,8 +359,8 @@ class TorchProteinMultiClassClassificationLearner(
 class TorchProteinMultiLabelClassificationLearner(
         ProteinMultiLabelClassificationLearner):
     def __init__(self, model_definition: ModelDefinition, data_dir: str,
-                 output_dir: str) -> None:
-        super().__init__(model_definition, data_dir, output_dir)
+                 output_dir: str, validate_data: bool = True) -> None:
+        super().__init__(model_definition, data_dir, output_dir, validate_data)
         self._check_task_loss_compatibility()
 
     def _check_task_loss_compatibility(self) -> None:
