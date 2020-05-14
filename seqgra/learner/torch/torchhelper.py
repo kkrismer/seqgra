@@ -126,8 +126,13 @@ class TorchHelper:
             shuffle=False)
 
         # GPU or CPU?
-        device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+        use_cuda: bool = torch.cuda.is_available()
+        device = torch.device("cuda:0" if use_cuda else "cpu")
         learner.model = learner.model.to(device)
+        if use_cuda:
+            logger.info("using GPU")
+        else:
+            logger.info("using CPU")
 
         # training loop
         trainer = create_supervised_trainer(learner.model, learner.optimizer,

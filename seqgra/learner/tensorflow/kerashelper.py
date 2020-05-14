@@ -6,6 +6,7 @@ TensorFlow Keras learner helper class
 """
 from ast import literal_eval
 from distutils.util import strtobool
+import logging
 import os
 import random
 import sys
@@ -120,6 +121,15 @@ class KerasHelper:
     def train_model(learner: Learner,
                     x_train: List[str], y_train: List[str],
                     x_val: List[str], y_val: List[str]) -> None:
+        logger = logging.getLogger(__name__)
+        # GPU or CPU?
+        if tf.test.is_built_with_gpu_support() and \
+            len(tf.config.list_physical_devices("GPU")) > 0:
+            logger.info("using GPU")
+        else:
+            logger.info("using CPU")
+
+
         # one hot encode input and labels
         encoded_x_train = learner.encode_x(x_train)
         encoded_y_train = learner.encode_y(y_train)

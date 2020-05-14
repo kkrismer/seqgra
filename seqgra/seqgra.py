@@ -304,7 +304,7 @@ def run_seqgra(data_config_file: Optional[str],
         if trained_model_available:
             if new_data:
                 raise Exception("previously trained model used outdated "
-                                "training data; please delete '" +
+                                "training data; delete '" +
                                 learner.output_dir +
                                 "' and run seqgra again to train new model "
                                 "on current data")
@@ -362,7 +362,7 @@ def run_seqgra(data_config_file: Optional[str],
                                 "to disk", evaluator_id)
                     if new_model:
                         logger.warning("results from evaluator %s are based "
-                                       "on an outdated model; please delete "
+                                       "on an outdated model; delete "
                                        "'%s' and run seqgra again to get "
                                        "results from %s on current model",
                                        evaluator_id, results_dir,

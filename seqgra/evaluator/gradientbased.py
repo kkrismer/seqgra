@@ -41,7 +41,8 @@ class GradientBasedEvaluator(FeatureImportanceEvaluator):
 
     def _evaluate_model(self, x: List[str], y: List[str],
                         annotations: List[str]) -> Any:
-        use_cuda = torch.cuda.is_available()
+        # GPU or CPU?
+        use_cuda: bool = torch.cuda.is_available()
 
         # encode
         encoded_x = self.learner.encode_x(x)
