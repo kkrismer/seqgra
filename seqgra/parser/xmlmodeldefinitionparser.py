@@ -76,8 +76,27 @@ class XMLModelDefinitionParser(ModelDefinitionParser):
         labels_element: Any = \
             self._general_element.getElementsByTagName("labels")[0]
         label_elements = labels_element.getElementsByTagName("label")
-        return [XMLHelper.read_immediate_text_node(label_element)
-                for label_element in label_elements]
+        if label_elements:
+            return [XMLHelper.read_immediate_text_node(label_element)
+                    for label_element in label_elements]
+        else:
+            pattern_element = labels_element.getElementsByTagName("pattern")[0]
+            if pattern_element.hasAttribute("prefix"):
+                prefix: str = pattern_element.getAttribute("prefix")
+            else:
+                prefix: str = ""
+            if pattern_element.hasAttribute("postfix"):
+                postfix: str = pattern_element.getAttribute("postfix")
+            else:
+                postfix: str = ""
+            if pattern_element.hasAttribute("min"):
+                label_index_min: int = int(pattern_element.getAttribute("min"))
+            else:
+                label_index_min: int = 1
+            label_index_max: int = int(pattern_element.getAttribute("max"))
+
+            return [prefix + str(i) + postfix
+                    for i in range(label_index_min, label_index_max + 1)]
 
     def get_seed(self) -> str:
         return XMLHelper.read_int_node(self._general_element, "seed")

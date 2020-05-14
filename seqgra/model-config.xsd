@@ -22,9 +22,23 @@
               </xs:element>
               <xs:element name="labels">
                 <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="label" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
-                  </xs:sequence>
+                  <xs:choice>
+                    <xs:sequence>
+                      <xs:element name="label" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                    <xs:element name="pattern">
+                      <xs:complexType>
+                        <xs:simpleContent>
+                          <xs:extension base="xs:string">
+                            <xs:attribute name="prefix" type="xs:string" use="optional"/>
+                            <xs:attribute name="postfix" type="xs:string" use="optional"/>
+                            <xs:attribute name="min" type="xs:long" use="optional"/>
+                            <xs:attribute name="max" type="xs:long" use="required"/>
+                          </xs:extension>
+                        </xs:simpleContent>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:choice>
                 </xs:complexType>
               </xs:element>
               <xs:element name="seed" type="xs:long"/>

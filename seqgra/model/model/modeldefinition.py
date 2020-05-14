@@ -80,8 +80,7 @@ class ModelDefinition:
         if self.input_encoding:
             str_rep += ["\t\tInput encoding: ", self.input_encoding, "\n"]
         str_rep += ["\t\tLabels:\n"]
-        if self.labels is not None and len(self.labels) > 0:
-            str_rep += ["\t\t\t" + label + "\n" for label in self.labels]
+        str_rep += ["\t\t\t" + str(self.labels) + "\n"]
         str_rep += ["\t\tSeed: ", str(self.seed), "\n"]
         str_rep += ["\t" + s + "\n"
                     for s in str(self.architecture).splitlines()]
