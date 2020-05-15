@@ -1,0 +1,31 @@
+seqgra.learner package
+======================
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   seqgra.learner.tensorflow
+   seqgra.learner.torch
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   seqgra.learner.dna
+   seqgra.learner.dnahelper
+   seqgra.learner.learner
+   seqgra.learner.protein
+   seqgra.learner.proteinhelper
+
+Module contents
+---------------
+
+.. automodule:: seqgra.learner
+   :members:
+   :undoc-members:
+   :show-inheritance:

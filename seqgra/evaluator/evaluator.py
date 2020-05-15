@@ -1,20 +1,15 @@
-"""
-MIT - CSAIL - Gifford Lab - seqgra
-
-- abstract base class for all evaluators
-
-@author: Konstantin Krismer
+"""Abstract base class for all evaluators
 """
 from abc import ABC, abstractmethod
 import logging
 import os
 import random
-import pkg_resources
 import subprocess
 from typing import Any, List, Optional, Set
 
 import numpy as np
 import pandas as pd
+import pkg_resources
 
 import seqgra.constants as c
 from seqgra import AnnotatedExampleSet

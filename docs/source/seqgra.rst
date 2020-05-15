@@ -1,33 +1,28 @@
 seqgra package
 ==============
 
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   seqgra.evaluator
+   seqgra.learner
+   seqgra.model
+   seqgra.parser
+   seqgra.simulator
+   seqgra.writer
+
 Submodules
 ----------
 
-seqgra.mischelper module
-------------------------
+.. toctree::
+   :maxdepth: 4
 
-.. automodule:: seqgra.mischelper
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-seqgra.seqgra module
---------------------
-
-.. automodule:: seqgra.seqgra
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-seqgra.sis module
------------------
-
-.. automodule:: seqgra.sis
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
+   seqgra.constants
+   seqgra.misc
+   seqgra.seqgra
 
 Module contents
 ---------------

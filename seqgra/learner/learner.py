@@ -1,14 +1,11 @@
 """Contains abstract classes for all learners.
 
 Classes:
-    Learner: abstract base class for all learners
-    MultiClassClassificationLearner: abstract class for multi-class
-        classification learners
-    MultiLabelClassificationLearner: abstract class for multi-label
-        classification learners
-    MultipleRegressionLearner: abstract class for multiple regression learners
-    MultivariateRegressionLearner: abstract class for multivariate
-        regression learners
+    - :class:`Learner`: abstract base class for all learners
+    - :class:`MultiClassClassificationLearner`: abstract class for multi-class classification learners
+    - :class:`MultiLabelClassificationLearner`: abstract class for multi-label classification learners
+    - :class:`MultipleRegressionLearner`: abstract class for multiple regression learners
+    - :class:`MultivariateRegressionLearner`: abstract class for multivariate regression learners
 """
 from abc import ABC, abstractmethod
 import logging
@@ -38,24 +35,6 @@ class Learner(ABC):
         metrics (List[str]): metrics that are collected, usually `loss` and
             `accuracy`
 
-    Methods:
-        train_model
-        parse_examples_data
-        parse_annotations_data
-        get_examples_file
-        get_annotations_file
-        create_model
-        save_model
-        load_model
-        print_model_summary
-        predict
-        encode_x
-        decode_x
-        encode_y
-        decode_y
-        get_num_params
-        set_seed
-
     Arguments:
         model_definition (ModelDefinition): contains model meta info,
             architecture and hyperparameters
@@ -65,12 +44,9 @@ class Learner(ABC):
             `{OUTPUTDIR}/models/{GRAMMAR ID}`
 
     See Also:
-        :class:`MultiClassClassificationLearner`: for classification models
-            with mutually exclusive classes
-        MultiLabelClassificationLearner: for classification models with
-            non-mutually exclusive classes
-        MultipleRegressionLearner: for regression models with multiple
-            independent variables and one dependent variable
+        - :class:`MultiClassClassificationLearner`: for classification models with mutually exclusive classes
+        - :class:`MultiLabelClassificationLearner`: for classification models with non-mutually exclusive classes
+        - :class:`MultipleRegressionLearner`: for regression models with multiple independent variables and one dependent variable
     """
 
     @abstractmethod
@@ -80,8 +56,8 @@ class Learner(ABC):
         self.definition: ModelDefinition = model_definition
         self.data_dir: str = MiscHelper.prepare_path(data_dir)
         self.output_dir: str = MiscHelper.prepare_path(output_dir + "/" +
-                                                  self.definition.model_id,
-                                                  allow_exists=True)
+                                                       self.definition.model_id,
+                                                       allow_exists=True)
         self.validate_data: bool = validate_data
         self.model = None
         self.optimizer = None
@@ -383,25 +359,6 @@ class MultiClassClassificationLearner(Learner):
         metrics (List[str]): metrics that are collected, usually `loss` and
             `accuracy`
 
-    Methods:
-        train_model
-        parse_examples_data
-        parse_annotations_data
-        get_examples_file
-        get_annotations_file
-        create_model
-        save_model
-        load_model
-        print_model_summary
-        predict
-        encode_x
-        decode_x
-        encode_y
-        decode_y
-        get_num_params
-        set_seed
-        evaluate_model
-
     Arguments:
         model_definition (ModelDefinition): contains model meta info,
             architecture and hyperparameters
@@ -476,25 +433,6 @@ class MultiLabelClassificationLearner(Learner):
         criterion: PyTorch or TensorFlow criterion (loss)
         metrics (List[str]): metrics that are collected, usually `loss` and
             `accuracy`
-
-    Methods:
-        train_model
-        parse_examples_data
-        parse_annotations_data
-        get_examples_file
-        get_annotations_file
-        create_model
-        save_model
-        load_model
-        print_model_summary
-        predict
-        encode_x
-        decode_x
-        encode_y
-        decode_y
-        get_num_params
-        set_seed
-        evaluate_model
 
     Arguments:
         model_definition (ModelDefinition): contains model meta info,
@@ -577,25 +515,6 @@ class MultipleRegressionLearner(Learner):
         criterion: PyTorch or TensorFlow criterion (loss)
         metrics (List[str]): metrics that are collected, usually `loss` and
             `accuracy`
-
-    Methods:
-        train_model
-        parse_examples_data
-        parse_annotations_data
-        get_examples_file
-        get_annotations_file
-        create_model
-        save_model
-        load_model
-        print_model_summary
-        predict
-        encode_x
-        decode_x
-        encode_y
-        decode_y
-        get_num_params
-        set_seed
-        evaluate_model
 
     Arguments:
         model_definition (ModelDefinition): contains model meta info,
@@ -681,25 +600,6 @@ class MultivariateRegressionLearner(Learner):
         criterion: PyTorch or TensorFlow criterion (loss)
         metrics (List[str]): metrics that are collected, usually `loss` and
             `accuracy`
-
-    Methods:
-        train_model
-        parse_examples_data
-        parse_annotations_data
-        get_examples_file
-        get_annotations_file
-        create_model
-        save_model
-        load_model
-        print_model_summary
-        predict
-        encode_x
-        decode_x
-        encode_y
-        decode_y
-        get_num_params
-        set_seed
-        evaluate_model
 
     Arguments:
         model_definition (ModelDefinition): contains model meta info,

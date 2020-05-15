@@ -39,9 +39,13 @@ extensions = ["sphinx.ext.autodoc",
               "sphinx.ext.autosummary",
               "sphinxcontrib.apidoc"]
 
+napoleon_google_docstring = True
+napoleon_numpy_docstring = False
+
 apidoc_module_dir = "../../seqgra"
 apidoc_output_dir = "."
-apidoc_extra_args = ["--implicit-namespaces"]
+apidoc_extra_args = ["-f", "-e", "-T", "--implicit-namespaces"]
+
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
@@ -51,6 +55,8 @@ templates_path = ["_templates"]
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = []
 
+add_module_names = False
+modindex_common_prefix = ["seqgra."]
 
 # -- Options for HTML output -------------------------------------------------
 
