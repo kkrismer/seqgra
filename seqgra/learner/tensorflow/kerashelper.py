@@ -150,7 +150,7 @@ class KerasHelper:
         # TensorBoard callback
         log_dir = learner.output_dir + "logs/run"
         os.makedirs(log_dir)
-        log_dir = log_dir.replace("/", "\\")
+        log_dir = log_dir.replace("\\", "/")
         tensorboard_callback = tf.keras.callbacks.TensorBoard(
             log_dir=log_dir,
             histogram_freq=0,
