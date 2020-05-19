@@ -21,6 +21,10 @@ import seqgra.constants as c
 from seqgra.evaluator import Evaluator
 from seqgra.evaluator import FeatureImportanceEvaluator
 from seqgra.learner import Learner
+from seqgra.learner.bayes import BayesOptimalDNAMultiClassClassificationLearner
+from seqgra.learner.bayes import BayesOptimalDNAMultiLabelClassificationLearner
+from seqgra.learner.bayes import BayesOptimalProteinMultiClassClassificationLearner
+from seqgra.learner.bayes import BayesOptimalProteinMultiLabelClassificationLearner
 from seqgra.model import DataDefinition
 from seqgra.model import ModelDefinition
 from seqgra.parser import DataDefinitionParser
@@ -68,6 +72,9 @@ def get_learner(model_definition: ModelDefinition,
                     from seqgra.learner.torch import TorchDNAMultiClassClassificationLearner  # pylint: disable=import-outside-toplevel
                     return TorchDNAMultiClassClassificationLearner(
                         model_definition, data_dir, output_dir, validate_data)
+                elif model_definition.library == c.LibraryType.BAYES_OPTIMAL_CLASSIFIER:
+                    return BayesOptimalDNAMultiClassClassificationLearner(
+                        model_definition, data_dir, output_dir, validate_data)
                 else:
                     raise Exception("invalid library: " +
                                     model_definition.library)
@@ -79,6 +86,9 @@ def get_learner(model_definition: ModelDefinition,
                 elif model_definition.library == c.LibraryType.TORCH:
                     from seqgra.learner.torch import TorchProteinMultiClassClassificationLearner  # pylint: disable=import-outside-toplevel
                     return TorchProteinMultiClassClassificationLearner(
+                        model_definition, data_dir, output_dir, validate_data)
+                elif model_definition.library == c.LibraryType.BAYES_OPTIMAL_CLASSIFIER:
+                    return BayesOptimalProteinMultiClassClassificationLearner(
                         model_definition, data_dir, output_dir, validate_data)
                 else:
                     raise Exception("invalid library: " +
@@ -96,6 +106,9 @@ def get_learner(model_definition: ModelDefinition,
                     from seqgra.learner.torch import TorchDNAMultiLabelClassificationLearner  # pylint: disable=import-outside-toplevel
                     return TorchDNAMultiLabelClassificationLearner(
                         model_definition, data_dir, output_dir, validate_data)
+                elif model_definition.library == c.LibraryType.BAYES_OPTIMAL_CLASSIFIER:
+                    return BayesOptimalDNAMultiLabelClassificationLearner(
+                        model_definition, data_dir, output_dir, validate_data)
                 else:
                     raise Exception("invalid library: " +
                                     model_definition.library)
@@ -107,6 +120,9 @@ def get_learner(model_definition: ModelDefinition,
                 elif model_definition.library == c.LibraryType.TORCH:
                     from seqgra.learner.torch import TorchProteinMultiLabelClassificationLearner  # pylint: disable=import-outside-toplevel
                     return TorchProteinMultiLabelClassificationLearner(
+                        model_definition, data_dir, output_dir, validate_data)
+                elif model_definition.library == c.LibraryType.BAYES_OPTIMAL_CLASSIFIER:
+                    return BayesOptimalProteinMultiLabelClassificationLearner(
                         model_definition, data_dir, output_dir, validate_data)
                 else:
                     raise Exception("invalid library: " +
@@ -139,6 +155,12 @@ def get_learner(model_definition: ModelDefinition,
             from seqgra.learner.torch import TorchDNAMultiLabelClassificationLearner  # pylint: disable=import-outside-toplevel
             return TorchDNAMultiLabelClassificationLearner(
                 model_definition, data_dir, output_dir, validate_data)
+        elif model_definition.implementation == "BayesOptimalDNAMultiClassClassificationLearner":
+            return BayesOptimalDNAMultiClassClassificationLearner(
+                model_definition, data_dir, output_dir, validate_data)
+        elif model_definition.implementation == "BayesOptimalDNAMultiLabelClassificationLearner":
+            return BayesOptimalDNAMultiLabelClassificationLearner(
+                model_definition, data_dir, output_dir, validate_data)
         elif model_definition.implementation == "KerasProteinMultiClassClassificationLearner":
             from seqgra.learner.tensorflow import KerasProteinMultiClassClassificationLearner  # pylint: disable=import-outside-toplevel
             return KerasProteinMultiClassClassificationLearner(
@@ -154,6 +176,12 @@ def get_learner(model_definition: ModelDefinition,
         elif model_definition.implementation == "TorchProteinMultiLabelClassificationLearner":
             from seqgra.learner.torch import TorchProteinMultiLabelClassificationLearner  # pylint: disable=import-outside-toplevel
             return TorchProteinMultiLabelClassificationLearner(
+                model_definition, data_dir, output_dir, validate_data)
+        elif model_definition.implementation == "BayesOptimalProteinMultiClassClassificationLearner":
+            return BayesOptimalProteinMultiClassClassificationLearner(
+                model_definition, data_dir, output_dir, validate_data)
+        elif model_definition.implementation == "BayesOptimalProteinMultiLabelClassificationLearner":
+            return BayesOptimalProteinMultiLabelClassificationLearner(
                 model_definition, data_dir, output_dir, validate_data)
         else:
             raise Exception("invalid learner ID")

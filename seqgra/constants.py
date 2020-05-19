@@ -29,7 +29,9 @@ class SequenceSpaceType:
 class LibraryType:
     TENSORFLOW: str = "TensorFlow"
     TORCH: str = "PyTorch"
-    ALL_LIBRARIES: FrozenSet[str] = frozenset([TENSORFLOW, TORCH])
+    BAYES_OPTIMAL_CLASSIFIER: str = "BayesOptimalClassifier"
+    ALL_LIBRARIES: FrozenSet[str] = frozenset([TENSORFLOW, TORCH,
+                                               BAYES_OPTIMAL_CLASSIFIER])
 
 
 class DataSet:
