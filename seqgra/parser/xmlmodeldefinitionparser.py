@@ -166,10 +166,13 @@ class XMLModelDefinitionParser(ModelDefinitionParser):
 
     def get_training_process_hyperparameters(self) -> Dict[str, str]:
         training_process_element: Any = \
-            self._dom.getElementsByTagName("trainingprocess")[0]
-        hyperparameter_elements: Any = \
-            training_process_element.getElementsByTagName("hyperparameter")
-        return self.__parse_hyperparameters(hyperparameter_elements)
+            self._dom.getElementsByTagName("trainingprocess")
+        if len(training_process_element) == 1:
+            hyperparameter_elements: Any = \
+                training_process_element[0].getElementsByTagName("hyperparameter")
+            return self.__parse_hyperparameters(hyperparameter_elements)
+        else:
+            return None
 
     def __parse_hyperparameters(self,
                                 hyperparameter_elements) -> Dict[str, str]:
