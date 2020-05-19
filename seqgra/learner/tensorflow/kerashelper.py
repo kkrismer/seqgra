@@ -109,7 +109,10 @@ class KerasHelper:
 
     @staticmethod
     def print_model_summary(learner: Learner):
-        learner.model.summary()
+        if learner.model:
+            learner.model.summary()
+        else:
+            print("uninitialized model")
 
     @staticmethod
     def set_seed(learner: Learner) -> None:

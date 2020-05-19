@@ -92,7 +92,10 @@ class TorchHelper:
 
     @staticmethod
     def print_model_summary(learner: Learner):
-        print(learner.model)
+        if learner.model:
+            print(learner.model)
+        else:
+            print("uninitialized model")
 
     @staticmethod
     def set_seed(learner: Learner) -> None:
