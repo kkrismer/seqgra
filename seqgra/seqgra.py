@@ -355,7 +355,8 @@ def run_seqgra(data_config_file: Optional[str],
             learner.train_model(x_train=x_train, y_train=y_train,
                                 x_val=x_val, y_val=y_val)
             learner.save_model()
-            new_model = True
+            new_model = True and learner.definition.library != \
+                c.LibraryType.BAYES_OPTIMAL_CLASSIFIER
 
         if remove_existing_data:
             evaluator_output_dir: str = output_dir + "evaluation/" + \
