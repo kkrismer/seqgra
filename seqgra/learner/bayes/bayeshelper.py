@@ -5,6 +5,7 @@ TensorFlow Keras learner helper class
 @author: Konstantin Krismer
 """
 import logging
+import math
 import os
 import random
 import sys
@@ -143,6 +144,28 @@ class BayesOptimalHelper:
         return pwms
 
     @staticmethod
+    def get_pwm_max_score(pwm) -> float:
+        pwm_width: int = pwm.shape[0]
+
+        return np.sum(np.max(pwm, axis=1))
+
+    @staticmethod
+    def get_pwm_min_score(pwm) -> float:
+        pwm_width: int = pwm.shape[0]
+
+        return np.sum(np.min(pwm, axis=1))
+
+    @staticmethod
+    def normalize_pwm_score(score: float, pwm) -> float:
+        min_score: float = BayesOptimalHelper.get_pwm_min_score(pwm)
+        max_score: float = BayesOptimalHelper.get_pwm_max_score(pwm)
+
+        if math.isclose(min_score, max_score):
+            return 0.5
+        else:
+            return (score - min_score) / (max_score - min_score)
+
+    @staticmethod
     def predict(learner: Learner, x: Any, encode: bool = True):
         """ This is the forward calculation from x to y
         Returns:
@@ -160,15 +183,15 @@ class BayesOptimalHelper:
                                                              learner.model[0],
                                                              learner.model[1])
                 for pwm in pwms:
-                    y_hat[example_index, i] = \
-                        max(BayesOptimalHelper.score_example(
+                    raw_score = max(BayesOptimalHelper.score_example(
                             x[example_index, :, :], pwm))
+                    y_hat[example_index, i] = \
+                        BayesOptimalHelper.normalize_pwm_score(raw_score, pwm)
 
         if learner.definition.task == c.TaskType.MULTI_CLASS_CLASSIFICATION:
             # shift
             zero_col = np.zeros((y_hat.shape[0], 1))
             y_hat -= np.hstack((y_hat, zero_col)).min(axis=1)[:, None]
-
             # scale to [0, 1]
             y_hat /= y_hat.sum(axis=1)[:, None]
         
