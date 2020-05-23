@@ -47,6 +47,25 @@ class DNAMultiClassClassificationLearner(MultiClassClassificationLearner):
                             "load_model first")
         labels = np.array(self.definition.labels)
 
+        if isinstance(y, list):
+            y = np.asarray(y)
+        elif not isinstance(y, np.ndarray):
+            raise Exception("y is neither list nor np.ndarry")
+
+        if y.dtype == np.float32 or y.dtype == np.float64 or \
+                y.dtype == np.float_:
+            y = np.round(y).astype(bool)
+        elif y.dtype == np.int8 or y.dtype == np.int16 or \
+                y.dtype == np.int32 or y.dtype == np.int64 or \
+                y.dtype == np.uint8 or y.dtype == np.uint16 or \
+                y.dtype == np.uint32 or y.dtype == np.uint64 or \
+                y.dtype == np.intp or y.dtype == np.uintp or \
+                y.dtype == np.int_:
+            y = y.astype(bool)
+        elif y.dtype != np.bool_:
+            raise Exception("y has invalid data type; valid data types "
+                            "include bool, int, float")
+
         decoded_y = np.vstack([labels[ex] for ex in y])
         decoded_y = list(itertools.chain(*decoded_y))
         return decoded_y

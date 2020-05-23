@@ -165,16 +165,22 @@ class BayesOptimalHelper:
                             x[example_index, :, :], pwm))
 
         if learner.definition.task == c.TaskType.MULTI_CLASS_CLASSIFICATION:
-            y_hat = y_hat / y_hat.sum(axis=1)[:, None]
+            # shift
+            zero_col = np.zeros((y_hat.shape[0], 1))
+            y_hat -= np.hstack((y_hat, zero_col)).min(axis=1)[:, None]
+
+            # scale to [0, 1]
+            y_hat /= y_hat.sum(axis=1)[:, None]
         
         return y_hat
 
     @staticmethod
     def evaluate_model(learner: Learner, x: List[str], y: List[str]):
-        # one hot encode input and labels
-        encoded_x = learner.encode_x(x)
-        encoded_y = learner.encode_y(y)
+        y_hat = BayesOptimalHelper.predict(learner, x)
+        y_hat = learner.decode_y(np.round(y_hat).astype(bool))
 
-        loss, accuracy = learner.model.evaluate(encoded_x, encoded_y,
-                                                verbose=0)
-        return {"loss": loss, "accuracy": accuracy}
+        accuracy = [y_i == y_hat_i for y_i, y_hat_i in zip(y, y_hat)]
+        accuracy = np.asarray(accuracy).astype(int)
+        accuracy = np.sum(accuracy) / len(accuracy)
+
+        return {"loss": float("nan"), "accuracy": accuracy}
