@@ -72,3 +72,32 @@ class MiscHelper:
             os.makedirs(path)
 
         return path
+
+    @staticmethod
+    def print_progress_bar(iteration: int, total: int, prefix: str = "",
+                           suffix: str = "", decimals: int = 1,
+                           length: int = 100, fill: int = "█",
+                           print_end: int = "\r"):
+        """Call in a loop to create terminal progress bar
+
+        Arguments:
+            iteration (int): current iteration
+            total (int): total iterations
+            prefix (str, optional): prefix string, defaults to empty string
+            suffix (str, optional): suffix string, defaults to empty string
+            decimals (int, optional): positive number of decimals in percent
+                complete, defaults to 1
+            length (int, optional): character length of bar, defaults to 100
+            fill (str, optional): bar fill character, defaults to "█"
+            print_end (str, optional): end character (e.g. "\r", "\r\n"),
+                defaults to "\r"
+        """
+        percent = ("{0:." + str(decimals) +
+                   "f}").format(100 * (iteration / float(total)))
+        filled_length = int(length * iteration // total)
+        progress_bar = fill * filled_length + "-" * (length - filled_length)
+        print("\r%s |%s| %s%% %s" %
+              (prefix, progress_bar, percent, suffix), end=print_end)
+
+        if iteration == total:
+            print()

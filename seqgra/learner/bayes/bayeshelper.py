@@ -15,6 +15,7 @@ import numpy as np
 import pkg_resources
 
 import seqgra.constants as c
+from seqgra import MiscHelper
 from seqgra.learner import Learner
 from seqgra.model import DataDefinition
 from seqgra.model.data import Condition
@@ -145,14 +146,10 @@ class BayesOptimalHelper:
 
     @staticmethod
     def get_pwm_max_score(pwm) -> float:
-        pwm_width: int = pwm.shape[0]
-
         return np.sum(np.max(pwm, axis=1))
 
     @staticmethod
     def get_pwm_min_score(pwm) -> float:
-        pwm_width: int = pwm.shape[0]
-
         return np.sum(np.min(pwm, axis=1))
 
     @staticmethod
@@ -175,6 +172,7 @@ class BayesOptimalHelper:
             x = learner.encode_x(x)
 
         y_hat = np.zeros((x.shape[0], len(learner.definition.labels)))
+
         for example_index in range(x.shape[0]):
             for i, label in enumerate(learner.definition.labels):
                 # get rules for label
@@ -187,6 +185,8 @@ class BayesOptimalHelper:
                             x[example_index, :, :], pwm))
                     y_hat[example_index, i] = \
                         BayesOptimalHelper.normalize_pwm_score(raw_score, pwm)
+            
+            MiscHelper.print_progress_bar(example_index, x.shape[0] - 1)
 
         if learner.definition.task == c.TaskType.MULTI_CLASS_CLASSIFICATION:
             # shift
