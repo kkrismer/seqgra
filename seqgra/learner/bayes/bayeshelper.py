@@ -119,10 +119,11 @@ class BayesOptimalHelper:
 
     @staticmethod
     def score_example(example, pwm) -> Any:
-        pwm_width: int = pwm.shape[0]
+        scores = np.zeros((example.shape[0] - pwm.shape[0] + 1))
 
-        return [np.sum(np.multiply(example[i:(i + pwm_width), :], pwm))
-                for i in range(example.shape[0] - pwm_width + 1)]
+        for i in range(example.shape[1]):
+            scores += np.correlate(example[:, i], pwm[:, i], mode="valid")
+        return scores
 
     @staticmethod
     def create_se_pwm_dict(sequence_elements: List[SequenceElement]) -> Dict[str, Any]:
@@ -182,10 +183,10 @@ class BayesOptimalHelper:
                                                              learner.model[1])
                 for pwm in pwms:
                     raw_score = max(BayesOptimalHelper.score_example(
-                            x[example_index, :, :], pwm))
+                        x[example_index, :, :], pwm))
                     y_hat[example_index, i] = \
                         BayesOptimalHelper.normalize_pwm_score(raw_score, pwm)
-            
+
             MiscHelper.print_progress_bar(example_index, x.shape[0] - 1)
 
         if learner.definition.task == c.TaskType.MULTI_CLASS_CLASSIFICATION:
@@ -194,7 +195,7 @@ class BayesOptimalHelper:
             y_hat -= np.hstack((y_hat, zero_col)).min(axis=1)[:, None]
             # scale to [0, 1]
             y_hat /= y_hat.sum(axis=1)[:, None]
-        
+
         return y_hat
 
     @staticmethod
