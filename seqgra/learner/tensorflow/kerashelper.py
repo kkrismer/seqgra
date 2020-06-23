@@ -42,70 +42,71 @@ class KerasHelper:
 
     @staticmethod
     def create_model(learner: Learner) -> None:
-        arch: Architecture = learner.definition.architecture
-        path = arch.external_model_path
-        learner.set_seed()
+        with tf.device(learner.device_label):
+            arch: Architecture = learner.definition.architecture
+            path = arch.external_model_path
+            learner.set_seed()
 
-        if arch.operations is not None:
-            learner.model = tf.keras.Sequential(
-                [KerasHelper.get_keras_layer(operation)
-                 for operation in arch.operations])
+            if arch.operations is not None:
+                learner.model = tf.keras.Sequential(
+                    [KerasHelper.get_keras_layer(operation)
+                     for operation in arch.operations])
 
-            for i in range(len(arch.operations)):
-                custom_weights = KerasHelper.load_custom_weights(
-                    arch.operations[i])
-                if custom_weights is not None:
-                    learner.model.layers[i].set_weights(custom_weights)
-        elif path is not None:
-            if arch.external_model_format == "keras-h5-whole-model":
-                if os.path.isfile(path):
-                    learner.model = tf.keras.models.load_model(path)
-                else:
-                    raise Exception(".h5 file does not exist: " + path)
-            elif arch.external_model_format == "keras-tf-whole-model":
-                if os.path.isdir(path):
-                    learner.model = tf.keras.models.load_model(path)
-                else:
-                    raise Exception(
-                        "TF saved model directory does not exist: " + path)
-            elif arch.external_model_format == "keras-json-architecture-only":
-                if os.path.isfile(path):
-                    with open(path, "r") as json_config_file:
-                        json_config = json_config_file.read()
-                        learner.model = tf.keras.models.model_from_json(
-                            json_config)
-                else:
-                    raise Exception(".json file does not exist: " + path)
-            elif arch.external_model_format == "keras-yaml-architecture-only":
-                if os.path.isfile(path):
-                    with open(path, "r") as yaml_config_file:
-                        yaml_config = yaml_config_file.read()
-                        learner.model = tf.keras.models.model_from_yaml(
-                            yaml_config)
-                else:
-                    raise Exception(".yaml file does not exist: " + path)
-        else:
-            raise Exception("neither internal nor external architecture "
-                            "definition provided")
-
-        if arch.external_model_format is None or \
-           arch.external_model_format == "keras-yaml-architecture-only" or \
-           arch.external_model_format == "keras-json-architecture-only":
-            if learner.definition.optimizer_hyperparameters is not None and \
-               learner.definition.loss_hyperparameters is not None and \
-               learner.metrics is not None:
-                local_metrics = learner.metrics[learner.metrics != "loss"]
-                if not isinstance(local_metrics, list):
-                    local_metrics = [local_metrics]
-                learner.model.compile(
-                    optimizer=KerasHelper.get_optimizer(
-                        learner.definition.optimizer_hyperparameters),
-                    loss=KerasHelper.get_loss(
-                        learner.definition.loss_hyperparameters),
-                    metrics=local_metrics
-                )
+                for i in range(len(arch.operations)):
+                    custom_weights = KerasHelper.load_custom_weights(
+                        arch.operations[i])
+                    if custom_weights is not None:
+                        learner.model.layers[i].set_weights(custom_weights)
+            elif path is not None:
+                if arch.external_model_format == "keras-h5-whole-model":
+                    if os.path.isfile(path):
+                        learner.model = tf.keras.models.load_model(path)
+                    else:
+                        raise Exception(".h5 file does not exist: " + path)
+                elif arch.external_model_format == "keras-tf-whole-model":
+                    if os.path.isdir(path):
+                        learner.model = tf.keras.models.load_model(path)
+                    else:
+                        raise Exception(
+                            "TF saved model directory does not exist: " + path)
+                elif arch.external_model_format == "keras-json-architecture-only":
+                    if os.path.isfile(path):
+                        with open(path, "r") as json_config_file:
+                            json_config = json_config_file.read()
+                            learner.model = tf.keras.models.model_from_json(
+                                json_config)
+                    else:
+                        raise Exception(".json file does not exist: " + path)
+                elif arch.external_model_format == "keras-yaml-architecture-only":
+                    if os.path.isfile(path):
+                        with open(path, "r") as yaml_config_file:
+                            yaml_config = yaml_config_file.read()
+                            learner.model = tf.keras.models.model_from_yaml(
+                                yaml_config)
+                    else:
+                        raise Exception(".yaml file does not exist: " + path)
             else:
-                raise Exception("optimizer, loss or metrics undefined")
+                raise Exception("neither internal nor external architecture "
+                                "definition provided")
+
+            if arch.external_model_format is None or \
+                    arch.external_model_format == "keras-yaml-architecture-only" or \
+                    arch.external_model_format == "keras-json-architecture-only":
+                if learner.definition.optimizer_hyperparameters is not None and \
+                        learner.definition.loss_hyperparameters is not None and \
+                        learner.metrics is not None:
+                    local_metrics = learner.metrics[learner.metrics != "loss"]
+                    if not isinstance(local_metrics, list):
+                        local_metrics = [local_metrics]
+                    learner.model.compile(
+                        optimizer=KerasHelper.get_optimizer(
+                            learner.definition.optimizer_hyperparameters),
+                        loss=KerasHelper.get_loss(
+                            learner.definition.loss_hyperparameters),
+                        metrics=local_metrics
+                    )
+                else:
+                    raise Exception("optimizer, loss or metrics undefined")
 
     @staticmethod
     def print_model_summary(learner: Learner):
@@ -125,68 +126,65 @@ class KerasHelper:
                     x_train: List[str], y_train: List[str],
                     x_val: List[str], y_val: List[str]) -> None:
         logger = logging.getLogger(__name__)
+
         # GPU or CPU?
-        if tf.test.is_built_with_gpu_support() and \
-            len(tf.config.list_physical_devices("GPU")) > 0:
-            logger.info("using GPU")
-        else:
-            logger.info("using CPU")
+        logger.info("using device: %s", learner.device_label)
 
+        with tf.device(learner.device_label):
+            # one hot encode input and labels
+            encoded_x_train = learner.encode_x(x_train)
+            encoded_y_train = learner.encode_y(y_train)
+            encoded_x_val = learner.encode_x(x_val)
+            encoded_y_val = learner.encode_y(y_val)
 
-        # one hot encode input and labels
-        encoded_x_train = learner.encode_x(x_train)
-        encoded_y_train = learner.encode_y(y_train)
-        encoded_x_val = learner.encode_x(x_val)
-        encoded_y_val = learner.encode_y(y_val)
+            if learner.model is None:
+                learner.create_model()
 
-        if learner.model is None:
-            learner.create_model()
+            # checkpoint callback
+            checkpoint_path = learner.output_dir + "training/cp.ckpt"
+            cp_callback = tf.keras.callbacks.ModelCheckpoint(
+                filepath=checkpoint_path,
+                save_weights_only=True,
+                verbose=0
+            )
 
-        # checkpoint callback
-        checkpoint_path = learner.output_dir + "training/cp.ckpt"
-        cp_callback = tf.keras.callbacks.ModelCheckpoint(
-            filepath=checkpoint_path,
-            save_weights_only=True,
-            verbose=0
-        )
+            # TensorBoard callback
+            log_dir = learner.output_dir + "logs/run"
+            os.makedirs(log_dir)
+            log_dir = log_dir.replace("\\", "/")
+            tensorboard_callback = tf.keras.callbacks.TensorBoard(
+                log_dir=log_dir,
+                histogram_freq=0,
+                write_graph=True,
+                write_images=True
+            )
 
-        # TensorBoard callback
-        log_dir = learner.output_dir + "logs/run"
-        os.makedirs(log_dir)
-        log_dir = log_dir.replace("\\", "/")
-        tensorboard_callback = tf.keras.callbacks.TensorBoard(
-            log_dir=log_dir,
-            histogram_freq=0,
-            write_graph=True,
-            write_images=True
-        )
+            # early stopping callback
+            es_callback = tf.keras.callbacks.EarlyStopping(monitor="val_loss",
+                                                           mode="min",
+                                                           verbose=1,
+                                                           patience=2,
+                                                           min_delta=0)
 
-        # early stopping callback
-        es_callback = tf.keras.callbacks.EarlyStopping(monitor="val_loss",
-                                                       mode="min",
-                                                       verbose=1,
-                                                       patience=2,
-                                                       min_delta=0)
+            if bool(strtobool(learner.definition.training_process_hyperparameters["early_stopping"])):
+                callbacks = [cp_callback, tensorboard_callback, es_callback]
+            else:
+                callbacks = [cp_callback, tensorboard_callback]
 
-        if bool(strtobool(learner.definition.training_process_hyperparameters["early_stopping"])):
-            callbacks = [cp_callback, tensorboard_callback, es_callback]
-        else:
-            callbacks = [cp_callback, tensorboard_callback]
-
-        # training loop
-        learner.model.fit(
-            encoded_x_train,
-            encoded_y_train,
-            batch_size=int(
-                learner.definition.training_process_hyperparameters["batch_size"]),
-            epochs=int(
-                learner.definition.training_process_hyperparameters["epochs"]),
-            verbose=1,
-            callbacks=callbacks,
-            validation_data=(encoded_x_val, encoded_y_val),
-            shuffle=bool(strtobool(
-                learner.definition.training_process_hyperparameters["shuffle"]))
-        )
+            # training loop
+            learner.model.fit(
+                encoded_x_train,
+                encoded_y_train,
+                batch_size=int(
+                    learner.definition.training_process_hyperparameters["batch_size"]),
+                epochs=int(
+                    learner.definition.training_process_hyperparameters["epochs"]),
+                verbose=1,
+                callbacks=callbacks,
+                validation_data=(encoded_x_val, encoded_y_val),
+                shuffle=bool(strtobool(
+                    learner.definition.training_process_hyperparameters["shuffle"]))
+            )
 
     @staticmethod
     def save_model(learner: Learner, model_name: str = "") -> None:
@@ -225,8 +223,9 @@ class KerasHelper:
 
     @staticmethod
     def load_model(learner: Learner, model_name: str = "") -> None:
-        learner.model = tf.keras.models.load_model(
-            learner.output_dir + model_name)
+        with tf.device(learner.device_label):
+            learner.model = tf.keras.models.load_model(
+                learner.output_dir + model_name)
 
     @staticmethod
     def predict(learner: Learner, x: Any, encode: bool = True):
@@ -234,10 +233,16 @@ class KerasHelper:
         Returns:
             softmax_linear: Output tensor with the computed logits.
         """
-        if encode:
-            x = learner.encode_x(x)
+        logger = logging.getLogger(__name__)
 
-        return learner.model.predict(x)
+        # GPU or CPU?
+        logger.info("using device: %s", learner.device_label)
+
+        with tf.device(learner.device_label):
+            if encode:
+                x = learner.encode_x(x)
+
+            return learner.model.predict(x)
 
     @staticmethod
     def get_num_params(learner: Learner):
@@ -247,13 +252,19 @@ class KerasHelper:
 
     @staticmethod
     def evaluate_model(learner: Learner, x: List[str], y: List[str]):
-        # one hot encode input and labels
-        encoded_x = learner.encode_x(x)
-        encoded_y = learner.encode_y(y)
+        logger = logging.getLogger(__name__)
 
-        loss, accuracy = learner.model.evaluate(encoded_x, encoded_y,
-                                                verbose=0)
-        return {"loss": loss, "accuracy": accuracy}
+        # GPU or CPU?
+        logger.info("using device: %s", learner.device_label)
+        
+        with tf.device(learner.device_label):
+            # one hot encode input and labels
+            encoded_x = learner.encode_x(x)
+            encoded_y = learner.encode_y(y)
+
+            loss, accuracy = learner.model.evaluate(encoded_x, encoded_y,
+                                                    verbose=0)
+            return {"loss": loss, "accuracy": accuracy}
 
     @staticmethod
     def get_keras_layer(operation):
@@ -436,7 +447,7 @@ class KerasHelper:
 
             if "return_sequences" in operation.parameters:
                 return_sequences = bool(strtobool(
-                        operation.parameters["return_sequences"]))
+                    operation.parameters["return_sequences"]))
             else:
                 return_sequences = False
 

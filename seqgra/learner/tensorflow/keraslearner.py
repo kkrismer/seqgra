@@ -8,6 +8,7 @@ from distutils.util import strtobool
 from typing import Any, List, Optional
 
 import numpy as np
+import tensorflow as tf
 
 from seqgra.learner import DNAMultiClassClassificationLearner
 from seqgra.learner import DNAMultiLabelClassificationLearner
@@ -24,6 +25,13 @@ class KerasDNAMultiClassClassificationLearner(
                  gpu_id: int = 0) -> None:
         super().__init__(model_definition, data_dir, output_dir,
                          validate_data, gpu_id)
+        self.use_cuda: bool = tf.test.is_built_with_gpu_support() and \
+            len(tf.config.list_physical_devices("GPU")) > 0 and gpu_id != -1
+        if self.use_cuda:
+            self.device_label: str = "/GPU:" + str(gpu_id)
+        else:
+            self.device_label: str = "/CPU:0"
+
         self._check_task_loss_compatibility()
 
     def _check_task_loss_compatibility(self) -> None:
@@ -108,6 +116,13 @@ class KerasDNAMultiLabelClassificationLearner(
                  gpu_id: int = 0) -> None:
         super().__init__(model_definition, data_dir, output_dir,
                          validate_data, gpu_id)
+        self.use_cuda: bool = tf.test.is_built_with_gpu_support() and \
+            len(tf.config.list_physical_devices("GPU")) > 0 and gpu_id != -1
+        if self.use_cuda:
+            self.device_label: str = "/GPU:" + str(gpu_id)
+        else:
+            self.device_label: str = "/CPU:0"
+
         self._check_task_loss_compatibility()
 
     def _check_task_loss_compatibility(self) -> None:
@@ -192,6 +207,13 @@ class KerasProteinMultiClassClassificationLearner(
                  gpu_id: int = 0) -> None:
         super().__init__(model_definition, data_dir, output_dir,
                          validate_data, gpu_id)
+        self.use_cuda: bool = tf.test.is_built_with_gpu_support() and \
+            len(tf.config.list_physical_devices("GPU")) > 0 and gpu_id != -1
+        if self.use_cuda:
+            self.device_label: str = "/GPU:" + str(gpu_id)
+        else:
+            self.device_label: str = "/CPU:0"
+
         self._check_task_loss_compatibility()
 
     def _check_task_loss_compatibility(self) -> None:
@@ -276,6 +298,13 @@ class KerasProteinMultiLabelClassificationLearner(
                  gpu_id: int = 0) -> None:
         super().__init__(model_definition, data_dir, output_dir,
                          validate_data, gpu_id)
+        self.use_cuda: bool = tf.test.is_built_with_gpu_support() and \
+            len(tf.config.list_physical_devices("GPU")) > 0 and gpu_id != -1
+        if self.use_cuda:
+            self.device_label: str = "/GPU:" + str(gpu_id)
+        else:
+            self.device_label: str = "/CPU:0"
+
         self._check_task_loss_compatibility()
 
     def _check_task_loss_compatibility(self) -> None:

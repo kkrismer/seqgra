@@ -131,7 +131,7 @@ class TorchHelper:
 
         # GPU or CPU?
         learner.model = learner.model.to(learner.device)
-        logger.info("using device: " + learner.device_label)
+        logger.info("using device: %s", learner.device_label)
 
         # training loop
         trainer = create_supervised_trainer(learner.model, learner.optimizer,
@@ -234,7 +234,7 @@ class TorchHelper:
 
         # GPU or CPU?
         learner.model = learner.model.to(learner.device)
-        logger.info("using device: " + learner.device_label)
+        logger.info("using device: %s", learner.device_label)
 
         # training loop
         num_epochs: int = int(
@@ -342,7 +342,7 @@ class TorchHelper:
 
         # GPU or CPU?
         learner.model = learner.model.to(learner.device)
-        logger.info("using device: " + learner.device_label)
+        logger.info("using device: %s", learner.device_label)
 
         y_hat = []
         learner.model.eval()
@@ -380,7 +380,7 @@ class TorchHelper:
 
         # GPU or CPU?
         learner.model = learner.model.to(learner.device)
-        logger.info("using device: " + learner.device_label)
+        logger.info("using device: %s", learner.device_label)
  
         running_loss: float = 0.0
         running_correct: int = 0
