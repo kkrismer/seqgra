@@ -4,6 +4,7 @@ from torch.autograd import Variable
 import torch.nn.functional as F
 import torch.optim as optim
 import torchvision.transforms as transforms
+from seqgra.learner import Learner
 
 
 class Blur(object):
@@ -59,12 +60,12 @@ def get_transforms(if_inception=False):
     return transf, blur_transf
 
 class PerturbExplainer(object):
-    def __init__(self, model, num_iters=500, lr=0.1,
+    def __init__(self, learner: Learner, num_iters=500, lr=0.1,
                  l1_lambda=0.01, tv_lambda=0.2, tv_beta=3,
                  mask_scale=8, if_upsample=True):
         # this is for vgg19
         # for vgg16, l1_lambda = 0.005, num_iters=300, tv_lambda = 0.1
-        self.model = model
+        self.learner = learner
         self.num_iters = num_iters
         self.lr = lr
         self.l1_lambda = l1_lambda
@@ -75,7 +76,7 @@ class PerturbExplainer(object):
 
     def explain(self, inp, null_inp, ind=None):
         if ind is None:
-            output = self.model(inp)
+            output = self.learner.model(inp)
             ind = output.max(1)[1][0]
 
         mask_init = torch.ones(
@@ -84,7 +85,7 @@ class PerturbExplainer(object):
             int(inp.data.size(3) / self.mask_scale)
         )
 
-        mask_var = Variable(mask_init.cuda(), requires_grad=True)
+        mask_var = Variable(mask_init.to(self.learner.device), requires_grad=True)
 
         optimizer = optim.Adam([mask_var], lr=self.lr)
 
@@ -93,7 +94,7 @@ class PerturbExplainer(object):
 
             x = inp * real_mask + null_inp * (1 - real_mask)
 
-            output = self.model(x)
+            output = self.learner.model(x)
             prob = F.softmax(output)
 
             loss = self.l1_lambda * torch.mean(torch.abs(1 - mask_var)) + \

@@ -2,42 +2,44 @@ import numpy as np
 import torch
 import torch.nn.functional as F
 
-
-def load_patterns(filename):
-    f = np.load(filename)
-    ret = {}
-    for prefix in ["A", "r", "mu"]:
-        l = sum([x.startswith(prefix) for x in f.keys()])
-        ret.update({prefix: [f["%s_%i" % (prefix, i)] for i in range(l)]})
-    return ret
-
-
-def load_params(filename):
-    f = np.load(filename)
-    weights = []
-    for i in range(32):
-        if i in [26, 28, 30]:
-            weights.append(f['arr_%d' % i].T)
-        else:
-            weights.append(f['arr_%d' % i])
-
-    return weights
+from seqgra.learner import Learner
 
 
 class PatternNetExplainer(object):
-    def __init__(self, model, params_file=None, pattern_file=None):
-        self.model = model
-        self.weights = list(self.model.parameters())
-        self.np_weights = load_params(params_file)
-        self.np_patterns = load_patterns(pattern_file)['A']
-        self._to_cuda()
+    def __init__(self, learner: Learner, params_file=None, pattern_file=None):
+        self.learner = learner
+        self.weights = list(self.learner.model.parameters())
+        self.np_weights = self.load_params(params_file)
+        self.np_patterns = self.load_patterns(pattern_file)['A']
+        self._to_device()
 
-    def _to_cuda(self):
+    def load_patterns(self, filename):
+        f = np.load(filename)
+        ret = {}
+        for prefix in ["A", "r", "mu"]:
+            l = sum([x.startswith(prefix) for x in f.keys()])
+            ret.update({prefix: [f["%s_%i" % (prefix, i)] for i in range(l)]})
+        return ret
+
+    def load_params(self, filename):
+        f = np.load(filename)
+        weights = []
+        for i in range(32):
+            if i in [26, 28, 30]:
+                weights.append(f['arr_%d' % i].T)
+            else:
+                weights.append(f['arr_%d' % i])
+
+        return weights
+
+    def _to_device(self):
         for i in range(len(self.np_weights)):
-            self.np_weights[i] = torch.from_numpy(self.np_weights[i]).float().cuda()
+            self.np_weights[i] = torch.from_numpy(
+                self.np_weights[i]).float().to(self.learner.device)
 
         for i in range(len(self.np_patterns)):
-            self.np_patterns[i] = torch.from_numpy(self.np_patterns[i]).float().cuda()
+            self.np_patterns[i] = torch.from_numpy(
+                self.np_patterns[i]).float().to(self.learner.device)
 
     def _fill_in_params(self):
         for i in range(32):
@@ -52,7 +54,7 @@ class PatternNetExplainer(object):
     def explain(self, inp, ind=None):
         self._fill_in_params()
 
-        output = self.model(inp)
+        output = self.learner.model(inp)
         prob = F.softmax(output)
         if ind is None:
             ind = output.data.max(1)[1]
@@ -70,8 +72,8 @@ class PatternNetExplainer(object):
 
 
 class PatternLRPExplainer(PatternNetExplainer):
-    def __init__(self, model, params_file=None, pattern_file=None):
-        super(PatternLRPExplainer, self).__init__(model, params_file, pattern_file)
+    def __init__(self, learner: Learner, params_file=None, pattern_file=None):
+        super().__init__(learner, params_file, pattern_file)
 
     def _fill_in_patterns(self):
         for i in range(0, 26, 2):

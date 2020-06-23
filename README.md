@@ -59,12 +59,15 @@ models are used.
 
 ```
 seqgra -h
-usage: seqgra [-h]
+usage: seqgra [-h] 
               (-d DATACONFIGFILE | -f DATAFOLDER)
-              [-m MODELCONFIGFILE] 
+              [-m MODELCONFIGFILE]
               [-e EVALUATORS [EVALUATORS ...]]
               -o OUTPUTDIR
               [-p]
+              [-r]
+              [-g GPU]
+              [--nochecks]
               [--eval-sets EVAL_SETS [EVAL_SETS ...]]
               [--eval-n EVAL_N]
               [--eval-n-per-label EVAL_N_PER_LABEL]
@@ -82,7 +85,7 @@ optional arguments:
                         this option to generate synthetic data based on a 
                         seqgra grammar (specify either -d or -f, not both)
   -f DATAFOLDER, --datafolder DATAFOLDER
-                        experimental data folder name inside outputdir/input.
+                        experimental data folder name inside outputdir/input. 
                         Use this option to train the model on experimental or 
                         externally synthesized data (specify either -f or -d, 
                         not both)
@@ -94,13 +97,24 @@ optional arguments:
                         importance evaluators include 
                         contrastive-excitation-backprop, deep-lift, 
                         excitation-backprop, grad-cam, gradient, 
-                        gradient-x-input, integrated-gradients,
+                        gradient-x-input, integrated-gradients,      
                         nonlinear-integrated-gradients, saliency, sis
   -o OUTPUTDIR, --outputdir OUTPUTDIR
                         output directory, subdirectories are created for 
                         generated data, trained model, and model evaluation
-  -p, --print           if this flag is set, data and model definitions are 
-                        printed
+  -p, --print           if this flag is set, data definition, model 
+                        definition, and model summary are printed
+  -r, --remove          if this flag is set, previously stored data for this 
+                        grammar - model combination will be removed prior to 
+                        the analysis run. This includes the folders 
+                        input/[grammar ID], models/[grammar ID]/[model ID], 
+                        and evaluation/[grammar ID]/[model ID].
+  -g GPU, --gpu GPU     ID of GPU used by TensorFlow and PyTorch (defaults to 
+                        GPU ID 0); CPU is used if no GPU is available or
+                        GPU ID is set to -1
+  --nochecks            if this flag is set, examples and example annotations 
+                        will not be validated before training, e.g., that DNA 
+                        sequences only contain A, C, G, T, N
   --eval-sets EVAL_SETS [EVAL_SETS ...]
                         either one or more of the following: training, 
                         validation, test; selects data set for evaluation; 
@@ -109,14 +123,14 @@ optional arguments:
   --eval-n EVAL_N       maximum number of examples to be evaluated per set 
                         (defaults to the total number of examples); this 
                         evaluator argument will be passed to all evaluators
-  --eval-suppress-plots
-                        if this flag is set, plots are suppressed globally; 
-                        this evaluator argument will be passed to all 
-                        evaluators
   --eval-n-per-label EVAL_N_PER_LABEL
                         maximum number of examples to be evaluated for each 
                         label and set (defaults to the total number of 
                         examples unless eval-n is set, overrules eval-n); 
+                        this evaluator argument will be passed to all 
+                        evaluators
+  --eval-suppress-plots
+                        if this flag is set, plots are suppressed globally; 
                         this evaluator argument will be passed to all 
                         evaluators
   --eval-fi-predict-threshold EVAL_FI_PREDICT_THRESHOLD

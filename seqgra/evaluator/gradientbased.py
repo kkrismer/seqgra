@@ -42,7 +42,10 @@ class GradientBasedEvaluator(FeatureImportanceEvaluator):
     def _evaluate_model(self, x: List[str], y: List[str],
                         annotations: List[str]) -> Any:
         # GPU or CPU?
-        use_cuda: bool = torch.cuda.is_available()
+        if self.learner.use_cuda:
+            self.logger.info("using GPU")
+        else:
+            self.logger.info("using CPU")
 
         # encode
         encoded_x = self.learner.encode_x(x)
@@ -57,11 +60,10 @@ class GradientBasedEvaluator(FeatureImportanceEvaluator):
         encoded_x = torch.from_numpy(encoded_x)
         encoded_y = torch.from_numpy(encoded_y)
 
-        if use_cuda:
-            # store input tensor, label tensor and model on GPU
-            encoded_x = encoded_x.cuda()
-            encoded_y = encoded_y.cuda()
-            self.explainer.model.cuda()
+        # store input tensor, label tensor and model on correct device
+        encoded_x = encoded_x.to(self.learner.device)
+        encoded_y = encoded_y.to(self.learner.device)
+        self.explainer.model.to(self.learner.device)
 
         encoded_x = torch.autograd.Variable(encoded_x, requires_grad=True)
 
@@ -434,28 +436,28 @@ class GradientEvaluator(GradientBasedEvaluator):
     def __init__(self, learner: Learner, output_dir: str) -> None:
         super().__init__(c.EvaluatorID.GRADIENT, "Vanilla gradient saliency",
                          learner, output_dir)
-        self.explainer = VanillaGradExplainer(learner.model)
+        self.explainer = VanillaGradExplainer(learner)
 
 
 class GradientxInputEvaluator(GradientBasedEvaluator):
     def __init__(self, learner: Learner, output_dir: str) -> None:
         super().__init__(c.EvaluatorID.GRADIENT_X_INPUT, "Gradient x input",
                          learner, output_dir)
-        self.explainer = GradxInputExplainer(learner.model)
+        self.explainer = GradxInputExplainer(learner)
 
 
 class SaliencyEvaluator(GradientBasedEvaluator):
     def __init__(self, learner: Learner, output_dir: str) -> None:
         super().__init__(c.EvaluatorID.SALIENCY, "Saliency", learner,
                          output_dir)
-        self.explainer = SaliencyExplainer(learner.model)
+        self.explainer = SaliencyExplainer(learner)
 
 
 class IntegratedGradientEvaluator(GradientBasedEvaluator):
     def __init__(self, learner: Learner, output_dir: str) -> None:
         super().__init__(c.EvaluatorID.INTEGRATED_GRADIENTS,
                          "Integrated Gradients", learner, output_dir)
-        self.explainer = IntegrateGradExplainer(learner.model)
+        self.explainer = IntegrateGradExplainer(learner)
 
 
 class NonlinearIntegratedGradientEvaluator(GradientBasedEvaluator):
@@ -465,14 +467,14 @@ class NonlinearIntegratedGradientEvaluator(GradientBasedEvaluator):
         super().__init__(c.EvaluatorID.NONLINEAR_INTEGRATED_GRADIENTS,
                          "Nonlinear Integrated Gradients", learner,
                          output_dir)
-        # self.explainer = NonlinearIntegrateGradExplainer(learner.model)
+        # self.explainer = NonlinearIntegrateGradExplainer(learner)
 
 
 class GradCamGradientEvaluator(GradientBasedEvaluator):
     def __init__(self, learner: Learner, output_dir: str) -> None:
         super().__init__(c.EvaluatorID.GRAD_CAM, "Grad-CAM", learner,
                          output_dir)
-        self.explainer = GradCAMExplainer(learner.model)
+        self.explainer = GradCAMExplainer(learner)
 
     def _explainer_transform(self, data, result):
         return torch.nn.functional.interpolate(result.view(1, 1, -1),
@@ -485,14 +487,14 @@ class DeepLiftEvaluator(GradientBasedEvaluator):
     def __init__(self, learner: Learner, output_dir: str) -> None:
         super().__init__(c.EvaluatorID.DEEP_LIFT, "DeepLIFT", learner,
                          output_dir)
-        self.explainer = DeepLIFTRescaleExplainer(learner.model, "shuffled")
+        self.explainer = DeepLIFTRescaleExplainer(learner, "shuffled")
 
 
 class ExcitationBackpropEvaluator(GradientBasedEvaluator):
     def __init__(self, learner: Learner, output_dir: str) -> None:
         super().__init__(c.EvaluatorID.EXCITATION_BACKPROP,
                          "Excitation Backprop", learner, output_dir)
-        self.explainer = ExcitationBackpropExplainer(learner.model)
+        self.explainer = ExcitationBackpropExplainer(learner)
 
 
 class ContrastiveExcitationBackpropEvaluator(GradientBasedEvaluator):
@@ -500,5 +502,4 @@ class ContrastiveExcitationBackpropEvaluator(GradientBasedEvaluator):
         super().__init__(c.EvaluatorID.CONTRASTIVE_EXCITATION_BACKPROP,
                          "Contrastive Excitation Backprop", learner,
                          output_dir)
-        self.explainer = ContrastiveExcitationBackpropExplainer(
-            learner.model)
+        self.explainer = ContrastiveExcitationBackpropExplainer(learner)

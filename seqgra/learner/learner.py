@@ -29,6 +29,9 @@ class Learner(ABC):
         data_dir (str): directory with data files, e.g., `training.txt`
         output_dir (str): model output directory,
             `{OUTPUTDIR}/models/{GRAMMAR ID}/{MODEL ID}/`
+        validate_data (bool): whether input data should be validated (e.g.,
+            check if valid DNA or protein sequence)
+        gpu_id (int): ID of GPU used by TensorFlow and PyTorch
         model: PyTorch or TensorFlow model
         optimizer: PyTorch or TensorFlow optimizer
         criterion: PyTorch or TensorFlow criterion (loss)
@@ -42,6 +45,9 @@ class Learner(ABC):
             `{OUTPUTDIR}/input/{GRAMMAR ID}`
         output_dir (str): model output directory without model folder,
             `{OUTPUTDIR}/models/{GRAMMAR ID}`
+        validate_data (bool): whether input data should be validated (e.g.,
+            check if valid DNA or protein sequence)
+        gpu_id (int): ID of GPU used by TensorFlow and PyTorch
 
     See Also:
         - :class:`MultiClassClassificationLearner`: for classification models with mutually exclusive classes
@@ -51,7 +57,8 @@ class Learner(ABC):
 
     @abstractmethod
     def __init__(self, model_definition: ModelDefinition, data_dir: str,
-                 output_dir: str, validate_data: bool = True) -> None:
+                 output_dir: str, validate_data: bool = True,
+                 gpu_id: int = 0) -> None:
         self.logger = logging.getLogger(__name__)
         self.definition: ModelDefinition = model_definition
         self.data_dir: str = MiscHelper.prepare_path(data_dir)
@@ -59,6 +66,7 @@ class Learner(ABC):
                                                        self.definition.model_id,
                                                        allow_exists=True)
         self.validate_data: bool = validate_data
+        self.gpu_id: int = gpu_id
         self.model = None
         self.optimizer = None
         self.criterion = None
@@ -353,6 +361,9 @@ class MultiClassClassificationLearner(Learner):
         data_dir (str): directory with data files, e.g., `training.txt`
         output_dir (str): model output directory,
             `{OUTPUTDIR}/models/{GRAMMAR ID}/{MODEL ID}/`
+        validate_data (bool): whether input data should be validated (e.g.,
+            check if valid DNA or protein sequence)
+        gpu_id (int): ID of GPU used by TensorFlow and PyTorch
         model: PyTorch or TensorFlow model
         optimizer: PyTorch or TensorFlow optimizer
         criterion: PyTorch or TensorFlow criterion (loss)
@@ -366,12 +377,17 @@ class MultiClassClassificationLearner(Learner):
             `{OUTPUTDIR}/input/{GRAMMAR ID}`
         output_dir (str): model output directory without model folder,
             `{OUTPUTDIR}/models/{GRAMMAR ID}`
+        validate_data (bool): whether input data should be validated (e.g.,
+            check if valid DNA or protein sequence)
+        gpu_id (int): ID of GPU used by TensorFlow and PyTorch
     """
 
     @abstractmethod
     def __init__(self, model_definition: ModelDefinition, data_dir: str,
-                 output_dir: str, validate_data: bool = True) -> None:
-        super().__init__(model_definition, data_dir, output_dir, validate_data)
+                 output_dir: str, validate_data: bool = True,
+                 gpu_id: int = 0) -> None:
+        super().__init__(model_definition, data_dir, output_dir,
+                         validate_data, gpu_id)
 
         if self.definition.task != c.TaskType.MULTI_CLASS_CLASSIFICATION:
             raise Exception("task of model definition must be multi-class "
@@ -428,6 +444,9 @@ class MultiLabelClassificationLearner(Learner):
         data_dir (str): directory with data files, e.g., `training.txt`
         output_dir (str): model output directory,
             `{OUTPUTDIR}/models/{GRAMMAR ID}/{MODEL ID}/`
+        validate_data (bool): whether input data should be validated (e.g.,
+            check if valid DNA or protein sequence)
+        gpu_id (int): ID of GPU used by TensorFlow and PyTorch
         model: PyTorch or TensorFlow model
         optimizer: PyTorch or TensorFlow optimizer
         criterion: PyTorch or TensorFlow criterion (loss)
@@ -441,12 +460,17 @@ class MultiLabelClassificationLearner(Learner):
             `{OUTPUTDIR}/input/{GRAMMAR ID}`
         output_dir (str): model output directory without model folder,
             `{OUTPUTDIR}/models/{GRAMMAR ID}`
+        validate_data (bool): whether input data should be validated (e.g.,
+            check if valid DNA or protein sequence)
+        gpu_id (int): ID of GPU used by TensorFlow and PyTorch
     """
 
     @abstractmethod
     def __init__(self, model_definition: ModelDefinition, data_dir: str,
-                 output_dir: str, validate_data: bool = True) -> None:
-        super().__init__(model_definition, data_dir, output_dir, validate_data)
+                 output_dir: str, validate_data: bool = True,
+                 gpu_id: int = 0) -> None:
+        super().__init__(model_definition, data_dir, output_dir,
+                         validate_data, gpu_id)
 
         if self.definition.task != c.TaskType.MULTI_LABEL_CLASSIFICATION:
             raise Exception("task of model definition must be multi-label "
@@ -510,6 +534,9 @@ class MultipleRegressionLearner(Learner):
         data_dir (str): directory with data files, e.g., `training.txt`
         output_dir (str): model output directory,
             `{OUTPUTDIR}/models/{GRAMMAR ID}/{MODEL ID}/`
+        validate_data (bool): whether input data should be validated (e.g.,
+            check if valid DNA or protein sequence)
+        gpu_id (int): ID of GPU used by TensorFlow and PyTorch
         model: PyTorch or TensorFlow model
         optimizer: PyTorch or TensorFlow optimizer
         criterion: PyTorch or TensorFlow criterion (loss)
@@ -523,12 +550,17 @@ class MultipleRegressionLearner(Learner):
             `{OUTPUTDIR}/input/{GRAMMAR ID}`
         output_dir (str): model output directory without model folder,
             `{OUTPUTDIR}/models/{GRAMMAR ID}`
+        validate_data (bool): whether input data should be validated (e.g.,
+            check if valid DNA or protein sequence)
+        gpu_id (int): ID of GPU used by TensorFlow and PyTorch
     """
 
     @abstractmethod
     def __init__(self, model_definition: ModelDefinition, data_dir: str,
-                 output_dir: str, validate_data: bool = True) -> None:
-        super().__init__(model_definition, data_dir, output_dir, validate_data)
+                 output_dir: str, validate_data: bool = True,
+                 gpu_id: int = 0) -> None:
+        super().__init__(model_definition, data_dir, output_dir,
+                         validate_data, gpu_id)
 
         if self.definition.task != c.TaskType.MULTIPLE_REGRESSION:
             raise Exception("task of model definition must be multiple "
@@ -595,6 +627,9 @@ class MultivariateRegressionLearner(Learner):
         data_dir (str): directory with data files, e.g., `training.txt`
         output_dir (str): model output directory,
             `{OUTPUTDIR}/models/{GRAMMAR ID}/{MODEL ID}/`
+        validate_data (bool): whether input data should be validated (e.g.,
+            check if valid DNA or protein sequence)
+        gpu_id (int): ID of GPU used by TensorFlow and PyTorch
         model: PyTorch or TensorFlow model
         optimizer: PyTorch or TensorFlow optimizer
         criterion: PyTorch or TensorFlow criterion (loss)
@@ -608,12 +643,17 @@ class MultivariateRegressionLearner(Learner):
             `{OUTPUTDIR}/input/{GRAMMAR ID}`
         output_dir (str): model output directory without model folder,
             `{OUTPUTDIR}/models/{GRAMMAR ID}`
+        validate_data (bool): whether input data should be validated (e.g.,
+            check if valid DNA or protein sequence)
+        gpu_id (int): ID of GPU used by TensorFlow and PyTorch
     """
 
     @abstractmethod
     def __init__(self, model_definition: ModelDefinition, data_dir: str,
-                 output_dir: str, validate_data: bool = True) -> None:
-        super().__init__(model_definition, data_dir, output_dir, validate_data)
+                 output_dir: str, validate_data: bool = True,
+                 gpu_id: int = 0) -> None:
+        super().__init__(model_definition, data_dir, output_dir,
+                         validate_data, gpu_id)
 
         if self.definition.task != c.TaskType.MULTIVARIATE_REGRESSION:
             raise Exception("task of model definition must be multivariate "

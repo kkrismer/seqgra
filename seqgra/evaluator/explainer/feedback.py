@@ -7,6 +7,7 @@ from torch.autograd import Variable
 from torch import optim
 
 from seqgra.evaluator.explainer.backprop import SaliencyExplainer
+from seqgra.learner import Learner
 
 
 def first_forward(self, x):
@@ -35,9 +36,9 @@ def replace_mask(m):
 
 
 class FeedbackExplainer(SaliencyExplainer):
-    def __init__(self, model, input_size, class_num=1000, lr=0.1, lambd=0.01, max_iters=30):
-        super(FeedbackExplainer, self).__init__(model)
-        self.model = model
+    def __init__(self, learner: Learner, input_size, class_num=1000,
+                 lr=0.1, lambd=0.01, max_iters=30):
+        super().__init__(learner)
         self.lr = lr
         self.lambd = lambd
         self.max_iters = max_iters
@@ -46,13 +47,14 @@ class FeedbackExplainer(SaliencyExplainer):
         self.control_gates = []
 
         self._init_control_gates()
-        self.model.apply(replace_mask)
+        self.learner.model.apply(replace_mask)
 
     def _init_control_gates(self):
-        self.model.apply(replace_first)
-        input_placeholder = Variable(torch.randn(*self.input_size).cuda())
-        _ = self.model(input_placeholder)
-        for m in self.model.modules():
+        self.learner.model.apply(replace_first)
+        input_placeholder = Variable(
+            torch.randn(*self.input_size).to(self.learner.device))
+        _ = self.learner.model(input_placeholder)
+        for m in self.learner.model.modules():
             if m.__class__.__name__ == 'ReLU':
                 self.control_gates.append(m.control_gate)
 
@@ -64,14 +66,15 @@ class FeedbackExplainer(SaliencyExplainer):
 
     def explain(self, inp, ind=None):
         self._reset_control_gates()
-        optimizer = optim.SGD(self.control_gates, lr=self.lr, momentum=0.9, weight_decay=0.0)
+        optimizer = optim.SGD(self.control_gates, lr=self.lr,
+                              momentum=0.9, weight_decay=0.0)
 
-        mask = torch.zeros(self.input_size[0], self.class_num).cuda()
+        mask = torch.zeros(self.input_size[0], self.class_num).to(self.learner.device)
         mask.scatter_(1, ind.unsqueeze(1), 1)
         mask_var = Variable(mask)
 
         for j in range(self.max_iters):
-            output = self.model(inp)
+            output = self.learner.model(inp)
             loss = -(output * mask_var).sum()
 
             for v in self.control_gates:
@@ -84,5 +87,5 @@ class FeedbackExplainer(SaliencyExplainer):
             for v in self.control_gates:
                 v.data.clamp_(0, 1)
 
-        saliency = super(FeedbackExplainer, self).explain(inp, ind)
+        saliency = super().explain(inp, ind)
         return saliency

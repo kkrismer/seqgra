@@ -23,8 +23,10 @@ from seqgra.model import ModelDefinition
 
 class ProteinMultiClassClassificationLearner(MultiClassClassificationLearner):
     def __init__(self, model_definition: ModelDefinition, data_dir: str,
-                 output_dir: str, validate_data: bool = True) -> None:
-        super().__init__(model_definition, data_dir, output_dir, validate_data)
+                 output_dir: str, validate_data: bool = True,
+                 gpu_id: int = 0) -> None:
+        super().__init__(model_definition, data_dir, output_dir,
+                         validate_data, gpu_id)
 
     def encode_x(self, x: List[str]):
         return np.stack([ProteinHelper.convert_dense_to_one_hot_encoding(seq)
@@ -66,8 +68,10 @@ class ProteinMultiClassClassificationLearner(MultiClassClassificationLearner):
 
 class ProteinMultiLabelClassificationLearner(MultiLabelClassificationLearner):
     def __init__(self, model_definition: ModelDefinition, data_dir: str,
-                 output_dir: str, validate_data: bool = True) -> None:
-        super().__init__(model_definition, data_dir, output_dir, validate_data)
+                 output_dir: str, validate_data: bool = True,
+                 gpu_id: int = 0) -> None:
+        super().__init__(model_definition, data_dir, output_dir,
+                         validate_data, gpu_id)
 
     def encode_x(self, x: List[str]):
         return np.stack([ProteinHelper.convert_dense_to_one_hot_encoding(seq)

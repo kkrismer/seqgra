@@ -43,7 +43,8 @@ def read_config_file(file_name: str) -> str:
 def get_learner(model_definition: ModelDefinition,
                 data_definition: Optional[DataDefinition],
                 data_dir: str, output_dir: str, 
-                validate_data: bool) -> Learner:
+                validate_data: bool,
+                gpu_id: int) -> Learner:
     if data_definition is not None:
         if model_definition.task != data_definition.task:
             raise Exception("model and grammar task incompatible (" +
@@ -67,11 +68,13 @@ def get_learner(model_definition: ModelDefinition,
                 if model_definition.library == c.LibraryType.TENSORFLOW:
                     from seqgra.learner.tensorflow import KerasDNAMultiClassClassificationLearner  # pylint: disable=import-outside-toplevel
                     return KerasDNAMultiClassClassificationLearner(
-                        model_definition, data_dir, output_dir, validate_data)
+                        model_definition, data_dir, output_dir, validate_data,
+                        gpu_id)
                 elif model_definition.library == c.LibraryType.TORCH:
                     from seqgra.learner.torch import TorchDNAMultiClassClassificationLearner  # pylint: disable=import-outside-toplevel
                     return TorchDNAMultiClassClassificationLearner(
-                        model_definition, data_dir, output_dir, validate_data)
+                        model_definition, data_dir, output_dir, validate_data,
+                        gpu_id)
                 elif model_definition.library == c.LibraryType.BAYES_OPTIMAL_CLASSIFIER:
                     return BayesOptimalDNAMultiClassClassificationLearner(
                         model_definition, data_dir, output_dir, validate_data)
@@ -82,11 +85,13 @@ def get_learner(model_definition: ModelDefinition,
                 if model_definition.library == c.LibraryType.TENSORFLOW:
                     from seqgra.learner.tensorflow import KerasProteinMultiClassClassificationLearner  # pylint: disable=import-outside-toplevel
                     return KerasProteinMultiClassClassificationLearner(
-                        model_definition, data_dir, output_dir, validate_data)
+                        model_definition, data_dir, output_dir, validate_data,
+                        gpu_id)
                 elif model_definition.library == c.LibraryType.TORCH:
                     from seqgra.learner.torch import TorchProteinMultiClassClassificationLearner  # pylint: disable=import-outside-toplevel
                     return TorchProteinMultiClassClassificationLearner(
-                        model_definition, data_dir, output_dir, validate_data)
+                        model_definition, data_dir, output_dir, validate_data,
+                        gpu_id)
                 elif model_definition.library == c.LibraryType.BAYES_OPTIMAL_CLASSIFIER:
                     return BayesOptimalProteinMultiClassClassificationLearner(
                         model_definition, data_dir, output_dir, validate_data)
@@ -101,11 +106,13 @@ def get_learner(model_definition: ModelDefinition,
                 if model_definition.library == c.LibraryType.TENSORFLOW:
                     from seqgra.learner.tensorflow import KerasDNAMultiLabelClassificationLearner  # pylint: disable=import-outside-toplevel
                     return KerasDNAMultiLabelClassificationLearner(
-                        model_definition, data_dir, output_dir, validate_data)
+                        model_definition, data_dir, output_dir, validate_data,
+                        gpu_id)
                 elif model_definition.library == c.LibraryType.TORCH:
                     from seqgra.learner.torch import TorchDNAMultiLabelClassificationLearner  # pylint: disable=import-outside-toplevel
                     return TorchDNAMultiLabelClassificationLearner(
-                        model_definition, data_dir, output_dir, validate_data)
+                        model_definition, data_dir, output_dir, validate_data,
+                        gpu_id)
                 elif model_definition.library == c.LibraryType.BAYES_OPTIMAL_CLASSIFIER:
                     return BayesOptimalDNAMultiLabelClassificationLearner(
                         model_definition, data_dir, output_dir, validate_data)
@@ -116,11 +123,13 @@ def get_learner(model_definition: ModelDefinition,
                 if model_definition.library == c.LibraryType.TENSORFLOW:
                     from seqgra.learner.tensorflow import KerasProteinMultiLabelClassificationLearner  # pylint: disable=import-outside-toplevel
                     return KerasProteinMultiLabelClassificationLearner(
-                        model_definition, data_dir, output_dir, validate_data)
+                        model_definition, data_dir, output_dir, validate_data,
+                        gpu_id)
                 elif model_definition.library == c.LibraryType.TORCH:
                     from seqgra.learner.torch import TorchProteinMultiLabelClassificationLearner  # pylint: disable=import-outside-toplevel
                     return TorchProteinMultiLabelClassificationLearner(
-                        model_definition, data_dir, output_dir, validate_data)
+                        model_definition, data_dir, output_dir, validate_data,
+                        gpu_id)
                 elif model_definition.library == c.LibraryType.BAYES_OPTIMAL_CLASSIFIER:
                     return BayesOptimalProteinMultiLabelClassificationLearner(
                         model_definition, data_dir, output_dir, validate_data)
@@ -142,19 +151,19 @@ def get_learner(model_definition: ModelDefinition,
         if model_definition.implementation == "KerasDNAMultiClassClassificationLearner":
             from seqgra.learner.tensorflow import KerasDNAMultiClassClassificationLearner  # pylint: disable=import-outside-toplevel
             return KerasDNAMultiClassClassificationLearner(
-                model_definition, data_dir, output_dir, validate_data)
+                model_definition, data_dir, output_dir, validate_data, gpu_id)
         elif model_definition.implementation == "KerasDNAMultiLabelClassificationLearner":
             from seqgra.learner.tensorflow import KerasDNAMultiLabelClassificationLearner  # pylint: disable=import-outside-toplevel
             return KerasDNAMultiLabelClassificationLearner(
-                model_definition, data_dir, output_dir, validate_data)
+                model_definition, data_dir, output_dir, validate_data, gpu_id)
         elif model_definition.implementation == "TorchDNAMultiClassClassificationLearner":
             from seqgra.learner.torch import TorchDNAMultiClassClassificationLearner  # pylint: disable=import-outside-toplevel
             return TorchDNAMultiClassClassificationLearner(
-                model_definition, data_dir, output_dir, validate_data)
+                model_definition, data_dir, output_dir, validate_data, gpu_id)
         elif model_definition.implementation == "TorchDNAMultiLabelClassificationLearner":
             from seqgra.learner.torch import TorchDNAMultiLabelClassificationLearner  # pylint: disable=import-outside-toplevel
             return TorchDNAMultiLabelClassificationLearner(
-                model_definition, data_dir, output_dir, validate_data)
+                model_definition, data_dir, output_dir, validate_data, gpu_id)
         elif model_definition.implementation == "BayesOptimalDNAMultiClassClassificationLearner":
             return BayesOptimalDNAMultiClassClassificationLearner(
                 model_definition, data_dir, output_dir, validate_data)
@@ -164,19 +173,19 @@ def get_learner(model_definition: ModelDefinition,
         elif model_definition.implementation == "KerasProteinMultiClassClassificationLearner":
             from seqgra.learner.tensorflow import KerasProteinMultiClassClassificationLearner  # pylint: disable=import-outside-toplevel
             return KerasProteinMultiClassClassificationLearner(
-                model_definition, data_dir, output_dir, validate_data)
+                model_definition, data_dir, output_dir, validate_data, gpu_id)
         elif model_definition.implementation == "KerasProteinMultiLabelClassificationLearner":
             from seqgra.learner.tensorflow import KerasProteinMultiLabelClassificationLearner  # pylint: disable=import-outside-toplevel
             return KerasProteinMultiLabelClassificationLearner(
-                model_definition, data_dir, output_dir, validate_data)
+                model_definition, data_dir, output_dir, validate_data, gpu_id)
         elif model_definition.implementation == "TorchProteinMultiClassClassificationLearner":
             from seqgra.learner.torch import TorchProteinMultiClassClassificationLearner  # pylint: disable=import-outside-toplevel
             return TorchProteinMultiClassClassificationLearner(
-                model_definition, data_dir, output_dir, validate_data)
+                model_definition, data_dir, output_dir, validate_data, gpu_id)
         elif model_definition.implementation == "TorchProteinMultiLabelClassificationLearner":
             from seqgra.learner.torch import TorchProteinMultiLabelClassificationLearner  # pylint: disable=import-outside-toplevel
             return TorchProteinMultiLabelClassificationLearner(
-                model_definition, data_dir, output_dir, validate_data)
+                model_definition, data_dir, output_dir, validate_data, gpu_id)
         elif model_definition.implementation == "BayesOptimalProteinMultiClassClassificationLearner":
             return BayesOptimalProteinMultiClassClassificationLearner(
                 model_definition, data_dir, output_dir, validate_data)
@@ -263,6 +272,7 @@ def run_seqgra(data_config_file: Optional[str],
                output_dir: str,
                print_info: bool,
                remove_existing_data: bool,
+               gpu_id: int,
                no_checks: bool,
                eval_sets: Optional[List[str]],
                eval_n: Optional[int],
@@ -325,7 +335,7 @@ def run_seqgra(data_config_file: Optional[str],
         learner: Learner = get_learner(model_definition, data_definition,
                                        output_dir + "input/" + grammar_id,
                                        output_dir + "models/" + grammar_id,
-                                       not no_checks)
+                                       not no_checks, gpu_id)
 
         # train model on data
         trained_model_available: bool = len(os.listdir(learner.output_dir)) > 0
@@ -496,6 +506,14 @@ def main():
         "evaluation/[grammar ID]/[model ID]."
     )
     parser.add_argument(
+        "-g",
+        "--gpu",
+        type=int,
+        default=0,
+        help="ID of GPU used by TensorFlow and PyTorch (defaults to GPU "
+        "ID 0); CPU is used if no GPU is available or GPU ID is set to -1"
+    )
+    parser.add_argument(
         "--nochecks",
         action="store_true",
         help="if this flag is set, examples and example annotations will not "
@@ -570,6 +588,7 @@ def main():
                args.outputdir,
                args.print,
                args.remove,
+               args.gpu,
                args.nochecks,
                args.eval_sets,
                args.eval_n,

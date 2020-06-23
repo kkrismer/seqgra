@@ -5,18 +5,19 @@ from torch.autograd import Variable, Function
 import torch
 
 import seqgra.evaluator.explainer.path as path
+from seqgra.learner import Learner
 
 
 class VanillaDifferenceGradExplainer(object):
-    def __init__(self, model):
-        self.model = model
+    def __init__(self, learner: Learner):
+        self.learner = learner
 
     def _backprop(self, inp, ind1, ind2=None):
-        output = self.model(inp)
+        output = self.learner.model(inp)
         if ind1 is None:
             ind1 = output.data.max(1)[1]
         if ind2 is None:
-            index0 = torch.LongTensor([0]).cuda()
+            index0 = torch.LongTensor([0]).to(self.learner.device)
             ind2 = output.data.topk(k=2, sorted=True)[1][0][0].unsqueeze(0)
 
         grad_out1 = output.data.clone()
@@ -35,11 +36,11 @@ class VanillaDifferenceGradExplainer(object):
 
 
 class VanillaGradExplainer(object):
-    def __init__(self, model):
-        self.model = model
+    def __init__(self, learner: Learner):
+        self.learner = learner
 
     def _backprop(self, inp, ind):
-        output = self.model(inp)
+        output = self.learner.model(inp)
         if ind is None:
             ind = output.data.max(1)[1].unsqueeze(0)
         grad_out = output.data.clone()
@@ -53,8 +54,8 @@ class VanillaGradExplainer(object):
 
 
 class GradxInputExplainer(VanillaGradExplainer):
-    def __init__(self, model):
-        super(GradxInputExplainer, self).__init__(model)
+    def __init__(self, learner: Learner):
+        super().__init__(learner)
 
     def explain(self, inp, ind=None):
         grad = self._backprop(inp, ind)
@@ -62,8 +63,8 @@ class GradxInputExplainer(VanillaGradExplainer):
 
 
 class SaliencyExplainer(VanillaGradExplainer):
-    def __init__(self, model):
-        super(SaliencyExplainer, self).__init__(model)
+    def __init__(self, learner: Learner):
+        super().__init__(learner)
 
     def explain(self, inp, ind=None):
         grad = self._backprop(inp, ind)
@@ -71,8 +72,9 @@ class SaliencyExplainer(VanillaGradExplainer):
 
 
 class NonlinearIntegrateGradExplainer(VanillaGradExplainer):
-    def __init__(self, model, data, k=5, reference=None, path_generator=None):
-        super(NonlinearIntegrateGradExplainer, self).__init__(model)
+    def __init__(self, learner: Learner, data, k=5, reference=None,
+                 path_generator=None):
+        super().__init__(learner)
         self.reference = reference
         if path_generator != None:
             self._path_fnc = path_generator
@@ -92,7 +94,8 @@ class NonlinearIntegrateGradExplainer(VanillaGradExplainer):
         for i in range(nsteps):
             new_inp = torch.from_numpy(new_data[i])
             new_inp = new_inp.float()
-            new_inp = Variable(new_inp.unsqueeze(0).cuda(), requires_grad=True)
+            new_inp = Variable(new_inp.unsqueeze(0).to(self.learner.device),
+                               requires_grad=True)
             g = self._backprop(new_inp, ind)
             grad += g
 
@@ -100,8 +103,8 @@ class NonlinearIntegrateGradExplainer(VanillaGradExplainer):
 
 
 class IntegrateGradExplainer(VanillaGradExplainer):
-    def __init__(self, model, steps=100):
-        super(IntegrateGradExplainer, self).__init__(model)
+    def __init__(self, learner: Learner, steps=100):
+        super().__init__(learner)
         self.steps = steps
 
     def explain(self, inp, ind=None):
@@ -117,8 +120,8 @@ class IntegrateGradExplainer(VanillaGradExplainer):
 
 
 class DeconvExplainer(VanillaGradExplainer):
-    def __init__(self, model):
-        super(DeconvExplainer, self).__init__(model)
+    def __init__(self, learner: Learner):
+        super().__init__(learner)
         self._override_backward()
 
     def _override_backward(self):
@@ -140,12 +143,12 @@ class DeconvExplainer(VanillaGradExplainer):
             if m.__class__.__name__ == 'ReLU':
                 m.forward = types.MethodType(new_forward, m)
 
-        self.model.apply(replace)
+        self.learner.model.apply(replace)
 
 
 class GuidedBackpropExplainer(VanillaGradExplainer):
-    def __init__(self, model):
-        super(GuidedBackpropExplainer, self).__init__(model)
+    def __init__(self, learner: Learner):
+        super().__init__(learner)
         self._override_backward()
 
     def _override_backward(self):
@@ -172,7 +175,7 @@ class GuidedBackpropExplainer(VanillaGradExplainer):
             if m.__class__.__name__ == 'ReLU':
                 m.forward = types.MethodType(new_forward, m)
 
-        self.model.apply(replace)
+        self.learner.model.apply(replace)
 
 
 # modified from https://github.com/PAIR-code/saliency/blob/master/saliency/base.py#L80
@@ -191,7 +194,7 @@ class SmoothGradExplainer(object):
         origin_inp_data = inp.data.clone()
 
         for i in range(self.nsamples):
-            noise = torch.randn(inp.size()).cuda() * stdev
+            noise = torch.randn(inp.size()).to(self.base_explainer.learner.device) * stdev
             inp.data.copy_(noise + origin_inp_data)
             grad = self.base_explainer.explain(inp, ind1, ind2)
 

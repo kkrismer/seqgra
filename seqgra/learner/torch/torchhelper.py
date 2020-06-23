@@ -130,27 +130,23 @@ class TorchHelper:
             shuffle=False)
 
         # GPU or CPU?
-        use_cuda: bool = torch.cuda.is_available()
-        device = torch.device("cuda:0" if use_cuda else "cpu")
-        learner.model = learner.model.to(device)
-        if use_cuda:
-            logger.info("using GPU")
-        else:
-            logger.info("using CPU")
+        learner.model = learner.model.to(learner.device)
+        logger.info("using device: " + learner.device_label)
 
         # training loop
         trainer = create_supervised_trainer(learner.model, learner.optimizer,
-                                            learner.criterion, device=device)
+                                            learner.criterion,
+                                            device=learner.device)
         train_evaluator = create_supervised_evaluator(
             learner.model,
             metrics=TorchHelper.get_metrics(
                 learner, output_layer_activation_function),
-            device=device)
+            device=learner.device)
         val_evaluator = create_supervised_evaluator(
             learner.model,
             metrics=TorchHelper.get_metrics(
                 learner, output_layer_activation_function),
-            device=device)
+            device=learner.device)
 
         logging.getLogger("ignite.engine.engine.Engine").setLevel(
             logging.WARNING)
@@ -237,8 +233,8 @@ class TorchHelper:
             shuffle=False)
 
         # GPU or CPU?
-        device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-        learner.model = learner.model.to(device)
+        learner.model = learner.model.to(learner.device)
+        logger.info("using device: " + learner.device_label)
 
         # training loop
         num_epochs: int = int(
@@ -260,8 +256,8 @@ class TorchHelper:
 
                 for x, y in data_loader:
                     # transfer to device
-                    x = x.to(device)
-                    y = y.to(device)
+                    x = x.to(learner.device)
+                    y = y.to(learner.device)
 
                     # zero the parameter gradients
                     learner.optimizer.zero_grad()
@@ -337,6 +333,7 @@ class TorchHelper:
         Returns:
             softmax_linear: Output tensor with the computed logits.
         """
+        logger = logging.getLogger(__name__)
         data_loader = torch.utils.data.DataLoader(
             dataset,
             batch_size=int(
@@ -344,15 +341,15 @@ class TorchHelper:
             shuffle=False)
 
         # GPU or CPU?
-        device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-        learner.model = learner.model.to(device)
+        learner.model = learner.model.to(learner.device)
+        logger.info("using device: " + learner.device_label)
 
         y_hat = []
         learner.model.eval()
         with torch.no_grad():
             for x in data_loader:
                 # transfer to device
-                x = x.to(device)
+                x = x.to(learner.device)
 
                 raw_logits = learner.model(x)
                 if output_layer_activation_function is None:
@@ -374,6 +371,7 @@ class TorchHelper:
     @staticmethod
     def evaluate_model(learner: Learner, dataset: torch.utils.data.Dataset,
                        output_layer_activation_function: Optional[str] = None):
+        logger = logging.getLogger(__name__)
         data_loader = torch.utils.data.DataLoader(
             dataset,
             batch_size=int(
@@ -381,9 +379,9 @@ class TorchHelper:
             shuffle=False)
 
         # GPU or CPU?
-        device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-        learner.model = learner.model.to(device)
-
+        learner.model = learner.model.to(learner.device)
+        logger.info("using device: " + learner.device_label)
+ 
         running_loss: float = 0.0
         running_correct: int = 0
         num_examples: int = 0
@@ -392,8 +390,8 @@ class TorchHelper:
         with torch.no_grad():
             for x, y in data_loader:
                 # transfer to device
-                x = x.to(device)
-                y = y.to(device)
+                x = x.to(learner.device)
+                y = y.to(learner.device)
 
                 y_hat = learner.model(x)
                 loss = learner.criterion(y_hat, y)
