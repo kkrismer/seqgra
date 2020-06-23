@@ -4,6 +4,7 @@ PyTorch learner helper class
 
 @author: Konstantin Krismer
 """
+from ast import literal_eval
 from distutils.util import strtobool
 import importlib
 import logging
@@ -434,17 +435,221 @@ class TorchHelper:
             else:
                 learning_rate = 0.001
 
-            if optimizer == "sgd":
-                if "momentum" in optimizer_hyperparameters:
-                    momentum = float(
-                        optimizer_hyperparameters["momentum"].strip())
-                else:
-                    momentum = 0.0
+            if "rho" in optimizer_hyperparameters:
+                rho = float(
+                    optimizer_hyperparameters["rho"].strip())
+            else:
+                rho = 0.9
 
+            if "eps" in optimizer_hyperparameters:
+                eps = float(
+                    optimizer_hyperparameters["eps"].strip())
+            else:
+                eps = 1e-08
+
+            if "weight_decay" in optimizer_hyperparameters:
+                weight_decay = float(
+                    optimizer_hyperparameters["weight_decay"].strip())
+            else:
+                weight_decay = 0.0
+
+            if "momentum" in optimizer_hyperparameters:
+                momentum = float(
+                    optimizer_hyperparameters["momentum"].strip())
+            else:
+                momentum = 0.0
+
+            if "lr_decay" in optimizer_hyperparameters:
+                lr_decay = float(
+                    optimizer_hyperparameters["lr_decay"].strip())
+            else:
+                lr_decay = 0.0
+
+            if "initial_accumulator_value" in optimizer_hyperparameters:
+                initial_accumulator_value = float(
+                    optimizer_hyperparameters["initial_accumulator_value"].strip())
+            else:
+                initial_accumulator_value = 0.0
+
+            if "betas" in optimizer_hyperparameters:
+                betas = literal_eval(
+                    optimizer_hyperparameters["betas"].strip())
+            else:
+                betas = (0.9, 0.999)
+
+            if "amsgrad" in optimizer_hyperparameters:
+                amsgrad = bool(strtobool(
+                    optimizer_hyperparameters["amsgrad"].strip()))
+            else:
+                amsgrad = False
+
+            if "lambd" in optimizer_hyperparameters:
+                lambd = float(
+                    optimizer_hyperparameters["lambd"].strip())
+            else:
+                lambd = 0.0001
+
+            if "alpha" in optimizer_hyperparameters:
+                alpha = float(
+                    optimizer_hyperparameters["alpha"].strip())
+            else:
+                alpha = 0.75
+
+            if "t0" in optimizer_hyperparameters:
+                t0 = float(
+                    optimizer_hyperparameters["t0"].strip())
+            else:
+                t0 = 1000000.0
+
+            if "max_iter" in optimizer_hyperparameters:
+                max_iter = int(
+                    optimizer_hyperparameters["max_iter"].strip())
+            else:
+                max_iter = 20
+
+            if "max_eval" in optimizer_hyperparameters:
+                max_eval = int(
+                    optimizer_hyperparameters["max_eval"].strip())
+            else:
+                max_eval = None
+
+            if "tolerance_grad" in optimizer_hyperparameters:
+                tolerance_grad = float(
+                    optimizer_hyperparameters["tolerance_grad"].strip())
+            else:
+                tolerance_grad = 1e-07
+
+            if "tolerance_change" in optimizer_hyperparameters:
+                tolerance_change = float(
+                    optimizer_hyperparameters["tolerance_change"].strip())
+            else:
+                tolerance_change = 1e-09
+
+            if "history_size" in optimizer_hyperparameters:
+                history_size = int(
+                    optimizer_hyperparameters["history_size"].strip())
+            else:
+                history_size = 100
+
+            if "line_search_fn" in optimizer_hyperparameters:
+                line_search_fn = \
+                    optimizer_hyperparameters["line_search_fn"].strip()
+            else:
+                line_search_fn = None
+
+            if "centered" in optimizer_hyperparameters:
+                centered = bool(strtobool(
+                    optimizer_hyperparameters["centered"].strip()))
+            else:
+                centered = False
+
+            if "etas" in optimizer_hyperparameters:
+                etas = literal_eval(optimizer_hyperparameters["etas"].strip())
+            else:
+                etas = (0.5, 1.2)
+
+            if "step_sizes" in optimizer_hyperparameters:
+                step_sizes = literal_eval(
+                    optimizer_hyperparameters["step_sizes"].strip())
+            else:
+                step_sizes = (1e-06, 50)
+
+            if "dampening" in optimizer_hyperparameters:
+                dampening = float(
+                    optimizer_hyperparameters["dampening"].strip())
+            else:
+                dampening = 0.0
+
+            if "nesterov" in optimizer_hyperparameters:
+                nesterov = bool(strtobool(
+                    optimizer_hyperparameters["nesterov"].strip()))
+            else:
+                nesterov = False
+
+            if optimizer == "adadelta":
+                if "eps" not in optimizer_hyperparameters:
+                    eps = 1e-06
+                return torch.optim.Adadelta(
+                    model_parameters, lr=learning_rate, rho=rho, eps=eps,
+                    weight_decay=weight_decay)
+            elif optimizer == "adagrad":
+                if "learning_rate" not in optimizer_hyperparameters:
+                    learning_rate = 0.01
+                if "eps" not in optimizer_hyperparameters:
+                    eps = 1e-10
+
+                return torch.optim.Adagrad(
+                    model_parameters, lr=learning_rate, lr_decay=lr_decay,
+                    weight_decay=weight_decay,
+                    initial_accumulator_value=initial_accumulator_value,
+                    eps=eps)
+            elif optimizer == "adam":
+                return torch.optim.Adam(
+                    model_parameters, lr=learning_rate, betas=betas,
+                    eps=eps, weight_decay=weight_decay, amsgrad=amsgrad)
+            elif optimizer == "adamw":
+                if "weight_decay" not in optimizer_hyperparameters:
+                    weight_decay = 0.01
+
+                return torch.optim.AdamW(
+                    model_parameters, lr=learning_rate, betas=betas, eps=eps,
+                    weight_decay=weight_decay, amsgrad=amsgrad)
+            elif optimizer == "sparseadam":
+                return torch.optim.SparseAdam(
+                    model_parameters, lr=learning_rate, betas=betas,
+                    eps=eps)
+            elif optimizer == "adamax":
+                if "learning_rate" not in optimizer_hyperparameters:
+                    learning_rate = 0.002
+
+                return torch.optim.Adamax(
+                    model_parameters, lr=learning_rate, betas=betas, eps=eps,
+                    weight_decay=weight_decay)
+            elif optimizer == "asgd":
+                if "learning_rate" not in optimizer_hyperparameters:
+                    learning_rate = 0.01
+
+                return torch.optim.ASGD(
+                    model_parameters, lr=learning_rate, lambd=lambd,
+                    alpha=alpha, t0=t0, weight_decay=weight_decay)
+            elif optimizer == "lbfgs":
+                if "learning_rate" not in optimizer_hyperparameters:
+                    learning_rate = 1.0
+
+                return torch.optim.LBFGS(
+                    model_parameters, lr=learning_rate, max_iter=max_iter,
+                    max_eval=max_eval, tolerance_grad=tolerance_grad,
+                    tolerance_change=tolerance_change,
+                    history_size=history_size, line_search_fn=line_search_fn)
+            elif optimizer == "rmsprop":
+                if "learning_rate" not in optimizer_hyperparameters:
+                    learning_rate = 0.01
+                if "alpha" not in optimizer_hyperparameters:
+                    alpha = 0.99
+
+                return torch.optim.RMSprop(
+                    model_parameters, lr=learning_rate, alpha=alpha, eps=eps,
+                    weight_decay=weight_decay, momentum=momentum,
+                    centered=centered)
+            elif optimizer == "rprop":
+                if "learning_rate" not in optimizer_hyperparameters:
+                    learning_rate = 0.01
+
+                return torch.optim.Rprop(
+                    model_parameters, lr=learning_rate, etas=etas,
+                    step_sizes=step_sizes)
+            elif optimizer == "rprop":
+                if "learning_rate" not in optimizer_hyperparameters:
+                    learning_rate = 0.01
+
+                return torch.optim.Rprop(
+                    model_parameters, lr=learning_rate, etas=etas,
+                    step_sizes=step_sizes)
+            elif optimizer == "sgd":
                 return torch.optim.SGD(
-                    model_parameters,
-                    lr=learning_rate,
-                    momentum=momentum)
+                    model_parameters, lr=learning_rate, momentum=momentum,
+                    dampening=dampening, weight_decay=weight_decay,
+                    nesterov=nesterov)
             else:
                 raise Exception("unknown optimizer specified: " + optimizer)
         else:
