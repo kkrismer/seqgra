@@ -4,7 +4,7 @@ TensorFlow Keras learners
 
 @author: Konstantin Krismer
 """
-from typing import Any, List
+from typing import Any, List, Optional
 
 from seqgra.learner import DNAMultiClassClassificationLearner
 from seqgra.learner import DNAMultiLabelClassificationLearner
@@ -34,13 +34,13 @@ class BayesOptimalDNAMultiClassClassificationLearner(
                      x_val: List[str], y_val: List[str]) -> None:
         pass
 
-    def save_model(self, model_name: str = "") -> None:
+    def save_model(self, file_name: Optional[str] = None):
         pass
 
     def write_session_info(self) -> None:
         BayesOptimalHelper.write_session_info(self)
 
-    def load_model(self, model_name: str = "") -> None:
+    def load_model(self, file_name: Optional[str] = None):
         pass
 
     def predict(self, x: Any, encode: bool = True):
@@ -73,13 +73,13 @@ class BayesOptimalDNAMultiLabelClassificationLearner(
                      x_val: List[str], y_val: List[str]) -> None:
         pass
 
-    def save_model(self, model_name: str = "") -> None:
+    def save_model(self, file_name: Optional[str] = None):
         pass
 
     def write_session_info(self) -> None:
         BayesOptimalHelper.write_session_info(self)
 
-    def load_model(self, model_name: str = "") -> None:
+    def load_model(self, file_name: Optional[str] = None):
         pass
 
     def predict(self, x: Any, encode: bool = True):
@@ -112,13 +112,13 @@ class BayesOptimalProteinMultiClassClassificationLearner(
                      x_val: List[str], y_val: List[str]) -> None:
         pass
 
-    def save_model(self, model_name: str = "") -> None:
+    def save_model(self, file_name: Optional[str] = None):
         pass
 
     def write_session_info(self) -> None:
         BayesOptimalHelper.write_session_info(self)
 
-    def load_model(self, model_name: str = "") -> None:
+    def load_model(self, file_name: Optional[str] = None):
         pass
 
     def predict(self, x: Any, encode: bool = True):
@@ -151,13 +151,13 @@ class BayesOptimalProteinMultiLabelClassificationLearner(
                      x_val: List[str], y_val: List[str]) -> None:
         pass
 
-    def save_model(self, model_name: str = "") -> None:
+    def save_model(self, file_name: Optional[str] = None):
         pass
 
     def write_session_info(self) -> None:
         BayesOptimalHelper.write_session_info(self)
 
-    def load_model(self, model_name: str = "") -> None:
+    def load_model(self, file_name: Optional[str] = None):
         pass
 
     def predict(self, x: Any, encode: bool = True):

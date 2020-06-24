@@ -85,14 +85,14 @@ class TorchDNAMultiClassClassificationLearner(
                                 validation_dataset,
                                 self._get_output_layer_activation_function())
 
-    def save_model(self, model_name: str = "") -> None:
-        TorchHelper.save_model(self, model_name)
+    def save_model(self, file_name: Optional[str] = None) -> None:
+        TorchHelper.save_model(self, file_name)
 
     def write_session_info(self) -> None:
         TorchHelper.write_session_info(self)
 
-    def load_model(self, model_name: str = "") -> None:
-        TorchHelper.load_model(self, model_name)
+    def load_model(self, file_name: Optional[str] = None) -> None:
+        TorchHelper.load_model(self, file_name)
 
     def predict(self, x: Any, encode: bool = True):
         if encode:
@@ -206,14 +206,14 @@ class TorchDNAMultiLabelClassificationLearner(
                                 validation_dataset,
                                 self._get_output_layer_activation_function())
 
-    def save_model(self, model_name: str = "") -> None:
-        TorchHelper.save_model(self, model_name)
+    def save_model(self, file_name: Optional[str] = None) -> None:
+        TorchHelper.save_model(self, file_name)
 
     def write_session_info(self) -> None:
         TorchHelper.write_session_info(self)
 
-    def load_model(self, model_name: str = "") -> None:
-        TorchHelper.load_model(self, model_name)
+    def load_model(self, file_name: Optional[str] = None) -> None:
+        TorchHelper.load_model(self, file_name)
 
     def predict(self, x: Any, encode: bool = True):
         if encode:
@@ -327,14 +327,14 @@ class TorchProteinMultiClassClassificationLearner(
                                 validation_dataset,
                                 self._get_output_layer_activation_function())
 
-    def save_model(self, model_name: str = "") -> None:
-        TorchHelper.save_model(self, model_name)
+    def save_model(self, file_name: Optional[str] = None) -> None:
+        TorchHelper.save_model(self, file_name)
 
     def write_session_info(self) -> None:
         TorchHelper.write_session_info(self)
 
-    def load_model(self, model_name: str = "") -> None:
-        TorchHelper.load_model(self, model_name)
+    def load_model(self, file_name: Optional[str] = None) -> None:
+        TorchHelper.load_model(self, file_name)
 
     def predict(self, x: Any, encode: bool = True):
         if encode:
@@ -397,7 +397,7 @@ class TorchProteinMultiLabelClassificationLearner(
         else:
             self.device_label: str = "cpu"
         self.device = torch.device(self.device_label)
-        
+
         self._check_task_loss_compatibility()
 
     def _check_task_loss_compatibility(self) -> None:
@@ -448,14 +448,14 @@ class TorchProteinMultiLabelClassificationLearner(
                                 validation_dataset,
                                 self._get_output_layer_activation_function())
 
-    def save_model(self, model_name: str = "") -> None:
-        TorchHelper.save_model(self, model_name)
+    def save_model(self, file_name: Optional[str] = None) -> None:
+        TorchHelper.save_model(self, file_name)
 
     def write_session_info(self) -> None:
         TorchHelper.write_session_info(self)
 
-    def load_model(self, model_name: str = "") -> None:
-        TorchHelper.load_model(self, model_name)
+    def load_model(self, file_name: Optional[str] = None) -> None:
+        TorchHelper.load_model(self, file_name)
 
     def predict(self, x: Any, encode: bool = True):
         if encode:

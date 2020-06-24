@@ -248,25 +248,25 @@ class Learner(ABC):
         """
 
     @abstractmethod
-    def save_model(self, model_name: str = "final"):
+    def save_model(self, file_name: Optional[str] = None):
         """TODO
 
         TODO
 
         Arguments:
-            model_name (str, optional): file name in output dir;
-                defaults to `final`
+            file_name (str, optional): file name in output dir;
+                default is library-dependent
         """
 
     @abstractmethod
-    def load_model(self, model_name: str = "final"):
+    def load_model(self, file_name: Optional[str] = None):
         """TODO
 
         TODO
 
         Arguments:
-            model_name (str, optional): file name in output dir;
-                defaults to `final`
+            file_name (str, optional): file name in output dir;
+                default is library-dependent
         """
 
     @abstractmethod

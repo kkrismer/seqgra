@@ -9,8 +9,9 @@ from distutils.util import strtobool
 import logging
 import os
 import random
+import shutil
 import sys
-from typing import Any, FrozenSet, List
+from typing import Any, FrozenSet, List, Optional
 
 import numpy as np
 import pkg_resources
@@ -141,11 +142,12 @@ class KerasHelper:
                 learner.create_model()
 
             # checkpoint callback
-            checkpoint_path = learner.output_dir + "training/cp.ckpt"
+            checkpoint_folder = learner.output_dir + "tmp/best"
             cp_callback = tf.keras.callbacks.ModelCheckpoint(
-                filepath=checkpoint_path,
-                save_weights_only=True,
-                verbose=0
+                filepath=checkpoint_folder,
+                verbose=0,
+                save_best_only=True,
+                save_weights_only=True
             )
 
             # TensorBoard callback
@@ -186,26 +188,37 @@ class KerasHelper:
                     learner.definition.training_process_hyperparameters["shuffle"]))
             )
 
+            # load best model after training
+            learner.model.load_weights(checkpoint_folder)
+
+            # remove temp folder
+            shutil.rmtree(learner.output_dir + "tmp")
+
     @staticmethod
-    def save_model(learner: Learner, model_name: str = "") -> None:
-        if model_name:
-            os.makedirs(learner.output_dir + model_name)
+    def save_model(learner: Learner, file_name: Optional[str] = None) -> None:
+        if file_name:
+            os.makedirs(learner.output_dir + file_name)
+        else:
+            file_name = ""
+
+            # save session info
+            learner.write_session_info()
 
         # save whole model (TensorFlow format)
-        learner.model.save(learner.output_dir + model_name, save_format="tf")
+        learner.model.save(learner.output_dir + file_name, save_format="tf")
 
         # save whole model (HDF5)
-        learner.model.save(learner.output_dir + model_name + "/saved_model.h5",
+        learner.model.save(learner.output_dir + file_name + "/saved_model.h5",
                            save_format="h5")
 
         # save architecture only (YAML)
         yaml_model = learner.model.to_yaml()
-        with open(learner.output_dir + model_name + "/model-architecture.yaml", "w") as yaml_file:
+        with open(learner.output_dir + file_name + "/model-architecture.yaml", "w") as yaml_file:
             yaml_file.write(yaml_model)
 
         # save architecture only (JSON)
         json_model = learner.model.to_json()
-        with open(learner.output_dir + model_name + "/model-architecture.json", "w") as json_file:
+        with open(learner.output_dir + file_name + "/model-architecture.json", "w") as json_file:
             json_file.write(json_model)
 
         # save session info
@@ -222,10 +235,13 @@ class KerasHelper:
             session_file.write("Python version: " + sys.version + "\n")
 
     @staticmethod
-    def load_model(learner: Learner, model_name: str = "") -> None:
+    def load_model(learner: Learner, file_name: Optional[str] = None) -> None:
+        if not file_name:
+            file_name = ""
+
         with tf.device(learner.device_label):
             learner.model = tf.keras.models.load_model(
-                learner.output_dir + model_name)
+                learner.output_dir + file_name)
 
     @staticmethod
     def predict(learner: Learner, x: Any, encode: bool = True):
@@ -256,7 +272,7 @@ class KerasHelper:
 
         # GPU or CPU?
         logger.info("using device: %s", learner.device_label)
-        
+
         with tf.device(learner.device_label):
             # one hot encode input and labels
             encoded_x = learner.encode_x(x)

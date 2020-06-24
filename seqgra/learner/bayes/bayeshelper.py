@@ -101,10 +101,6 @@ class BayesOptimalHelper:
         np.random.seed(learner.definition.seed)
 
     @staticmethod
-    def save_model(learner: Learner, model_name: str = "") -> None:
-        pass
-
-    @staticmethod
     def write_session_info(learner: Learner) -> None:
         with open(learner.output_dir + "session-info.txt", "w") as session_file:
             session_file.write(
@@ -112,10 +108,6 @@ class BayesOptimalHelper:
                 pkg_resources.require("seqgra")[0].version + "\n")
             session_file.write("NumPy version: " + np.version.version + "\n")
             session_file.write("Python version: " + sys.version + "\n")
-
-    @staticmethod
-    def load_model(learner: Learner, model_name: str = "") -> None:
-        pass
 
     @staticmethod
     def score_example(example, pwm) -> Any:

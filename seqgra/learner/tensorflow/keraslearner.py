@@ -74,14 +74,14 @@ class KerasDNAMultiClassClassificationLearner(
                      x_val: List[str], y_val: List[str]) -> None:
         KerasHelper.train_model(self, x_train, y_train, x_val, y_val)
 
-    def save_model(self, model_name: str = "") -> None:
-        KerasHelper.save_model(self, model_name)
+    def save_model(self, file_name: Optional[str] = None) -> None:
+        KerasHelper.save_model(self, file_name)
 
     def write_session_info(self) -> None:
         KerasHelper.write_session_info(self)
 
-    def load_model(self, model_name: str = "") -> None:
-        KerasHelper.load_model(self, model_name)
+    def load_model(self, file_name: Optional[str] = None) -> None:
+        KerasHelper.load_model(self, file_name)
 
     def predict(self, x: Any, encode: bool = True):
         return KerasHelper.predict(self, x, encode)
@@ -165,14 +165,14 @@ class KerasDNAMultiLabelClassificationLearner(
                      x_val: List[str], y_val: List[str]) -> None:
         KerasHelper.train_model(self, x_train, y_train, x_val, y_val)
 
-    def save_model(self, model_name: str = "") -> None:
-        KerasHelper.save_model(self, model_name)
+    def save_model(self, file_name: Optional[str] = None) -> None:
+        KerasHelper.save_model(self, file_name)
 
     def write_session_info(self) -> None:
         KerasHelper.write_session_info(self)
 
-    def load_model(self, model_name: str = "") -> None:
-        KerasHelper.load_model(self, model_name)
+    def load_model(self, file_name: Optional[str] = None) -> None:
+        KerasHelper.load_model(self, file_name)
 
     def predict(self, x: Any, encode: bool = True):
         return KerasHelper.predict(self, x, encode)
@@ -256,14 +256,14 @@ class KerasProteinMultiClassClassificationLearner(
                      x_val: List[str], y_val: List[str]) -> None:
         KerasHelper.train_model(self, x_train, y_train, x_val, y_val)
 
-    def save_model(self, model_name: str = "") -> None:
-        KerasHelper.save_model(self, model_name)
+    def save_model(self, file_name: Optional[str] = None) -> None:
+        KerasHelper.save_model(self, file_name)
 
     def write_session_info(self) -> None:
         KerasHelper.write_session_info(self)
 
-    def load_model(self, model_name: str = "") -> None:
-        KerasHelper.load_model(self, model_name)
+    def load_model(self, file_name: Optional[str] = None) -> None:
+        KerasHelper.load_model(self, file_name)
 
     def predict(self, x: Any, encode: bool = True):
         return KerasHelper.predict(self, x, encode)
@@ -347,14 +347,14 @@ class KerasProteinMultiLabelClassificationLearner(
                      x_val: List[str], y_val: List[str]) -> None:
         KerasHelper.train_model(self, x_train, y_train, x_val, y_val)
 
-    def save_model(self, model_name: str = "") -> None:
-        KerasHelper.save_model(self, model_name)
+    def save_model(self, file_name: Optional[str] = None) -> None:
+        KerasHelper.save_model(self, file_name)
 
     def write_session_info(self) -> None:
         KerasHelper.write_session_info(self)
 
-    def load_model(self, model_name: str = "") -> None:
-        KerasHelper.load_model(self, model_name)
+    def load_model(self, file_name: Optional[str] = None) -> None:
+        KerasHelper.load_model(self, file_name)
 
     def predict(self, x: Any, encode: bool = True):
         return KerasHelper.predict(self, x, encode)

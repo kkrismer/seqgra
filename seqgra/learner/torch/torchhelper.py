@@ -10,6 +10,7 @@ import importlib
 import logging
 import os
 import random
+import shutil
 import sys
 from typing import FrozenSet, List, Optional
 
@@ -180,8 +181,9 @@ class TorchHelper:
                 raise Exception("no metric to track performance")
             return score
 
+        best_model_dir: str = learner.output_dir + "tmp"
         best_model_saver_handler = ModelCheckpoint(
-            learner.output_dir + "training/models",
+            best_model_dir,
             score_function=score_fn,
             filename_prefix="best",
             n_saved=1,
@@ -199,6 +201,25 @@ class TorchHelper:
             val_evaluator.add_event_handler(Events.COMPLETED, es_handler)
 
         trainer.run(training_loader, max_epochs=num_epochs)
+
+        # load best model after training
+        best_model = TorchHelper.get_best_model_file_name(best_model_dir)
+        if best_model:
+            learner.load_model("tmp/" + best_model)
+            # remove temp folder
+            shutil.rmtree(best_model_dir)
+        else:
+            logger.warn("best model could not be loaded")
+
+    @staticmethod
+    def get_best_model_file_name(best_model_dir: str) -> str:
+        model_files = [model_file
+                       for model_file in os.listdir(best_model_dir)
+                       if model_file.endswith(".pth")]
+        if len(model_files) == 1:
+            return model_files[0]
+        else:
+            return None
 
     @staticmethod
     def _format_metrics_output(metrics, set_label):
@@ -301,15 +322,17 @@ class TorchHelper:
                     phase, epoch_loss, epoch_acc))
 
     @staticmethod
-    def save_model(learner: Learner, model_name: str = "") -> None:
-        if model_name:
-            os.makedirs(learner.output_dir + model_name)
+    def save_model(learner: Learner, file_name: Optional[str] = None) -> None:
+        if not file_name:
+            file_name = "saved_model.pth"
 
-        torch.save(learner.model.state_dict(), learner.output_dir +
-                   model_name + "/saved_model.pth")
+            # save session info
+            learner.write_session_info()
 
-        # save session info
-        learner.write_session_info()
+        if os.path.dirname(file_name):
+            os.makedirs(learner.output_dir + os.path.dirname(file_name))
+
+        torch.save(learner.model.state_dict(), learner.output_dir + file_name)
 
     @staticmethod
     def write_session_info(learner: Learner) -> None:
@@ -321,10 +344,13 @@ class TorchHelper:
             session_file.write("Python version: " + sys.version + "\n")
 
     @staticmethod
-    def load_model(learner: Learner, model_name: str = "") -> None:
+    def load_model(learner: Learner, file_name: Optional[str] = None) -> None:
+        if not file_name:
+            file_name = "saved_model.pth"
+
         TorchHelper.create_model(learner)
         learner.model.load_state_dict(torch.load(learner.output_dir +
-                                                 model_name + "/saved_model.pth"))
+                                                 file_name))
 
     @staticmethod
     def predict(learner: Learner, dataset: torch.utils.data.Dataset,
@@ -381,7 +407,7 @@ class TorchHelper:
         # GPU or CPU?
         learner.model = learner.model.to(learner.device)
         logger.info("using device: %s", learner.device_label)
- 
+
         running_loss: float = 0.0
         running_correct: int = 0
         num_examples: int = 0
