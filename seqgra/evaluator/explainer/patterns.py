@@ -9,11 +9,11 @@ class PatternNetExplainer(object):
     def __init__(self, learner: Learner, params_file=None, pattern_file=None):
         self.learner = learner
         self.weights = list(self.learner.model.parameters())
-        self.np_weights = self.load_params(params_file)
-        self.np_patterns = self.load_patterns(pattern_file)['A']
+        self.np_weights = self._load_params(params_file)
+        self.np_patterns = self._load_patterns(pattern_file)["A"]
         self._to_device()
 
-    def load_patterns(self, filename):
+    def _load_patterns(self, filename):
         f = np.load(filename)
         ret = {}
         for prefix in ["A", "r", "mu"]:
@@ -21,14 +21,14 @@ class PatternNetExplainer(object):
             ret.update({prefix: [f["%s_%i" % (prefix, i)] for i in range(l)]})
         return ret
 
-    def load_params(self, filename):
+    def _load_params(self, filename):
         f = np.load(filename)
         weights = []
         for i in range(32):
             if i in [26, 28, 30]:
-                weights.append(f['arr_%d' % i].T)
+                weights.append(f["arr_%d" % i].T)
             else:
-                weights.append(f['arr_%d' % i])
+                weights.append(f["arr_%d" % i])
 
         return weights
 

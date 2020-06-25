@@ -63,12 +63,12 @@ class GradientBasedEvaluator(FeatureImportanceEvaluator):
         # store input tensor, label tensor and model on correct device
         encoded_x = encoded_x.to(self.learner.device)
         encoded_y = encoded_y.to(self.learner.device)
-        self.explainer.model.to(self.learner.device)
+        self.explainer.learner.model.to(self.learner.device)
 
         encoded_x = torch.autograd.Variable(encoded_x, requires_grad=True)
 
         # enable inference mode
-        self.explainer.model.eval()
+        self.explainer.learner.model.eval()
 
         fi_matrix = self.calculate_saliency(encoded_x, encoded_y)
 
