@@ -251,9 +251,6 @@ class KerasHelper:
         """
         logger = logging.getLogger(__name__)
 
-        # GPU or CPU?
-        logger.info("using device: %s", learner.device_label)
-
         with tf.device(learner.device_label):
             if encode:
                 x = learner.encode_x(x)
@@ -269,9 +266,6 @@ class KerasHelper:
     @staticmethod
     def evaluate_model(learner: Learner, x: List[str], y: List[str]):
         logger = logging.getLogger(__name__)
-
-        # GPU or CPU?
-        logger.info("using device: %s", learner.device_label)
 
         with tf.device(learner.device_label):
             # one hot encode input and labels

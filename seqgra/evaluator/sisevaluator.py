@@ -7,7 +7,7 @@ MIT - CSAIL - Gifford Lab - seqgra
 """
 from __future__ import annotations
 
-from typing import Any, List, Optional, Set
+from typing import Any, List, Optional
 
 import numpy as np
 import pandas as pd
@@ -22,7 +22,7 @@ from seqgra.learner import Learner
 
 class SISEvaluator(FeatureImportanceEvaluator):
     def __init__(self, learner: Learner, output_dir: str,
-                 predict_threshold: Optional[float]) -> None:
+                 predict_threshold: Optional[float] = None) -> None:
         super().__init__(
             c.EvaluatorID.SIS, "Sufficient Input Subsets", learner, output_dir,
             supported_tasks=[c.TaskType.MULTI_CLASS_CLASSIFICATION,
@@ -133,6 +133,22 @@ class SISEvaluator(FeatureImportanceEvaluator):
                            "label": label_column})
 
         return df
+
+    def _visualize_grammar_agreement(self, results,
+                                     set_name: str = "test") -> None:
+        df: pd.DataFrame = self._convert_to_data_frame(results)
+        if len(df.index) > 0:
+            df.to_csv(self.output_dir + set_name +
+                      "-grammar-agreement-thresholded-df.txt",
+                      sep="\t", index=False)
+
+            pdf_file_name: str = set_name + "-grammar-agreement-thresholded.pdf"
+            df: pd.DataFrame = self._prepare_r_data_frame(df)
+            caption: str = "prediction threshold for SIS: " + \
+                str(self.predict_threshold) + \
+                    ":NL:(model prediction of true class exceeds this threshold with grammar positions alone)"
+            self._execute_plotting_command(df, pdf_file_name,
+                                           self.evaluator_name, caption)
 
     def find_sis(self, x: List[str], label_index: int) -> List[List[str]]:
         encoded_x = self.learner.encode_x(x)

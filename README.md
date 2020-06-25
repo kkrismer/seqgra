@@ -74,6 +74,7 @@ usage: seqgra [-h]
               [--eval-suppress-plots]
               [--eval-fi-predict-threshold EVAL_FI_PREDICT_THRESHOLD]
               [--eval-sis-predict-threshold EVAL_SIS_PREDICT_THRESHOLD]
+              [--eval-grad-importance-threshold EVAL_GRAD_IMPORTANCE_THRESHOLD]
 
 Generate synthetic data based on grammar, train model on synthetic data, 
 evaluate model
@@ -143,6 +144,13 @@ optional arguments:
                         prediction threshold for Sufficient Input Subsets; 
                         this evaluator argument is only visible to the SIS 
                         evaluator
+  --eval-grad-importance-threshold EVAL_GRAD_IMPORTANCE_THRESHOLD
+                        feature importance threshold for gradient-based 
+                        feature importance evaluators; this parameter only 
+                        affects thresholded grammar agreement plots, not the 
+                        feature importance measures themselves; this evaluator 
+                        argument is only visible to gradient-based feature     
+                        importance evaluators (defaults to 0.01)
 ```
 
 ## Commonly used suite of seqgra commands

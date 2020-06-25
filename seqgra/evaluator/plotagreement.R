@@ -25,7 +25,8 @@ if (!("ggplot2" %in% rownames(installed.packages())) ||
 library(ggplot2)
 library(scales)
 
-plot_agreement <- function(input_file_name, output_file_name, title = NULL) {
+plot_agreement <- function(input_file_name, output_file_name, title,
+                           caption = NULL) {
   # df with example, position, group, label, precision, recall, 
   # specificity, f1, n
   # where precision, recall, specificity, f1 are mean values per label,
@@ -35,6 +36,13 @@ plot_agreement <- function(input_file_name, output_file_name, title = NULL) {
 
   if (!is.null(title) && title == "") {
     title <- NULL
+  }
+  if (!is.null(caption) && caption == "") {
+    caption <- NULL
+  }
+
+  if (!is.null(caption)) {
+    caption <- gsub(":NL:", "\n", caption, fixed = TRUE)
   }
   
   df <- read.table(input_file_name, header = TRUE, sep = "\t",
@@ -61,12 +69,11 @@ plot_agreement <- function(input_file_name, output_file_name, title = NULL) {
     df$group[toupper(df$group) == "FP"] <- levels[3]
     df$group[toupper(df$group) == "TN"] <- levels[4]
     df$group <- factor(df$group, levels = levels, ordered = TRUE)
-    
+
     p <- ggplot(df, aes(x = position, y = example, fill = group)) + 
       scale_fill_manual(values = c("#B5EAD7", "#FFDAC1", 
                                    "#FF9AA2", "#FFFFFF"), 
                         labels = levels, drop = FALSE) +
-      labs(y = NULL, title = title) +
       guides(fill = guide_legend(nrow = 2, byrow = TRUE))
   } else {
     df$value <- df$value * ifelse(df$group == "G", 1, -1)
@@ -82,14 +89,14 @@ plot_agreement <- function(input_file_name, output_file_name, title = NULL) {
     p <- ggplot(df, aes(x = position, y = example, fill = value)) + 
       scale_fill_gradient2(low = muted("red"), mid = "white",
                            high = muted("green"), midpoint = 0,
-                           limits = c(-1, 1), guide = FALSE) +
-      labs(y = NULL, title = title, caption = "luminosity encodes feature importance: from light (low feature importance) to dark (high feature importance)\nhue encodes annotation: green (grammar position), red (background position)")
+                           limits = c(-1, 1), guide = FALSE)
   }
   
   p <- p + geom_tile() + 
     scale_x_continuous(breaks = pretty_breaks(n = 5), expand = c(0, 0)) + 
     facet_wrap(vars(label), ncol = 1, scales = "free_y") +
     scale_y_discrete(expand = c(0, 0)) +  
+    labs(y = NULL, title = title, caption = caption) +
     theme_bw() +
     theme(axis.text.y = element_blank(),
           axis.ticks.y = element_blank(),
@@ -107,10 +114,10 @@ plot_agreement <- function(input_file_name, output_file_name, title = NULL) {
 
 args <- commandArgs(trailingOnly = TRUE)
 
-if (length(args) == 2) {
-  plot_agreement(args[1], args[2])
-} else if (length(args) == 3) {
+if (length(args) == 3) {
   plot_agreement(args[1], args[2], args[3])
+} else if (length(args) == 4) {
+  plot_agreement(args[1], args[2], args[3], args[4])
 } else {
-  stop("input file name and output file name must be specified")
+  stop("input file name, output file name, and plot title must be specified")
 }

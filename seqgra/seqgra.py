@@ -42,7 +42,7 @@ def read_config_file(file_name: str) -> str:
 
 def get_learner(model_definition: ModelDefinition,
                 data_definition: Optional[DataDefinition],
-                data_dir: str, output_dir: str, 
+                data_dir: str, output_dir: str,
                 validate_data: bool,
                 gpu_id: int) -> Learner:
     if data_definition is not None:
@@ -198,7 +198,8 @@ def get_learner(model_definition: ModelDefinition,
 
 def get_evaluator(evaluator_id: str, learner: Learner,
                   output_dir: str,
-                  eval_sis_predict_threshold: Optional[float]) -> Evaluator:
+                  eval_sis_predict_threshold: Optional[float] = None,
+                  eval_grad_importance_threshold: Optional[float] = None) -> Evaluator:
     evaluator_id = evaluator_id.lower().strip()
 
     if learner is None:
@@ -221,31 +222,40 @@ def get_evaluator(evaluator_id: str, learner: Learner,
         return SISEvaluator(learner, output_dir, eval_sis_predict_threshold)
     elif evaluator_id == c.EvaluatorID.GRADIENT:
         from seqgra.evaluator.gradientbased import GradientEvaluator  # pylint: disable=import-outside-toplevel
-        return GradientEvaluator(learner, output_dir)
+        return GradientEvaluator(
+            learner, output_dir, eval_grad_importance_threshold)
     elif evaluator_id == c.EvaluatorID.GRADIENT_X_INPUT:
         from seqgra.evaluator.gradientbased import GradientxInputEvaluator  # pylint: disable=import-outside-toplevel
-        return GradientxInputEvaluator(learner, output_dir)
+        return GradientxInputEvaluator(
+            learner, output_dir, eval_grad_importance_threshold)
     elif evaluator_id == c.EvaluatorID.SALIENCY:
         from seqgra.evaluator.gradientbased import SaliencyEvaluator  # pylint: disable=import-outside-toplevel
-        return SaliencyEvaluator(learner, output_dir)
+        return SaliencyEvaluator(
+            learner, output_dir, eval_grad_importance_threshold)
     elif evaluator_id == c.EvaluatorID.INTEGRATED_GRADIENTS:
         from seqgra.evaluator.gradientbased import IntegratedGradientEvaluator  # pylint: disable=import-outside-toplevel
-        return IntegratedGradientEvaluator(learner, output_dir)
+        return IntegratedGradientEvaluator(
+            learner, output_dir, eval_grad_importance_threshold)
     elif evaluator_id == c.EvaluatorID.NONLINEAR_INTEGRATED_GRADIENTS:
         from seqgra.evaluator.gradientbased import NonlinearIntegratedGradientEvaluator  # pylint: disable=import-outside-toplevel
-        return NonlinearIntegratedGradientEvaluator(learner, output_dir)
+        return NonlinearIntegratedGradientEvaluator(
+            learner, output_dir, eval_grad_importance_threshold)
     elif evaluator_id == c.EvaluatorID.GRAD_CAM:
         from seqgra.evaluator.gradientbased import GradCamGradientEvaluator  # pylint: disable=import-outside-toplevel
-        return GradCamGradientEvaluator(learner, output_dir)
+        return GradCamGradientEvaluator(
+            learner, output_dir, eval_grad_importance_threshold)
     elif evaluator_id == c.EvaluatorID.DEEP_LIFT:
         from seqgra.evaluator.gradientbased import DeepLiftEvaluator  # pylint: disable=import-outside-toplevel
-        return DeepLiftEvaluator(learner, output_dir)
+        return DeepLiftEvaluator(
+            learner, output_dir, eval_grad_importance_threshold)
     elif evaluator_id == c.EvaluatorID.EXCITATION_BACKPROP:
         from seqgra.evaluator.gradientbased import ExcitationBackpropEvaluator  # pylint: disable=import-outside-toplevel
-        return ExcitationBackpropEvaluator(learner, output_dir)
+        return ExcitationBackpropEvaluator(
+            learner, output_dir, eval_grad_importance_threshold)
     elif evaluator_id == c.EvaluatorID.CONTRASTIVE_EXCITATION_BACKPROP:
         from seqgra.evaluator.gradientbased import ContrastiveExcitationBackpropEvaluator  # pylint: disable=import-outside-toplevel
-        return ContrastiveExcitationBackpropEvaluator(learner, output_dir)
+        return ContrastiveExcitationBackpropEvaluator(
+            learner, output_dir, eval_grad_importance_threshold)
     else:
         raise Exception("invalid evaluator ID")
 
@@ -279,7 +289,8 @@ def run_seqgra(data_config_file: Optional[str],
                eval_n_per_label: Optional[int],
                eval_suppress_plots: Optional[bool],
                eval_fi_predict_threshold: Optional[float],
-               eval_sis_predict_threshold: Optional[float]) -> None:
+               eval_sis_predict_threshold: Optional[float],
+               eval_grad_importance_threshold: Optional[float]) -> None:
     logger = logging.getLogger(__name__)
     output_dir = format_output_dir(output_dir.strip())
     new_data: bool = False
@@ -409,7 +420,8 @@ def run_seqgra(data_config_file: Optional[str],
                 else:
                     evaluator: Evaluator = get_evaluator(
                         evaluator_id, learner, evaluation_dir,
-                        eval_sis_predict_threshold)
+                        eval_sis_predict_threshold,
+                        eval_grad_importance_threshold)
 
                     if eval_n_per_label:
                         eval_n = eval_n_per_label
@@ -567,6 +579,16 @@ def main():
         help="prediction threshold for Sufficient Input Subsets; "
         "this evaluator argument is only visible to the SIS evaluator"
     )
+    parser.add_argument(
+        "--eval-grad-importance-threshold",
+        type=float,
+        default=0.01,
+        help="feature importance threshold for gradient-based feature "
+        "importance evaluators; this parameter only affects thresholded "
+        "grammar agreement plots, not the feature importance measures "
+        "themselves; this evaluator argument is only visible to "
+        "gradient-based feature importance evaluators (defaults to 0.01)"
+    )
     args = parser.parse_args()
 
     if args.datafolder and args.modelconfigfile is None:
@@ -595,7 +617,8 @@ def main():
                args.eval_n_per_label,
                args.eval_suppress_plots,
                args.eval_fi_predict_threshold,
-               args.eval_sis_predict_threshold)
+               args.eval_sis_predict_threshold,
+               args.eval_grad_importance_threshold)
 
 
 if __name__ == "__main__":

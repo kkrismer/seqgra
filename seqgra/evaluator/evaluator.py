@@ -415,24 +415,34 @@ class FeatureImportanceEvaluator(Evaluator):
             df.to_csv(self.output_dir + set_name +
                       "-grammar-agreement-thresholded-df.txt",
                       sep="\t", index=False)
-
-            plot_script: str = pkg_resources.resource_filename(
-                "seqgra", "evaluator/plotagreement.R")
-            temp_file_name: str = self.output_dir + set_name + \
-                "-thresholded-temp.txt"
-            pdf_file_name: str = self.output_dir + set_name + \
-                "-grammar-agreement-thresholded.pdf"
+            pdf_file_name: str = set_name + "-grammar-agreement-thresholded.pdf"
             df: pd.DataFrame = self._prepare_r_data_frame(df)
-            df.to_csv(temp_file_name, sep="\t", index=False)
+            self._execute_plotting_command(df, pdf_file_name,
+                                           self.evaluator_name)
+
+    def _execute_plotting_command(
+            self, df: pd.DataFrame, pdf_file_name: str,
+            title: str, caption: Optional[str] = None) -> None:
+        plot_script: str = pkg_resources.resource_filename(
+            "seqgra", "evaluator/plotagreement.R")
+
+        temp_file_name = self.output_dir + "temp.txt"
+        pdf_file_name = self.output_dir + pdf_file_name
+        df.to_csv(temp_file_name, sep="\t", index=False)
+        if caption is None:
             cmd = ["Rscript", "--no-save", "--no-restore", "--quiet",
-                   plot_script, temp_file_name, pdf_file_name,
-                   self.evaluator_name]
-            try:
-                subprocess.call(cmd, universal_newlines=True)
-            except subprocess.CalledProcessError as exception:
-                self.logger.warning("failed to create grammar-model-agreement "
-                                    "plots: %s", exception.output)
-            except FileNotFoundError as exception:
-                self.logger.warning("Rscript not on PATH, skipping "
-                                    "grammar-model-agreement plots")
-            os.remove(temp_file_name)
+                   plot_script, temp_file_name, pdf_file_name, title]
+        else:
+            cmd = ["Rscript", "--no-save", "--no-restore", "--quiet",
+                   plot_script, temp_file_name, pdf_file_name, title,
+                   caption]
+
+        try:
+            subprocess.call(cmd, universal_newlines=True)
+        except subprocess.CalledProcessError as exception:
+            self.logger.warning("failed to create grammar-model-agreement "
+                                "plots: %s", exception.output)
+        except FileNotFoundError as exception:
+            self.logger.warning("Rscript not on PATH, skipping "
+                                "grammar-model-agreement plots")
+        os.remove(temp_file_name)

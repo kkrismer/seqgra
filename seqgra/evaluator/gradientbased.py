@@ -6,15 +6,11 @@ MIT - CSAIL - Gifford Lab - seqgra
 
 @author: Jennifer Hammelman
 """
-import logging
 import math
-import os
-import subprocess
-from typing import Any, List
+from typing import Any, List, Optional
 
 import numpy as np
 import pandas as pd
-import pkg_resources
 import torch
 
 import seqgra.constants as c
@@ -33,20 +29,19 @@ from seqgra.evaluator.explainer.ebp import ContrastiveExcitationBackpropExplaine
 
 class GradientBasedEvaluator(FeatureImportanceEvaluator):
     def __init__(self, evaluator_id: str, evaluator_name: str,
-                 learner: Learner, output_dir: str) -> None:
+                 learner: Learner, output_dir: str,
+                 importance_threshold: Optional[float] = None) -> None:
         super().__init__(evaluator_id, evaluator_name, learner, output_dir,
                          supported_libraries=[c.LibraryType.TORCH])
+
         self.explainer = None
-        self.relevance_threshold = 0.1
+        if importance_threshold:
+            self.importance_threshold = importance_threshold
+        else:
+            self.importance_threshold = 0.01
 
     def _evaluate_model(self, x: List[str], y: List[str],
                         annotations: List[str]) -> Any:
-        # GPU or CPU?
-        if self.learner.use_cuda:
-            self.logger.info("using GPU")
-        else:
-            self.logger.info("using CPU")
-
         # encode
         encoded_x = self.learner.encode_x(x)
         encoded_y = self.learner.encode_y(y)
@@ -225,33 +220,37 @@ class GradientBasedEvaluator(FeatureImportanceEvaluator):
 
     def _visualize_grammar_agreement(self, results,
                                      set_name: str = "test") -> None:
-        super()._visualize_grammar_agreement(results, set_name)
+        self._visualize_thresholded_grammar_agreement(results, set_name)
+        self._visualize_unthresholded_grammar_agreement(results, set_name)
 
-        df: pd.DataFrame = self._convert_to_unthresholded_data_frame(results)
+    def _visualize_thresholded_grammar_agreement(
+            self, results, set_name: str = "test") -> None:
+        df: pd.DataFrame = self._convert_to_data_frame(results)
         if len(df.index) > 0:
             df.to_csv(self.output_dir + set_name +
-                      "-grammar-agreement-df.txt",
+                      "-grammar-agreement-thresholded-df.txt",
                       sep="\t", index=False)
 
-            plot_script: str = pkg_resources.resource_filename(
-                "seqgra", "evaluator/plotagreement.R")
-            temp_file_name: str = self.output_dir + set_name + "-temp.txt"
-            pdf_file_name: str = self.output_dir + set_name + \
-                "-grammar-agreement.pdf"
+            pdf_file_name: str = set_name + "-grammar-agreement-thresholded.pdf"
+            df: pd.DataFrame = self._prepare_r_data_frame(df)
+            caption: str = "feature importance threshold: " + \
+                str(self.importance_threshold) + \
+                ":NL:(positions above this threshold are considered grammar positions)"
+            self._execute_plotting_command(df, pdf_file_name,
+                                           self.evaluator_name, caption)
+
+    def _visualize_unthresholded_grammar_agreement(
+            self, results, set_name: str = "test") -> None:
+        df: pd.DataFrame = self._convert_to_unthresholded_data_frame(results)
+        if len(df.index) > 0:
+            df.to_csv(self.output_dir + set_name + "-grammar-agreement-df.txt",
+                      sep="\t", index=False)
+
+            pdf_file_name: str = set_name + "-grammar-agreement.pdf"
             df: pd.DataFrame = self._prepare_unthresholded_r_data_frame(df)
-            df.to_csv(temp_file_name, sep="\t", index=False)
-            cmd = ["Rscript", "--no-save", "--no-restore", "--quiet",
-                   plot_script, temp_file_name, pdf_file_name,
-                   self.evaluator_name]
-            try:
-                subprocess.call(cmd, universal_newlines=True)
-            except subprocess.CalledProcessError as exception:
-                self.logger.warning("failed to create grammar-model-agreement "
-                                    "plots: %s", exception.output)
-            except FileNotFoundError as exception:
-                self.logger.warning("Rscript not on PATH, skipping "
-                                    "grammar-model-agreement plots")
-            os.remove(temp_file_name)
+            caption: str = "luminosity encodes feature importance: from light (low feature importance) to dark (high feature importance):NL:hue encodes annotation: green (grammar position), red (background position)"
+            self._execute_plotting_command(df, pdf_file_name,
+                                           self.evaluator_name, caption)
 
     def _prepare_unthresholded_r_data_frame(self,
                                             df: pd.DataFrame) -> pd.DataFrame:
@@ -298,12 +297,12 @@ class GradientBasedEvaluator(FeatureImportanceEvaluator):
     def __get_agreement_group(self, annotation_position: str,
                               importance_vector) -> str:
         if annotation_position == c.PositionType.GRAMMAR:
-            if np.max(importance_vector) < self.relevance_threshold:
+            if np.max(importance_vector) < self.importance_threshold:
                 return "FN"
             else:
                 return "TP"
         else:
-            if np.max(importance_vector) < self.relevance_threshold:
+            if np.max(importance_vector) < self.importance_threshold:
                 return "TN"
             else:
                 return "FP"
@@ -434,47 +433,54 @@ class GradientBasedEvaluator(FeatureImportanceEvaluator):
 
 
 class GradientEvaluator(GradientBasedEvaluator):
-    def __init__(self, learner: Learner, output_dir: str) -> None:
+    def __init__(self, learner: Learner, output_dir: str,
+                 importance_threshold: Optional[float] = None) -> None:
         super().__init__(c.EvaluatorID.GRADIENT, "Vanilla gradient saliency",
-                         learner, output_dir)
+                         learner, output_dir, importance_threshold)
         self.explainer = VanillaGradExplainer(learner)
 
 
 class GradientxInputEvaluator(GradientBasedEvaluator):
-    def __init__(self, learner: Learner, output_dir: str) -> None:
+    def __init__(self, learner: Learner, output_dir: str,
+                 importance_threshold: Optional[float] = None) -> None:
         super().__init__(c.EvaluatorID.GRADIENT_X_INPUT, "Gradient x input",
-                         learner, output_dir)
+                         learner, output_dir, importance_threshold)
         self.explainer = GradxInputExplainer(learner)
 
 
 class SaliencyEvaluator(GradientBasedEvaluator):
-    def __init__(self, learner: Learner, output_dir: str) -> None:
+    def __init__(self, learner: Learner, output_dir: str,
+                 importance_threshold: Optional[float] = None) -> None:
         super().__init__(c.EvaluatorID.SALIENCY, "Saliency", learner,
-                         output_dir)
+                         output_dir, importance_threshold)
         self.explainer = SaliencyExplainer(learner)
 
 
 class IntegratedGradientEvaluator(GradientBasedEvaluator):
-    def __init__(self, learner: Learner, output_dir: str) -> None:
+    def __init__(self, learner: Learner, output_dir: str,
+                 importance_threshold: Optional[float] = None) -> None:
         super().__init__(c.EvaluatorID.INTEGRATED_GRADIENTS,
-                         "Integrated Gradients", learner, output_dir)
+                         "Integrated Gradients", learner, output_dir,
+                         importance_threshold)
         self.explainer = IntegrateGradExplainer(learner)
 
 
 class NonlinearIntegratedGradientEvaluator(GradientBasedEvaluator):
-    def __init__(self, learner: Learner, output_dir: str) -> None:
+    def __init__(self, learner: Learner, output_dir: str,
+                 importance_threshold: Optional[float] = None) -> None:
         # TODO NonlinearIntegratedGradExplainer
         # requires other data and how to handle reference (default is None)
         super().__init__(c.EvaluatorID.NONLINEAR_INTEGRATED_GRADIENTS,
                          "Nonlinear Integrated Gradients", learner,
-                         output_dir)
+                         output_dir, importance_threshold)
         # self.explainer = NonlinearIntegrateGradExplainer(learner)
 
 
 class GradCamGradientEvaluator(GradientBasedEvaluator):
-    def __init__(self, learner: Learner, output_dir: str) -> None:
+    def __init__(self, learner: Learner, output_dir: str,
+                 importance_threshold: Optional[float] = None) -> None:
         super().__init__(c.EvaluatorID.GRAD_CAM, "Grad-CAM", learner,
-                         output_dir)
+                         output_dir, importance_threshold)
         self.explainer = GradCAMExplainer(learner)
 
     def _explainer_transform(self, data, result):
@@ -485,22 +491,26 @@ class GradCamGradientEvaluator(GradientBasedEvaluator):
 
 class DeepLiftEvaluator(GradientBasedEvaluator):
     # TODO where to set reference?
-    def __init__(self, learner: Learner, output_dir: str) -> None:
+    def __init__(self, learner: Learner, output_dir: str,
+                 importance_threshold: Optional[float] = None) -> None:
         super().__init__(c.EvaluatorID.DEEP_LIFT, "DeepLIFT", learner,
-                         output_dir)
+                         output_dir, importance_threshold)
         self.explainer = DeepLIFTRescaleExplainer(learner, "shuffled")
 
 
 class ExcitationBackpropEvaluator(GradientBasedEvaluator):
-    def __init__(self, learner: Learner, output_dir: str) -> None:
+    def __init__(self, learner: Learner, output_dir: str,
+                 importance_threshold: Optional[float] = None) -> None:
         super().__init__(c.EvaluatorID.EXCITATION_BACKPROP,
-                         "Excitation Backprop", learner, output_dir)
+                         "Excitation Backprop", learner, output_dir,
+                         importance_threshold)
         self.explainer = ExcitationBackpropExplainer(learner)
 
 
 class ContrastiveExcitationBackpropEvaluator(GradientBasedEvaluator):
-    def __init__(self, learner: Learner, output_dir: str) -> None:
+    def __init__(self, learner: Learner, output_dir: str,
+                 importance_threshold: Optional[float] = None) -> None:
         super().__init__(c.EvaluatorID.CONTRASTIVE_EXCITATION_BACKPROP,
                          "Contrastive Excitation Backprop", learner,
-                         output_dir)
+                         output_dir, importance_threshold)
         self.explainer = ContrastiveExcitationBackpropExplainer(learner)

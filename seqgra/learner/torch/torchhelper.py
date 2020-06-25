@@ -366,9 +366,7 @@ class TorchHelper:
                 learner.definition.training_process_hyperparameters["batch_size"]),
             shuffle=False)
 
-        # GPU or CPU?
         learner.model = learner.model.to(learner.device)
-        logger.info("using device: %s", learner.device_label)
 
         y_hat = []
         learner.model.eval()
@@ -404,9 +402,7 @@ class TorchHelper:
                 learner.definition.training_process_hyperparameters["batch_size"]),
             shuffle=False)
 
-        # GPU or CPU?
         learner.model = learner.model.to(learner.device)
-        logger.info("using device: %s", learner.device_label)
 
         running_loss: float = 0.0
         running_correct: int = 0
