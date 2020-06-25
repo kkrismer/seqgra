@@ -14,6 +14,12 @@ if (!dir.exists(user_site_path)) {
   .libPaths(c(.libPaths(), user_site_path))
 }
 
+if (!("ggplot2" %in% rownames(installed.packages())) ||
+    !("scales" %in% rownames(installed.packages()))) {
+  stop(paste0("R packages ggplot2 and/or scales are missing (lib paths: ",
+    paste(.libPaths(), collapse = "; "), ")"))
+}
+
 library(ggplot2)
 library(scales)
 
@@ -24,6 +30,10 @@ plot_agreement <- function(input_file_name, output_file_name, title = NULL) {
   # and n is the number of examples per label
   # if df contains value column, switch to non-thresholded mode
   example <- position <- label <- group <- NULL
+
+  if (!is.null(title) && title == "" {
+    title <- NULL
+  }
   
   df <- read.table(input_file_name, header = TRUE, sep = "\t",
                    stringsAsFactors = FALSE)
