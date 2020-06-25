@@ -6,7 +6,7 @@ library(methods)
 # C:/Users/[User] instead of C:/Users/[User]\Documents
 user_site_path <- Sys.getenv("R_LIBS_USER")
 if (!dir.exists(user_site_path)) {
-  warning(paste0("R_LIBS_USER environment variable set incorrectly"))
+  warning(paste0("R_LIBS_USER environment variable set incorrectly: ", user_site_path))
   user_site_path <- gsub("//", "/", gsub("\\", "/", user_site_path, fixed = TRUE), fixed = TRUE)
   home_path <- gsub("//", "/", gsub("\\", "/", Sys.getenv("HOME"), fixed = TRUE), fixed = TRUE)
   user_site_path <- gsub(home_path, "", user_site_path)
