@@ -4,14 +4,16 @@ library(methods)
 
 # hack apparently necessary on Windows if Sys.getenv("HOME") returns
 # C:/Users/[User] instead of C:/Users/[User]\Documents
-user_site_path <- Sys.getenv("R_LIBS_USER")
-if (!dir.exists(user_site_path)) {
-  warning(paste0("R_LIBS_USER environment variable set incorrectly: ", user_site_path))
-  user_site_path <- gsub("//", "/", gsub("\\", "/", user_site_path, fixed = TRUE), fixed = TRUE)
-  home_path <- gsub("//", "/", gsub("\\", "/", Sys.getenv("HOME"), fixed = TRUE), fixed = TRUE)
-  user_site_path <- gsub(home_path, "", user_site_path)
-  user_site_path <- gsub("//", "/", paste0(home_path, "/Documents/", user_site_path), fixed = TRUE)
-  .libPaths(c(.libPaths(), user_site_path))
+if (.Platform$OS.type == "windows") {
+  user_site_path <- Sys.getenv("R_LIBS_USER")
+  if (!dir.exists(user_site_path)) {
+    warning(paste0("attempting to fix incorrectly set R_LIBS_USER environment variable: ", user_site_path))
+    user_site_path <- gsub("//", "/", gsub("\\", "/", user_site_path, fixed = TRUE), fixed = TRUE)
+    home_path <- gsub("//", "/", gsub("\\", "/", Sys.getenv("HOME"), fixed = TRUE), fixed = TRUE)
+    user_site_path <- gsub(home_path, "", user_site_path)
+    user_site_path <- gsub("//", "/", paste0(home_path, "/Documents/", user_site_path), fixed = TRUE)
+    .libPaths(c(.libPaths(), user_site_path))
+  }
 }
 
 if (!("ggplot2" %in% rownames(installed.packages())) ||
@@ -31,7 +33,7 @@ plot_agreement <- function(input_file_name, output_file_name, title = NULL) {
   # if df contains value column, switch to non-thresholded mode
   example <- position <- label <- group <- NULL
 
-  if (!is.null(title) && title == "" {
+  if (!is.null(title) && title == "") {
     title <- NULL
   }
   

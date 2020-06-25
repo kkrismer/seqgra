@@ -241,7 +241,7 @@ class GradientBasedEvaluator(FeatureImportanceEvaluator):
             df: pd.DataFrame = self._prepare_unthresholded_r_data_frame(df)
             df.to_csv(temp_file_name, sep="\t", index=False)
             cmd = ["Rscript", "--no-save", "--no-restore", "--quiet",
-                   plot_script, temp_file_name, pdf_file_name, 
+                   plot_script, temp_file_name, pdf_file_name,
                    self.evaluator_name]
             try:
                 subprocess.call(cmd, universal_newlines=True)
