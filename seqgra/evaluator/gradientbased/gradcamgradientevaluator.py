@@ -1,22 +1,33 @@
+"""GradCAM Evaluator
+"""
+from typing import Optional
+
 import torch
 
-from seqgra.evaluator.explainer.backprop import VanillaGradExplainer
+import seqgra.constants as c
+from seqgra.evaluator.gradientbased import AbstractGradientEvaluator
+from seqgra.learner import Learner
 
 
-def get_layer(model, key_list):
-    a = model
-    for key in key_list:
-        a = a._modules[key]
-    return a
+class GradCamGradientEvaluator(AbstractGradientEvaluator):
+    """GradCAM Evaluator
+    """
 
-class GradCAMExplainer(VanillaGradExplainer):
-    def __init__(self, model, target_layer_name_keys=None, use_inp=False):
-        super(GradCAMExplainer, self).__init__(model)
-        self.target_layer = get_layer(model, target_layer_name_keys)
-        self.use_inp = use_inp
+    def __init__(self, learner: Learner, output_dir: str,
+                 importance_threshold: Optional[float] = None,
+                 target_layer_name_keys=None, use_input: bool = False) -> None:
+        super().__init__(c.EvaluatorID.GRAD_CAM, "Grad-CAM", learner,
+                         output_dir, importance_threshold)
+        self.target_layer = self.get_layer(target_layer_name_keys)
+        self.use_input = use_input
         self.intermediate_act = []
         self.intermediate_grad = []
         self._register_forward_backward_hook()
+
+    def _explainer_transform(self, data, result):
+        return torch.nn.functional.interpolate(result.view(1, 1, -1),
+                                               size=data.shape[2],
+                                               mode="linear").cpu().numpy()
 
     def _register_forward_backward_hook(self):
         def forward_hook_input(m, i, o):
@@ -28,7 +39,7 @@ class GradCAMExplainer(VanillaGradExplainer):
         def backward_hook(m, grad_i, grad_o):
             self.intermediate_grad.append(grad_o[0].data.clone())
 
-        if self.use_inp:
+        if self.use_input:
             self.target_layer.register_forward_hook(forward_hook_input)
         else:
             self.target_layer.register_forward_hook(forward_hook_output)
@@ -39,10 +50,10 @@ class GradCAMExplainer(VanillaGradExplainer):
         self.intermediate_act = []
         self.intermediate_grad = []
 
-    def explain(self, inp, ind=None):
+    def explain(self, x, y):
         self._reset_intermediate_lists()
 
-        _ = super(GradCAMExplainer, self)._backprop(inp, ind)
+        _ = self._backprop(x, y)
 
         grad = self.intermediate_grad[0]
         act = self.intermediate_act[0]
@@ -53,6 +64,4 @@ class GradCAMExplainer(VanillaGradExplainer):
 
         cam = torch.clamp(cam, min=0)
 
-        
         return cam
-

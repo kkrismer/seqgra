@@ -3,10 +3,10 @@ from torch.nn.modules.utils import _pair
 import torch
 import torch.nn.functional as F
 
-class EBLinear(Function):
 
+class EBLinear(Function):
     @staticmethod
-    def forward(ctx, inp, weight, bias=None):        
+    def forward(ctx, inp, weight, bias=None):
         ctx.save_for_backward(inp, weight, bias)
         output = inp.matmul(weight.t())
         if bias is not None:
@@ -31,16 +31,16 @@ class EBLinear(Function):
 
 def _output_size(inp, weight, pad, dilation, stride):
 
-    #if any are 1 dim
+    # if any are 1 dim
     if len(pad) == 1:
         pad = [pad[0] for _ in inp.dim()-2]
-    if len(dilation)==1:
+    if len(dilation) == 1:
         dilation = [dilation[0] for _ in inp.dim()-2]
-    if len(stride)==1:
+    if len(stride) == 1:
         stride = [stride[0] for _ in inp.dim()-2]
 
     channels = weight.size(0)
-    
+
     output_size = (inp.size(0), channels)
     for d in range(inp.dim() - 2):
         in_size = inp.size(d + 2)
@@ -64,8 +64,7 @@ class EBConv2d(Function):
         ctx.dilation = _pair(dilation)
         ctx.groups = groups
 
-
-        output = F.conv2d(inp,weight,bias,
+        output = F.conv2d(inp, weight, bias,
                           ctx.stride,
                           ctx.padding,
                           ctx.dilation,
@@ -81,21 +80,22 @@ class EBConv2d(Function):
         kH, kW = weight.size(2), weight.size(3)
 
         wplus = weight.clone().clamp(min=0)
-        biasplus=bias.clamp(min=0)
+        biasplus = bias.clamp(min=0)
 
-        new_output = F.conv2d(inp,wplus,biasplus,
-                          ctx.stride,
-                          ctx.padding,
-                          ctx.dilation,
-                          ctx.groups)
+        new_output = F.conv2d(inp, wplus, biasplus,
+                              ctx.stride,
+                              ctx.padding,
+                              ctx.dilation,
+                              ctx.groups)
 
         normalized_grad_output = grad_output.data / (new_output + 1e-10)
-        normalized_grad_output = normalized_grad_output * (new_output > 0).float()
+        normalized_grad_output = normalized_grad_output * \
+            (new_output > 0).float()
 
         grad_inp = torch.nn.grad.conv2d_input(inp.size(),
                                               wplus,
                                               normalized_grad_output,
-                                              ctx.stride, ctx.padding, ctx.dilation,ctx.groups)
+                                              ctx.stride, ctx.padding, ctx.dilation, ctx.groups)
 
         grad_inp = grad_inp * inp
 
@@ -116,16 +116,14 @@ class EBAvgPool2d(Function):
         #backend = type2backend[type(inp)]
         #output = inp.new()
         ctx.save_for_backward(inp, output)
-        output =  ctx._update_output(input)
-        #backend.SpatialAveragePooling_updateOutput(
+        output = ctx._update_output(input)
+        # backend.SpatialAveragePooling_updateOutput(
         #    backend.library_state,
         #    inp, output,
         #    ctx.kernel_size[1], ctx.kernel_size[0],
         #    ctx.stride[1], ctx.stride[0],
         #    ctx.padding[1], ctx.padding[0],
         #    ctx.ceil_mode, ctx.count_include_pad)
-
-
 
         return output
 
@@ -138,8 +136,8 @@ class EBAvgPool2d(Function):
         normalized_grad_output = normalized_grad_output * (output > 0).float()
 
         #grad_inp = inp.new()
-        grad_inp = (ctx._grad_input(input,normalized_grad_output))
-        #backend.SpatialAveragePooling_updateGradInput(
+        grad_inp = (ctx._grad_input(input, normalized_grad_output))
+        # backend.SpatialAveragePooling_updateGradInput(
         #    backend.library_state,
         #    inp, normalized_grad_output, grad_inp,
         #    ctx.kernel_size[1], ctx.kernel_size[0],

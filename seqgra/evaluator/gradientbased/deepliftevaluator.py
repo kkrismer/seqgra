@@ -1,24 +1,39 @@
+"""DeepLIFT Evaluator
+"""
 import types
+from typing import Optional
 
 import torch
-import torch.nn.functional as F
 from torch.autograd import Variable
+import torch.nn.functional as F
 
-from seqgra.evaluator.explainer.backprop import GradxInputExplainer
+import seqgra.constants as c
+from seqgra.evaluator.gradientbased import AbstractGradientEvaluator
 from seqgra.learner import Learner
 
-# Based on formulation in DeepExplain, https://arxiv.org/abs/1711.06104
-# https://github.com/marcoancona/DeepExplain/blob/master/deepexplain/tensorflow/methods.py#L221-L272
 
+class DeepLiftEvaluator(AbstractGradientEvaluator):
+    """DeepLIFT evaluator for PyTorch models
+    """
+    # TODO where to set reference?
 
-class DeepLIFTRescaleExplainer(GradxInputExplainer):
-    def __init__(self, learner: Learner, baseline_type="zeros"):
-        super().__init__(learner)
+    def __init__(self, learner: Learner, output_dir: str,
+                 importance_threshold: Optional[float] = None,
+                 baseline_type: str = "shuffled") -> None:
+        super().__init__(c.EvaluatorID.DEEP_LIFT, "DeepLIFT", learner,
+                         output_dir, importance_threshold)
         self._prepare_reference()
         assert(baseline_type in ["neutral", "zeros", "shuffled"])
         self.baseline_inp = None
         self.baseline_type = baseline_type
         self._override_backward()
+
+    def explain(self, x, y):
+        self._reset_preference()
+        self._baseline_forward(x)
+
+        grad = self._backprop(x, y)
+        return x.data * grad
 
     def _prepare_reference(self):
         def init_refs(m):
@@ -85,10 +100,3 @@ class DeepLIFTRescaleExplainer(GradxInputExplainer):
                 m.backward = types.MethodType(new_backward, m)
 
         self.learner.model.apply(backward_replace)
-
-    def explain(self, inp, ind=None):
-        self._reset_preference()
-        self._baseline_forward(inp)
-        g = super().explain(inp, ind)
-
-        return g

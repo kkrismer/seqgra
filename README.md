@@ -96,10 +96,12 @@ optional arguments:
                         evaluator ID or IDs: IDs of conventional evaluators 
                         include metrics, pr, predict, roc; IDs of feature 
                         importance evaluators include 
-                        contrastive-excitation-backprop, deep-lift, 
-                        excitation-backprop, grad-cam, gradient, 
-                        gradient-x-input, integrated-gradients,      
-                        nonlinear-integrated-gradients, saliency, sis
+                        contrastive-excitation-backprop, deconv, deep-lift, 
+                        excitation-backprop, feedback, grad-cam, gradient, 
+                        gradient-x-input, guided-backprop, 
+                        integrated-gradients, 
+                        nonlinear-integrated-gradients, saliency, sis, 
+                        smooth-grad
   -o OUTPUTDIR, --outputdir OUTPUTDIR
                         output directory, subdirectories are created for 
                         generated data, trained model, and model evaluation

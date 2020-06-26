@@ -232,6 +232,22 @@ def get_evaluator(evaluator_id: str, learner: Learner,
         from seqgra.evaluator.gradientbased import SaliencyEvaluator  # pylint: disable=import-outside-toplevel
         return SaliencyEvaluator(
             learner, output_dir, eval_grad_importance_threshold)
+    elif evaluator_id == c.EvaluatorID.FEEDBACK:
+        from seqgra.evaluator.gradientbased import FeedbackEvaluator  # pylint: disable=import-outside-toplevel
+        return FeedbackEvaluator(
+            learner, output_dir, eval_grad_importance_threshold)
+    elif evaluator_id == c.EvaluatorID.GUIDED_BACKPROP:
+        from seqgra.evaluator.gradientbased import GuidedBackpropEvaluator  # pylint: disable=import-outside-toplevel
+        return GuidedBackpropEvaluator(
+            learner, output_dir, eval_grad_importance_threshold)
+    elif evaluator_id == c.EvaluatorID.DECONV:
+        from seqgra.evaluator.gradientbased import DeconvEvaluator  # pylint: disable=import-outside-toplevel
+        return DeconvEvaluator(
+            learner, output_dir, eval_grad_importance_threshold)
+    elif evaluator_id == c.EvaluatorID.SMOOTH_GRAD:
+        from seqgra.evaluator.gradientbased import SmoothGradEvaluator  # pylint: disable=import-outside-toplevel
+        return SmoothGradEvaluator(
+            learner, output_dir, eval_grad_importance_threshold)
     elif evaluator_id == c.EvaluatorID.INTEGRATED_GRADIENTS:
         from seqgra.evaluator.gradientbased import IntegratedGradientEvaluator  # pylint: disable=import-outside-toplevel
         return IntegratedGradientEvaluator(
