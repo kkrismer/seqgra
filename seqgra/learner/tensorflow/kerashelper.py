@@ -18,6 +18,7 @@ import pkg_resources
 import tensorflow as tf
 
 from seqgra.learner import Learner
+from seqgra.learner.tensorflow import LastEpochCallback
 from seqgra.model.model import Architecture
 
 
@@ -168,10 +169,15 @@ class KerasHelper:
                                                            patience=2,
                                                            min_delta=0)
 
+            # track last epoch callback
+            last_epoch_callback = LastEpochCallback(learner.output_dir)
+
             if bool(strtobool(learner.definition.training_process_hyperparameters["early_stopping"])):
-                callbacks = [cp_callback, tensorboard_callback, es_callback]
+                callbacks = [cp_callback, tensorboard_callback,
+                             last_epoch_callback, es_callback]
             else:
-                callbacks = [cp_callback, tensorboard_callback]
+                callbacks = [cp_callback, tensorboard_callback,
+                             last_epoch_callback]
 
             # training loop
             learner.model.fit(

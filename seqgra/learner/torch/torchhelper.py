@@ -170,6 +170,11 @@ class TorchHelper:
             logger.info(TorchHelper._format_metrics_output(metrics,
                                                            "validation set"))
 
+        @trainer.on(Events.EPOCH_COMPLETED)
+        def log_last_epoch(trainer):
+            with open(learner.output_dir + "last-epoch-completed.txt", "w") as last_epoch_file: 
+                last_epoch_file.write(str(trainer.state.epoch) + "\t")
+
         # save best model
         def score_fn(engine):
             if "loss" in learner.metrics:
