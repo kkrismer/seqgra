@@ -27,6 +27,10 @@ class SequenceElement(ABC):
     def get_max_length(self) -> int:
         pass
 
+    @abstractmethod
+    def normalize_probabilities(self) -> None:
+        pass
+
     @staticmethod
     def get_by_id(sequence_elements: List[SequenceElement],
                   sid: str) -> SequenceElement:
@@ -41,6 +45,7 @@ class MatrixBasedSequenceElement(SequenceElement):
                  positions: List[List[ProbabilisticToken]]) -> None:
         super().__init__(sid)
         self.positions: List[List[ProbabilisticToken]] = positions
+        self.normalize_probabilities()
 
     def __str__(self):
         str_rep = ["Sequence element (matrix-based):\n",
@@ -50,11 +55,16 @@ class MatrixBasedSequenceElement(SequenceElement):
             str_rep += ["\t\t", str(pos), "\n"]
         return ''.join(str_rep)
 
-    def __generate_letter(self, position: List[ProbabilisticToken]) -> str:
-        letters = [letter.token for letter in position]
+    def normalize_probabilities(self) -> None:
+        self.positions = [self.__normalize_position_probabilities(position)
+                          for position in self.positions]
+
+    def __normalize_position_probabilities(
+            self, position: List[ProbabilisticToken]) -> List[ProbabilisticToken]:
         probabilities = [letter.probability for letter in position]
         probabilities = [p / sum(probabilities) for p in probabilities]
-        return np.random.choice(letters, p=probabilities)
+        return [ProbabilisticToken(position[i].token, probabilities[i])
+                for i in range(len(position))]
 
     def generate(self) -> str:
         return "".join([self.__generate_letter(position)
@@ -63,15 +73,31 @@ class MatrixBasedSequenceElement(SequenceElement):
     def get_max_length(self) -> int:
         return len(self.positions)
 
+    def __generate_letter(self, position: List[ProbabilisticToken]) -> str:
+        letters = [letter.token for letter in position]
+        probabilities = [letter.probability for letter in position]
+        probabilities = [p / sum(probabilities) for p in probabilities]
+        return np.random.choice(letters, p=probabilities)
+
 
 class KmerBasedSequenceElement(SequenceElement):
     def __init__(self, sid: str, kmers: List[ProbabilisticToken]) -> None:
         super().__init__(sid)
         self.kmers: List[ProbabilisticToken] = kmers
+        self._kmers: List[str] = [kmer.token for kmer in self.kmers]
+        self._probabilities: List[float] = [kmer.probability
+                                            for kmer in self.kmers]
+        self.normalize_probabilities()
+
+    def normalize_probabilities(self) -> None:
         self._kmers = [kmer.token for kmer in self.kmers]
-        self._probabilities = [kmer.probability for kmer in self.kmers]
+        self._probabilities = [kmer.probability
+                               for kmer in self.kmers]
         self._probabilities = [p / sum(self._probabilities)
                                for p in self._probabilities]
+        self.kmers = [ProbabilisticToken(self._kmers[i],
+                                         self._probabilities[i])
+                      for i in range(len(self.kmers))]
 
     def __str__(self):
         str_rep = ["Sequence element (k-mer-based):\n",

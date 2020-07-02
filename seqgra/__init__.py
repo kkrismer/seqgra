@@ -5,4 +5,4 @@ from seqgra.misc import Example
 from seqgra.misc import ExampleSet
 from seqgra.misc import MiscHelper
 from seqgra.misc import ProbabilisticToken
-__version__ = '0.0.1'
+__version__ = "0.0.1"

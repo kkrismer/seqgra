@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
-'''
-MIT - CSAIL - Gifford Lab - seqgra
+"""MIT - CSAIL - Gifford Lab - seqgra
 
 seqgra complete pipeline:
 1. generate data based on data definition (once), see run_simulator.py
@@ -9,7 +8,7 @@ seqgra complete pipeline:
 3. evaluate model performance with SIS, see run_sis.py
 
 @author: Konstantin Krismer
-'''
+"""
 
 import argparse
 import logging

@@ -20,10 +20,18 @@ class AlphabetDistribution:
                  condition: Optional[Condition] = None,
                  set_name: Optional[str] = None) -> None:
         self.letters: List[ProbabilisticToken] = letters
-        self._letters = [letter.token for letter in self.letters]
-        self._probabilities = [letter.probability for letter in self.letters]
+        self._letters: List[str] = [letter.token
+                                    for letter in self.letters]
+        self._probabilities: List[float] = [letter.probability
+                                            for letter in self.letters]
         self._probabilities = [p / sum(self._probabilities)
                                for p in self._probabilities]
+
+        # set renormalized probabilities
+        self.letters = [ProbabilisticToken(self._letters[i],
+                                           self._probabilities[i])
+                        for i in range(len(self.letters))]
+
         self.condition: Optional[Condition] = condition
         self.set_name: Optional[str] = set_name
         self.condition_independent: bool = condition is None
