@@ -429,11 +429,11 @@ class TorchHelper:
                     elif output_layer_activation_function == "sigmoid":
                         y_hat = torch.sigmoid(y_hat)
 
+                # binarize y_hat
                 if learner.definition.task == c.TaskType.MULTI_CLASS_CLASSIFICATION:
                     indices = torch.argmax(y_hat, dim=1)
                     correct = torch.eq(indices, y).view(-1)
                 elif learner.definition.task == c.TaskType.MULTI_LABEL_CLASSIFICATION:
-                    # binarize y_hat
                     y_hat = torch.gt(y_hat, 0.5)
                     y = y.type_as(y_hat)
 

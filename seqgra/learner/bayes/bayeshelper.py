@@ -193,8 +193,7 @@ class BayesOptimalHelper:
     @staticmethod
     def evaluate_model(learner: Learner, x: List[str], y: List[str]):
         y_hat = BayesOptimalHelper.predict(learner, x)
-        y_hat = learner.decode_y(np.round(y_hat).astype(bool))
-
+        y_hat = learner.decode_y(y_hat)
         accuracy = [y_i == y_hat_i for y_i, y_hat_i in zip(y, y_hat)]
         accuracy = np.asarray(accuracy).astype(int)
         accuracy = np.sum(accuracy) / len(accuracy)
