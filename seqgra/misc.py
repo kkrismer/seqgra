@@ -76,8 +76,8 @@ class MiscHelper:
     @staticmethod
     def print_progress_bar(iteration: int, total: int, prefix: str = "",
                            suffix: str = "", decimals: int = 1,
-                           length: int = 100, fill: int = "█",
-                           print_end: int = "\r"):
+                           length: int = 100, fill: str = "█",
+                           print_end: str = "\r"):
         """Call in a loop to create terminal progress bar
 
         Arguments:
@@ -92,12 +92,18 @@ class MiscHelper:
             print_end (str, optional): end character (e.g. "\r", "\r\n"),
                 defaults to "\r"
         """
-        percent = ("{0:." + str(decimals) +
-                   "f}").format(100 * (iteration / float(total)))
-        filled_length = int(length * iteration // total)
-        progress_bar = fill * filled_length + "-" * (length - filled_length)
-        print("\r%s |%s| %s%% %s" %
-              (prefix, progress_bar, percent, suffix), end=print_end)
+        if not hasattr(MiscHelper.print_progress_bar, "previous_bar"):
+            MiscHelper.print_progress_bar.previous_bar: str = ""
+
+        percent: str = ("{0:." + str(decimals) +
+                        "f}").format(100 * (iteration / float(total)))
+        filled_length: int = int(length * iteration // total)
+        progress_bar: str = fill * filled_length + \
+            "-" * (length - filled_length)
+        if MiscHelper.print_progress_bar.previous_bar != progress_bar:
+            print("\r%s |%s| %s%% %s" %
+                  (prefix, progress_bar, percent, suffix), end=print_end)
+            MiscHelper.print_progress_bar.previous_bar = progress_bar
 
         if iteration == total:
             print()
