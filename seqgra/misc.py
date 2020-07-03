@@ -94,16 +94,20 @@ class MiscHelper:
         """
         if not hasattr(MiscHelper.print_progress_bar, "previous_bar"):
             MiscHelper.print_progress_bar.previous_bar: str = ""
+        if not hasattr(MiscHelper.print_progress_bar, "previous_percent"):
+            MiscHelper.print_progress_bar.previous_percent: str = ""
 
         percent: str = ("{0:." + str(decimals) +
                         "f}").format(100 * (iteration / float(total)))
         filled_length: int = int(length * iteration // total)
         progress_bar: str = fill * filled_length + \
             "-" * (length - filled_length)
-        if MiscHelper.print_progress_bar.previous_bar != progress_bar:
+        if MiscHelper.print_progress_bar.previous_bar != progress_bar or \
+            MiscHelper.print_progress_bar.previous_percent != percent:
             print("\r%s |%s| %s%% %s" %
                   (prefix, progress_bar, percent, suffix), end=print_end)
             MiscHelper.print_progress_bar.previous_bar = progress_bar
+            MiscHelper.print_progress_bar.previous_percent = percent
 
         if iteration == total:
             print()
