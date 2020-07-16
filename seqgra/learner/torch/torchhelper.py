@@ -220,7 +220,7 @@ class TorchHelper:
     def get_best_model_file_name(best_model_dir: str) -> str:
         model_files = [model_file
                        for model_file in os.listdir(best_model_dir)
-                       if model_file.endswith(".pth")]
+                       if model_file.endswith(".pth") or model_file.endswith(".pt")]
         if len(model_files) == 1:
             return model_files[0]
         else:
