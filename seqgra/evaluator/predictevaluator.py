@@ -21,13 +21,21 @@ class PredictEvaluator(Evaluator):
 
     def _evaluate_model(self, x: List[str], y: List[str],
                         annotations: List[str]) -> Any:
-        return self.learner.predict(x)
+        encoded_y = self.learner.encode_y(y)
+        y_hat = self.learner.predict(x)
+
+        return (encoded_y, y_hat)
 
     def _save_results(self, results, set_name: str = "test",
                       suppress_plots: bool = False) -> None:
-        if results is None:
-            results = []
-
-        df = pd.DataFrame(results, columns=self.learner.definition.labels)
-        df.to_csv(self.output_dir + set_name + "-y-hat.txt", sep="\t",
-                  index=False)
+        if results is not None:
+            y_df = pd.DataFrame(
+                results[0], columns=["y_" + s
+                                     for s in self.learner.definition.labels])
+            y_hat_df = pd.DataFrame(
+                results[1],
+                columns=["y_hat_" + s
+                         for s in self.learner.definition.labels])
+            df = pd.concat([y_df, y_hat_df], axis=1)
+            df.to_csv(self.output_dir + set_name + "-y-hat.txt", sep="\t",
+                      index=False)

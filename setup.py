@@ -40,6 +40,7 @@ setuptools.setup(
     ],
     python_requires=">=3",
     entry_points={
-        "console_scripts": ["seqgra=seqgra.seqgra:main"]
+        "console_scripts": ["seqgra=seqgra.seqgra:main",
+                            "metaseqgra=seqgra.metaseqgra:main"]
     }
 )

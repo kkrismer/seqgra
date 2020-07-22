@@ -47,27 +47,29 @@ class ProbabilisticToken(NamedTuple):
 
 class MiscHelper:
     @staticmethod
-    def prepare_path(path: str, allow_exists: bool = True) -> str:
+    def prepare_path(path: str, allow_exists: bool = True,
+                     allow_non_empty: bool = False) -> str:
         path = path.replace("\\", "/").replace("//", "/").strip()
         if not path.endswith("/"):
             path += "/"
 
         if os.path.exists(path):
-            if not os.path.isdir(path):
-                raise Exception("directory cannot be created "
-                                "(file with same name exists)")
-            elif len(os.listdir(path)) > 0:
-                num_files: int = len([name
-                                      for name in os.listdir(path)
-                                      if os.path.isfile(path + name)])
-                if num_files > 0:
-                    if not allow_exists:
-                        raise Exception("directory cannot be created "
-                                        "(non-empty folder with same "
-                                        "name exists)")
-                else:
-                    shutil.rmtree(path)
-                    os.makedirs(path)
+            if not allow_non_empty:
+                if not os.path.isdir(path):
+                    raise Exception("directory cannot be created "
+                                    "(file with same name exists)")
+                elif len(os.listdir(path)) > 0:
+                    num_files: int = len([name
+                                        for name in os.listdir(path)
+                                        if os.path.isfile(path + name)])
+                    if num_files > 0:
+                        if not allow_exists:
+                            raise Exception("directory cannot be created "
+                                            "(non-empty folder with same "
+                                            "name exists)")
+                    else:
+                        shutil.rmtree(path)
+                        os.makedirs(path)
         else:
             os.makedirs(path)
 
@@ -97,13 +99,15 @@ class MiscHelper:
         if not hasattr(MiscHelper.print_progress_bar, "previous_percent"):
             MiscHelper.print_progress_bar.previous_percent: str = ""
 
+        if total < 1:
+            total = 1
         percent: str = ("{0:." + str(decimals) +
                         "f}").format(100 * (iteration / float(total)))
         filled_length: int = int(length * iteration // total)
         progress_bar: str = fill * filled_length + \
             "-" * (length - filled_length)
         if MiscHelper.print_progress_bar.previous_bar != progress_bar or \
-            MiscHelper.print_progress_bar.previous_percent != percent:
+                MiscHelper.print_progress_bar.previous_percent != percent:
             print("\r%s |%s| %s%% %s" %
                   (prefix, progress_bar, percent, suffix), end=print_end)
             MiscHelper.print_progress_bar.previous_bar = progress_bar
