@@ -8,4 +8,4 @@ class LastEpochCallback(tf.keras.callbacks.Callback):
 
     def on_epoch_end(self, epoch, logs=None):
         with open(self.output_dir + "last-epoch-completed.txt", "w") as last_epoch_file:
-            last_epoch_file.write(str(epoch + 1) + "\t")
+            last_epoch_file.write(str(epoch + 1) + "\n")
