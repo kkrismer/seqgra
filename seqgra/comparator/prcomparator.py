@@ -83,8 +83,10 @@ class PRComparator(Comparator):
         if not self.model_labels or len(self.model_labels) != len(valid_labels):
             self.model_labels = valid_labels
 
-        self.create_precision_recall_curve(precision, recall, pr_auc, self.model_labels,
-                                           self.output_dir + "pr-curve.pdf")
+        self.create_precision_recall_curve(precision, recall, pr_auc,
+                                           self.model_labels,
+                                           self.output_dir + set_names[0] +
+                                           "-pr-curve.pdf")
 
     def create_single_precision_recall_curve(self, y_true, y_hat) -> None:
         """Create precision-recall curve.

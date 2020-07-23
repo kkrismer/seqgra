@@ -82,7 +82,8 @@ class ROCComparator(Comparator):
             self.model_labels = valid_labels
 
         self.create_roc_curve(fpr, tpr, roc_auc, self.model_labels,
-                              self.output_dir + "roc-curve.pdf")
+                              self.output_dir + set_names[0] +
+                              "-roc-curve.pdf")
 
     def create_single_roc_curve(self, y_true, y_hat) -> None:
         """Create ROC curve.
