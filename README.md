@@ -59,7 +59,8 @@ models are used.
 
 ```
 seqgra -h
-usage: seqgra [-h] 
+usage: seqgra [-h]
+              [-v]
               (-d DATACONFIGFILE | -f DATAFOLDER)
               [-m MODELCONFIGFILE]
               [-e EVALUATORS [EVALUATORS ...]]
@@ -81,6 +82,7 @@ evaluate model
 
 optional arguments:
   -h, --help            show this help message and exit
+  -v, --version         show program's version number and exit
   -d DATACONFIGFILE, --dataconfigfile DATACONFIGFILE
                         path to the segra XML data configuration file. Use 
                         this option to generate synthetic data based on a 

@@ -31,6 +31,7 @@ class ROCComparator(Comparator):
         fpr: List[List[float]] = list()
         tpr: List[List[float]] = list()
         roc_auc: List[float] = list()
+        valid_labels: List[str] = list()
         if len(grammar_ids) == 1 and len(set_names) == 1:
             for model_id in model_ids:
                 predict_file_name: str = self.evaluation_dir + \
@@ -48,15 +49,40 @@ class ROCComparator(Comparator):
                     fpr.append(current_fpr)
                     tpr.append(current_tpr)
                     roc_auc.append(current_auc)
+                    valid_labels.append(model_id)
                 else:
                     self.logger.warning("file does not exist: %s",
                                         predict_file_name)
+        elif len(model_ids) == 1 and len(set_names) == 1:
+            for grammar_id in grammar_ids:
+                predict_file_name: str = self.evaluation_dir + \
+                    grammar_id + "/" + \
+                    model_ids[0] + "/" + c.EvaluatorID.PREDICT + \
+                    "/test-y-hat.txt"
+                if os.path.isfile(predict_file_name):
+                    df = pd.read_csv(predict_file_name, sep="\t")
+                    num_labels: int = int(len(df.columns) / 2)
+                    y_df = df.iloc[:, 0:num_labels]
+                    y_hat_df = df.iloc[:, num_labels:len(df.columns)]
 
-            if not self.model_labels or len(self.model_labels) != len(model_ids):
-                self.model_labels = model_ids
+                    current_fpr, current_tpr, current_auc = self.create_single_roc_curve(
+                        y_df.values, y_hat_df.values)
+                    fpr.append(current_fpr)
+                    tpr.append(current_tpr)
+                    roc_auc.append(current_auc)
+                    valid_labels.append(grammar_id)
+                else:
+                    self.logger.warning("file does not exist: %s",
+                                        predict_file_name)
+        else:
+            # TODO
+            pass
 
-            self.create_roc_curve(fpr, tpr, roc_auc, self.model_labels,
-                                  self.output_dir + "roc-curve.pdf")
+        if not self.model_labels or len(self.model_labels) != len(valid_labels):
+            self.model_labels = valid_labels
+
+        self.create_roc_curve(fpr, tpr, roc_auc, self.model_labels,
+                              self.output_dir + "roc-curve.pdf")
 
     def create_single_roc_curve(self, y_true, y_hat) -> None:
         """Create ROC curve.
