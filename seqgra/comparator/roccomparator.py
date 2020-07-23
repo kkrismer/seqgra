@@ -18,9 +18,10 @@ from seqgra.comparator import Comparator
 
 
 class ROCComparator(Comparator):
-    def __init__(self, analysis_name: str, output_dir: str) -> None:
+    def __init__(self, analysis_name: str, output_dir: str,
+                 model_labels: Optional[List[str]] = None) -> None:
         super().__init__(c.ComparatorID.ROC, "ROC curve", analysis_name,
-                         output_dir)
+                         output_dir, model_labels)
 
     def compare_models(self, grammar_ids: Optional[List[str]] = None,
                        model_ids: Optional[List[str]] = None,
@@ -28,7 +29,6 @@ class ROCComparator(Comparator):
         if not set_names:
             set_names = ["test"]
 
-        model_labels: List[str] = list()
         fpr: List[List[float]] = list()
         tpr: List[List[float]] = list()
         roc_auc: List[float] = list()
@@ -43,11 +43,14 @@ class ROCComparator(Comparator):
 
                 current_fpr, current_tpr, current_auc = self.create_single_roc_curve(
                     y_df.values, y_hat_df.values)
-                model_labels.append(model_id)
                 fpr.append(current_fpr)
                 tpr.append(current_tpr)
                 roc_auc.append(current_auc)
-            self.create_roc_curve(fpr, tpr, roc_auc, model_labels,
+
+            if not self.model_labels or len(self.model_labels) != len(model_ids):
+                self.model_labels = model_ids
+
+            self.create_roc_curve(fpr, tpr, roc_auc, self.model_labels,
                                   self.output_dir + "roc-curve.pdf")
 
     def create_single_roc_curve(self, y_true, y_hat) -> None:

@@ -10,7 +10,8 @@ from seqgra import MiscHelper
 class Comparator(ABC):
     @abstractmethod
     def __init__(self, comparator_id: str, comparator_name: str,
-                 analysis_name: str, output_dir: str) -> None:
+                 analysis_name: str, output_dir: str, 
+                 model_labels: Optional[List[str]] = None) -> None:
         self.logger = logging.getLogger(__name__)
         self.comparator_id: str = comparator_id
         self.comparator_name: str = comparator_name
@@ -19,6 +20,7 @@ class Comparator(ABC):
         self.output_dir: str = MiscHelper.prepare_path(
             output_dir + "/model-comparisons/" + analysis_name,
             allow_exists=True)
+        self.model_labels: Optional[List[str]] = model_labels
 
     @abstractmethod
     def compare_models(self, grammar_ids: Optional[List[str]] = None,

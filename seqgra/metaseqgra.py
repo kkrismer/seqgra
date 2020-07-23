@@ -27,15 +27,16 @@ def format_output_dir(output_dir: str) -> str:
 
 
 def get_comparator(analysis_name: str, comparator_id: str,
-                   output_dir: str) -> Comparator:
+                   output_dir: str,
+                   model_labels: Optional[List[str]] = None) -> Comparator:
     comparator_id = comparator_id.lower().strip()
 
     if comparator_id == c.ComparatorID.ROC:
         from seqgra.comparator import ROCComparator  # pylint: disable=import-outside-toplevel
-        return ROCComparator(analysis_name, output_dir)
+        return ROCComparator(analysis_name, output_dir, model_labels)
         # elif comparator_id == c.ComparatorID.PR:
         # from seqgra.comparator import PRComparator  # pylint: disable=import-outside-toplevel
-        # return PRComparator(analysis_name, output_dir)
+        # return PRComparator(analysis_name, output_dir, model_labels)
     else:
         raise Exception("invalid evaluator ID")
 
@@ -61,7 +62,8 @@ def run_metaseqgra(analysis_name: str,
                    output_dir: str,
                    grammar_ids: Optional[List[str]] = None,
                    model_ids: Optional[List[str]] = None,
-                   set_names: Optional[List[str]] = None) -> None:
+                   set_names: Optional[List[str]] = None,
+                   model_labels: Optional[List[str]] = None) -> None:
     logger = logging.getLogger(__name__)
     output_dir = format_output_dir(output_dir.strip())
 
@@ -69,7 +71,8 @@ def run_metaseqgra(analysis_name: str,
         for comparator_id in comparator_ids:
             comparator: Comparator = get_comparator(analysis_name,
                                                     comparator_id,
-                                                    output_dir)
+                                                    output_dir,
+                                                    model_labels)
             if not grammar_ids:
                 grammar_ids = get_all_grammar_ids(output_dir)
             if not model_ids:
@@ -135,6 +138,14 @@ def main():
         nargs="+",
         help="one or more of the following: training, validation, or test"
     )
+    parser.add_argument(
+        "-l",
+        "--model_labels",
+        type=str,
+        default=None,
+        nargs="+",
+        help="labels for models, must be same length as model_ids"
+    )
     args = parser.parse_args()
 
     for comparator in args.comparators:
@@ -147,7 +158,8 @@ def main():
                    args.outputdir,
                    args.grammar_ids,
                    args.model_ids,
-                   args.sets)
+                   args.sets,
+                   args.model_labels)
 
 
 if __name__ == "__main__":
