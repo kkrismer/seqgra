@@ -64,7 +64,7 @@ class PREvaluator(Evaluator):
         average_precision["micro"] = average_precision_score(y_true, y_hat,
                                                              average="micro")
 
-        plt.figure(figsize=(7, 8))
+        plt.figure(figsize=(7, 7))
         lines = []
         labels = []
 
@@ -91,8 +91,6 @@ class PREvaluator(Evaluator):
                           "".format(self.learner.definition.labels[i],
                                     average_precision[i]))
 
-        fig = plt.gcf()
-        fig.subplots_adjust(bottom=0.25)
         plt.xlim([0.0, 1.0])
         plt.ylim([0.0, 1.05])
         plt.xlabel("Recall")

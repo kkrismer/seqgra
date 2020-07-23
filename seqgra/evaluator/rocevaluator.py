@@ -77,7 +77,7 @@ class ROCEvaluator(Evaluator):
         roc_auc["macro"] = auc(fpr["macro"], tpr["macro"])
 
         # Plot all ROC curves
-        plt.figure()
+        plt.figure(figsize=(7, 7))
         lines = []
         labels = []
 
