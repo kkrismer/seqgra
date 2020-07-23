@@ -35,9 +35,9 @@ def get_comparator(analysis_name: str, comparator_id: str,
     if comparator_id == c.ComparatorID.ROC:
         from seqgra.comparator import ROCComparator  # pylint: disable=import-outside-toplevel
         return ROCComparator(analysis_name, output_dir, model_labels)
-        # elif comparator_id == c.ComparatorID.PR:
-        # from seqgra.comparator import PRComparator  # pylint: disable=import-outside-toplevel
-        # return PRComparator(analysis_name, output_dir, model_labels)
+    elif comparator_id == c.ComparatorID.PR:
+        from seqgra.comparator import PRComparator  # pylint: disable=import-outside-toplevel
+        return PRComparator(analysis_name, output_dir, model_labels)
     else:
         raise Exception("invalid evaluator ID")
 
