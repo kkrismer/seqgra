@@ -16,6 +16,7 @@ import os
 import shutil
 from typing import List, Optional
 
+import seqgra
 import seqgra.constants as c
 from seqgra.evaluator import Evaluator
 from seqgra.evaluator import FeatureImportanceEvaluator
@@ -472,6 +473,11 @@ def main():
         prog="seqgra",
         description="Generate synthetic data based on grammar, train model on "
         "synthetic data, evaluate model")
+    parser.add_argument(
+        "-v",
+        "--version",
+        action="version",
+        version="%(prog)s " + seqgra.__version__)
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument(
         "-d",

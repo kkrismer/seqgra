@@ -15,6 +15,7 @@ import logging
 import os
 from typing import List, Optional
 
+import seqgra
 import seqgra.constants as c
 from seqgra.comparator import Comparator
 
@@ -87,6 +88,11 @@ def main():
     parser = argparse.ArgumentParser(
         prog="metaseqgra",
         description="Compare seqgra models")
+    parser.add_argument(
+        "-v",
+        "--version",
+        action="version",
+        version="%(prog)s " + seqgra.__version__)
     parser.add_argument(
         "-a",
         "--analysisname",
