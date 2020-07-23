@@ -6,12 +6,11 @@ ROC comparator: creates ROC curves of different models
 @author: Konstantin Krismer
 """
 from typing import List, Optional
+import os
 
-import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 from sklearn.metrics import roc_curve, auc
-from scipy import interp
 
 import seqgra.constants as c
 from seqgra.comparator import Comparator
@@ -34,18 +33,24 @@ class ROCComparator(Comparator):
         roc_auc: List[float] = list()
         if len(grammar_ids) == 1 and len(set_names) == 1:
             for model_id in model_ids:
-                df = pd.read_csv(self.evaluation_dir + grammar_ids[0] + "/" +
-                                 model_id + "/" + c.EvaluatorID.PREDICT +
-                                 "/test-y-hat.txt", sep="\t")
-                num_labels: int = int(len(df.columns) / 2)
-                y_df = df.iloc[:, 0:num_labels]
-                y_hat_df = df.iloc[:, num_labels:len(df.columns)]
+                predict_file_name: str = self.evaluation_dir + \
+                    grammar_ids[0] + "/" + \
+                    model_id + "/" + c.EvaluatorID.PREDICT + \
+                    "/test-y-hat.txt"
+                if os.path.isfile(predict_file_name):
+                    df = pd.read_csv(predict_file_name, sep="\t")
+                    num_labels: int = int(len(df.columns) / 2)
+                    y_df = df.iloc[:, 0:num_labels]
+                    y_hat_df = df.iloc[:, num_labels:len(df.columns)]
 
-                current_fpr, current_tpr, current_auc = self.create_single_roc_curve(
-                    y_df.values, y_hat_df.values)
-                fpr.append(current_fpr)
-                tpr.append(current_tpr)
-                roc_auc.append(current_auc)
+                    current_fpr, current_tpr, current_auc = self.create_single_roc_curve(
+                        y_df.values, y_hat_df.values)
+                    fpr.append(current_fpr)
+                    tpr.append(current_tpr)
+                    roc_auc.append(current_auc)
+                else:
+                    self.logger.warning("file does not exist: %s",
+                                        predict_file_name)
 
             if not self.model_labels or len(self.model_labels) != len(model_ids):
                 self.model_labels = model_ids
