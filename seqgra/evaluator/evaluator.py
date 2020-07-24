@@ -429,6 +429,20 @@ class FeatureImportanceEvaluator(Evaluator):
         temp_file_name = self.output_dir + "temp.txt"
         pdf_file_name = self.output_dir + pdf_file_name
         df.to_csv(temp_file_name, sep="\t", index=False)
+        statistics_df = df.copy()
+        statistics_df = statistics_df.astype({"n": int})
+        statistics_df.drop(["example", "position", "group"], axis=1,
+                           inplace=True)
+        if "value" in statistics_df.columns:
+            statistics_df.drop("value", axis=1, inplace=True)
+            statistics_df.drop_duplicates(inplace=True)
+            statistics_df.to_csv(self.output_dir + "statistics.txt",
+                                 sep="\t", index=False)
+        else:
+            statistics_df.drop_duplicates(inplace=True)
+            statistics_df.to_csv(self.output_dir + "statistics-thresholded.txt",
+                                 sep="\t", index=False)
+
         if caption is None:
             cmd = ["Rscript", "--no-save", "--no-restore", "--quiet",
                    plot_script, temp_file_name, pdf_file_name, title]
