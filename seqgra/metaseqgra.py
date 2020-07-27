@@ -21,6 +21,7 @@ from seqgra.comparator import Comparator
 from seqgra.comparator import PRComparator
 from seqgra.comparator import ROCComparator
 from seqgra.comparator import TableComparator
+from seqgra.comparator import FIETableComparator
 
 
 def format_output_dir(output_dir: str) -> str:
@@ -41,6 +42,8 @@ def get_comparator(analysis_name: str, comparator_id: str,
         return PRComparator(analysis_name, output_dir, model_labels)
     elif comparator_id == c.ComparatorID.TABLE:
         return TableComparator(analysis_name, output_dir, model_labels)
+    elif comparator_id == c.ComparatorID.FEATURE_IMPORTANCE_EVALUATOR_TABLE:
+        return FIETableComparator(analysis_name, output_dir, model_labels)
     else:
         raise Exception("invalid evaluator ID")
 

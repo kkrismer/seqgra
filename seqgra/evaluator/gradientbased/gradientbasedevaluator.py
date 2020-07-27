@@ -153,7 +153,7 @@ class GradientBasedEvaluator(FeatureImportanceEvaluator):
             caption: str = "feature importance threshold: " + \
                 str(self.importance_threshold) + \
                 ":NL:(positions above this threshold are considered grammar positions)"
-            self._execute_plotting_command(df, pdf_file_name,
+            self._execute_plotting_command(df, set_name, pdf_file_name,
                                            self.evaluator_name, caption)
 
     def _visualize_unthresholded_grammar_agreement(
@@ -167,7 +167,7 @@ class GradientBasedEvaluator(FeatureImportanceEvaluator):
             pdf_file_name: str = set_name + "-grammar-agreement.pdf"
             df: pd.DataFrame = self._prepare_unthresholded_r_data_frame(df)
             caption: str = "luminosity encodes feature importance: from light (low feature importance) to dark (high feature importance):NL:hue encodes annotation: green (grammar position), red (background position)"
-            self._execute_plotting_command(df, pdf_file_name,
+            self._execute_plotting_command(df, set_name, pdf_file_name,
                                            self.evaluator_name, caption)
 
     def _prepare_unthresholded_r_data_frame(self,

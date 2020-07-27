@@ -417,11 +417,11 @@ class FeatureImportanceEvaluator(Evaluator):
                       sep="\t", index=False)
             pdf_file_name: str = set_name + "-grammar-agreement-thresholded.pdf"
             df: pd.DataFrame = self._prepare_r_data_frame(df)
-            self._execute_plotting_command(df, pdf_file_name,
+            self._execute_plotting_command(df, set_name, pdf_file_name,
                                            self.evaluator_name)
 
     def _execute_plotting_command(
-            self, df: pd.DataFrame, pdf_file_name: str,
+            self, df: pd.DataFrame, set_name: str, pdf_file_name: str,
             title: str, caption: Optional[str] = None) -> None:
         plot_script: str = pkg_resources.resource_filename(
             "seqgra", "evaluator/plotagreement.R")
@@ -436,11 +436,11 @@ class FeatureImportanceEvaluator(Evaluator):
         if "value" in statistics_df.columns:
             statistics_df.drop("value", axis=1, inplace=True)
             statistics_df.drop_duplicates(inplace=True)
-            statistics_df.to_csv(self.output_dir + "statistics.txt",
+            statistics_df.to_csv(self.output_dir + set_name + "-statistics.txt",
                                  sep="\t", index=False)
         else:
             statistics_df.drop_duplicates(inplace=True)
-            statistics_df.to_csv(self.output_dir + "statistics-thresholded.txt",
+            statistics_df.to_csv(self.output_dir + set_name + "-statistics-thresholded.txt",
                                  sep="\t", index=False)
 
         if caption is None:

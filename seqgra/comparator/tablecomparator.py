@@ -1,9 +1,5 @@
 """
 MIT - CSAIL - Gifford Lab - seqgra
-
-ROC comparator: creates ROC curves of different models
-
-@author: Konstantin Krismer
 """
 from typing import List, Optional
 import os

@@ -146,8 +146,8 @@ class SISEvaluator(FeatureImportanceEvaluator):
             df: pd.DataFrame = self._prepare_r_data_frame(df)
             caption: str = "prediction threshold for SIS: " + \
                 str(self.predict_threshold) + \
-                    ":NL:(model prediction of true class exceeds this threshold with grammar positions alone)"
-            self._execute_plotting_command(df, pdf_file_name,
+                ":NL:(model prediction of true class exceeds this threshold with grammar positions alone)"
+            self._execute_plotting_command(df, set_name, pdf_file_name,
                                            self.evaluator_name, caption)
 
     def find_sis(self, x: List[str], label_index: int) -> List[List[str]]:
