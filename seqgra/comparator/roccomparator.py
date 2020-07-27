@@ -37,7 +37,7 @@ class ROCComparator(Comparator):
                 predict_file_name: str = self.evaluation_dir + \
                     grammar_ids[0] + "/" + \
                     model_id + "/" + c.EvaluatorID.PREDICT + \
-                    "/test-y-hat.txt"
+                    "/" + set_names[0] + "-y-hat.txt"
                 if os.path.isfile(predict_file_name):
                     df = pd.read_csv(predict_file_name, sep="\t")
                     num_labels: int = int(len(df.columns) / 2)
@@ -58,7 +58,7 @@ class ROCComparator(Comparator):
                 predict_file_name: str = self.evaluation_dir + \
                     grammar_id + "/" + \
                     model_ids[0] + "/" + c.EvaluatorID.PREDICT + \
-                    "/test-y-hat.txt"
+                    "/" + set_names[0] + "-y-hat.txt"
                 if os.path.isfile(predict_file_name):
                     df = pd.read_csv(predict_file_name, sep="\t")
                     num_labels: int = int(len(df.columns) / 2)

@@ -15,6 +15,10 @@ class Comparator(ABC):
         self.logger = logging.getLogger(__name__)
         self.comparator_id: str = comparator_id
         self.comparator_name: str = comparator_name
+        self.data_dir: str = MiscHelper.prepare_path(
+            output_dir + "/input/", allow_non_empty=True)
+        self.model_dir: str = MiscHelper.prepare_path(
+            output_dir + "/models/", allow_non_empty=True)
         self.evaluation_dir: str = MiscHelper.prepare_path(
             output_dir + "/evaluation/", allow_non_empty=True)
         self.output_dir: str = MiscHelper.prepare_path(

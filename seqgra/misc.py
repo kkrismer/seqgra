@@ -43,6 +43,10 @@ class AnnotatedExampleSet(NamedTuple):
 class ProbabilisticToken(NamedTuple):
     token: str
     probability: float
+    
+class Metrics(NamedTuple):
+    loss: float
+    accuracy: float
 
 
 class MiscHelper:
