@@ -175,6 +175,8 @@ class TableComparator(Comparator):
             roc_macro_auc = auc(all_fpr, mean_tpr)
 
             return (roc_micro_auc, roc_macro_auc)
+        else:
+            return (-1, -1)
 
     def get_pr_auc(self, grammar_id: str, model_id: str,
                    set_name: str) -> [float, float]:
@@ -196,3 +198,5 @@ class TableComparator(Comparator):
                                                    average="macro")
 
             return (pr_micro_auc, pr_macro_auc)
+        else:
+            return (-1, -1)
