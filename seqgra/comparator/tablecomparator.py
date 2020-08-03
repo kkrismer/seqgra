@@ -101,6 +101,9 @@ class TableComparator(Comparator):
             with open(set_file_name) as f:
                 for line in f:
                     i += 1
+        else:
+            self.logger.warning("file does not exist: %s",
+                                set_file_name)
 
         return i
 
@@ -111,6 +114,9 @@ class TableComparator(Comparator):
         if os.path.isfile(last_epoch_file_name):
             with open(last_epoch_file_name) as f:
                 last_epoch = int(f.readline().strip())
+        else:
+            self.logger.warning("file does not exist: %s",
+                                last_epoch_file_name)
 
         return last_epoch
 
@@ -124,6 +130,8 @@ class TableComparator(Comparator):
             df = pd.read_csv(predict_file_name, sep="\t")
             return int(len(df.columns) / 2)
         else:
+            self.logger.warning("file does not exist: %s",
+                                predict_file_name)
             return -1
 
     def get_metrics(self, grammar_id: str, model_id: str,
@@ -140,6 +148,8 @@ class TableComparator(Comparator):
 
             return Metrics(loss.iloc[0]["value"], accuracy.iloc[0]["value"])
         else:
+            self.logger.warning("file does not exist: %s",
+                                metrics_file_name)
             return Metrics(-1, -1)
 
     def get_roc_auc(self, grammar_id: str, model_id: str,
@@ -176,6 +186,8 @@ class TableComparator(Comparator):
 
             return (roc_micro_auc, roc_macro_auc)
         else:
+            self.logger.warning("file does not exist: %s",
+                                predict_file_name)
             return (-1, -1)
 
     def get_pr_auc(self, grammar_id: str, model_id: str,
@@ -199,4 +211,6 @@ class TableComparator(Comparator):
 
             return (pr_micro_auc, pr_macro_auc)
         else:
+            self.logger.warning("file does not exist: %s",
+                                predict_file_name)
             return (-1, -1)

@@ -68,6 +68,9 @@ class FIETableComparator(Comparator):
                                         row["specificity"])
                                     f1_column.append(row["f1"])
                                     n_column.append(row["n"])
+                            else:
+                                self.logger.warning("file does not exist: %s",
+                                                    statistics_file_name)
 
         df = pd.DataFrame(
             {"grammar_id": grammar_id_column,
