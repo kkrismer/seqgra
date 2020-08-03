@@ -163,10 +163,14 @@ class KerasHelper:
             )
 
             # early stopping callback
+            if "early_stopping_patience" in learner.definition.training_process_hyperparameters:
+                patience: int = int(learner.definition.training_process_hyperparameters["early_stopping_patience"])
+            else:
+                patience: int = 10
             es_callback = tf.keras.callbacks.EarlyStopping(monitor="val_loss",
                                                            mode="min",
                                                            verbose=1,
-                                                           patience=2,
+                                                           patience=patience,
                                                            min_delta=0)
 
             # track last epoch callback

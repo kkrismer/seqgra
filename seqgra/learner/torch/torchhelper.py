@@ -199,7 +199,11 @@ class TorchHelper:
 
         # early stopping callback
         if bool(strtobool(learner.definition.training_process_hyperparameters["early_stopping"])):
-            es_handler = EarlyStopping(patience=2,
+            if "early_stopping_patience" in learner.definition.training_process_hyperparameters:
+                patience: int = int(learner.definition.training_process_hyperparameters["early_stopping_patience"])
+            else:
+                patience: int = 10
+            es_handler = EarlyStopping(patience=patience,
                                        score_function=score_fn,
                                        trainer=trainer,
                                        min_delta=0)
