@@ -83,10 +83,14 @@ class Evaluator(ABC):
         else:
             x, y, annotations = self._load_data(set_name)
 
-        results = self._evaluate_model(x, y, annotations)
-        self._save_results(results, set_name, suppress_plots)
+        if x:
+            results = self._evaluate_model(x, y, annotations)
+            self._save_results(results, set_name, suppress_plots)
 
-        return results
+            return results
+        else:
+            self.logger.warning("evaluator skipped: no valid examples")
+            return None
 
     def _load_data(
             self, set_name: str = "test",
@@ -118,14 +122,17 @@ class Evaluator(ABC):
         if len(x) != len(y) or len(x) != len(annotations):
             raise Exception("x, y, and annotations have to be the same length")
 
-        if max(idx) >= len(x):
-            raise Exception("max(idx) >= len(x)")
+        if idx:
+            if max(idx) >= len(x):
+                raise Exception("max(idx) >= len(x)")
 
-        x = [x[i] for i in idx]
-        y = [y[i] for i in idx]
-        annotations = [annotations[i] for i in idx]
+            x = [x[i] for i in idx]
+            y = [y[i] for i in idx]
+            annotations = [annotations[i] for i in idx]
 
-        return AnnotatedExampleSet(x, y, annotations)
+            return AnnotatedExampleSet(x, y, annotations)
+        else:
+            return AnnotatedExampleSet(None, None, None)
 
     def _subset_by_label(self, x: List[str], y: List[str],
                          annotations: List[str],
@@ -144,7 +151,10 @@ class Evaluator(ABC):
                 if is_valid:
                     subset_idx += [i]
 
-        return self._subset(subset_idx, x, y, annotations)
+        if subset_idx is None:
+            return AnnotatedExampleSet(None, None, None)
+        else:
+            return self._subset(subset_idx, x, y, annotations)
 
     def _subset_by_compatibility(
             self, x: List[str], y: List[str],
@@ -229,9 +239,10 @@ class Evaluator(ABC):
             for label in labels:
                 examples = self.select_n_examples(set_name, n, label, False,
                                                   shuffle, threshold)
-                x += examples.x
-                y += examples.y
-                annotations += examples.annotations
+                if examples.x:
+                    x += examples.x
+                    y += examples.y
+                    annotations += examples.annotations
             return AnnotatedExampleSet(x, y, annotations)
         else:
             x, y, annotations = self.select_examples(set_name, labels,
@@ -294,7 +305,7 @@ class FeatureImportanceEvaluator(Evaluator):
                                          subset_labels, subset_n_per_label,
                                          subset_shuffle, subset_threshold,
                                          suppress_plots)
-        if not suppress_plots:
+        if not suppress_plots and results:
             self._visualize_grammar_agreement(results, set_name)
         return results
 
