@@ -1,7 +1,7 @@
 """
 MIT - CSAIL - Gifford Lab - seqgra
 """
-from typing import List, Optional
+from typing import List, Optional, Tuple
 import os
 
 import numpy as np
@@ -34,6 +34,9 @@ class TableComparator(Comparator):
         d_validation_set_size_column: List[int] = list()
         d_test_set_size_column: List[int] = list()
         m_last_epoch_completed_column: List[int] = list()
+        m_trainable_params_column: List[int] = list()
+        m_non_trainable_params_column: List[int] = list()
+        m_all_params_column: List[int] = list()
         e_num_labels_column: List[int] = list()
         e_metrics_loss_column: List[float] = list()
         e_metrics_accuracy_column: List[float] = list()
@@ -51,6 +54,8 @@ class TableComparator(Comparator):
             for model_id in model_ids:
                 last_epoch_completed: int = self.get_last_epoch_completed(
                     grammar_id, model_id)
+                trainable_params, non_trainable_params, all_params = \
+                    self.get_model_params(grammar_id, model_id)
                 for set_name in set_names:
                     num_labels: int = self.get_num_labels(grammar_id,
                                                           model_id, set_name)
@@ -68,6 +73,9 @@ class TableComparator(Comparator):
                     d_validation_set_size_column.append(validation_set_size)
                     d_test_set_size_column.append(test_set_size)
                     m_last_epoch_completed_column.append(last_epoch_completed)
+                    m_trainable_params_column.append(trainable_params)
+                    m_non_trainable_params_column.append(non_trainable_params)
+                    m_all_params_column.append(all_params)
                     e_num_labels_column.append(num_labels)
                     e_metrics_loss_column.append(metrics_loss)
                     e_metrics_accuracy_column.append(metrics_accuracy)
@@ -84,6 +92,9 @@ class TableComparator(Comparator):
              "validation_set_size": d_validation_set_size_column,
              "test_set_size": d_test_set_size_column,
              "last_epoch_completed": m_last_epoch_completed_column,
+             "trainable_params": m_trainable_params_column,
+             "non_trainable_params": m_non_trainable_params_column,
+             "all_params": m_all_params_column,
              "num_labels": e_num_labels_column,
              "metrics_loss": e_metrics_loss_column,
              "metrics_accuracy": e_metrics_accuracy_column,
@@ -96,7 +107,8 @@ class TableComparator(Comparator):
     def get_set_size(self, grammar_id: str, set_name: str) -> int:
         set_file_name: str = self.data_dir + grammar_id + "/" + \
             set_name + ".txt"
-        i: int = -1  # do not count header
+        # do not count header
+        i: int = -1
         if os.path.isfile(set_file_name):
             with open(set_file_name) as f:
                 for line in f:
@@ -119,6 +131,24 @@ class TableComparator(Comparator):
                                 last_epoch_file_name)
 
         return last_epoch
+
+    def get_model_params(self, grammar_id: str,
+                         model_id: str) -> Tuple[int, int, int]:
+        model_params_file_name: str = self.model_dir + grammar_id + "/" + \
+            model_id + "/num-model-parameters.txt"
+        trainable_params: int = -1
+        non_trainable_params: int = -1
+        all_params: int = -1
+        if os.path.isfile(model_params_file_name):
+            with open(model_params_file_name) as f:
+                trainable_params = int(f.readline().strip().split("\t")[1])
+                non_trainable_params = int(f.readline().strip().split("\t")[1])
+                all_params = int(f.readline().strip().split("\t")[1])
+        else:
+            self.logger.warning("file does not exist: %s",
+                                model_params_file_name)
+
+        return trainable_params, non_trainable_params, all_params
 
     def get_num_labels(self, grammar_id: str, model_id: str,
                        set_name: str) -> int:
