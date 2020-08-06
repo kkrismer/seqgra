@@ -57,6 +57,9 @@ plot_agreement <- function(input_file_name, output_file_name, title,
                      ", specificity = ", round(df$specificity, digits = 3), 
                      ", F1 = ", round(df$f1, digits = 3),
                      ", n = ", df$n)
+  df$label <- factor(df$label,
+                     levels = stringr::str_sort(unique(df$label), 
+                                                numeric = TRUE))
   df$example <- as.factor(df$example)
   
   if (thresholded_mode) {
