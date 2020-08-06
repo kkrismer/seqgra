@@ -23,6 +23,7 @@ import numpy as np
 import pkg_resources
 import torch
 
+from seqgra import ModelSize
 import seqgra.constants as c
 from seqgra.learner import Learner
 
@@ -115,6 +116,18 @@ class TorchHelper:
         if learner.model is None:
             learner.create_model()
 
+        # save number of model parameters
+        num_trainable_params, num_non_trainable_params = learner.get_num_params()
+        with open(learner.output_dir +
+                  "num-model-parameters.txt", "w") as model_param_file:
+            model_param_file.write("number of trainable parameters" + "\t" +
+                                   str(num_trainable_params) + "\n")
+            model_param_file.write("number of non-trainable parameters" +
+                                   "\t" + str(num_non_trainable_params) + "\n")
+            model_param_file.write("number of all parameters" + "\t" +
+                                   str(num_trainable_params +
+                                       num_non_trainable_params) + "\n")
+
         batch_size = int(
             learner.definition.training_process_hyperparameters["batch_size"])
 
@@ -172,7 +185,7 @@ class TorchHelper:
 
         @trainer.on(Events.EPOCH_COMPLETED)
         def log_last_epoch(trainer):
-            with open(learner.output_dir + "last-epoch-completed.txt", "w") as last_epoch_file: 
+            with open(learner.output_dir + "last-epoch-completed.txt", "w") as last_epoch_file:
                 last_epoch_file.write(str(trainer.state.epoch) + "\n")
 
         # save best model
@@ -200,7 +213,8 @@ class TorchHelper:
         # early stopping callback
         if bool(strtobool(learner.definition.training_process_hyperparameters["early_stopping"])):
             if "early_stopping_patience" in learner.definition.training_process_hyperparameters:
-                patience: int = int(learner.definition.training_process_hyperparameters["early_stopping_patience"])
+                patience: int = int(
+                    learner.definition.training_process_hyperparameters["early_stopping_patience"])
             else:
                 patience: int = 10
             es_handler = EarlyStopping(patience=patience,
@@ -396,10 +410,16 @@ class TorchHelper:
         return np.array(y_hat)
 
     @staticmethod
-    def get_num_params(learner: Learner):
+    def get_num_params(learner: Learner) -> ModelSize:
         if learner.model is None:
             learner.create_model()
-        return len(learner.model.parameters())
+        num_trainable_params: int = sum(param.numel()
+                                        for param in learner.model.parameters()
+                                        if param.requires_grad)
+        num_all_params: int = sum(param.numel()
+                                  for param in learner.model.parameters())
+        return ModelSize(num_trainable_params,
+                         num_all_params - num_trainable_params)
 
     @staticmethod
     def evaluate_model(learner: Learner, dataset: torch.utils.data.Dataset,

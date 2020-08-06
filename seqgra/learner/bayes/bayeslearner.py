@@ -6,6 +6,7 @@ TensorFlow Keras learners
 """
 from typing import Any, List, Optional
 
+from seqgra import ModelSize
 from seqgra.learner import DNAMultiClassClassificationLearner
 from seqgra.learner import DNAMultiLabelClassificationLearner
 from seqgra.learner import ProteinMultiClassClassificationLearner
@@ -46,7 +47,7 @@ class BayesOptimalDNAMultiClassClassificationLearner(
     def predict(self, x: Any, encode: bool = True):
         return BayesOptimalHelper.predict(self, x, encode)
 
-    def get_num_params(self):
+    def get_num_params(self) -> ModelSize:
         return 0
 
     def _evaluate_model(self, x: List[str], y: List[str]):
@@ -85,7 +86,7 @@ class BayesOptimalDNAMultiLabelClassificationLearner(
     def predict(self, x: Any, encode: bool = True):
         return BayesOptimalHelper.predict(self, x, encode)
 
-    def get_num_params(self):
+    def get_num_params(self) -> ModelSize:
         return 0
 
     def _evaluate_model(self, x: List[str], y: List[str]):
@@ -124,7 +125,7 @@ class BayesOptimalProteinMultiClassClassificationLearner(
     def predict(self, x: Any, encode: bool = True):
         return BayesOptimalHelper.predict(self, x, encode)
 
-    def get_num_params(self):
+    def get_num_params(self) -> ModelSize:
         return 0
 
     def _evaluate_model(self, x: List[str], y: List[str]):
@@ -163,7 +164,7 @@ class BayesOptimalProteinMultiLabelClassificationLearner(
     def predict(self, x: Any, encode: bool = True):
         return BayesOptimalHelper.predict(self, x, encode)
 
-    def get_num_params(self):
+    def get_num_params(self) -> ModelSize:
         return 0
 
     def _evaluate_model(self, x: List[str], y: List[str]):

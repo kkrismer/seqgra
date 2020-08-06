@@ -15,7 +15,7 @@ from typing import Any, List, Optional, Set
 
 import pandas as pd
 
-from seqgra import AnnotationSet, ExampleSet, MiscHelper
+from seqgra import AnnotationSet, ExampleSet, MiscHelper, ModelSize
 import seqgra.constants as c
 from seqgra.model import ModelDefinition
 
@@ -329,7 +329,7 @@ class Learner(ABC):
         """
 
     @abstractmethod
-    def get_num_params(self):
+    def get_num_params(self) -> ModelSize:
         """TODO
 
         TODO

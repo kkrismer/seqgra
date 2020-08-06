@@ -47,6 +47,10 @@ class ProbabilisticToken(NamedTuple):
 class Metrics(NamedTuple):
     loss: float
     accuracy: float
+    
+class ModelSize(NamedTuple):
+    num_trainable_params: int
+    num_non_trainable_params: int
 
 
 class MiscHelper:

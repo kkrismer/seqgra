@@ -9,6 +9,7 @@ from typing import Any, List, Optional
 import numpy as np
 import torch
 
+from seqgra import ModelSize
 from seqgra.learner import DNAMultiClassClassificationLearner
 from seqgra.learner import DNAMultiLabelClassificationLearner
 from seqgra.learner import ProteinMultiClassClassificationLearner
@@ -104,7 +105,7 @@ class TorchDNAMultiClassClassificationLearner(
         return TorchHelper.predict(
             self, dataset, self._get_output_layer_activation_function())
 
-    def get_num_params(self):
+    def get_num_params(self) -> ModelSize:
         return TorchHelper.get_num_params(self)
 
     def _evaluate_model(self, x: List[str], y: List[str]):
@@ -225,7 +226,7 @@ class TorchDNAMultiLabelClassificationLearner(
         return TorchHelper.predict(
             self, dataset, self._get_output_layer_activation_function())
 
-    def get_num_params(self):
+    def get_num_params(self) -> ModelSize:
         return TorchHelper.get_num_params(self)
 
     def _evaluate_model(self, x: List[str], y: List[str]):
@@ -346,7 +347,7 @@ class TorchProteinMultiClassClassificationLearner(
         return TorchHelper.predict(
             self, dataset, self._get_output_layer_activation_function())
 
-    def get_num_params(self):
+    def get_num_params(self) -> ModelSize:
         return TorchHelper.get_num_params(self)
 
     def _evaluate_model(self, x: List[str], y: List[str]):
@@ -467,7 +468,7 @@ class TorchProteinMultiLabelClassificationLearner(
         return TorchHelper.predict(
             self, dataset, self._get_output_layer_activation_function())
 
-    def get_num_params(self):
+    def get_num_params(self) -> ModelSize:
         return TorchHelper.get_num_params(self)
 
     def _evaluate_model(self, x: List[str], y: List[str]):

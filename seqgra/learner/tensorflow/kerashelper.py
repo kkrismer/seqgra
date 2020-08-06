@@ -17,6 +17,7 @@ import numpy as np
 import pkg_resources
 import tensorflow as tf
 
+from seqgra import ModelSize
 from seqgra.learner import Learner
 from seqgra.learner.tensorflow import LastEpochCallback
 from seqgra.model.model import Architecture
@@ -132,6 +133,18 @@ class KerasHelper:
         # GPU or CPU?
         logger.info("using device: %s", learner.device_label)
 
+        # save number of model parameters
+        num_trainable_params, num_non_trainable_params = learner.get_num_params()
+        with open(learner.output_dir +
+                  "num-model-parameters.txt", "w") as model_param_file:
+            model_param_file.write("number of trainable parameters" + "\t" +
+                                   str(num_trainable_params) + "\n")
+            model_param_file.write("number of non-trainable parameters" +
+                                   "\t" + str(num_non_trainable_params) + "\n")
+            model_param_file.write("number of all parameters" + "\t" +
+                                   str(num_trainable_params +
+                                       num_non_trainable_params) + "\n")
+
         with tf.device(learner.device_label):
             # one hot encode input and labels
             encoded_x_train = learner.encode_x(x_train)
@@ -164,7 +177,8 @@ class KerasHelper:
 
             # early stopping callback
             if "early_stopping_patience" in learner.definition.training_process_hyperparameters:
-                patience: int = int(learner.definition.training_process_hyperparameters["early_stopping_patience"])
+                patience: int = int(
+                    learner.definition.training_process_hyperparameters["early_stopping_patience"])
             else:
                 patience: int = 10
             es_callback = tf.keras.callbacks.EarlyStopping(monitor="val_loss",
@@ -223,12 +237,14 @@ class KerasHelper:
 
         # save architecture only (YAML)
         yaml_model = learner.model.to_yaml()
-        with open(learner.output_dir + file_name + "/model-architecture.yaml", "w") as yaml_file:
+        with open(learner.output_dir + file_name +
+                  "/model-architecture.yaml", "w") as yaml_file:
             yaml_file.write(yaml_model)
 
         # save architecture only (JSON)
         json_model = learner.model.to_json()
-        with open(learner.output_dir + file_name + "/model-architecture.json", "w") as json_file:
+        with open(learner.output_dir + file_name +
+                  "/model-architecture.json", "w") as json_file:
             json_file.write(json_model)
 
         # save session info
@@ -268,10 +284,29 @@ class KerasHelper:
             return learner.model.predict(x)
 
     @staticmethod
-    def get_num_params(learner: Learner):
+    def get_num_params(learner: Learner) -> ModelSize:
+        def count_params(weights):
+            unique_weights = tf.python.util.object_identity.ObjectIdentitySet(
+                weights)
+            weight_shapes = [w.shape.as_list() for w in unique_weights]
+            standardized_weight_shapes = [
+                [0 if w_i is None else w_i for w_i in w] for w in weight_shapes
+            ]
+            return int(sum(np.prod(p) for p in standardized_weight_shapes))
+
         if learner.model is None:
             learner.create_model()
-        return 0
+
+        if hasattr(learner.model, '_collected_trainable_weights'):
+            num_trainable_params: int = count_params(
+                learner.model._collected_trainable_weights)
+        else:
+            num_trainable_params: int = count_params(
+                learner.model.trainable_weights)
+        num_non_trainable_params: int = count_params(
+            learner.model.non_trainable_weights)
+
+        return ModelSize(num_trainable_params, num_non_trainable_params)
 
     @staticmethod
     def evaluate_model(learner: Learner, x: List[str], y: List[str]):

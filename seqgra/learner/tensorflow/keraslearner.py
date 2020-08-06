@@ -10,6 +10,7 @@ from typing import Any, List, Optional
 import numpy as np
 import tensorflow as tf
 
+from seqgra import ModelSize
 from seqgra.learner import DNAMultiClassClassificationLearner
 from seqgra.learner import DNAMultiLabelClassificationLearner
 from seqgra.learner import ProteinMultiClassClassificationLearner
@@ -86,7 +87,7 @@ class KerasDNAMultiClassClassificationLearner(
     def predict(self, x: Any, encode: bool = True):
         return KerasHelper.predict(self, x, encode)
 
-    def get_num_params(self):
+    def get_num_params(self) -> ModelSize:
         return KerasHelper.get_num_params(self)
 
     def _evaluate_model(self, x: List[str], y: List[str]):
@@ -177,7 +178,7 @@ class KerasDNAMultiLabelClassificationLearner(
     def predict(self, x: Any, encode: bool = True):
         return KerasHelper.predict(self, x, encode)
 
-    def get_num_params(self):
+    def get_num_params(self) -> ModelSize:
         return KerasHelper.get_num_params(self)
 
     def _evaluate_model(self, x: List[str], y: List[str]):
@@ -268,7 +269,7 @@ class KerasProteinMultiClassClassificationLearner(
     def predict(self, x: Any, encode: bool = True):
         return KerasHelper.predict(self, x, encode)
 
-    def get_num_params(self):
+    def get_num_params(self) -> ModelSize:
         return KerasHelper.get_num_params(self)
 
     def _evaluate_model(self, x: List[str], y: List[str]):
@@ -359,7 +360,7 @@ class KerasProteinMultiLabelClassificationLearner(
     def predict(self, x: Any, encode: bool = True):
         return KerasHelper.predict(self, x, encode)
 
-    def get_num_params(self):
+    def get_num_params(self) -> ModelSize:
         return KerasHelper.get_num_params(self)
 
     def _evaluate_model(self, x: List[str], y: List[str]):
