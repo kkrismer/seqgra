@@ -89,6 +89,10 @@ class Evaluator(ABC):
 
             return results
         else:
+            with open(self.output_dir + set_name + "-no-valid-examples.txt",
+                      "w") as no_examples_file:
+                no_examples_file.write("no valid examples\n")
+            
             self.logger.warning("evaluator skipped: no valid examples")
             return None
 
