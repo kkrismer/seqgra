@@ -137,11 +137,11 @@ class KerasHelper:
         num_trainable_params, num_non_trainable_params = learner.get_num_params()
         with open(learner.output_dir +
                   "num-model-parameters.txt", "w") as model_param_file:
-            model_param_file.write("number of trainable parameters" + "\t" +
+            model_param_file.write("number of trainable parameters\t" +
                                    str(num_trainable_params) + "\n")
-            model_param_file.write("number of non-trainable parameters" +
-                                   "\t" + str(num_non_trainable_params) + "\n")
-            model_param_file.write("number of all parameters" + "\t" +
+            model_param_file.write("number of non-trainable parameters\t" +
+                                   str(num_non_trainable_params) + "\n")
+            model_param_file.write("number of all parameters\t" +
                                    str(num_trainable_params +
                                        num_non_trainable_params) + "\n")
 
