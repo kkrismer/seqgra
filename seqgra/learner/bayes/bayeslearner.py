@@ -33,12 +33,7 @@ class BayesOptimalDNAMultiClassClassificationLearner(
     def _train_model(self,
                      x_train: List[str], y_train: List[str],
                      x_val: List[str], y_val: List[str]) -> None:
-        # save number of model parameters
-        with open(self.output_dir +
-                  "num-model-parameters.txt", "w") as model_param_file:
-            model_param_file.write("number of trainable parameters\t0\n")
-            model_param_file.write("number of non-trainable parameters\t0\n")
-            model_param_file.write("number of all parameters\t0\n")
+        BayesOptimalHelper.train_model(self)
 
     def save_model(self, file_name: Optional[str] = None):
         pass
@@ -47,7 +42,7 @@ class BayesOptimalDNAMultiClassClassificationLearner(
         BayesOptimalHelper.write_session_info(self)
 
     def load_model(self, file_name: Optional[str] = None):
-        pass
+        self.create_model()
 
     def predict(self, x: Any, encode: bool = True):
         return BayesOptimalHelper.predict(self, x, encode)
@@ -77,7 +72,7 @@ class BayesOptimalDNAMultiLabelClassificationLearner(
     def _train_model(self,
                      x_train: List[str], y_train: List[str],
                      x_val: List[str], y_val: List[str]) -> None:
-        pass
+        BayesOptimalHelper.train_model(self)
 
     def save_model(self, file_name: Optional[str] = None):
         pass
@@ -86,7 +81,7 @@ class BayesOptimalDNAMultiLabelClassificationLearner(
         BayesOptimalHelper.write_session_info(self)
 
     def load_model(self, file_name: Optional[str] = None):
-        pass
+        self.create_model()
 
     def predict(self, x: Any, encode: bool = True):
         return BayesOptimalHelper.predict(self, x, encode)
@@ -116,7 +111,7 @@ class BayesOptimalProteinMultiClassClassificationLearner(
     def _train_model(self,
                      x_train: List[str], y_train: List[str],
                      x_val: List[str], y_val: List[str]) -> None:
-        pass
+        BayesOptimalHelper.train_model(self)
 
     def save_model(self, file_name: Optional[str] = None):
         pass
@@ -125,7 +120,7 @@ class BayesOptimalProteinMultiClassClassificationLearner(
         BayesOptimalHelper.write_session_info(self)
 
     def load_model(self, file_name: Optional[str] = None):
-        pass
+        self.create_model()
 
     def predict(self, x: Any, encode: bool = True):
         return BayesOptimalHelper.predict(self, x, encode)
@@ -155,7 +150,7 @@ class BayesOptimalProteinMultiLabelClassificationLearner(
     def _train_model(self,
                      x_train: List[str], y_train: List[str],
                      x_val: List[str], y_val: List[str]) -> None:
-        pass
+        BayesOptimalHelper.train_model(self)
 
     def save_model(self, file_name: Optional[str] = None):
         pass
@@ -164,7 +159,7 @@ class BayesOptimalProteinMultiLabelClassificationLearner(
         BayesOptimalHelper.write_session_info(self)
 
     def load_model(self, file_name: Optional[str] = None):
-        pass
+        self.create_model()
 
     def predict(self, x: Any, encode: bool = True):
         return BayesOptimalHelper.predict(self, x, encode)

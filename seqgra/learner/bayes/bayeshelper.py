@@ -27,6 +27,15 @@ from seqgra.parser import XMLDataDefinitionParser
 
 class BayesOptimalHelper:
     @staticmethod
+    def train_model(learner: Learner) -> None:
+        # save number of model parameters
+        with open(learner.output_dir +
+                  "num-model-parameters.txt", "w") as model_param_file:
+            model_param_file.write("number of trainable parameters\t0\n")
+            model_param_file.write("number of non-trainable parameters\t0\n")
+            model_param_file.write("number of all parameters\t0\n")
+
+    @staticmethod
     def ppm_to_pwm(ppm, alphabet_size) -> Any:
         return np.log2(ppm * alphabet_size)
 
