@@ -188,7 +188,7 @@ class BayesOptimalHelper:
                     y_hat[example_index, i] = \
                         BayesOptimalHelper.normalize_pwm_score(raw_score, pwm)
 
-            if x.shape[0] > 10:
+            if x.shape[0] > 5000:
                 MiscHelper.print_progress_bar(example_index, x.shape[0] - 1)
 
         if learner.definition.task == c.TaskType.MULTI_CLASS_CLASSIFICATION:
