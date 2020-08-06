@@ -137,6 +137,11 @@ class Evaluator(ABC):
     def _subset_by_label(self, x: List[str], y: List[str],
                          annotations: List[str],
                          valid_labels: Set[str]) -> AnnotatedExampleSet:
+        if isinstance(valid_labels, list):
+            valid_labels = set(valid_labels)
+        elif not isinstance(valid_labels, set):
+            valid_labels = set([valid_labels])
+
         if self.learner.definition.task == c.TaskType.MULTI_CLASS_CLASSIFICATION:
             subset_idx = [i
                           for i, label in enumerate(y)
@@ -247,6 +252,7 @@ class Evaluator(ABC):
         else:
             x, y, annotations = self.select_examples(set_name, labels,
                                                      threshold)
+
             if n is None:
                 n = len(x)
 
