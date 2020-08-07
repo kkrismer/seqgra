@@ -136,13 +136,13 @@ class BayesOptimalHelper:
 
     @staticmethod
     def get_pwms_for_label(label: str, conditions: List[Condition],
-                           pwm_dict: Dict[str, Any]) -> List[Any]:
+                           pwm_dict: Dict[str, Any]) -> Dict[str, Any]:
         condition: Condition = Condition.get_by_id(conditions, label)
-        pwms: List[Any] = list()
+        pwms: Dict[str, Any] = dict()
         if condition:
             for rule in condition.grammar:
                 for se in rule.sequence_elements:
-                    pwms.append(pwm_dict[se.sid])
+                    pwms[se.sid] = pwm_dict[se.sid]
 
         return pwms
 
@@ -173,20 +173,53 @@ class BayesOptimalHelper:
         if encode:
             x = learner.encode_x(x)
 
+        conditions: List[Condition] = learner.model[0]
         y_hat = np.zeros((x.shape[0], len(learner.definition.labels)))
 
         for example_index in range(x.shape[0]):
             for i, label in enumerate(learner.definition.labels):
                 # get rules for label
                 # for now: just PWM
-                pwms = BayesOptimalHelper.get_pwms_for_label(label,
-                                                             learner.model[0],
-                                                             learner.model[1])
-                for pwm in pwms:
-                    raw_score = max(BayesOptimalHelper.score_example(
-                        x[example_index, :, :], pwm))
-                    y_hat[example_index, i] = \
-                        BayesOptimalHelper.normalize_pwm_score(raw_score, pwm)
+                pwms: Dict[str, Any] = BayesOptimalHelper.get_pwms_for_label(
+                    label, conditions, learner.model[1])
+                raw_scores: Dict[str, Any] = dict()
+                for sid, pwm in pwms.items():
+                    raw_scores[sid] = BayesOptimalHelper.score_example(
+                        x[example_index, :, :], pwm)
+                    condition: Condition = Condition.get_by_id(
+                        conditions, label)
+
+                for rule in condition.grammar:
+                    for se in rule.sequence_elements:
+                        pwm = pwms[se.sid]
+                        if rule.position == "random":
+                            raw_score = max(raw_scores[se.sid])
+                        else:
+                            mask = np.zeros((raw_scores[se.sid].shape))
+                            if rule.position == "start":
+                                start_position: int = 0
+                                end_position: int = pwm.shape[0] + 1
+                            elif rule.position == "end":
+                                start_position: int = max(
+                                    mask.shape[0] - pwm.shape[0] - 1, 0)
+                                end_position: int = mask.shape[0]
+                            elif rule.position == "center":
+                                start_position: int = max(
+                                    int(mask.shape[0] / 2 - pwm.shape[0] / 2 - 1), 0)
+                                end_position: int = min(
+                                    start_position + pwm.shape[0] + 2, mask.shape[0])
+                            else:
+                                start_position: int = max(
+                                    int(rule.position) - pwm.shape[0] / 2 - 1, 0)
+                                end_position: int = min(
+                                    int(rule.position) + pwm.shape[0] + 2, mask.shape[0])
+
+                            mask[start_position:end_position] = 1.0
+                            raw_score = max(raw_scores[se.sid] * mask)
+
+                        y_hat[example_index, i] += \
+                            BayesOptimalHelper.normalize_pwm_score(raw_score,
+                                                                   pwm)
 
             if x.shape[0] > 5000:
                 MiscHelper.print_progress_bar(example_index, x.shape[0] - 1)
