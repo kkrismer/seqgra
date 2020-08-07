@@ -167,8 +167,9 @@ class Simulator:
         c5: bool = self.check_invalid_distances()
         c6: bool = self.check_invalid_sequence_elements()
         c7: bool = self.check_spacing_contraint_se_refs()
+        c8: bool = self.check_overlapping_sequence_elements()
 
-        valid = c1 and c2 and c3 and c4 and c5 and c6 and c7
+        valid = c1 and c2 and c3 and c4 and c5 and c6 and c7 and c8
         if valid:
             self.logger.info("semantic analysis of grammar completed: "
                              "no issues detected")
@@ -294,6 +295,25 @@ class Simulator:
                                             "length exceeds minimum sequence "
                                             "length",
                                             condition.condition_id, i + 1)
+        return valid
+
+    def check_overlapping_sequence_elements(self) -> bool:
+        valid: bool = True
+        for condition in self.definition.conditions:
+            for i in range(len(condition.grammar)):
+                rule = condition.grammar[i]
+                if rule.position != "random" and \
+                    len(rule.sequence_elements) > 1 and \
+                        not rule.spacing_constraints:
+                    valid = False
+                    self.logger.warning("condition %s [cid], rule %s: "
+                                        "overlapping sequence elements "
+                                        "(possible solutions: (1) position "
+                                        "randomly, (2) add spacing "
+                                        "constraint, (3) split in two rules "
+                                        "with different positions)",
+                                        condition.condition_id, i + 1)
+
         return valid
 
     def check_invalid_distances(self) -> bool:
