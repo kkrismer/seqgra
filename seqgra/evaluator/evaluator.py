@@ -315,7 +315,7 @@ class FeatureImportanceEvaluator(Evaluator):
                                          subset_labels, subset_n_per_label,
                                          subset_shuffle, subset_threshold,
                                          suppress_plots)
-        if not suppress_plots and results:
+        if not suppress_plots and results is not None:
             self._visualize_grammar_agreement(results, set_name)
         return results
 
