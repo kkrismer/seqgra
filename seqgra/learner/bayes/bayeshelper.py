@@ -221,6 +221,49 @@ class BayesOptimalHelper:
                             BayesOptimalHelper.normalize_pwm_score(raw_score,
                                                                    pwm)
 
+                    if rule.spacing_constraints:
+                        temp_combined_score: float = 0.0
+                        y_hat[example_index, i] = 0.0
+                        for spacing_contraint in rule.spacing_constraints:
+                            raw_scores_se1 = raw_scores[spacing_contraint.sequence_element1.sid]
+                            raw_scores_se2 = raw_scores[spacing_contraint.sequence_element2.sid]
+                            pwm_se1 = pwms[spacing_contraint.sequence_element1.sid]
+                            pwm_se2 = pwms[spacing_contraint.sequence_element2.sid]
+                            temp_combined_score = 0.0
+
+                            for j in range(raw_scores_se1.shape[0]):
+                                first_pos: int = min(j + spacing_contraint.min_distance,
+                                                     raw_scores_se2.shape[0])
+                                last_pos: int = min(j + spacing_contraint.max_distance,
+                                                    raw_scores_se2.shape[0])
+
+                                if first_pos < last_pos:
+                                    temp_combined_score = \
+                                        BayesOptimalHelper.normalize_pwm_score(
+                                            raw_scores_se1[j], pwm_se1) + \
+                                        BayesOptimalHelper.normalize_pwm_score(
+                                            max(raw_scores_se2[first_pos:last_pos]), pwm_se2)
+                                    if temp_combined_score > y_hat[example_index, i]:
+                                        y_hat[example_index,
+                                              i] = temp_combined_score
+
+                            if spacing_contraint.order == "random":
+                                for j in range(raw_scores_se2.shape[0]):
+                                    first_pos: int = min(j + spacing_contraint.min_distance,
+                                                         raw_scores_se1.shape[0])
+                                    last_pos: int = min(j + spacing_contraint.max_distance,
+                                                        raw_scores_se1.shape[0])
+
+                                    if first_pos < last_pos:
+                                        temp_combined_score = \
+                                            BayesOptimalHelper.normalize_pwm_score(
+                                                raw_scores_se2[j], pwm_se2) + \
+                                            BayesOptimalHelper.normalize_pwm_score(
+                                                max(raw_scores_se1[first_pos:last_pos]), pwm_se1)
+                                        if temp_combined_score > y_hat[example_index, i]:
+                                            y_hat[example_index,
+                                                  i] = temp_combined_score
+
             if x.shape[0] > 5000:
                 MiscHelper.print_progress_bar(example_index, x.shape[0] - 1)
 
