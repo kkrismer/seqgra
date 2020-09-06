@@ -112,7 +112,7 @@ plot_agreement <- function(input_file_name, output_file_name, title,
           plot.margin = margin(t = 10, r = 15, b = 10, l = 10, unit = "pt"))
   
   ggsave(plot = p, filename = output_file_name, width = 7,
-         height = 1.5 + length(unique(df$label)) * 1.5)
+         height = 1.5 + length(unique(df$label)) * 1.5, limitsize = FALSE)
 }
 
 args <- commandArgs(trailingOnly = TRUE)
