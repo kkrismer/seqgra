@@ -5,52 +5,8 @@ Class with miscellaneous helper functions as static methods
 
 @author: Konstantin Krismer
 """
-from dataclasses import dataclass
 import os
 import shutil
-from typing import List, NamedTuple
-
-
-@dataclass
-class Example:
-    x: str
-    y: str
-
-
-@dataclass
-class AnnotatedExample:
-    x: str
-    y: str
-    annotation: str
-
-
-class ExampleSet(NamedTuple):
-    x: List[str]
-    y: List[str]
-
-
-class AnnotationSet(NamedTuple):
-    annotations: List[str]
-    y: List[str]
-
-
-class AnnotatedExampleSet(NamedTuple):
-    x: List[str]
-    y: List[str]
-    annotations: List[str]
-
-
-class ProbabilisticToken(NamedTuple):
-    token: str
-    probability: float
-    
-class Metrics(NamedTuple):
-    loss: float
-    accuracy: float
-    
-class ModelSize(NamedTuple):
-    num_trainable_params: int
-    num_non_trainable_params: int
 
 
 class MiscHelper:
@@ -68,8 +24,8 @@ class MiscHelper:
                                     "(file with same name exists)")
                 elif len(os.listdir(path)) > 0:
                     num_files: int = len([name
-                                        for name in os.listdir(path)
-                                        if os.path.isfile(path + name)])
+                                          for name in os.listdir(path)
+                                          if os.path.isfile(path + name)])
                     if num_files > 0:
                         if not allow_exists:
                             raise Exception("directory cannot be created "
@@ -123,3 +79,24 @@ class MiscHelper:
 
         if iteration == total:
             print()
+
+    @staticmethod
+    def read_config_file(file_name: str) -> str:
+        with open(file_name.strip()) as f:
+            config: str = f.read()
+        return config
+
+    @staticmethod
+    def format_output_dir(output_dir: str) -> str:
+        output_dir = output_dir.strip().replace("\\", "/")
+        if not output_dir.endswith("/"):
+            output_dir += "/"
+        return output_dir
+
+    @staticmethod
+    def get_valid_file(data_file: str) -> str:
+        data_file = data_file.replace("\\", "/").replace("//", "/").strip()
+        if os.path.isfile(data_file):
+            return data_file
+        else:
+            raise Exception("file does not exist: " + data_file)

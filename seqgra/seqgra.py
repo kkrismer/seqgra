@@ -9,7 +9,6 @@ seqgra complete pipeline:
 
 @author: Konstantin Krismer
 """
-
 import argparse
 import logging
 import os
@@ -18,6 +17,7 @@ from typing import List, Optional
 
 import seqgra
 import seqgra.constants as c
+from seqgra import MiscHelper
 from seqgra.evaluator import Evaluator
 from seqgra.evaluator import FeatureImportanceEvaluator
 from seqgra.learner import Learner
@@ -32,12 +32,6 @@ from seqgra.parser import XMLDataDefinitionParser
 from seqgra.parser import ModelDefinitionParser
 from seqgra.parser import XMLModelDefinitionParser
 from seqgra.simulator import Simulator
-
-
-def read_config_file(file_name: str) -> str:
-    with open(file_name.strip()) as f:
-        config: str = f.read()
-    return config
 
 
 def get_learner(model_definition: ModelDefinition,
@@ -276,21 +270,6 @@ def get_evaluator(evaluator_id: str, learner: Learner,
         raise Exception("invalid evaluator ID")
 
 
-def format_output_dir(output_dir: str) -> str:
-    output_dir = output_dir.strip().replace("\\", "/")
-    if not output_dir.endswith("/"):
-        output_dir += "/"
-    return output_dir
-
-
-def get_valid_file(data_file: str) -> str:
-    data_file = data_file.replace("\\", "/").replace("//", "/").strip()
-    if os.path.isfile(data_file):
-        return data_file
-    else:
-        raise Exception("file does not exist: " + data_file)
-
-
 def run_seqgra(data_config_file: Optional[str],
                data_folder: Optional[str],
                model_config_file: Optional[str],
@@ -308,7 +287,7 @@ def run_seqgra(data_config_file: Optional[str],
                eval_sis_predict_threshold: Optional[float],
                eval_grad_importance_threshold: Optional[float]) -> None:
     logger = logging.getLogger(__name__)
-    output_dir = format_output_dir(output_dir.strip())
+    output_dir = MiscHelper.format_output_dir(output_dir.strip())
     new_data: bool = False
     new_model: bool = False
 
@@ -318,7 +297,7 @@ def run_seqgra(data_config_file: Optional[str],
         logger.info("loaded experimental data")
     else:
         # generate synthetic data
-        data_config = read_config_file(data_config_file)
+        data_config = MiscHelper.read_config_file(data_config_file)
         data_def_parser: DataDefinitionParser = XMLDataDefinitionParser(
             data_config)
         data_definition: DataDefinition = data_def_parser.get_data_definition()
@@ -342,9 +321,13 @@ def run_seqgra(data_config_file: Optional[str],
             simulator.simulate_data()
             new_data = True
 
+        simulator.create_grammar_heatmap(c.DataSet.TRAINING)
+        simulator.create_grammar_heatmap(c.DataSet.VALIDATION)
+        simulator.create_grammar_heatmap(c.DataSet.TEST)
+
     # get learner
     if model_config_file is not None:
-        model_config = read_config_file(model_config_file)
+        model_config = MiscHelper.read_config_file(model_config_file)
         model_def_parser: ModelDefinitionParser = XMLModelDefinitionParser(
             model_config)
         model_definition: ModelDefinition = \
@@ -359,10 +342,11 @@ def run_seqgra(data_config_file: Optional[str],
                 shutil.rmtree(learner_output_dir, ignore_errors=True)
                 logger.info("removed pretrained model")
 
-        learner: Learner = get_learner(model_definition, data_definition,
-                                       output_dir + "input/" + grammar_id,
-                                       output_dir + "models/" + grammar_id,
-                                       not no_checks, gpu_id)
+        learner: Learner = get_learner(
+            model_definition, data_definition,
+            output_dir + "input/" + grammar_id,
+            output_dir + "models/" + grammar_id,
+            not no_checks, gpu_id)
 
         # train model on data
         trained_model_available: bool = len(os.listdir(learner.output_dir)) > 0
