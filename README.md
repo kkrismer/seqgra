@@ -28,10 +28,11 @@ pip install .
 - Python 3.7 (or higher)
 - *R 3.5 (or higher)*
     - *R package `ggplot2` 3.3.0 (or higher)*
+    - *R package `gridExtra` 2.3 (or higher)*
     - *R package `scales` 1.1.0 (or higher)*
 
-R is used to create the grammar-model-agreement plots and if not available,
-these plots will be skipped.
+R is used to create the grammar-model-agreement plots and grammar heatmaps 
+and if not available, these plots will be skipped.
 
 ### Python package dependencies
 

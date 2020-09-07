@@ -17,8 +17,9 @@ if (.Platform$OS.type == "windows") {
 }
 
 if (!("ggplot2" %in% rownames(installed.packages())) ||
+    !("gridExtra" %in% rownames(installed.packages())) ||
     !("scales" %in% rownames(installed.packages()))) {
-    stop(paste0("R packages ggplot2 and/or scales are missing (lib paths: ",
+    stop(paste0("R packages ggplot2, gridExtra and/or scales are missing (lib paths: ",
                 paste(.libPaths(), collapse = "; "), ")"))
 }
 
@@ -71,12 +72,12 @@ plot_heatmap <- function(input_file_name, output_file_name) {
               plot.margin = margin(t = 10, r = 15, b = 10, l = 10, unit = "pt"))
     
     grDevices::pdf(NULL)
-    gp1 <- ggplot2::ggplot_gtable(ggplot2::ggplot_build(p_heatmap))
-    gp2 <- ggplot2::ggplot_gtable(ggplot2::ggplot_build(p_histogram))
+    gp1 <- ggplot_gtable(ggplot_build(p_heatmap))
+    gp2 <- ggplot_gtable(ggplot_build(p_histogram))
     invisible(grDevices::dev.off())
     
     gp1$heights <- gp2$heights
-    p = gridExtra::arrangeGrob(gp1, gp2, ncol = 2, widths = c(2, 1))
+    p <- gridExtra::arrangeGrob(gp1, gp2, ncol = 2, widths = c(2, 1))
     
     ggsave(plot = p, filename = output_file_name, width = 7,
            height = 0.8 + length(unique(df$label)) * 0.6, limitsize = FALSE)
