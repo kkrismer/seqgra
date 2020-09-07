@@ -201,10 +201,16 @@ Generated files and folders:
         |-- session-info.txt
         |-- training.txt
         |-- training-annotation.txt
+        |-- training-grammar-heatmap.txt
+        |-- training-grammar-heatmap.pdf
         |-- validation.txt
         |-- validation-annotation.txt
+        |-- validation-grammar-heatmap.txt
+        |-- validation-grammar-heatmap.pdf
         |-- test.txt
-        +-- test-annotation.txt
+        |-- test-annotation.txt
+        |-- test-grammar-heatmap.txt
+        +-- test-grammar-heatmap.pdf
 </pre>
 
 **Generate synthetic data and train model on it:**
@@ -222,15 +228,23 @@ Generated files and folders:
 |       |-- session-info.txt
 |       |-- training.txt
 |       |-- training-annotation.txt
+|       |-- training-grammar-heatmap.txt
+|       |-- training-grammar-heatmap.pdf
 |       |-- validation.txt
 |       |-- validation-annotation.txt
+|       |-- validation-grammar-heatmap.txt
+|       |-- validation-grammar-heatmap.pdf
 |       |-- test.txt
-|       +-- test-annotation.txt
+|       |-- test-annotation.txt
+|       |-- test-grammar-heatmap.txt
+|       +-- test-grammar-heatmap.pdf
 +-- models
     +-- {GRAMMAR ID}
         +-- {MODEL ID}
-            |-- session-info.txt
-            +-- saved_model*
+            |-- last-epoch-completed.txt
+            |-- num-model-parameters.txt
+            |-- saved_model*
+            +-- session-info.txt
 </pre>
 
 **Train model on previously synthesized data:**
@@ -250,15 +264,23 @@ Generated files and folders (pre-existing folders and files in italics):
 |       |-- <i>session-info.txt</i>
 |       |-- <i>training.txt</i>
 |       |-- <i>training-annotation.txt</i>
+|       |-- <i>training-grammar-heatmap.txt</i>
+|       |-- <i>training-grammar-heatmap.pdf</i>
 |       |-- <i>validation.txt</i>
 |       |-- <i>validation-annotation.txt</i>
+|       |-- <i>validation-grammar-heatmap.txt</i>
+|       |-- <i>validation-grammar-heatmap.pdf</i>
 |       |-- <i>test.txt</i>
-|       +-- <i>test-annotation.txt</i>
+|       |-- <i>test-annotation.txt</i>
+|       |-- <i>test-grammar-heatmap.txt</i>
+|       +-- <i>test-grammar-heatmap.pdf</i>
 +-- models
     +-- {GRAMMAR ID}
         +-- {MODEL ID}
-            |-- session-info.txt
-            +-- saved_model*
+            |-- last-epoch-completed.txt
+            |-- num-model-parameters.txt
+            |-- saved_model*
+            +-- session-info.txt
 </pre>
 
 **Train model on experimental or externally synthesized data:**
@@ -284,8 +306,10 @@ Generated files and folders (pre-existing folders and files in italics):
 +-- models
     +-- {GRAMMAR ID}
         +-- {MODEL ID}
-            |-- session-info.txt
-            +-- saved_model*
+            |-- last-epoch-completed.txt
+            |-- num-model-parameters.txt
+            |-- saved_model*
+            +-- session-info.txt
 </pre>
 
 **Run `metrics`, `predict`, `roc`, and `pr` evaluators on model that was previously trained on synthesized data:**
@@ -304,15 +328,23 @@ Generated files and folders (pre-existing folders and files in italics):
 |       |-- <i>session-info.txt</i>
 |       |-- <i>training.txt</i>
 |       |-- <i>training-annotation.txt</i>
+|       |-- <i>training-grammar-heatmap.txt</i>
+|       |-- <i>training-grammar-heatmap.pdf</i>
 |       |-- <i>validation.txt</i>
 |       |-- <i>validation-annotation.txt</i>
+|       |-- <i>validation-grammar-heatmap.txt</i>
+|       |-- <i>validation-grammar-heatmap.pdf</i>
 |       |-- <i>test.txt</i>
-|       +-- <i>test-annotation.txt</i>
+|       |-- <i>test-annotation.txt</i>
+|       |-- <i>test-grammar-heatmap.txt</i>
+|       +-- <i>test-grammar-heatmap.pdf</i>
 |-- <i>models</i>
 |   +-- <i>{GRAMMAR ID}</i>
 |       +-- <i>{MODEL ID}</i>
-|           |-- <i>session-info.txt</i>
-|           +-- <i>saved_model*</i>
+|           |-- <i>last-epoch-completed.txt</i>
+|           |-- <i>num-model-parameters.txt</i>
+|           |-- <i>saved_model*</i>
+|           +-- <i>session-info.txt</i>
 +-- evaluation
     +-- {GRAMMAR ID}
         +-- {MODEL ID}
@@ -353,15 +385,18 @@ Generated files and folders (pre-existing folders and files in italics):
 |-- <i>models</i>
 |   +-- <i>{GRAMMAR ID}</i>
 |       +-- <i>{MODEL ID}</i>
-|           |-- <i>session-info.txt</i>
-|           +-- <i>saved_model*</i>
+|           |-- <i>last-epoch-completed.txt</i>
+|           |-- <i>num-model-parameters.txt</i>
+|           |-- <i>saved_model*</i>
+|           +-- <i>session-info.txt</i>
 +-- evaluation
     +-- {GRAMMAR ID}
         +-- {MODEL ID}
             +-- sis
                 |-- test-df.txt
                 |-- test-grammar-agreement-thresholded.pdf
-                +-- test-grammar-agreement-thresholded-df.txt
+                |-- test-grammar-agreement-thresholded-df.txt
+                +-- test-statistics-thresholded.txt
 </pre>
 
 \* model files are library-dependent
@@ -395,8 +430,10 @@ Generated files and folders (pre-existing folders and files in italics):
 |-- <i>models</i>
 |   +-- <i>{GRAMMAR ID}</i>
 |       +-- <i>{MODEL ID}</i>
-|           |-- <i>session-info.txt</i>
-|           +-- <i>saved_model*</i>
+|           |-- <i>last-epoch-completed.txt</i>
+|           |-- <i>num-model-parameters.txt</i>
+|           |-- <i>saved_model*</i>
+|           +-- <i>session-info.txt</i>
 +-- evaluation
     +-- {GRAMMAR ID}
         +-- {MODEL ID}
@@ -405,37 +442,53 @@ Generated files and folders (pre-existing folders and files in italics):
             |   |-- test-feature-importance-matrix.npy
             |   |-- test-grammar-agreement-thresholded.pdf
             |   |-- test-grammar-agreement-thresholded-df.txt
+            |   |-- test-statistics.txt
+            |   |-- test-statistics-thresholded.txt
             |   |-- validation-df.txt
             |   |-- validation-feature-importance-matrix.npy
             |   |-- validation-grammar-agreement-thresholded.pdf
-            |   +-- validation-grammar-agreement-thresholded-df.txt
+            |   |-- validation-grammar-agreement-thresholded-df.txt
+            |   |-- validation-statistics.txt
+            |   +-- validation-statistics-thresholded.txt
             |-- gradient-x-input
             |   |-- test-df.txt
             |   |-- test-feature-importance-matrix.npy
             |   |-- test-grammar-agreement-thresholded.pdf
             |   |-- test-grammar-agreement-thresholded-df.txt
+            |   |-- test-statistics.txt
+            |   |-- test-statistics-thresholded.txt
             |   |-- validation-df.txt
             |   |-- validation-feature-importance-matrix.npy
             |   |-- validation-grammar-agreement-thresholded.pdf
-            |   +-- validation-grammar-agreement-thresholded-df.txt
+            |   |-- validation-grammar-agreement-thresholded-df.txt
+            |   |-- validation-statistics.txt
+            |   +-- validation-statistics-thresholded.txt
             |-- integrated-gradients
             |   |-- test-df.txt
             |   |-- test-feature-importance-matrix.npy
             |   |-- test-grammar-agreement-thresholded.pdf
             |   |-- test-grammar-agreement-thresholded-df.txt
+            |   |-- test-statistics.txt
+            |   |-- test-statistics-thresholded.txt
             |   |-- validation-df.txt
             |   |-- validation-feature-importance-matrix.npy
             |   |-- validation-grammar-agreement-thresholded.pdf
-            |   +-- validation-grammar-agreement-thresholded-df.txt
+            |   |-- validation-grammar-agreement-thresholded-df.txt
+            |   |-- validation-statistics.txt
+            |   +-- validation-statistics-thresholded.txt
             +-- saliency
                 |-- test-df.txt
                 |-- test-feature-importance-matrix.npy
-                |-- test-grammar-grammar-agreement-thresholded.pdf
+                |-- test-grammar-agreement-thresholded.pdf
                 |-- test-grammar-agreement-thresholded-df.txt
+                |-- test-statistics.txt
+                |-- test-statistics-thresholded.txt
                 |-- validation-df.txt
                 |-- validation-feature-importance-matrix.npy
                 |-- validation-grammar-agreement-thresholded.pdf
-                +-- validation-grammar-agreement-thresholded-df.txt
+                |-- validation-grammar-agreement-thresholded-df.txt
+                |-- validation-statistics.txt
+                +-- validation-statistics-thresholded.txt
 </pre>
 
 \* model files are library-dependent
