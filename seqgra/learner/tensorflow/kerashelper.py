@@ -1171,8 +1171,7 @@ class KerasHelper:
                     return tf.keras.optimizers.SGD(
                         learning_rate=learning_rate,
                         momentum=momentum,
-                        nesterov=nesterov,
-                        centered=centered)
+                        nesterov=nesterov)
                 elif clipnorm is None and clipvalue is not None:
                     return tf.keras.optimizers.SGD(
                         learning_rate=learning_rate,
