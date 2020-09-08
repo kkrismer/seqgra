@@ -18,9 +18,10 @@ class AbstractDifferenceGradientEvaluator(GradientBasedEvaluator):
     @abstractmethod
     def __init__(self, evaluator_id: str, evaluator_name: str,
                  learner: Learner, output_dir: str,
-                 importance_threshold: Optional[float] = None) -> None:
+                 importance_threshold: Optional[float] = None,
+                 silent: bool = False) -> None:
         super().__init__(evaluator_id, evaluator_name, learner, output_dir,
-                         importance_threshold)
+                         importance_threshold, silent=silent)
 
     @abstractmethod
     def explain(self, x, y1, y2):

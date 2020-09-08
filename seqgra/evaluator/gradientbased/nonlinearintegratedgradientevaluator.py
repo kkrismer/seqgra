@@ -19,12 +19,13 @@ class NonlinearIntegratedGradientEvaluator(AbstractGradientEvaluator):
     def __init__(self, learner: Learner, output_dir: str,
                  importance_threshold: Optional[float] = None,
                  data=None, k=5, reference=None,
-                 path_generator=None) -> None:
+                 path_generator=None,
+                 silent: bool = False) -> None:
         # TODO NonlinearIntegratedGradExplainer
         # requires other data and how to handle reference (default is None)
         super().__init__(c.EvaluatorID.NONLINEAR_INTEGRATED_GRADIENTS,
                          "Nonlinear Integrated Gradients", learner,
-                         output_dir, importance_threshold)
+                         output_dir, importance_threshold, silent=silent)
         self.reference = reference
         if path_generator is not None:
             self._path_fnc = path_generator

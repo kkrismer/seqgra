@@ -58,8 +58,11 @@ class Learner(ABC):
     @abstractmethod
     def __init__(self, model_definition: ModelDefinition, data_dir: str,
                  output_dir: str, validate_data: bool = True,
-                 gpu_id: int = 0) -> None:
+                 gpu_id: int = 0, silent: bool = False) -> None:
         self.logger = logging.getLogger(__name__)
+        self.silent = silent
+        if self.silent:
+            self.logger.setLevel(os.environ.get("LOGLEVEL", "WARNING"))
         self.definition: ModelDefinition = model_definition
         self.data_dir: str = MiscHelper.prepare_path(data_dir)
         self.output_dir: str = MiscHelper.prepare_path(output_dir + "/" +
@@ -385,9 +388,9 @@ class MultiClassClassificationLearner(Learner):
     @abstractmethod
     def __init__(self, model_definition: ModelDefinition, data_dir: str,
                  output_dir: str, validate_data: bool = True,
-                 gpu_id: int = 0) -> None:
+                 gpu_id: int = 0, silent: bool = False) -> None:
         super().__init__(model_definition, data_dir, output_dir,
-                         validate_data, gpu_id)
+                         validate_data, gpu_id, silent=silent)
 
         if self.definition.task != c.TaskType.MULTI_CLASS_CLASSIFICATION:
             raise Exception("task of model definition must be multi-class "
@@ -468,9 +471,9 @@ class MultiLabelClassificationLearner(Learner):
     @abstractmethod
     def __init__(self, model_definition: ModelDefinition, data_dir: str,
                  output_dir: str, validate_data: bool = True,
-                 gpu_id: int = 0) -> None:
+                 gpu_id: int = 0, silent: bool = False) -> None:
         super().__init__(model_definition, data_dir, output_dir,
-                         validate_data, gpu_id)
+                         validate_data, gpu_id, silent=silent)
 
         if self.definition.task != c.TaskType.MULTI_LABEL_CLASSIFICATION:
             raise Exception("task of model definition must be multi-label "
@@ -558,9 +561,9 @@ class MultipleRegressionLearner(Learner):
     @abstractmethod
     def __init__(self, model_definition: ModelDefinition, data_dir: str,
                  output_dir: str, validate_data: bool = True,
-                 gpu_id: int = 0) -> None:
+                 gpu_id: int = 0, silent: bool = False) -> None:
         super().__init__(model_definition, data_dir, output_dir,
-                         validate_data, gpu_id)
+                         validate_data, gpu_id, silent=silent)
 
         if self.definition.task != c.TaskType.MULTIPLE_REGRESSION:
             raise Exception("task of model definition must be multiple "
@@ -651,9 +654,9 @@ class MultivariateRegressionLearner(Learner):
     @abstractmethod
     def __init__(self, model_definition: ModelDefinition, data_dir: str,
                  output_dir: str, validate_data: bool = True,
-                 gpu_id: int = 0) -> None:
+                 gpu_id: int = 0, silent: bool = False) -> None:
         super().__init__(model_definition, data_dir, output_dir,
-                         validate_data, gpu_id)
+                         validate_data, gpu_id, silent=silent)
 
         if self.definition.task != c.TaskType.MULTIVARIATE_REGRESSION:
             raise Exception("task of model definition must be multivariate "

@@ -18,8 +18,10 @@ from seqgra.model import ModelDefinition
 class BayesOptimalDNAMultiClassClassificationLearner(
         DNAMultiClassClassificationLearner):
     def __init__(self, model_definition: ModelDefinition, data_dir: str,
-                 output_dir: str, validate_data: bool = True) -> None:
-        super().__init__(model_definition, data_dir, output_dir, validate_data)
+                 output_dir: str, validate_data: bool = True,
+                 silent: bool = False) -> None:
+        super().__init__(model_definition, data_dir, output_dir, validate_data,
+                         silent=silent)
 
     def create_model(self) -> None:
         BayesOptimalHelper.create_model(self)
@@ -45,7 +47,7 @@ class BayesOptimalDNAMultiClassClassificationLearner(
         self.create_model()
 
     def predict(self, x: Any, encode: bool = True):
-        return BayesOptimalHelper.predict(self, x, encode)
+        return BayesOptimalHelper.predict(self, x, encode, self.silent)
 
     def get_num_params(self) -> ModelSize:
         return 0
@@ -57,8 +59,10 @@ class BayesOptimalDNAMultiClassClassificationLearner(
 class BayesOptimalDNAMultiLabelClassificationLearner(
         DNAMultiLabelClassificationLearner):
     def __init__(self, model_definition: ModelDefinition, data_dir: str,
-                 output_dir: str, validate_data: bool = True) -> None:
-        super().__init__(model_definition, data_dir, output_dir, validate_data)
+                 output_dir: str, validate_data: bool = True,
+                 silent: bool = False) -> None:
+        super().__init__(model_definition, data_dir, output_dir, validate_data,
+                         silent=silent)
 
     def create_model(self) -> None:
         BayesOptimalHelper.create_model(self)
@@ -84,7 +88,7 @@ class BayesOptimalDNAMultiLabelClassificationLearner(
         self.create_model()
 
     def predict(self, x: Any, encode: bool = True):
-        return BayesOptimalHelper.predict(self, x, encode)
+        return BayesOptimalHelper.predict(self, x, encode, self.silent)
 
     def get_num_params(self) -> ModelSize:
         return 0
@@ -96,8 +100,10 @@ class BayesOptimalDNAMultiLabelClassificationLearner(
 class BayesOptimalProteinMultiClassClassificationLearner(
         ProteinMultiClassClassificationLearner):
     def __init__(self, model_definition: ModelDefinition, data_dir: str,
-                 output_dir: str, validate_data: bool = True) -> None:
-        super().__init__(model_definition, data_dir, output_dir, validate_data)
+                 output_dir: str, validate_data: bool = True,
+                 silent: bool = False) -> None:
+        super().__init__(model_definition, data_dir, output_dir, validate_data,
+                         silent=silent)
 
     def create_model(self) -> None:
         BayesOptimalHelper.create_model(self)
@@ -123,7 +129,7 @@ class BayesOptimalProteinMultiClassClassificationLearner(
         self.create_model()
 
     def predict(self, x: Any, encode: bool = True):
-        return BayesOptimalHelper.predict(self, x, encode)
+        return BayesOptimalHelper.predict(self, x, encode, self.silent)
 
     def get_num_params(self) -> ModelSize:
         return 0
@@ -135,8 +141,10 @@ class BayesOptimalProteinMultiClassClassificationLearner(
 class BayesOptimalProteinMultiLabelClassificationLearner(
         ProteinMultiLabelClassificationLearner):
     def __init__(self, model_definition: ModelDefinition, data_dir: str,
-                 output_dir: str, validate_data: bool = True) -> None:
-        super().__init__(model_definition, data_dir, output_dir, validate_data)
+                 output_dir: str, validate_data: bool = True,
+                 silent: bool = False) -> None:
+        super().__init__(model_definition, data_dir, output_dir, validate_data,
+                         silent=silent)
 
     def create_model(self) -> None:
         BayesOptimalHelper.create_model(self)
@@ -162,7 +170,7 @@ class BayesOptimalProteinMultiLabelClassificationLearner(
         self.create_model()
 
     def predict(self, x: Any, encode: bool = True):
-        return BayesOptimalHelper.predict(self, x, encode)
+        return BayesOptimalHelper.predict(self, x, encode, self.silent)
 
     def get_num_params(self) -> ModelSize:
         return 0

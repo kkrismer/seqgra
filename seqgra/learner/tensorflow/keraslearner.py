@@ -23,9 +23,9 @@ class KerasDNAMultiClassClassificationLearner(
         DNAMultiClassClassificationLearner):
     def __init__(self, model_definition: ModelDefinition, data_dir: str,
                  output_dir: str, validate_data: bool = True,
-                 gpu_id: int = 0) -> None:
+                 gpu_id: int = 0, silent: bool = False) -> None:
         super().__init__(model_definition, data_dir, output_dir,
-                         validate_data, gpu_id)
+                         validate_data, gpu_id, silent=silent)
         self.use_cuda: bool = tf.test.is_built_with_gpu_support() and \
             len(tf.config.list_physical_devices("GPU")) > 0 and gpu_id != -1
         if self.use_cuda:
@@ -73,7 +73,8 @@ class KerasDNAMultiClassClassificationLearner(
     def _train_model(self,
                      x_train: List[str], y_train: List[str],
                      x_val: List[str], y_val: List[str]) -> None:
-        KerasHelper.train_model(self, x_train, y_train, x_val, y_val)
+        KerasHelper.train_model(self, x_train, y_train, x_val, y_val,
+                                self.silent)
 
     def save_model(self, file_name: Optional[str] = None) -> None:
         KerasHelper.save_model(self, file_name)
@@ -114,9 +115,9 @@ class KerasDNAMultiLabelClassificationLearner(
         DNAMultiLabelClassificationLearner):
     def __init__(self, model_definition: ModelDefinition, data_dir: str,
                  output_dir: str, validate_data: bool = True,
-                 gpu_id: int = 0) -> None:
+                 gpu_id: int = 0, silent: bool = False) -> None:
         super().__init__(model_definition, data_dir, output_dir,
-                         validate_data, gpu_id)
+                         validate_data, gpu_id, silent=silent)
         self.use_cuda: bool = tf.test.is_built_with_gpu_support() and \
             len(tf.config.list_physical_devices("GPU")) > 0 and gpu_id != -1
         if self.use_cuda:
@@ -164,7 +165,8 @@ class KerasDNAMultiLabelClassificationLearner(
     def _train_model(self,
                      x_train: List[str], y_train: List[str],
                      x_val: List[str], y_val: List[str]) -> None:
-        KerasHelper.train_model(self, x_train, y_train, x_val, y_val)
+        KerasHelper.train_model(self, x_train, y_train, x_val, y_val,
+                                self.silent)
 
     def save_model(self, file_name: Optional[str] = None) -> None:
         KerasHelper.save_model(self, file_name)
@@ -205,9 +207,9 @@ class KerasProteinMultiClassClassificationLearner(
         ProteinMultiClassClassificationLearner):
     def __init__(self, model_definition: ModelDefinition, data_dir: str,
                  output_dir: str, validate_data: bool = True,
-                 gpu_id: int = 0) -> None:
+                 gpu_id: int = 0, silent: bool = False) -> None:
         super().__init__(model_definition, data_dir, output_dir,
-                         validate_data, gpu_id)
+                         validate_data, gpu_id, silent=silent)
         self.use_cuda: bool = tf.test.is_built_with_gpu_support() and \
             len(tf.config.list_physical_devices("GPU")) > 0 and gpu_id != -1
         if self.use_cuda:
@@ -255,7 +257,8 @@ class KerasProteinMultiClassClassificationLearner(
     def _train_model(self,
                      x_train: List[str], y_train: List[str],
                      x_val: List[str], y_val: List[str]) -> None:
-        KerasHelper.train_model(self, x_train, y_train, x_val, y_val)
+        KerasHelper.train_model(self, x_train, y_train, x_val, y_val,
+                                self.silent)
 
     def save_model(self, file_name: Optional[str] = None) -> None:
         KerasHelper.save_model(self, file_name)
@@ -296,9 +299,9 @@ class KerasProteinMultiLabelClassificationLearner(
         ProteinMultiLabelClassificationLearner):
     def __init__(self, model_definition: ModelDefinition, data_dir: str,
                  output_dir: str, validate_data: bool = True,
-                 gpu_id: int = 0) -> None:
+                 gpu_id: int = 0, silent: bool = False) -> None:
         super().__init__(model_definition, data_dir, output_dir,
-                         validate_data, gpu_id)
+                         validate_data, gpu_id, silent=silent)
         self.use_cuda: bool = tf.test.is_built_with_gpu_support() and \
             len(tf.config.list_physical_devices("GPU")) > 0 and gpu_id != -1
         if self.use_cuda:
@@ -346,7 +349,8 @@ class KerasProteinMultiLabelClassificationLearner(
     def _train_model(self,
                      x_train: List[str], y_train: List[str],
                      x_val: List[str], y_val: List[str]) -> None:
-        KerasHelper.train_model(self, x_train, y_train, x_val, y_val)
+        KerasHelper.train_model(self, x_train, y_train, x_val, y_val,
+                                self.silent)
 
     def save_model(self, file_name: Optional[str] = None) -> None:
         KerasHelper.save_model(self, file_name)

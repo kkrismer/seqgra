@@ -19,9 +19,10 @@ class DeepLiftEvaluator(AbstractGradientEvaluator):
 
     def __init__(self, learner: Learner, output_dir: str,
                  importance_threshold: Optional[float] = None,
-                 baseline_type: str = "shuffled") -> None:
+                 baseline_type: str = "shuffled",
+                 silent: bool = False) -> None:
         super().__init__(c.EvaluatorID.DEEP_LIFT, "DeepLIFT", learner,
-                         output_dir, importance_threshold)
+                         output_dir, importance_threshold, silent=silent)
         self._prepare_reference()
         assert(baseline_type in ["neutral", "zeros", "shuffled"])
         self.baseline_inp = None

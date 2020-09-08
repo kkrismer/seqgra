@@ -22,11 +22,13 @@ from seqgra.learner import Learner
 
 class SISEvaluator(FeatureImportanceEvaluator):
     def __init__(self, learner: Learner, output_dir: str,
-                 predict_threshold: Optional[float] = None) -> None:
+                 predict_threshold: Optional[float] = None,
+                 silent: bool = False) -> None:
         super().__init__(
             c.EvaluatorID.SIS, "Sufficient Input Subsets", learner, output_dir,
             supported_tasks=[c.TaskType.MULTI_CLASS_CLASSIFICATION,
-                             c.TaskType.MULTI_LABEL_CLASSIFICATION])
+                             c.TaskType.MULTI_LABEL_CLASSIFICATION],
+            silent=silent)
 
         if predict_threshold:
             self.predict_threshold = predict_threshold

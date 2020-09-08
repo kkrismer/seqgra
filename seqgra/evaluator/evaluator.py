@@ -24,8 +24,11 @@ class Evaluator(ABC):
                  output_dir: str,
                  supported_tasks: Optional[Set[str]] = None,
                  supported_sequence_spaces: Optional[Set[str]] = None,
-                 supported_libraries: Optional[Set[str]] = None) -> None:
+                 supported_libraries: Optional[Set[str]] = None,
+                 silent: bool = False) -> None:
         self.logger = logging.getLogger(__name__)
+        if silent:
+            self.logger.setLevel(os.environ.get("LOGLEVEL", "WARNING"))
         self.evaluator_id: str = evaluator_id
         self.evaluator_name: str = evaluator_name
         self.learner: Learner = learner
@@ -297,11 +300,12 @@ class FeatureImportanceEvaluator(Evaluator):
                  output_dir: str,
                  supported_tasks: Optional[Set[str]] = None,
                  supported_sequence_spaces: Optional[Set[str]] = None,
-                 supported_libraries: Optional[Set[str]] = None) -> None:
+                 supported_libraries: Optional[Set[str]] = None,
+                 silent: bool = False) -> None:
         super().__init__(evaluator_id, evaluator_name, learner, output_dir,
                          supported_tasks,
                          supported_sequence_spaces,
-                         supported_libraries)
+                         supported_libraries, silent)
 
     def evaluate_model(self, set_name: str = "test",
                        subset_idx: Optional[List[int]] = None,

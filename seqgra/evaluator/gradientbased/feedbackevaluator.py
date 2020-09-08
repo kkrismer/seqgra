@@ -20,9 +20,10 @@ class FeedbackEvaluator(AbstractGradientEvaluator):
     def __init__(self, learner: Learner, output_dir: str,
                  importance_threshold: Optional[float] = None,
                  input_size=None, class_num=1000,
-                 lr=0.1, lambd=0.01, max_iters=30) -> None:
+                 lr=0.1, lambd=0.01, max_iters=30,
+                 silent: bool = False) -> None:
         super().__init__(c.EvaluatorID.FEEDBACK, "Feedback", learner,
-                         output_dir, importance_threshold)
+                         output_dir, importance_threshold, silent=silent)
         self.lr = lr
         self.lambd = lambd
         self.max_iters = max_iters

@@ -1,8 +1,9 @@
 """Abstract base class for all comparators
 """
 from abc import ABC, abstractmethod
-from typing import List, Optional
 import logging
+import os
+from typing import List, Optional
 
 from seqgra import MiscHelper
 
@@ -11,8 +12,11 @@ class Comparator(ABC):
     @abstractmethod
     def __init__(self, comparator_id: str, comparator_name: str,
                  analysis_name: str, output_dir: str, 
-                 model_labels: Optional[List[str]] = None) -> None:
+                 model_labels: Optional[List[str]] = None,
+                 silent: bool = False) -> None:
         self.logger = logging.getLogger(__name__)
+        if silent:
+            self.logger.setLevel(os.environ.get("LOGLEVEL", "WARNING"))
         self.comparator_id: str = comparator_id
         self.comparator_name: str = comparator_name
         self.data_dir: str = MiscHelper.prepare_path(

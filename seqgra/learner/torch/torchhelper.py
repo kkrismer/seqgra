@@ -111,8 +111,12 @@ class TorchHelper:
             learner: Learner,
             training_dataset: torch.utils.data.Dataset,
             validation_dataset: torch.utils.data.Dataset,
-            output_layer_activation_function: Optional[str] = None) -> None:
+            output_layer_activation_function: Optional[str] = None,
+            silent: bool = False) -> None:
         logger = logging.getLogger(__name__)
+        if silent:
+            logger.setLevel(os.environ.get("LOGLEVEL", "WARNING"))
+
         if learner.model is None:
             learner.create_model()
 
@@ -256,8 +260,12 @@ class TorchHelper:
             learner: Learner,
             training_dataset: torch.utils.data.Dataset,
             validation_dataset: torch.utils.data.Dataset,
-            output_layer_activation_function: Optional[str] = None) -> None:
+            output_layer_activation_function: Optional[str] = None,
+            silent: bool = False) -> None:
         logger = logging.getLogger(__name__)
+        if silent:
+            logger.setLevel(os.environ.get("LOGLEVEL", "WARNING"))
+
         if learner.model is None:
             learner.create_model()
 
@@ -382,7 +390,6 @@ class TorchHelper:
         Returns:
             softmax_linear: Output tensor with the computed logits.
         """
-        logger = logging.getLogger(__name__)
         data_loader = torch.utils.data.DataLoader(
             dataset,
             batch_size=int(
@@ -424,7 +431,6 @@ class TorchHelper:
     @staticmethod
     def evaluate_model(learner: Learner, dataset: torch.utils.data.Dataset,
                        output_layer_activation_function: Optional[str] = None):
-        logger = logging.getLogger(__name__)
         data_loader = torch.utils.data.DataLoader(
             dataset,
             batch_size=int(

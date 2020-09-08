@@ -17,10 +17,11 @@ class ExcitationBackpropEvaluator(AbstractGradientEvaluator):
 
     def __init__(self, learner: Learner, output_dir: str,
                  importance_threshold: Optional[float] = None,
-                 output_layer_keys=None) -> None:
+                 output_layer_keys=None,
+                 silent: bool = False) -> None:
         super().__init__(c.EvaluatorID.EXCITATION_BACKPROP,
                          "Excitation Backprop", learner, output_dir,
-                         importance_threshold)
+                         importance_threshold, silent=silent)
         self.output_layer = self.get_layer(output_layer_keys)
         self._override_backward()
         self._register_hooks()

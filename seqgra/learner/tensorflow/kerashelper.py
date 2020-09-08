@@ -127,8 +127,13 @@ class KerasHelper:
     @staticmethod
     def train_model(learner: Learner,
                     x_train: List[str], y_train: List[str],
-                    x_val: List[str], y_val: List[str]) -> None:
+                    x_val: List[str], y_val: List[str],
+                    silent: bool = False) -> None:
         logger = logging.getLogger(__name__)
+        verbosity: int = 1
+        if silent:
+            logger.setLevel(os.environ.get("LOGLEVEL", "WARNING"))
+            verbosity: int = 0
 
         # GPU or CPU?
         logger.info("using device: %s", learner.device_label)
@@ -183,7 +188,7 @@ class KerasHelper:
                 patience: int = 10
             es_callback = tf.keras.callbacks.EarlyStopping(monitor="val_loss",
                                                            mode="min",
-                                                           verbose=1,
+                                                           verbose=verbosity,
                                                            patience=patience,
                                                            min_delta=0)
 
@@ -205,7 +210,7 @@ class KerasHelper:
                     learner.definition.training_process_hyperparameters["batch_size"]),
                 epochs=int(
                     learner.definition.training_process_hyperparameters["epochs"]),
-                verbose=1,
+                verbose=verbosity,
                 callbacks=callbacks,
                 validation_data=(encoded_x_val, encoded_y_val),
                 shuffle=bool(strtobool(
@@ -275,8 +280,6 @@ class KerasHelper:
         Returns:
             softmax_linear: Output tensor with the computed logits.
         """
-        logger = logging.getLogger(__name__)
-
         with tf.device(learner.device_label):
             if encode:
                 x = learner.encode_x(x)
@@ -310,8 +313,6 @@ class KerasHelper:
 
     @staticmethod
     def evaluate_model(learner: Learner, x: List[str], y: List[str]):
-        logger = logging.getLogger(__name__)
-
         with tf.device(learner.device_label):
             # one hot encode input and labels
             encoded_x = learner.encode_x(x)

@@ -13,7 +13,6 @@ from lxml import etree
 from seqgra.model import ModelDefinition
 from seqgra.writer import ModelDefinitionWriter
 from seqgra.model.model import Architecture
-from seqgra.model.model import Operation
 
 
 class XMLModelDefinitionWriter(ModelDefinitionWriter):
@@ -38,8 +37,6 @@ class XMLModelDefinitionWriter(ModelDefinitionWriter):
     @staticmethod
     def attach_general_element(root,
                                model_definition: ModelDefinition) -> None:
-        logger = logging.getLogger(__name__)
-
         general_element = etree.SubElement(root, "general",
                                            {"id": model_definition.model_id})
 
@@ -70,6 +67,7 @@ class XMLModelDefinitionWriter(ModelDefinitionWriter):
                                                           "inputencoding")
                 input_encoding_element.text = model_definition.input_encoding
             else:
+                logger = logging.getLogger(__name__)
                 logger.warning("invalid input encoding: %s; valid values: "
                                "1D, 2D", model_definition.input_encoding)
 

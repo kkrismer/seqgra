@@ -24,9 +24,9 @@ from seqgra.model import ModelDefinition
 class DNAMultiClassClassificationLearner(MultiClassClassificationLearner):
     def __init__(self, model_definition: ModelDefinition, data_dir: str,
                  output_dir: str, validate_data: bool = True,
-                 gpu_id: int = 0) -> None:
+                 gpu_id: int = 0, silent: bool = False) -> None:
         super().__init__(model_definition, data_dir, output_dir,
-                         validate_data, gpu_id)
+                         validate_data, gpu_id, silent=silent)
 
     def encode_x(self, x: List[str]):
         return np.stack([DNAHelper.convert_dense_to_one_hot_encoding(seq)
@@ -92,9 +92,9 @@ class DNAMultiClassClassificationLearner(MultiClassClassificationLearner):
 class DNAMultiLabelClassificationLearner(MultiLabelClassificationLearner):
     def __init__(self, model_definition: ModelDefinition, data_dir: str,
                  output_dir: str, validate_data: bool = True,
-                 gpu_id: int = 0) -> None:
+                 gpu_id: int = 0, silent: bool = False) -> None:
         super().__init__(model_definition, data_dir, output_dir,
-                         validate_data, gpu_id)
+                         validate_data, gpu_id, silent=silent)
 
     def encode_x(self, x: List[str]):
         return np.stack([DNAHelper.convert_dense_to_one_hot_encoding(seq)

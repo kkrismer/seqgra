@@ -26,9 +26,9 @@ class TorchDNAMultiClassClassificationLearner(
         DNAMultiClassClassificationLearner):
     def __init__(self, model_definition: ModelDefinition, data_dir: str,
                  output_dir: str, validate_data: bool = True,
-                 gpu_id: int = 0) -> None:
+                 gpu_id: int = 0, silent: bool = False) -> None:
         super().__init__(model_definition, data_dir, output_dir,
-                         validate_data, gpu_id)
+                         validate_data, gpu_id, silent=silent)
         self.use_cuda: bool = torch.cuda.is_available() and gpu_id != -1
         if self.use_cuda:
             self.device_label: str = "cuda:" + str(gpu_id)
@@ -84,7 +84,8 @@ class TorchDNAMultiClassClassificationLearner(
 
         TorchHelper.train_model(self, training_dataset,
                                 validation_dataset,
-                                self._get_output_layer_activation_function())
+                                self._get_output_layer_activation_function(),
+                                silent=self.silent)
 
     def save_model(self, file_name: Optional[str] = None) -> None:
         TorchHelper.save_model(self, file_name)
@@ -147,9 +148,9 @@ class TorchDNAMultiLabelClassificationLearner(
         DNAMultiLabelClassificationLearner):
     def __init__(self, model_definition: ModelDefinition, data_dir: str,
                  output_dir: str, validate_data: bool = True,
-                 gpu_id: int = 0) -> None:
+                 gpu_id: int = 0, silent: bool = False) -> None:
         super().__init__(model_definition, data_dir, output_dir,
-                         validate_data, gpu_id)
+                         validate_data, gpu_id, silent=silent)
         self.use_cuda: bool = torch.cuda.is_available() and gpu_id != -1
         if self.use_cuda:
             self.device_label: str = "cuda:" + str(gpu_id)
@@ -205,7 +206,8 @@ class TorchDNAMultiLabelClassificationLearner(
 
         TorchHelper.train_model(self, training_dataset,
                                 validation_dataset,
-                                self._get_output_layer_activation_function())
+                                self._get_output_layer_activation_function(),
+                                silent=self.silent)
 
     def save_model(self, file_name: Optional[str] = None) -> None:
         TorchHelper.save_model(self, file_name)
@@ -268,9 +270,9 @@ class TorchProteinMultiClassClassificationLearner(
         ProteinMultiClassClassificationLearner):
     def __init__(self, model_definition: ModelDefinition, data_dir: str,
                  output_dir: str, validate_data: bool = True,
-                 gpu_id: int = 0) -> None:
+                 gpu_id: int = 0, silent: bool = False) -> None:
         super().__init__(model_definition, data_dir, output_dir,
-                         validate_data, gpu_id)
+                         validate_data, gpu_id, silent=silent)
         self.use_cuda: bool = torch.cuda.is_available() and gpu_id != -1
         if self.use_cuda:
             self.device_label: str = "cuda:" + str(gpu_id)
@@ -326,7 +328,8 @@ class TorchProteinMultiClassClassificationLearner(
 
         TorchHelper.train_model(self, training_dataset,
                                 validation_dataset,
-                                self._get_output_layer_activation_function())
+                                self._get_output_layer_activation_function(),
+                                silent=self.silent)
 
     def save_model(self, file_name: Optional[str] = None) -> None:
         TorchHelper.save_model(self, file_name)
@@ -389,9 +392,9 @@ class TorchProteinMultiLabelClassificationLearner(
         ProteinMultiLabelClassificationLearner):
     def __init__(self, model_definition: ModelDefinition, data_dir: str,
                  output_dir: str, validate_data: bool = True,
-                 gpu_id: int = 0) -> None:
+                 gpu_id: int = 0, silent: bool = False) -> None:
         super().__init__(model_definition, data_dir, output_dir,
-                         validate_data, gpu_id)
+                         validate_data, gpu_id, silent=silent)
         self.use_cuda: bool = torch.cuda.is_available() and gpu_id != -1
         if self.use_cuda:
             self.device_label: str = "cuda:" + str(gpu_id)
@@ -447,7 +450,8 @@ class TorchProteinMultiLabelClassificationLearner(
 
         TorchHelper.train_model(self, training_dataset,
                                 validation_dataset,
-                                self._get_output_layer_activation_function())
+                                self._get_output_layer_activation_function(),
+                                silent=self.silent)
 
     def save_model(self, file_name: Optional[str] = None) -> None:
         TorchHelper.save_model(self, file_name)

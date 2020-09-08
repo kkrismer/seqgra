@@ -18,9 +18,10 @@ class SmoothGradEvaluator(AbstractDifferenceGradientEvaluator):
     def __init__(self, learner: Learner, output_dir: str,
                  importance_threshold: Optional[float] = None,
                  stdev_spread: float = 0.15,
-                 nsamples: int = 25, magnitude: bool = True) -> None:
+                 nsamples: int = 25, magnitude: bool = True,
+                 silent: bool = False) -> None:
         super().__init__(c.EvaluatorID.SMOOTH_GRAD, "Smooth Grad", learner,
-                         output_dir, importance_threshold)
+                         output_dir, importance_threshold, silent=silent)
         self.stdev_spread: float = stdev_spread
         self.nsamples: int = nsamples
         self.magnitude: bool = magnitude

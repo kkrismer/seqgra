@@ -22,9 +22,11 @@ class GradientBasedEvaluator(FeatureImportanceEvaluator):
     @abstractmethod
     def __init__(self, evaluator_id: str, evaluator_name: str,
                  learner: Learner, output_dir: str,
-                 importance_threshold: Optional[float] = None) -> None:
+                 importance_threshold: Optional[float] = None,
+                 silent: bool = False) -> None:
         super().__init__(evaluator_id, evaluator_name, learner, output_dir,
-                         supported_libraries=[c.LibraryType.TORCH])
+                         supported_libraries=[c.LibraryType.TORCH],
+                         silent=silent)
 
         if importance_threshold:
             self.importance_threshold = importance_threshold

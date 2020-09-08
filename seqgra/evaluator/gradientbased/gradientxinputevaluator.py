@@ -12,9 +12,11 @@ class GradientxInputEvaluator(AbstractGradientEvaluator):
     """
 
     def __init__(self, learner: Learner, output_dir: str,
-                 importance_threshold: Optional[float] = None) -> None:
+                 importance_threshold: Optional[float] = None,
+                 silent: bool = False) -> None:
         super().__init__(c.EvaluatorID.GRADIENT_X_INPUT, "Gradient x input",
-                         learner, output_dir, importance_threshold)
+                         learner, output_dir, importance_threshold,
+                         silent=silent)
 
     def explain(self, x, y):
         grad = self._backprop(x, y)

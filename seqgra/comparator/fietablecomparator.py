@@ -12,10 +12,11 @@ from seqgra.comparator import Comparator
 
 class FIETableComparator(Comparator):
     def __init__(self, analysis_name: str, output_dir: str,
-                 model_labels: Optional[List[str]] = None) -> None:
+                 model_labels: Optional[List[str]] = None,
+                 silent: bool = False) -> None:
         super().__init__(c.ComparatorID.FEATURE_IMPORTANCE_EVALUATOR_TABLE,
                          "Feature Importance Evaluator Table",
-                         analysis_name, output_dir, model_labels)
+                         analysis_name, output_dir, model_labels, silent)
 
     def compare_models(self, grammar_ids: Optional[List[str]] = None,
                        model_ids: Optional[List[str]] = None,

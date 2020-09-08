@@ -8,6 +8,7 @@ Implementation of Parser for XML configuration files
 """
 import io
 import logging
+import os
 from typing import Dict, List, Any
 from xml.dom.minidom import Document, parseString
 
@@ -30,8 +31,10 @@ class XMLModelDefinitionParser(ModelDefinitionParser):
     Strategies.
     """
 
-    def __init__(self, config: str) -> None:
+    def __init__(self, config: str, silent: bool = False) -> None:
         self.logger = logging.getLogger(__name__)
+        if silent:
+            self.logger.setLevel(os.environ.get("LOGLEVEL", "WARNING"))
         self._dom: Document = parseString(config)
         self._general_element: Any = \
             self._dom.getElementsByTagName("general")[0]

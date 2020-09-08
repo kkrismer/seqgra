@@ -16,10 +16,11 @@ class ContrastiveExcitationBackpropEvaluator(AbstractGradientEvaluator):
     def __init__(self, learner: Learner, output_dir: str,
                  importance_threshold: Optional[float] = None,
                  intermediate_layer_keys=None,
-                 output_layer_keys=None, final_linear_keys=None) -> None:
+                 output_layer_keys=None, final_linear_keys=None,
+                 silent: bool = False) -> None:
         super().__init__(c.EvaluatorID.CONTRASTIVE_EXCITATION_BACKPROP,
                          "Contrastive Excitation Backprop", learner,
-                         output_dir, importance_threshold)
+                         output_dir, importance_threshold, silent=silent)
         self.intermediate_layer = self.get_layer(intermediate_layer_keys)
         self.output_layer = self.get_layer(output_layer_keys)
         self.final_linear = self.get_layer(final_linear_keys)

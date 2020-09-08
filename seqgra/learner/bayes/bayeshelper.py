@@ -165,7 +165,8 @@ class BayesOptimalHelper:
             return (score - min_score) / (max_score - min_score)
 
     @staticmethod
-    def predict(learner: Learner, x: Any, encode: bool = True):
+    def predict(learner: Learner, x: Any, encode: bool = True,
+                silent: bool = False):
         """ This is the forward calculation from x to y
         Returns:
             softmax_linear: Output tensor with the computed logits.
@@ -264,7 +265,7 @@ class BayesOptimalHelper:
                                             y_hat[example_index,
                                                   i] = temp_combined_score
 
-            if x.shape[0] > 5000:
+            if not silent and x.shape[0] > 5000:
                 MiscHelper.print_progress_bar(example_index, x.shape[0] - 1)
 
         if learner.definition.task == c.TaskType.MULTI_CLASS_CLASSIFICATION:

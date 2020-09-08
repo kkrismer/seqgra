@@ -67,6 +67,7 @@ usage: seqgra [-h]
               [-e EVALUATORS [EVALUATORS ...]]
               -o OUTPUTDIR
               [-p]
+              [-s]
               [-r]
               [-g GPU]
               [--nochecks]
@@ -110,6 +111,8 @@ optional arguments:
                         generated data, trained model, and model evaluation
   -p, --print           if this flag is set, data definition, model 
                         definition, and model summary are printed
+  -s, --silent          if this flag is set, only warnings and errors are 
+                        printed
   -r, --remove          if this flag is set, previously stored data for this 
                         grammar - model combination will be removed prior to 
                         the analysis run. This includes the folders 

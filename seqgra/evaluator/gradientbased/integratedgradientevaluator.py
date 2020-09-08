@@ -16,10 +16,11 @@ class IntegratedGradientEvaluator(AbstractGradientEvaluator):
 
     def __init__(self, learner: Learner, output_dir: str,
                  importance_threshold: Optional[float] = None,
-                 steps: int = 100) -> None:
+                 steps: int = 100,
+                 silent: bool = False) -> None:
         super().__init__(c.EvaluatorID.INTEGRATED_GRADIENTS,
                          "Integrated Gradients", learner, output_dir,
-                         importance_threshold)
+                         importance_threshold, silent=silent)
         self.steps = steps
 
     def explain(self, x, y):

@@ -15,9 +15,10 @@ class GradCamGradientEvaluator(AbstractGradientEvaluator):
 
     def __init__(self, learner: Learner, output_dir: str,
                  importance_threshold: Optional[float] = None,
-                 target_layer_name_keys=None, use_input: bool = False) -> None:
+                 target_layer_name_keys=None, use_input: bool = False,
+                 silent: bool = False) -> None:
         super().__init__(c.EvaluatorID.GRAD_CAM, "Grad-CAM", learner,
-                         output_dir, importance_threshold)
+                         output_dir, importance_threshold, silent=silent)
         self.target_layer = self.get_layer(target_layer_name_keys)
         self.use_input = use_input
         self.intermediate_act = []

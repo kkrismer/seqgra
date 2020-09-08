@@ -32,8 +32,10 @@ from seqgra.simulator import ExampleGenerator
 
 class Simulator:
     def __init__(self, data_definition: DataDefinition,
-                 output_dir: str) -> None:
+                 output_dir: str, silent: bool = False) -> None:
         self.logger = logging.getLogger(__name__)
+        if silent:
+            self.logger.setLevel(os.environ.get("LOGLEVEL", "WARNING"))
         self.definition: DataDefinition = data_definition
         self.check_grammar()
         self.output_dir = MiscHelper.prepare_path(output_dir + "/" +
