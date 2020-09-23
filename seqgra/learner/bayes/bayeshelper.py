@@ -37,6 +37,7 @@ class BayesOptimalHelper:
 
     @staticmethod
     def ppm_to_pwm(ppm, alphabet_size) -> Any:
+        ppm = np.where(np.isclose(ppm, 0.0), 0.0001, ppm)
         return np.log2(ppm * alphabet_size)
 
     @staticmethod
@@ -124,6 +125,7 @@ class BayesOptimalHelper:
 
         for i in range(example.shape[1]):
             scores += np.correlate(example[:, i], pwm[:, i], mode="valid")
+
         return scores
 
     @staticmethod
@@ -162,6 +164,11 @@ class BayesOptimalHelper:
         if math.isclose(min_score, max_score):
             return 0.5
         else:
+            if min_score < 0:
+                # squish negative range
+                min_score = (-1.0) * (abs(min_score) ** (1.0 / 4.0))
+            if score < 0:
+                score = (-1.0) * (abs(score) ** (1.0 / 4.0))
             return (score - min_score) / (max_score - min_score)
 
     @staticmethod
@@ -215,6 +222,8 @@ class BayesOptimalHelper:
                                 end_position: int = min(
                                     int(rule.position) + pwm.shape[0] + 2, mask.shape[0])
 
+                            start_position = int(start_position)
+                            end_position = int(end_position)
                             mask[start_position:end_position] = 1.0
                             raw_score = max(raw_scores[se.sid] * mask)
 
