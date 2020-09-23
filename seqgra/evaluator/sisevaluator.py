@@ -159,10 +159,19 @@ class SISEvaluator(FeatureImportanceEvaluator):
             return np.array(self.learner.predict(
                 x, encode=False))[:, label_index]
 
-        input_shape = encoded_x[0].shape
+        input_shape: int = encoded_x[0].shape
+        if self.learner.definition.library == c.LibraryType.TENSORFLOW:
+            broadcast_axis: int = 1
+        elif self.learner.definition.library == c.LibraryType.TORCH:
+            broadcast_axis: int = 0
+        elif self.learner.definition.library == c.LibraryType.BAYES_OPTIMAL_CLASSIFIER:
+            broadcast_axis: int = 1
+        else:
+            raise Exception("unknown library type")
+            
         fully_masked_input = np.ones(input_shape) * 0.25
         initial_mask = make_empty_boolean_mask_broadcast_over_axis(
-            input_shape, 1)
+            input_shape, broadcast_axis)
 
         return [self.__produce_masked_inputs(
             encoded_x[i], sis_predict,
