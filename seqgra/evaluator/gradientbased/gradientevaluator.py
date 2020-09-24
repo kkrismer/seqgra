@@ -1,4 +1,4 @@
-"""Gradient Saliency Evaluator
+"""Raw Gradient Saliency Evaluator
 """
 from typing import Optional
 
@@ -8,13 +8,13 @@ from seqgra.learner import Learner
 
 
 class GradientEvaluator(AbstractGradientEvaluator):
-    """Vanilla gradient saliency evaluator for PyTorch models
+    """Raw gradient saliency evaluator for PyTorch models
     """
 
     def __init__(self, learner: Learner, output_dir: str,
                  importance_threshold: Optional[float] = None,
                  silent: bool = False) -> None:
-        super().__init__(c.EvaluatorID.GRADIENT, "Vanilla gradient saliency",
+        super().__init__(c.EvaluatorID.GRADIENT, "Raw gradient",
                          learner, output_dir, importance_threshold,
                          silent=silent)
 

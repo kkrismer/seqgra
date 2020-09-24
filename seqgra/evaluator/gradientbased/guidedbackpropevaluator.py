@@ -12,7 +12,7 @@ from seqgra.learner import Learner
 
 
 class GuidedBackpropEvaluator(AbstractGradientEvaluator):
-    """Vanilla gradient saliency evaluator for PyTorch models
+    """Guided backprop evaluator for PyTorch models
     """
 
     def __init__(self, learner: Learner, output_dir: str,
