@@ -44,6 +44,19 @@ class KerasHelper:
     MULTIVARIATE_REGRESSION_LOSSES: FrozenSet[str] = MULTIPLE_REGRESSION_LOSSES
 
     @staticmethod
+    def init_tf_memory_policy() -> None:
+        logger = logging.getLogger(__name__)
+        gpus = tf.config.list_physical_devices("GPU")
+        if gpus:
+            try:
+                for gpu in gpus:
+                    tf.config.experimental.set_memory_growth(gpu, True)
+            except RuntimeError as error:
+                logger.warning("Error occurred while setting TensorFlow "
+                               "memory growth: %s", str(error))
+
+
+    @staticmethod
     def create_model(learner: Learner) -> None:
         with tf.device(learner.device_label):
             arch: Architecture = learner.definition.architecture

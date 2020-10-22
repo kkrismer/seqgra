@@ -26,6 +26,8 @@ class KerasDNAMultiClassClassificationLearner(
                  gpu_id: int = 0, silent: bool = False) -> None:
         super().__init__(model_definition, data_dir, output_dir,
                          validate_data, gpu_id, silent=silent)
+        KerasHelper.init_tf_memory_policy()
+        
         self.use_cuda: bool = tf.test.is_built_with_gpu_support() and \
             len(tf.config.list_physical_devices("GPU")) > 0 and gpu_id != -1
         if self.use_cuda:
@@ -118,6 +120,8 @@ class KerasDNAMultiLabelClassificationLearner(
                  gpu_id: int = 0, silent: bool = False) -> None:
         super().__init__(model_definition, data_dir, output_dir,
                          validate_data, gpu_id, silent=silent)
+        KerasHelper.init_tf_memory_policy()
+        
         self.use_cuda: bool = tf.test.is_built_with_gpu_support() and \
             len(tf.config.list_physical_devices("GPU")) > 0 and gpu_id != -1
         if self.use_cuda:
@@ -210,6 +214,8 @@ class KerasProteinMultiClassClassificationLearner(
                  gpu_id: int = 0, silent: bool = False) -> None:
         super().__init__(model_definition, data_dir, output_dir,
                          validate_data, gpu_id, silent=silent)
+        KerasHelper.init_tf_memory_policy()
+        
         self.use_cuda: bool = tf.test.is_built_with_gpu_support() and \
             len(tf.config.list_physical_devices("GPU")) > 0 and gpu_id != -1
         if self.use_cuda:
@@ -302,6 +308,8 @@ class KerasProteinMultiLabelClassificationLearner(
                  gpu_id: int = 0, silent: bool = False) -> None:
         super().__init__(model_definition, data_dir, output_dir,
                          validate_data, gpu_id, silent=silent)
+        KerasHelper.init_tf_memory_policy()
+
         self.use_cuda: bool = tf.test.is_built_with_gpu_support() and \
             len(tf.config.list_physical_devices("GPU")) > 0 and gpu_id != -1
         if self.use_cuda:
