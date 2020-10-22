@@ -368,16 +368,39 @@ def run_seqgra(data_config_file: Optional[str],
 
         # train model on data
         trained_model_available: bool = len(os.listdir(learner.output_dir)) > 0
+        train_model: bool = not trained_model_available
         if trained_model_available:
-            if new_data:
+            try:
+                learner.load_model()
+                logger.info("loaded previously trained model")
+            except Exception as exception:
+                logger.warning("unable to load previously trained model; "
+                               "previously trained model will be deleted "
+                               "and new model will be trained; "
+                               "exception caught: %s", str(exception))
+
+                # delete all files and folders in learner output directory
+                for file_name in os.listdir(learner.output_dir):
+                    file_path = os.path.join(learner.output_dir, file_name)
+                    try:
+                        if os.path.isfile(file_path) or os.path.islink(file_path):
+                            os.unlink(file_path)
+                        elif os.path.isdir(file_path):
+                            shutil.rmtree(file_path)
+                    except OSError as e:
+                        logger.warning(
+                            "Failed to delete %s. Reason: %s", file_path, e)
+
+                train_model = True
+
+            if new_data and train_model:
                 raise Exception("previously trained model used outdated "
                                 "training data; delete '" +
                                 learner.output_dir +
                                 "' and run seqgra again to train new model "
                                 "on current data")
-            learner.load_model()
-            logger.info("loaded previously trained model")
-        else:
+
+        if train_model:
             logger.info("training model")
 
             # load data
