@@ -14,9 +14,7 @@ import pandas as pd
 
 import seqgra.constants as c
 from seqgra.evaluator import FeatureImportanceEvaluator
-from seqgra.evaluator.sis import make_empty_boolean_mask_broadcast_over_axis
-from seqgra.evaluator.sis import produce_masked_inputs
-from seqgra.evaluator.sis import sis_collection
+from seqgra.evaluator import sis
 from seqgra.learner import Learner
 
 
@@ -170,7 +168,7 @@ class SISEvaluator(FeatureImportanceEvaluator):
             raise Exception("unknown library type")
             
         fully_masked_input = np.ones(input_shape) * 0.25
-        initial_mask = make_empty_boolean_mask_broadcast_over_axis(
+        initial_mask = sis.make_empty_boolean_mask_broadcast_over_axis(
             input_shape, broadcast_axis)
 
         return [self.__produce_masked_inputs(
@@ -204,12 +202,12 @@ class SISEvaluator(FeatureImportanceEvaluator):
 
     def __produce_masked_inputs(self, x, sis_predict, fully_masked_input,
                                 initial_mask) -> List[str]:
-        collection = sis_collection(sis_predict, self.predict_threshold, x,
+        collection = sis.sis_collection(sis_predict, self.predict_threshold, x,
                                     fully_masked_input,
                                     initial_mask=initial_mask)
 
         if len(collection) > 0:
-            sis_masked_inputs = produce_masked_inputs(
+            sis_masked_inputs = sis.produce_masked_inputs(
                 x, fully_masked_input,
                 [sr.mask for sr in collection])
             return self.learner.decode_x(sis_masked_inputs).tolist()
