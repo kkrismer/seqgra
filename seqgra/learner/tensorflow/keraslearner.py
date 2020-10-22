@@ -28,9 +28,11 @@ class KerasDNAMultiClassClassificationLearner(
                          validate_data, gpu_id, silent=silent)
         KerasHelper.init_tf_memory_policy()
         
+        gpus = tf.config.list_physical_devices("GPU")
         self.use_cuda: bool = tf.test.is_built_with_gpu_support() and \
-            len(tf.config.list_physical_devices("GPU")) > 0 and gpu_id != -1
+            len(gpus) > 0 and gpu_id != -1
         if self.use_cuda:
+            tf.config.set_visible_devices(gpus[gpu_id], "GPU")
             self.device_label: str = "/GPU:" + str(gpu_id)
         else:
             self.device_label: str = "/CPU:0"
@@ -122,9 +124,11 @@ class KerasDNAMultiLabelClassificationLearner(
                          validate_data, gpu_id, silent=silent)
         KerasHelper.init_tf_memory_policy()
         
+        gpus = tf.config.list_physical_devices("GPU")
         self.use_cuda: bool = tf.test.is_built_with_gpu_support() and \
-            len(tf.config.list_physical_devices("GPU")) > 0 and gpu_id != -1
+            len(gpus) > 0 and gpu_id != -1
         if self.use_cuda:
+            tf.config.set_visible_devices(gpus[gpu_id], "GPU")
             self.device_label: str = "/GPU:" + str(gpu_id)
         else:
             self.device_label: str = "/CPU:0"
@@ -216,9 +220,11 @@ class KerasProteinMultiClassClassificationLearner(
                          validate_data, gpu_id, silent=silent)
         KerasHelper.init_tf_memory_policy()
         
+        gpus = tf.config.list_physical_devices("GPU")
         self.use_cuda: bool = tf.test.is_built_with_gpu_support() and \
-            len(tf.config.list_physical_devices("GPU")) > 0 and gpu_id != -1
+            len(gpus) > 0 and gpu_id != -1
         if self.use_cuda:
+            tf.config.set_visible_devices(gpus[gpu_id], "GPU")
             self.device_label: str = "/GPU:" + str(gpu_id)
         else:
             self.device_label: str = "/CPU:0"
@@ -309,10 +315,12 @@ class KerasProteinMultiLabelClassificationLearner(
         super().__init__(model_definition, data_dir, output_dir,
                          validate_data, gpu_id, silent=silent)
         KerasHelper.init_tf_memory_policy()
-
+        
+        gpus = tf.config.list_physical_devices("GPU")
         self.use_cuda: bool = tf.test.is_built_with_gpu_support() and \
-            len(tf.config.list_physical_devices("GPU")) > 0 and gpu_id != -1
+            len(gpus) > 0 and gpu_id != -1
         if self.use_cuda:
+            tf.config.set_visible_devices(gpus[gpu_id], "GPU")
             self.device_label: str = "/GPU:" + str(gpu_id)
         else:
             self.device_label: str = "/CPU:0"
