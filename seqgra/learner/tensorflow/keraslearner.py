@@ -138,7 +138,9 @@ class KerasDNAMultiClassClassificationLearner(
                 x: Optional[Any] = None,
                 encode: bool = True):
         if x is not None:
-            dataset = tf.data.Dataset.from_tensor_slices((self.encode_x(x)))
+            if encode:
+                x = self.encode_x(x)
+            dataset = tf.data.Dataset.from_tensor_slices((x))
         elif file_name is not None:
             seq_len: int = self.get_sequence_length(file_name)
 
@@ -300,7 +302,9 @@ class KerasDNAMultiLabelClassificationLearner(
                 x: Optional[Any] = None,
                 encode: bool = True):
         if x is not None:
-            dataset = tf.data.Dataset.from_tensor_slices((self.encode_x(x)))
+            if encode:
+                x = self.encode_x(x)
+            dataset = tf.data.Dataset.from_tensor_slices((x))
         elif file_name is not None:
             seq_len: int = self.get_sequence_length(file_name)
 
@@ -462,7 +466,9 @@ class KerasProteinMultiClassClassificationLearner(
                 x: Optional[Any] = None,
                 encode: bool = True):
         if x is not None:
-            dataset = tf.data.Dataset.from_tensor_slices((self.encode_x(x)))
+            if encode:
+                x = self.encode_x(x)
+            dataset = tf.data.Dataset.from_tensor_slices((x))
         elif file_name is not None:
             seq_len: int = self.get_sequence_length(file_name)
 
@@ -624,7 +630,9 @@ class KerasProteinMultiLabelClassificationLearner(
                 x: Optional[Any] = None,
                 encode: bool = True):
         if x is not None:
-            dataset = tf.data.Dataset.from_tensor_slices((self.encode_x(x)))
+            if encode:
+                x = self.encode_x(x)
+            dataset = tf.data.Dataset.from_tensor_slices((x))
         elif file_name is not None:
             seq_len: int = self.get_sequence_length(file_name)
 
