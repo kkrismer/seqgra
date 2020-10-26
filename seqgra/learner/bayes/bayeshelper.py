@@ -36,6 +36,127 @@ class BayesOptimalHelper:
             model_param_file.write("number of all parameters\t0\n")
 
     @staticmethod
+    def evaluate_model(learner: Learner, x: List[str], y: List[str]):
+        y_hat = BayesOptimalHelper.predict(learner, x)
+        y_hat = learner.decode_y(y_hat)
+        accuracy = [y_i == y_hat_i for y_i, y_hat_i in zip(y, y_hat)]
+        accuracy = np.asarray(accuracy).astype(int)
+        accuracy = np.sum(accuracy) / len(accuracy)
+
+        return {"loss": float("nan"), "accuracy": accuracy}
+
+    @staticmethod
+    def predict(learner: Learner, x: Any, silent: bool = False):
+        """ This is the forward calculation from x to y
+        Returns:
+            softmax_linear: Output tensor with the computed logits.
+        """
+        conditions: List[Condition] = learner.model[0]
+        y_hat = np.zeros((x.shape[0], len(learner.definition.labels)))
+
+        for example_index in range(x.shape[0]):
+            for i, label in enumerate(learner.definition.labels):
+                # get rules for label
+                # for now: just PWM
+                pwms: Dict[str, Any] = BayesOptimalHelper.get_pwms_for_label(
+                    label, conditions, learner.model[1])
+                raw_scores: Dict[str, Any] = dict()
+                for sid, pwm in pwms.items():
+                    raw_scores[sid] = BayesOptimalHelper.score_example(
+                        x[example_index, :, :], pwm)
+                    condition: Condition = Condition.get_by_id(
+                        conditions, label)
+
+                for rule in condition.grammar:
+                    for se in rule.sequence_elements:
+                        pwm = pwms[se.sid]
+                        if rule.position == "random":
+                            raw_score = max(raw_scores[se.sid])
+                        else:
+                            mask = np.zeros((raw_scores[se.sid].shape))
+                            if rule.position == "start":
+                                start_position: int = 0
+                                end_position: int = pwm.shape[0] + 1
+                            elif rule.position == "end":
+                                start_position: int = max(
+                                    mask.shape[0] - pwm.shape[0] - 1, 0)
+                                end_position: int = mask.shape[0]
+                            elif rule.position == "center":
+                                start_position: int = max(
+                                    int(mask.shape[0] / 2 - pwm.shape[0] / 2 - 1), 0)
+                                end_position: int = min(
+                                    start_position + pwm.shape[0] + 2, mask.shape[0])
+                            else:
+                                start_position: int = max(
+                                    int(rule.position) - pwm.shape[0] / 2 - 1, 0)
+                                end_position: int = min(
+                                    int(rule.position) + pwm.shape[0] + 2, mask.shape[0])
+
+                            start_position = int(start_position)
+                            end_position = int(end_position)
+                            mask[start_position:end_position] = 1.0
+                            raw_score = max(raw_scores[se.sid] * mask)
+
+                        y_hat[example_index, i] += \
+                            BayesOptimalHelper.normalize_pwm_score(raw_score,
+                                                                   pwm)
+
+                    if rule.spacing_constraints:
+                        temp_combined_score: float = 0.0
+                        y_hat[example_index, i] = 0.0
+                        for spacing_contraint in rule.spacing_constraints:
+                            raw_scores_se1 = raw_scores[spacing_contraint.sequence_element1.sid]
+                            raw_scores_se2 = raw_scores[spacing_contraint.sequence_element2.sid]
+                            pwm_se1 = pwms[spacing_contraint.sequence_element1.sid]
+                            pwm_se2 = pwms[spacing_contraint.sequence_element2.sid]
+                            temp_combined_score = 0.0
+
+                            for j in range(raw_scores_se1.shape[0]):
+                                first_pos: int = min(j + spacing_contraint.min_distance,
+                                                     raw_scores_se2.shape[0])
+                                last_pos: int = min(j + spacing_contraint.max_distance,
+                                                    raw_scores_se2.shape[0])
+
+                                if first_pos < last_pos:
+                                    temp_combined_score = \
+                                        BayesOptimalHelper.normalize_pwm_score(
+                                            raw_scores_se1[j], pwm_se1) + \
+                                        BayesOptimalHelper.normalize_pwm_score(
+                                            max(raw_scores_se2[first_pos:last_pos]), pwm_se2)
+                                    if temp_combined_score > y_hat[example_index, i]:
+                                        y_hat[example_index,
+                                              i] = temp_combined_score
+
+                            if spacing_contraint.order == "random":
+                                for j in range(raw_scores_se2.shape[0]):
+                                    first_pos: int = min(j + spacing_contraint.min_distance,
+                                                         raw_scores_se1.shape[0])
+                                    last_pos: int = min(j + spacing_contraint.max_distance,
+                                                        raw_scores_se1.shape[0])
+
+                                    if first_pos < last_pos:
+                                        temp_combined_score = \
+                                            BayesOptimalHelper.normalize_pwm_score(
+                                                raw_scores_se2[j], pwm_se2) + \
+                                            BayesOptimalHelper.normalize_pwm_score(
+                                                max(raw_scores_se1[first_pos:last_pos]), pwm_se1)
+                                        if temp_combined_score > y_hat[example_index, i]:
+                                            y_hat[example_index,
+                                                  i] = temp_combined_score
+
+            if not silent and x.shape[0] > 5000:
+                MiscHelper.print_progress_bar(example_index, x.shape[0] - 1)
+
+        if learner.definition.task == c.TaskType.MULTI_CLASS_CLASSIFICATION:
+            # shift
+            zero_col = np.zeros((y_hat.shape[0], 1))
+            y_hat -= np.hstack((y_hat, zero_col)).min(axis=1)[:, None]
+            # scale to [0, 1]
+            y_hat /= y_hat.sum(axis=1)[:, None]
+
+        return y_hat
+
+    @staticmethod
     def ppm_to_pwm(ppm, alphabet_size) -> Any:
         ppm = np.where(np.isclose(ppm, 0.0), 0.0001, ppm)
         return np.log2(ppm * alphabet_size)
@@ -170,128 +291,3 @@ class BayesOptimalHelper:
             if score < 0:
                 score = (-1.0) * (abs(score) ** (1.0 / 4.0))
             return (score - min_score) / (max_score - min_score)
-
-    @staticmethod
-    def predict(learner: Learner, x: Any, encode: bool = True,
-                silent: bool = False):
-        """ This is the forward calculation from x to y
-        Returns:
-            softmax_linear: Output tensor with the computed logits.
-        """
-        if encode:
-            x = learner.encode_x(x)
-
-        conditions: List[Condition] = learner.model[0]
-        y_hat = np.zeros((x.shape[0], len(learner.definition.labels)))
-
-        for example_index in range(x.shape[0]):
-            for i, label in enumerate(learner.definition.labels):
-                # get rules for label
-                # for now: just PWM
-                pwms: Dict[str, Any] = BayesOptimalHelper.get_pwms_for_label(
-                    label, conditions, learner.model[1])
-                raw_scores: Dict[str, Any] = dict()
-                for sid, pwm in pwms.items():
-                    raw_scores[sid] = BayesOptimalHelper.score_example(
-                        x[example_index, :, :], pwm)
-                    condition: Condition = Condition.get_by_id(
-                        conditions, label)
-
-                for rule in condition.grammar:
-                    for se in rule.sequence_elements:
-                        pwm = pwms[se.sid]
-                        if rule.position == "random":
-                            raw_score = max(raw_scores[se.sid])
-                        else:
-                            mask = np.zeros((raw_scores[se.sid].shape))
-                            if rule.position == "start":
-                                start_position: int = 0
-                                end_position: int = pwm.shape[0] + 1
-                            elif rule.position == "end":
-                                start_position: int = max(
-                                    mask.shape[0] - pwm.shape[0] - 1, 0)
-                                end_position: int = mask.shape[0]
-                            elif rule.position == "center":
-                                start_position: int = max(
-                                    int(mask.shape[0] / 2 - pwm.shape[0] / 2 - 1), 0)
-                                end_position: int = min(
-                                    start_position + pwm.shape[0] + 2, mask.shape[0])
-                            else:
-                                start_position: int = max(
-                                    int(rule.position) - pwm.shape[0] / 2 - 1, 0)
-                                end_position: int = min(
-                                    int(rule.position) + pwm.shape[0] + 2, mask.shape[0])
-
-                            start_position = int(start_position)
-                            end_position = int(end_position)
-                            mask[start_position:end_position] = 1.0
-                            raw_score = max(raw_scores[se.sid] * mask)
-
-                        y_hat[example_index, i] += \
-                            BayesOptimalHelper.normalize_pwm_score(raw_score,
-                                                                   pwm)
-
-                    if rule.spacing_constraints:
-                        temp_combined_score: float = 0.0
-                        y_hat[example_index, i] = 0.0
-                        for spacing_contraint in rule.spacing_constraints:
-                            raw_scores_se1 = raw_scores[spacing_contraint.sequence_element1.sid]
-                            raw_scores_se2 = raw_scores[spacing_contraint.sequence_element2.sid]
-                            pwm_se1 = pwms[spacing_contraint.sequence_element1.sid]
-                            pwm_se2 = pwms[spacing_contraint.sequence_element2.sid]
-                            temp_combined_score = 0.0
-
-                            for j in range(raw_scores_se1.shape[0]):
-                                first_pos: int = min(j + spacing_contraint.min_distance,
-                                                     raw_scores_se2.shape[0])
-                                last_pos: int = min(j + spacing_contraint.max_distance,
-                                                    raw_scores_se2.shape[0])
-
-                                if first_pos < last_pos:
-                                    temp_combined_score = \
-                                        BayesOptimalHelper.normalize_pwm_score(
-                                            raw_scores_se1[j], pwm_se1) + \
-                                        BayesOptimalHelper.normalize_pwm_score(
-                                            max(raw_scores_se2[first_pos:last_pos]), pwm_se2)
-                                    if temp_combined_score > y_hat[example_index, i]:
-                                        y_hat[example_index,
-                                              i] = temp_combined_score
-
-                            if spacing_contraint.order == "random":
-                                for j in range(raw_scores_se2.shape[0]):
-                                    first_pos: int = min(j + spacing_contraint.min_distance,
-                                                         raw_scores_se1.shape[0])
-                                    last_pos: int = min(j + spacing_contraint.max_distance,
-                                                        raw_scores_se1.shape[0])
-
-                                    if first_pos < last_pos:
-                                        temp_combined_score = \
-                                            BayesOptimalHelper.normalize_pwm_score(
-                                                raw_scores_se2[j], pwm_se2) + \
-                                            BayesOptimalHelper.normalize_pwm_score(
-                                                max(raw_scores_se1[first_pos:last_pos]), pwm_se1)
-                                        if temp_combined_score > y_hat[example_index, i]:
-                                            y_hat[example_index,
-                                                  i] = temp_combined_score
-
-            if not silent and x.shape[0] > 5000:
-                MiscHelper.print_progress_bar(example_index, x.shape[0] - 1)
-
-        if learner.definition.task == c.TaskType.MULTI_CLASS_CLASSIFICATION:
-            # shift
-            zero_col = np.zeros((y_hat.shape[0], 1))
-            y_hat -= np.hstack((y_hat, zero_col)).min(axis=1)[:, None]
-            # scale to [0, 1]
-            y_hat /= y_hat.sum(axis=1)[:, None]
-
-        return y_hat
-
-    @staticmethod
-    def evaluate_model(learner: Learner, x: List[str], y: List[str]):
-        y_hat = BayesOptimalHelper.predict(learner, x)
-        y_hat = learner.decode_y(y_hat)
-        accuracy = [y_i == y_hat_i for y_i, y_hat_i in zip(y, y_hat)]
-        accuracy = np.asarray(accuracy).astype(int)
-        accuracy = np.sum(accuracy) / len(accuracy)
-
-        return {"loss": float("nan"), "accuracy": accuracy}

@@ -33,13 +33,41 @@ class BayesOptimalDNAMultiClassClassificationLearner(
         BayesOptimalHelper.set_seed(self)
 
     def _train_model(self,
-                     training_file: Optional[str] = None,
-                     validation_file: Optional[str] = None,
+                     file_name_train: Optional[str] = None,
+                     file_name_val: Optional[str] = None,
                      x_train: Optional[List[str]] = None,
                      y_train: Optional[List[str]] = None,
                      x_val: Optional[List[str]] = None,
                      y_val: Optional[List[str]] = None) -> None:
         BayesOptimalHelper.train_model(self)
+
+    def evaluate_model(self, file_name: Optional[str] = None,
+                       x: Optional[List[str]] = None,
+                       y: Optional[List[str]] = None):
+        if x is not None and y is not None:
+            pass
+        elif file_name is not None:
+            x, y = self.parse_examples_data(file_name)
+        else:
+            raise Exception("specify either file_name or x, y")
+
+        x = self.encode_x(x)
+        y = self.encode_y(y)
+        return BayesOptimalHelper.evaluate_model(self, x, y)
+
+    def predict(self, file_name: Optional[str] = None,
+                x: Optional[Any] = None,
+                encode: bool = True):
+        if x is not None:
+            if encode:
+                x = self.encode_x(x)
+        elif file_name is not None:
+            x, _ = self.parse_examples_data(file_name)
+            x = self.encode_x(x)
+        else:
+            raise Exception("specify either file_name or x")
+
+        return BayesOptimalHelper.predict(self, x, self.silent)
 
     def save_model(self, file_name: Optional[str] = None):
         pass
@@ -50,20 +78,8 @@ class BayesOptimalDNAMultiClassClassificationLearner(
     def load_model(self, file_name: Optional[str] = None):
         self.create_model()
 
-    def predict(self, file_name: Optional[str] = None,
-                x: Optional[Any] = None,
-                encode: bool = True):
-        # TODO file_name option
-        return BayesOptimalHelper.predict(self, x, encode, self.silent)
-
     def get_num_params(self) -> ModelSize:
         return 0
-
-    def evaluate_model(self, file_name: Optional[str] = None,
-                       x: Optional[List[str]] = None,
-                       y: Optional[List[str]] = None):
-        # TODO file_name option
-        return BayesOptimalHelper.evaluate_model(self, x, y)
 
 
 class BayesOptimalDNAMultiLabelClassificationLearner(
@@ -84,13 +100,41 @@ class BayesOptimalDNAMultiLabelClassificationLearner(
         BayesOptimalHelper.set_seed(self)
 
     def _train_model(self,
-                     training_file: Optional[str] = None,
-                     validation_file: Optional[str] = None,
+                     file_name_train: Optional[str] = None,
+                     file_name_val: Optional[str] = None,
                      x_train: Optional[List[str]] = None,
                      y_train: Optional[List[str]] = None,
                      x_val: Optional[List[str]] = None,
                      y_val: Optional[List[str]] = None) -> None:
         BayesOptimalHelper.train_model(self)
+
+    def evaluate_model(self, file_name: Optional[str] = None,
+                       x: Optional[List[str]] = None,
+                       y: Optional[List[str]] = None):
+        if x is not None and y is not None:
+            pass
+        elif file_name is not None:
+            x, y = self.parse_examples_data(file_name)
+        else:
+            raise Exception("specify either file_name or x, y")
+
+        x = self.encode_x(x)
+        y = self.encode_y(y)
+        return BayesOptimalHelper.evaluate_model(self, x, y)
+
+    def predict(self, file_name: Optional[str] = None,
+                x: Optional[Any] = None,
+                encode: bool = True):
+        if x is not None:
+            if encode:
+                x = self.encode_x(x)
+        elif file_name is not None:
+            x, _ = self.parse_examples_data(file_name)
+            x = self.encode_x(x)
+        else:
+            raise Exception("specify either file_name or x")
+
+        return BayesOptimalHelper.predict(self, x, self.silent)
 
     def save_model(self, file_name: Optional[str] = None):
         pass
@@ -101,20 +145,8 @@ class BayesOptimalDNAMultiLabelClassificationLearner(
     def load_model(self, file_name: Optional[str] = None):
         self.create_model()
 
-    def predict(self, file_name: Optional[str] = None,
-                x: Optional[Any] = None,
-                encode: bool = True):
-        # TODO file_name option
-        return BayesOptimalHelper.predict(self, x, encode, self.silent)
-
     def get_num_params(self) -> ModelSize:
         return 0
-
-    def evaluate_model(self, file_name: Optional[str] = None,
-                       x: Optional[List[str]] = None,
-                       y: Optional[List[str]] = None):
-        # TODO file_name option
-        return BayesOptimalHelper.evaluate_model(self, x, y)
 
 
 class BayesOptimalProteinMultiClassClassificationLearner(
@@ -135,13 +167,41 @@ class BayesOptimalProteinMultiClassClassificationLearner(
         BayesOptimalHelper.set_seed(self)
 
     def _train_model(self,
-                     training_file: Optional[str] = None,
-                     validation_file: Optional[str] = None,
+                     file_name_train: Optional[str] = None,
+                     file_name_val: Optional[str] = None,
                      x_train: Optional[List[str]] = None,
                      y_train: Optional[List[str]] = None,
                      x_val: Optional[List[str]] = None,
                      y_val: Optional[List[str]] = None) -> None:
         BayesOptimalHelper.train_model(self)
+
+    def evaluate_model(self, file_name: Optional[str] = None,
+                       x: Optional[List[str]] = None,
+                       y: Optional[List[str]] = None):
+        if x is not None and y is not None:
+            pass
+        elif file_name is not None:
+            x, y = self.parse_examples_data(file_name)
+        else:
+            raise Exception("specify either file_name or x, y")
+
+        x = self.encode_x(x)
+        y = self.encode_y(y)
+        return BayesOptimalHelper.evaluate_model(self, x, y)
+
+    def predict(self, file_name: Optional[str] = None,
+                x: Optional[Any] = None,
+                encode: bool = True):
+        if x is not None:
+            if encode:
+                x = self.encode_x(x)
+        elif file_name is not None:
+            x, _ = self.parse_examples_data(file_name)
+            x = self.encode_x(x)
+        else:
+            raise Exception("specify either file_name or x")
+
+        return BayesOptimalHelper.predict(self, x, self.silent)
 
     def save_model(self, file_name: Optional[str] = None):
         pass
@@ -152,20 +212,8 @@ class BayesOptimalProteinMultiClassClassificationLearner(
     def load_model(self, file_name: Optional[str] = None):
         self.create_model()
 
-    def predict(self, file_name: Optional[str] = None,
-                x: Optional[Any] = None,
-                encode: bool = True):
-        # TODO file_name option
-        return BayesOptimalHelper.predict(self, x, encode, self.silent)
-
     def get_num_params(self) -> ModelSize:
         return 0
-
-    def evaluate_model(self, file_name: Optional[str] = None,
-                       x: Optional[List[str]] = None,
-                       y: Optional[List[str]] = None):
-        # TODO file_name option
-        return BayesOptimalHelper.evaluate_model(self, x, y)
 
 
 class BayesOptimalProteinMultiLabelClassificationLearner(
@@ -186,13 +234,41 @@ class BayesOptimalProteinMultiLabelClassificationLearner(
         BayesOptimalHelper.set_seed(self)
 
     def _train_model(self,
-                     training_file: Optional[str] = None,
-                     validation_file: Optional[str] = None,
+                     file_name_train: Optional[str] = None,
+                     file_name_val: Optional[str] = None,
                      x_train: Optional[List[str]] = None,
                      y_train: Optional[List[str]] = None,
                      x_val: Optional[List[str]] = None,
                      y_val: Optional[List[str]] = None) -> None:
         BayesOptimalHelper.train_model(self)
+
+    def evaluate_model(self, file_name: Optional[str] = None,
+                       x: Optional[List[str]] = None,
+                       y: Optional[List[str]] = None):
+        if x is not None and y is not None:
+            pass
+        elif file_name is not None:
+            x, y = self.parse_examples_data(file_name)
+        else:
+            raise Exception("specify either file_name or x, y")
+
+        x = self.encode_x(x)
+        y = self.encode_y(y)
+        return BayesOptimalHelper.evaluate_model(self, x, y)
+
+    def predict(self, file_name: Optional[str] = None,
+                x: Optional[Any] = None,
+                encode: bool = True):
+        if x is not None:
+            if encode:
+                x = self.encode_x(x)
+        elif file_name is not None:
+            x, _ = self.parse_examples_data(file_name)
+            x = self.encode_x(x)
+        else:
+            raise Exception("specify either file_name or x")
+
+        return BayesOptimalHelper.predict(self, x, self.silent)
 
     def save_model(self, file_name: Optional[str] = None):
         pass
@@ -203,17 +279,5 @@ class BayesOptimalProteinMultiLabelClassificationLearner(
     def load_model(self, file_name: Optional[str] = None):
         self.create_model()
 
-    def predict(self, file_name: Optional[str] = None,
-                x: Optional[Any] = None,
-                encode: bool = True):
-        # TODO file_name option
-        return BayesOptimalHelper.predict(self, x, encode, self.silent)
-
     def get_num_params(self) -> ModelSize:
         return 0
-
-    def evaluate_model(self, file_name: Optional[str] = None,
-                       x: Optional[List[str]] = None,
-                       y: Optional[List[str]] = None):
-        # TODO file_name option
-        return BayesOptimalHelper.evaluate_model(self, x, y)
