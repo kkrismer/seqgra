@@ -4,6 +4,7 @@ PyTorch learners
 
 @author: Konstantin Krismer
 """
+from distutils.util import strtobool
 from typing import Any, List, Optional
 
 import numpy as np
@@ -75,12 +76,14 @@ class TorchDNAMultiClassClassificationLearner(
                      y_train: Optional[List[str]] = None,
                      x_val: Optional[List[str]] = None,
                      y_val: Optional[List[str]] = None) -> None:
+        shuffle: bool = bool(
+            strtobool(self.definition.training_process_hyperparameters["shuffle"]))
         if x_train is not None and y_train is not None:
             training_dataset: torch.utils.data.Dataset = MultiClassDataSet(
                 self.encode_x(x_train), self.encode_y(y_train))
         elif file_name_train is not None:
             training_dataset: torch.utils.data.Dataset = IterableMultiClassDataSet(
-                file_name_train, self)
+                file_name_train, self, shuffle=shuffle)
         else:
             raise Exception(
                 "specify either file_name_train or x_train, y_train")
@@ -90,7 +93,7 @@ class TorchDNAMultiClassClassificationLearner(
                 self.encode_x(x_val), self.encode_y(y_val))
         elif file_name_val is not None:
             validation_dataset: torch.utils.data.Dataset = IterableMultiClassDataSet(
-                file_name_val, self)
+                file_name_val, self, shuffle=shuffle)
         else:
             raise Exception("specify either file_name_val or x_val, y_val")
 
@@ -122,7 +125,7 @@ class TorchDNAMultiClassClassificationLearner(
             dataset: torch.utils.data.Dataset = MultiClassDataSet(x)
         elif file_name is not None:
             dataset: torch.utils.data.Dataset = IterableMultiClassDataSet(
-                file_name, self, False)
+                file_name, self, contains_y=False)
         else:
             raise Exception("specify either file_name or x")
 
@@ -219,12 +222,14 @@ class TorchDNAMultiLabelClassificationLearner(
                      y_train: Optional[List[str]] = None,
                      x_val: Optional[List[str]] = None,
                      y_val: Optional[List[str]] = None) -> None:
+        shuffle: bool = bool(
+            strtobool(self.definition.training_process_hyperparameters["shuffle"]))
         if x_train is not None and y_train is not None:
             training_dataset: torch.utils.data.Dataset = MultiLabelDataSet(
                 self.encode_x(x_train), self.encode_y(y_train))
         elif file_name_train is not None:
             training_dataset: torch.utils.data.Dataset = IterableMultiLabelDataSet(
-                file_name_train, self)
+                file_name_train, self, shuffle=shuffle)
         else:
             raise Exception(
                 "specify either file_name_train or x_train, y_train")
@@ -234,7 +239,7 @@ class TorchDNAMultiLabelClassificationLearner(
                 self.encode_x(x_val), self.encode_y(y_val))
         elif file_name_val is not None:
             validation_dataset: torch.utils.data.Dataset = IterableMultiLabelDataSet(
-                file_name_val, self)
+                file_name_val, self, shuffle=shuffle)
         else:
             raise Exception("specify either file_name_val or x_val, y_val")
 
@@ -266,7 +271,7 @@ class TorchDNAMultiLabelClassificationLearner(
             dataset: torch.utils.data.Dataset = MultiLabelDataSet(x)
         elif file_name is not None:
             dataset: torch.utils.data.Dataset = IterableMultiLabelDataSet(
-                file_name, self, False)
+                file_name, self, contains_y=False)
         else:
             raise Exception("specify either file_name or x")
 
@@ -363,12 +368,14 @@ class TorchProteinMultiClassClassificationLearner(
                      y_train: Optional[List[str]] = None,
                      x_val: Optional[List[str]] = None,
                      y_val: Optional[List[str]] = None) -> None:
+        shuffle: bool = bool(
+            strtobool(self.definition.training_process_hyperparameters["shuffle"]))
         if x_train is not None and y_train is not None:
             training_dataset: torch.utils.data.Dataset = MultiClassDataSet(
                 self.encode_x(x_train), self.encode_y(y_train))
         elif file_name_train is not None:
             training_dataset: torch.utils.data.Dataset = IterableMultiClassDataSet(
-                file_name_train, self)
+                file_name_train, self, shuffle=shuffle)
         else:
             raise Exception(
                 "specify either file_name_train or x_train, y_train")
@@ -378,7 +385,7 @@ class TorchProteinMultiClassClassificationLearner(
                 self.encode_x(x_val), self.encode_y(y_val))
         elif file_name_val is not None:
             validation_dataset: torch.utils.data.Dataset = IterableMultiClassDataSet(
-                file_name_val, self)
+                file_name_val, self, shuffle=shuffle)
         else:
             raise Exception("specify either file_name_val or x_val, y_val")
 
@@ -410,7 +417,7 @@ class TorchProteinMultiClassClassificationLearner(
             dataset: torch.utils.data.Dataset = MultiClassDataSet(x)
         elif file_name is not None:
             dataset: torch.utils.data.Dataset = IterableMultiClassDataSet(
-                file_name, self, False)
+                file_name, self, contains_y=False)
         else:
             raise Exception("specify either file_name or x")
 
@@ -507,12 +514,14 @@ class TorchProteinMultiLabelClassificationLearner(
                      y_train: Optional[List[str]] = None,
                      x_val: Optional[List[str]] = None,
                      y_val: Optional[List[str]] = None) -> None:
+        shuffle: bool = bool(
+            strtobool(self.definition.training_process_hyperparameters["shuffle"]))
         if x_train is not None and y_train is not None:
             training_dataset: torch.utils.data.Dataset = MultiLabelDataSet(
                 self.encode_x(x_train), self.encode_y(y_train))
         elif file_name_train is not None:
             training_dataset: torch.utils.data.Dataset = IterableMultiLabelDataSet(
-                file_name_train, self)
+                file_name_train, self, shuffle=shuffle)
         else:
             raise Exception(
                 "specify either file_name_train or x_train, y_train")
@@ -522,7 +531,7 @@ class TorchProteinMultiLabelClassificationLearner(
                 self.encode_x(x_val), self.encode_y(y_val))
         elif file_name_val is not None:
             validation_dataset: torch.utils.data.Dataset = IterableMultiLabelDataSet(
-                file_name_val, self)
+                file_name_val, self, shuffle=shuffle)
         else:
             raise Exception("specify either file_name_val or x_val, y_val")
 
@@ -554,7 +563,7 @@ class TorchProteinMultiLabelClassificationLearner(
             dataset: torch.utils.data.Dataset = MultiLabelDataSet(x)
         elif file_name is not None:
             dataset: torch.utils.data.Dataset = IterableMultiLabelDataSet(
-                file_name, self, False)
+                file_name, self, contains_y=False)
         else:
             raise Exception("specify either file_name or x")
 

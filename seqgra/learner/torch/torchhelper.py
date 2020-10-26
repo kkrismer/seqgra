@@ -136,10 +136,17 @@ class TorchHelper:
             learner.definition.training_process_hyperparameters["batch_size"])
 
         # init data loaders
+        if isinstance(training_dataset, torch.utils.data.IterableDataset):
+            # examples are shuffled in IterableDataSet class
+            shuffle: bool = False
+        else:
+            shuffle: bool = bool(
+                strtobool(learner.definition.training_process_hyperparameters["shuffle"]))
+
         training_loader = torch.utils.data.DataLoader(
             training_dataset,
             batch_size=batch_size,
-            shuffle=bool(strtobool(learner.definition.training_process_hyperparameters["shuffle"])))
+            shuffle=shuffle)
 
         validation_loader = torch.utils.data.DataLoader(
             validation_dataset,

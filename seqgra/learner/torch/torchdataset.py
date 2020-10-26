@@ -69,7 +69,7 @@ class MultiLabelDataSet(torch.utils.data.Dataset):
 
 
 class IterableMultiClassDataSet(torch.utils.data.IterableDataset):
-    def __init__(self, file_name: str, learner: Learner, shuffle: bool = True,
+    def __init__(self, file_name: str, learner: Learner, shuffle: bool = False,
                  contains_y: bool = True, cache_size: int = 10000):
         self.file_name: str = file_name
         self.learner: Learner = learner
@@ -153,7 +153,7 @@ class IterableMultiClassDataSet(torch.utils.data.IterableDataset):
 
 
 class IterableMultiLabelDataSet(torch.utils.data.IterableDataset):
-    def __init__(self, file_name: str, learner: Learner, shuffle: bool = True,
+    def __init__(self, file_name: str, learner: Learner, shuffle: bool = False,
                  contains_y: bool = True, cache_size: int = 10000):
         self.file_name: str = file_name
         self.learner: Learner = learner
