@@ -177,9 +177,16 @@ class Learner(ABC):
                 cells: List[str] = line.split("\t")
 
                 if len(cells) == 2:
+                    x_vec: List[str] = [cells[0].strip()]
+                    y_vec: List[str] = [cells[1].strip()]
+                    # validate data
+                    if self.validate_data:
+                        self.check_sequence(x_vec)
+                        self.check_labels(y_vec)
+
                     # one hot encode input and labels
-                    x = self.encode_x([cells[0].strip()])[0]
-                    y = self.encode_y([cells[1].strip()])[0]
+                    x = self.encode_x(x_vec)[0]
+                    y = self.encode_y(y_vec)[0]
                     yield x, y
                 else:
                     raise Exception("invalid example: " + line)
