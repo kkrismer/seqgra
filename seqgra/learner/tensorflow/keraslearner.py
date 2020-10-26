@@ -75,8 +75,8 @@ class KerasDNAMultiClassClassificationLearner(
         KerasHelper.set_seed(self)
 
     def _train_model(self,
-                     training_file: Optional[str] = None,
-                     validation_file: Optional[str] = None,
+                     file_name_train: Optional[str] = None,
+                     file_name_val: Optional[str] = None,
                      x_train: Optional[List[str]] = None,
                      y_train: Optional[List[str]] = None,
                      x_val: Optional[List[str]] = None,
@@ -84,32 +84,32 @@ class KerasDNAMultiClassClassificationLearner(
         if x_train is not None and y_train is not None:
             training_dataset = tf.data.Dataset.from_tensor_slices(
                 (self.encode_x(x_train), self.encode_y(y_train)))
-        elif training_file is not None:
-            seq_len: int = self.get_sequence_length(training_file)
+        elif file_name_train is not None:
+            seq_len: int = self.get_sequence_length(file_name_train)
 
             def train_generator():
-                return self.dataset_generator(training_file)
+                return self.dataset_generator(file_name_train)
             training_dataset = tf.data.Dataset.from_generator(
                 train_generator, (tf.float64, tf.bool),
                 output_shapes=(tf.TensorShape([seq_len, self.alphabet_size]),
                                tf.TensorShape([len(self.definition.labels)])))
         else:
-            raise Exception("specify either training_file or x_train, y_train")
+            raise Exception("specify either file_name_train or x_train, y_train")
 
         if x_val is not None and y_val is not None:
             validation_dataset = tf.data.Dataset.from_tensor_slices(
                 (self.encode_x(x_val), self.encode_y(y_val)))
-        elif validation_file is not None:
-            seq_len: int = self.get_sequence_length(validation_file)
+        elif file_name_val is not None:
+            seq_len: int = self.get_sequence_length(file_name_val)
 
             def val_generator():
-                return self.dataset_generator(validation_file)
+                return self.dataset_generator(file_name_val)
             validation_dataset = tf.data.Dataset.from_generator(
                 val_generator, (tf.float64, tf.bool),
                 output_shapes=(tf.TensorShape([seq_len, self.alphabet_size]),
                                tf.TensorShape([len(self.definition.labels)])))
         else:
-            raise Exception("specify either validation_file or x_val, y_val")
+            raise Exception("specify either file_name_val or x_val, y_val")
 
         KerasHelper.train_model(self, training_dataset, validation_dataset,
                                 self.silent)
@@ -239,8 +239,8 @@ class KerasDNAMultiLabelClassificationLearner(
         KerasHelper.set_seed(self)
 
     def _train_model(self,
-                     training_file: Optional[str] = None,
-                     validation_file: Optional[str] = None,
+                     file_name_train: Optional[str] = None,
+                     file_name_val: Optional[str] = None,
                      x_train: Optional[List[str]] = None,
                      y_train: Optional[List[str]] = None,
                      x_val: Optional[List[str]] = None,
@@ -248,32 +248,32 @@ class KerasDNAMultiLabelClassificationLearner(
         if x_train is not None and y_train is not None:
             training_dataset = tf.data.Dataset.from_tensor_slices(
                 (self.encode_x(x_train), self.encode_y(y_train)))
-        elif training_file is not None:
-            seq_len: int = self.get_sequence_length(training_file)
+        elif file_name_train is not None:
+            seq_len: int = self.get_sequence_length(file_name_train)
 
             def train_generator():
-                return self.dataset_generator(training_file)
+                return self.dataset_generator(file_name_train)
             training_dataset = tf.data.Dataset.from_generator(
                 train_generator, (tf.float64, tf.bool),
                 output_shapes=(tf.TensorShape([seq_len, self.alphabet_size]),
                                tf.TensorShape([len(self.definition.labels)])))
         else:
-            raise Exception("specify either training_file or x_train, y_train")
+            raise Exception("specify either file_name_train or x_train, y_train")
 
         if x_val is not None and y_val is not None:
             validation_dataset = tf.data.Dataset.from_tensor_slices(
                 (self.encode_x(x_val), self.encode_y(y_val)))
-        elif validation_file is not None:
-            seq_len: int = self.get_sequence_length(validation_file)
+        elif file_name_val is not None:
+            seq_len: int = self.get_sequence_length(file_name_val)
 
             def val_generator():
-                return self.dataset_generator(validation_file)
+                return self.dataset_generator(file_name_val)
             validation_dataset = tf.data.Dataset.from_generator(
                 val_generator, (tf.float64, tf.bool),
                 output_shapes=(tf.TensorShape([seq_len, self.alphabet_size]),
                                tf.TensorShape([len(self.definition.labels)])))
         else:
-            raise Exception("specify either validation_file or x_val, y_val")
+            raise Exception("specify either file_name_val or x_val, y_val")
 
         KerasHelper.train_model(self, training_dataset, validation_dataset,
                                 self.silent)
@@ -403,8 +403,8 @@ class KerasProteinMultiClassClassificationLearner(
         KerasHelper.set_seed(self)
 
     def _train_model(self,
-                     training_file: Optional[str] = None,
-                     validation_file: Optional[str] = None,
+                     file_name_train: Optional[str] = None,
+                     file_name_val: Optional[str] = None,
                      x_train: Optional[List[str]] = None,
                      y_train: Optional[List[str]] = None,
                      x_val: Optional[List[str]] = None,
@@ -412,32 +412,32 @@ class KerasProteinMultiClassClassificationLearner(
         if x_train is not None and y_train is not None:
             training_dataset = tf.data.Dataset.from_tensor_slices(
                 (self.encode_x(x_train), self.encode_y(y_train)))
-        elif training_file is not None:
-            seq_len: int = self.get_sequence_length(training_file)
+        elif file_name_train is not None:
+            seq_len: int = self.get_sequence_length(file_name_train)
 
             def train_generator():
-                return self.dataset_generator(training_file)
+                return self.dataset_generator(file_name_train)
             training_dataset = tf.data.Dataset.from_generator(
                 train_generator, (tf.float64, tf.bool),
                 output_shapes=(tf.TensorShape([seq_len, self.alphabet_size]),
                                tf.TensorShape([len(self.definition.labels)])))
         else:
-            raise Exception("specify either training_file or x_train, y_train")
+            raise Exception("specify either file_name_train or x_train, y_train")
 
         if x_val is not None and y_val is not None:
             validation_dataset = tf.data.Dataset.from_tensor_slices(
                 (self.encode_x(x_val), self.encode_y(y_val)))
-        elif validation_file is not None:
-            seq_len: int = self.get_sequence_length(validation_file)
+        elif file_name_val is not None:
+            seq_len: int = self.get_sequence_length(file_name_val)
 
             def val_generator():
-                return self.dataset_generator(validation_file)
+                return self.dataset_generator(file_name_val)
             validation_dataset = tf.data.Dataset.from_generator(
                 val_generator, (tf.float64, tf.bool),
                 output_shapes=(tf.TensorShape([seq_len, self.alphabet_size]),
                                tf.TensorShape([len(self.definition.labels)])))
         else:
-            raise Exception("specify either validation_file or x_val, y_val")
+            raise Exception("specify either file_name_val or x_val, y_val")
 
         KerasHelper.train_model(self, training_dataset, validation_dataset,
                                 self.silent)
@@ -567,8 +567,8 @@ class KerasProteinMultiLabelClassificationLearner(
         KerasHelper.set_seed(self)
 
     def _train_model(self,
-                     training_file: Optional[str] = None,
-                     validation_file: Optional[str] = None,
+                     file_name_train: Optional[str] = None,
+                     file_name_val: Optional[str] = None,
                      x_train: Optional[List[str]] = None,
                      y_train: Optional[List[str]] = None,
                      x_val: Optional[List[str]] = None,
@@ -576,32 +576,32 @@ class KerasProteinMultiLabelClassificationLearner(
         if x_train is not None and y_train is not None:
             training_dataset = tf.data.Dataset.from_tensor_slices(
                 (self.encode_x(x_train), self.encode_y(y_train)))
-        elif training_file is not None:
-            seq_len: int = self.get_sequence_length(training_file)
+        elif file_name_train is not None:
+            seq_len: int = self.get_sequence_length(file_name_train)
 
             def train_generator():
-                return self.dataset_generator(training_file)
+                return self.dataset_generator(file_name_train)
             training_dataset = tf.data.Dataset.from_generator(
                 train_generator, (tf.float64, tf.bool),
                 output_shapes=(tf.TensorShape([seq_len, self.alphabet_size]),
                                tf.TensorShape([len(self.definition.labels)])))
         else:
-            raise Exception("specify either training_file or x_train, y_train")
+            raise Exception("specify either file_name_train or x_train, y_train")
 
         if x_val is not None and y_val is not None:
             validation_dataset = tf.data.Dataset.from_tensor_slices(
                 (self.encode_x(x_val), self.encode_y(y_val)))
-        elif validation_file is not None:
-            seq_len: int = self.get_sequence_length(validation_file)
+        elif file_name_val is not None:
+            seq_len: int = self.get_sequence_length(file_name_val)
 
             def val_generator():
-                return self.dataset_generator(validation_file)
+                return self.dataset_generator(file_name_val)
             validation_dataset = tf.data.Dataset.from_generator(
                 val_generator, (tf.float64, tf.bool),
                 output_shapes=(tf.TensorShape([seq_len, self.alphabet_size]),
                                tf.TensorShape([len(self.definition.labels)])))
         else:
-            raise Exception("specify either validation_file or x_val, y_val")
+            raise Exception("specify either file_name_val or x_val, y_val")
 
         KerasHelper.train_model(self, training_dataset, validation_dataset,
                                 self.silent)
