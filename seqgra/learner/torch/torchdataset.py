@@ -76,7 +76,9 @@ class IterableMultiClassDataSet(torch.utils.data.IterableDataset):
         self.shuffle: bool = shuffle
         self.contains_y: bool = contains_y
         self.cache_size: int = cache_size
-        self.cache: Deque[Tuple[Any, Any]] = deque()
+        self.x_cache = None
+        self.y_cache = None
+        self.cache_index: int = cache_size
 
     def __iter__(self):
         with open(self.file_name, "r") as f:
@@ -93,7 +95,7 @@ class IterableMultiClassDataSet(torch.utils.data.IterableDataset):
                 x, y = self._get_next_example(f)
 
     def _get_next_example(self, file_handle) -> Tuple[Any, Any]:
-        if not self.cache:
+        if self.x_cache is None or self.cache_index >= self.x_cache.shape[0]:
             # read next chunk in memory
             x_vec: List[str] = list()
             y_vec: List[str] = list()
@@ -115,6 +117,12 @@ class IterableMultiClassDataSet(torch.utils.data.IterableDataset):
                 i += 1
 
             if x_vec:
+                # validate data
+                if self.learner.validate_data:
+                    self.learner.check_sequence(x_vec)
+                    if self.contains_y:
+                        self.learner.check_labels(y_vec)
+
                 # shuffle
                 if self.shuffle:
                     if self.contains_y:
@@ -128,26 +136,24 @@ class IterableMultiClassDataSet(torch.utils.data.IterableDataset):
                 encoded_x_vec = self.learner.encode_x(x_vec)
                 if not isinstance(encoded_x_vec, np.ndarray):
                     encoded_x_vec = np.array(encoded_x_vec)
-                encoded_x_vec = encoded_x_vec.astype(np.float32)
+                self.x_cache = encoded_x_vec.astype(np.float32)
 
                 if self.contains_y:
                     encoded_y_vec = self.learner.encode_y(y_vec)
                     if not isinstance(encoded_y_vec, np.ndarray):
                         encoded_y_vec = np.array(encoded_y_vec)
-                    encoded_y_vec = np.argmax(encoded_y_vec.astype(np.int64),
-                                              axis=1)
+                    self.y_cache = np.argmax(encoded_y_vec.astype(np.int64),
+                                             axis=1)
+                self.cache_index = 0
 
-                # fill cache
-                if self.contains_y:
-                    for i in range(encoded_x_vec.shape[0]):
-                        self.cache.append((encoded_x_vec[i, ...],
-                                           encoded_y_vec[i]))
-                else:
-                    for i in range(encoded_x_vec.shape[0]):
-                        self.cache.append((encoded_x_vec[i, ...], None))
-
-        if self.cache:
-            return self.cache.popleft()
+        if self.x_cache is not None and self.cache_index < self.x_cache.shape[0]:
+            if self.contains_y:
+                example = (self.x_cache[self.cache_index, ...],
+                           self.y_cache[self.cache_index])
+            else:
+                example = (self.x_cache[self.cache_index, ...], None)
+            self.cache_index += 1
+            return example
         else:
             return (None, None)
 
@@ -160,7 +166,9 @@ class IterableMultiLabelDataSet(torch.utils.data.IterableDataset):
         self.shuffle: bool = shuffle
         self.contains_y: bool = contains_y
         self.cache_size: int = cache_size
-        self.cache: Deque[Tuple[Any, Any]] = deque()
+        self.x_cache = None
+        self.y_cache = None
+        self.cache_index: int = cache_size
 
     def __iter__(self):
         with open(self.file_name, "r") as f:
@@ -177,7 +185,7 @@ class IterableMultiLabelDataSet(torch.utils.data.IterableDataset):
                 x, y = self._get_next_example(f)
 
     def _get_next_example(self, file_handle) -> Tuple[Any, Any]:
-        if not self.cache:
+        if self.x_cache is None or self.cache_index >= self.x_cache.shape[0]:
             # read next chunk in memory
             x_vec: List[str] = list()
             y_vec: List[str] = list()
@@ -199,6 +207,12 @@ class IterableMultiLabelDataSet(torch.utils.data.IterableDataset):
                 i += 1
 
             if x_vec:
+                # validate data
+                if self.learner.validate_data:
+                    self.learner.check_sequence(x_vec)
+                    if self.contains_y:
+                        self.learner.check_labels(y_vec)
+
                 # shuffle
                 if self.shuffle:
                     if self.contains_y:
@@ -212,24 +226,22 @@ class IterableMultiLabelDataSet(torch.utils.data.IterableDataset):
                 encoded_x_vec = self.learner.encode_x(x_vec)
                 if not isinstance(encoded_x_vec, np.ndarray):
                     encoded_x_vec = np.array(encoded_x_vec)
-                encoded_x_vec = encoded_x_vec.astype(np.float32)
+                self.x_cache = encoded_x_vec.astype(np.float32)
 
                 if self.contains_y:
                     encoded_y_vec = self.learner.encode_y(y_vec)
                     if not isinstance(encoded_y_vec, np.ndarray):
                         encoded_y_vec = np.array(encoded_y_vec)
-                    encoded_y_vec = encoded_y_vec.astype(np.int64)
+                    self.y_cache = encoded_y_vec.astype(np.int64)
+                self.cache_index = 0
 
-                # fill cache
-                if self.contains_y:
-                    for i in range(encoded_x_vec.shape[0]):
-                        self.cache.append((encoded_x_vec[i, ...],
-                                           encoded_y_vec[i]))
-                else:
-                    for i in range(encoded_x_vec.shape[0]):
-                        self.cache.append((encoded_x_vec[i, ...], None))
-
-        if self.cache:
-            return self.cache.popleft()
+        if self.x_cache is not None and self.cache_index < self.x_cache.shape[0]:
+            if self.contains_y:
+                example = (self.x_cache[self.cache_index, ...],
+                           self.y_cache[self.cache_index])
+            else:
+                example = (self.x_cache[self.cache_index, ...], None)
+            self.cache_index += 1
+            return example
         else:
             return (None, None)
