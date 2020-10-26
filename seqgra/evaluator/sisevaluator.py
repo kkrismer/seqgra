@@ -155,7 +155,7 @@ class SISEvaluator(FeatureImportanceEvaluator):
 
         def sis_predict(x):
             return np.array(self.learner.predict(
-                x, encode=False))[:, label_index]
+                x=x, encode=False))[:, label_index]
 
         input_shape: int = encoded_x[0].shape
         if self.learner.definition.library == c.LibraryType.TENSORFLOW:
@@ -166,7 +166,7 @@ class SISEvaluator(FeatureImportanceEvaluator):
             broadcast_axis: int = 1
         else:
             raise Exception("unknown library type")
-            
+
         fully_masked_input = np.ones(input_shape) * 0.25
         initial_mask = sis.make_empty_boolean_mask_broadcast_over_axis(
             input_shape, broadcast_axis)
@@ -203,8 +203,8 @@ class SISEvaluator(FeatureImportanceEvaluator):
     def __produce_masked_inputs(self, x, sis_predict, fully_masked_input,
                                 initial_mask) -> List[str]:
         collection = sis.sis_collection(sis_predict, self.predict_threshold, x,
-                                    fully_masked_input,
-                                    initial_mask=initial_mask)
+                                        fully_masked_input,
+                                        initial_mask=initial_mask)
 
         if len(collection) > 0:
             sis_masked_inputs = sis.produce_masked_inputs(

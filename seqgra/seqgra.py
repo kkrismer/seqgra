@@ -290,6 +290,7 @@ def run_seqgra(data_config_file: Optional[str],
                model_config_file: Optional[str],
                evaluator_ids: Optional[List[str]],
                output_dir: str,
+               in_memory: bool,
                print_info: bool,
                silent: bool,
                remove_existing_data: bool,
@@ -403,21 +404,25 @@ def run_seqgra(data_config_file: Optional[str],
         if train_model:
             logger.info("training model")
 
-            # load data
-            training_set_file: str = learner.get_examples_file(
-                c.DataSet.TRAINING)
-            validation_set_file: str = learner.get_examples_file(
-                c.DataSet.VALIDATION)
-            x_train, y_train = learner.parse_examples_data(training_set_file)
-            x_val, y_val = learner.parse_examples_data(validation_set_file)
-
             learner.create_model()
             if print_info:
                 learner.print_model_summary()
-            learner.train_model(x_train=x_train, y_train=y_train,
-                                x_val=x_val, y_val=y_val)
+
+            if in_memory:
+                training_set_file: str = learner.get_examples_file(
+                    c.DataSet.TRAINING)
+                validation_set_file: str = learner.get_examples_file(
+                    c.DataSet.VALIDATION)
+                x_train, y_train = learner.parse_examples_data(
+                    training_set_file)
+                x_val, y_val = learner.parse_examples_data(validation_set_file)
+
+                learner.train_model(x_train=x_train, y_train=y_train,
+                                    x_val=x_val, y_val=y_val)
+            else:
+                learner.train_model()
             learner.save_model()
-            new_model = True and learner.definition.library != \
+            new_model = learner.definition.library != \
                 c.LibraryType.BAYES_OPTIMAL_CLASSIFIER
 
         if remove_existing_data:
@@ -506,7 +511,7 @@ def main():
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument(
         "-d",
-        "--dataconfigfile",
+        "--data-config-file",
         type=str,
         help="path to the segra XML data configuration file. Use this option "
         "to generate synthetic data based on a seqgra grammar (specify "
@@ -514,7 +519,7 @@ def main():
     )
     group.add_argument(
         "-f",
-        "--datafolder",
+        "--data-folder",
         type=str,
         help="experimental data folder name inside outputdir/input. Use this "
         "option to train the model on experimental or externally synthesized "
@@ -522,7 +527,7 @@ def main():
     )
     parser.add_argument(
         "-m",
-        "--modelconfigfile",
+        "--model-config-file",
         type=str,
         help="path to the seqgra XML model configuration file"
     )
@@ -540,11 +545,18 @@ def main():
     )
     parser.add_argument(
         "-o",
-        "--outputdir",
+        "--output-dir",
         type=str,
         required=True,
         help="output directory, subdirectories are created for generated "
         "data, trained model, and model evaluation"
+    )
+    parser.add_argument(
+        "-i",
+        "--in-memory",
+        action="store_true",
+        help="if this flag is set, training and validation data will be "
+        "stored in-memory instead of loaded in chunks"
     )
     parser.add_argument(
         "-p",
@@ -578,7 +590,7 @@ def main():
         "ID 0); CPU is used if no GPU is available or GPU ID is set to -1"
     )
     parser.add_argument(
-        "--nochecks",
+        "--no-checks",
         action="store_true",
         help="if this flag is set, examples and example annotations will not "
         "be validated before training, e.g., that DNA sequences only contain "
@@ -643,11 +655,11 @@ def main():
     )
     args = parser.parse_args()
 
-    if args.datafolder and args.modelconfigfile is None:
-        parser.error("-f/--datafolder requires -m/--modelconfigfile.")
+    if args.data_folder and args.model_config_file is None:
+        parser.error("-f/--data-folder requires -m/--model-config-file.")
 
-    if args.evaluators and args.modelconfigfile is None:
-        parser.error("-e/--evaluators requires -m/--modelconfigfile.")
+    if args.evaluators and args.model_config_file is None:
+        parser.error("-e/--evaluators requires -m/--model-config-file.")
 
     if args.evaluators is not None:
         for evaluator in args.evaluators:
@@ -655,16 +667,17 @@ def main():
                 raise ValueError(
                     "invalid evaluator ID {s!r}".format(s=evaluator))
 
-    run_seqgra(args.dataconfigfile,
-               args.datafolder,
-               args.modelconfigfile,
+    run_seqgra(args.data_config_file,
+               args.data_folder,
+               args.model_config_file,
                args.evaluators,
-               args.outputdir,
+               args.output_dir,
+               args.in_memory,
                args.print,
                args.silent,
                args.remove,
                args.gpu,
-               args.nochecks,
+               args.no_checks,
                args.eval_sets,
                args.eval_n,
                args.eval_n_per_label,

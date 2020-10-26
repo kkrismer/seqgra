@@ -55,7 +55,6 @@ class KerasHelper:
                 logger.warning("Error occurred while setting TensorFlow "
                                "memory growth: %s", str(error))
 
-
     @staticmethod
     def create_model(learner: Learner) -> None:
         with tf.device(learner.device_label):
@@ -139,8 +138,8 @@ class KerasHelper:
 
     @staticmethod
     def train_model(learner: Learner,
-                    x_train: List[str], y_train: List[str],
-                    x_val: List[str], y_val: List[str],
+                    training_dataset,
+                    validation_dataset,
                     silent: bool = False) -> None:
         logger = logging.getLogger(__name__)
         verbosity: int = 1
@@ -164,11 +163,22 @@ class KerasHelper:
                                        num_non_trainable_params) + "\n")
 
         with tf.device(learner.device_label):
-            # one hot encode input and labels
-            encoded_x_train = learner.encode_x(x_train)
-            encoded_y_train = learner.encode_y(y_train)
-            encoded_x_val = learner.encode_x(x_val)
-            encoded_y_val = learner.encode_y(y_val)
+            batch_size: int = int(
+                learner.definition.training_process_hyperparameters["batch_size"])
+            shuffle: bool = bool(strtobool(
+                learner.definition.training_process_hyperparameters["shuffle"]))
+
+            training_dataset = training_dataset.cache()
+            if shuffle:
+                training_dataset = training_dataset.shuffle(10000)
+            training_dataset = training_dataset.batch(batch_size)
+            training_dataset = training_dataset.prefetch(
+                tf.data.experimental.AUTOTUNE)
+
+            validation_dataset = validation_dataset.cache()
+            validation_dataset = validation_dataset.batch(batch_size)
+            validation_dataset = validation_dataset.prefetch(
+                tf.data.experimental.AUTOTUNE)
 
             if learner.model is None:
                 learner.create_model()
@@ -217,17 +227,12 @@ class KerasHelper:
 
             # training loop
             learner.model.fit(
-                encoded_x_train,
-                encoded_y_train,
-                batch_size=int(
-                    learner.definition.training_process_hyperparameters["batch_size"]),
+                training_dataset,
                 epochs=int(
                     learner.definition.training_process_hyperparameters["epochs"]),
                 verbose=verbosity,
                 callbacks=callbacks,
-                validation_data=(encoded_x_val, encoded_y_val),
-                shuffle=bool(strtobool(
-                    learner.definition.training_process_hyperparameters["shuffle"]))
+                validation_data=validation_dataset
             )
 
             # load best model after training
@@ -235,6 +240,29 @@ class KerasHelper:
 
             # remove temp folder
             shutil.rmtree(learner.output_dir + "tmp")
+
+    @staticmethod
+    def evaluate_model(learner: Learner, dataset):
+        with tf.device(learner.device_label):
+            batch_size: int = int(
+                learner.definition.training_process_hyperparameters["batch_size"])
+            dataset = dataset.batch(batch_size)
+            dataset = dataset.prefetch(tf.data.experimental.AUTOTUNE)
+            loss, accuracy = learner.model.evaluate(dataset, verbose=0)
+            return {"loss": loss, "accuracy": accuracy}
+
+    @staticmethod
+    def predict(learner: Learner, dataset):
+        """ This is the forward calculation from x to y
+        Returns:
+            softmax_linear: Output tensor with the computed logits.
+        """
+        with tf.device(learner.device_label):
+            batch_size: int = int(
+                learner.definition.training_process_hyperparameters["batch_size"])
+            dataset = dataset.batch(batch_size)
+            dataset = dataset.prefetch(tf.data.experimental.AUTOTUNE)
+            return learner.model.predict(dataset)
 
     @staticmethod
     def save_model(learner: Learner, file_name: Optional[str] = None) -> None:
@@ -288,18 +316,6 @@ class KerasHelper:
                 learner.output_dir + file_name)
 
     @staticmethod
-    def predict(learner: Learner, x: Any, encode: bool = True):
-        """ This is the forward calculation from x to y
-        Returns:
-            softmax_linear: Output tensor with the computed logits.
-        """
-        with tf.device(learner.device_label):
-            if encode:
-                x = learner.encode_x(x)
-
-            return learner.model.predict(x)
-
-    @staticmethod
     def get_num_params(learner: Learner) -> ModelSize:
         def count_params(weights):
             unique_weights = tf.python.util.object_identity.ObjectIdentitySet(
@@ -323,17 +339,6 @@ class KerasHelper:
             learner.model.non_trainable_weights)
 
         return ModelSize(num_trainable_params, num_non_trainable_params)
-
-    @staticmethod
-    def evaluate_model(learner: Learner, x: List[str], y: List[str]):
-        with tf.device(learner.device_label):
-            # one hot encode input and labels
-            encoded_x = learner.encode_x(x)
-            encoded_y = learner.encode_y(y)
-
-            loss, accuracy = learner.model.evaluate(encoded_x, encoded_y,
-                                                    verbose=0)
-            return {"loss": loss, "accuracy": accuracy}
 
     @staticmethod
     def get_keras_layer(operation):

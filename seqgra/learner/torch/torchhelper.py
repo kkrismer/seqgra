@@ -139,8 +139,7 @@ class TorchHelper:
         training_loader = torch.utils.data.DataLoader(
             training_dataset,
             batch_size=batch_size,
-            shuffle=bool(strtobool(
-                learner.definition.training_process_hyperparameters["shuffle"])))
+            shuffle=bool(strtobool(learner.definition.training_process_hyperparameters["shuffle"])))
 
         validation_loader = torch.utils.data.DataLoader(
             validation_dataset,
@@ -237,6 +236,89 @@ class TorchHelper:
             shutil.rmtree(best_model_dir)
         else:
             logger.warn("best model could not be loaded")
+
+    @staticmethod
+    def evaluate_model(learner: Learner, dataset: torch.utils.data.Dataset,
+                       output_layer_activation_function: Optional[str] = None):
+        data_loader = torch.utils.data.DataLoader(
+            dataset,
+            batch_size=int(
+                learner.definition.training_process_hyperparameters["batch_size"]),
+            shuffle=False)
+
+        learner.model = learner.model.to(learner.device)
+
+        running_loss: float = 0.0
+        running_correct: int = 0
+        num_examples: int = 0
+
+        learner.model.eval()
+        with torch.no_grad():
+            for x, y in data_loader:
+                # transfer to device
+                x = x.to(learner.device)
+                y = y.to(learner.device)
+
+                y_hat = learner.model(x)
+                loss = learner.criterion(y_hat, y)
+
+                if output_layer_activation_function is not None:
+                    if output_layer_activation_function == "softmax":
+                        y_hat = torch.nn.functional.softmax(y_hat, dim=1)
+                    elif output_layer_activation_function == "sigmoid":
+                        y_hat = torch.sigmoid(y_hat)
+
+                # binarize y_hat
+                if learner.definition.task == c.TaskType.MULTI_CLASS_CLASSIFICATION:
+                    indices = torch.argmax(y_hat, dim=1)
+                    correct = torch.eq(indices, y).view(-1)
+                elif learner.definition.task == c.TaskType.MULTI_LABEL_CLASSIFICATION:
+                    y_hat = torch.gt(y_hat, 0.5)
+                    y = y.type_as(y_hat)
+
+                    correct = torch.all(y == y_hat, dim=-1)
+
+                running_correct += torch.sum(correct).item()
+                running_loss += loss.item() * x.size(0)
+                num_examples += correct.shape[0]
+
+        overall_loss = running_loss / num_examples
+        overall_accuracy = running_correct / num_examples
+
+        return {"loss": overall_loss, "accuracy": overall_accuracy}
+
+    @staticmethod
+    def predict(learner: Learner, dataset: torch.utils.data.Dataset,
+                output_layer_activation_function: Optional[str] = None):
+        """ This is the forward calculation from x to y
+        Returns:
+            softmax_linear: Output tensor with the computed logits.
+        """
+        data_loader = torch.utils.data.DataLoader(
+            dataset,
+            batch_size=int(
+                learner.definition.training_process_hyperparameters["batch_size"]),
+            shuffle=False)
+
+        learner.model = learner.model.to(learner.device)
+
+        y_hat = []
+        learner.model.eval()
+        with torch.no_grad():
+            for x in data_loader:
+                # transfer to device
+                x = x.to(learner.device)
+
+                raw_logits = learner.model(x)
+                if output_layer_activation_function is None:
+                    y_hat += raw_logits.tolist()
+                elif output_layer_activation_function == "softmax":
+                    y_hat += \
+                        torch.nn.functional.softmax(raw_logits, dim=1).tolist()
+                elif output_layer_activation_function == "sigmoid":
+                    y_hat += torch.sigmoid(raw_logits).tolist()
+
+        return np.array(y_hat)
 
     @staticmethod
     def get_best_model_file_name(best_model_dir: str) -> str:
@@ -384,39 +466,6 @@ class TorchHelper:
                                                  file_name))
 
     @staticmethod
-    def predict(learner: Learner, dataset: torch.utils.data.Dataset,
-                output_layer_activation_function: Optional[str] = None):
-        """ This is the forward calculation from x to y
-        Returns:
-            softmax_linear: Output tensor with the computed logits.
-        """
-        data_loader = torch.utils.data.DataLoader(
-            dataset,
-            batch_size=int(
-                learner.definition.training_process_hyperparameters["batch_size"]),
-            shuffle=False)
-
-        learner.model = learner.model.to(learner.device)
-
-        y_hat = []
-        learner.model.eval()
-        with torch.no_grad():
-            for x in data_loader:
-                # transfer to device
-                x = x.to(learner.device)
-
-                raw_logits = learner.model(x)
-                if output_layer_activation_function is None:
-                    y_hat += raw_logits.tolist()
-                elif output_layer_activation_function == "softmax":
-                    y_hat += \
-                        torch.nn.functional.softmax(raw_logits, dim=1).tolist()
-                elif output_layer_activation_function == "sigmoid":
-                    y_hat += torch.sigmoid(raw_logits).tolist()
-
-        return np.array(y_hat)
-
-    @staticmethod
     def get_num_params(learner: Learner) -> ModelSize:
         if learner.model is None:
             learner.create_model()
@@ -427,56 +476,6 @@ class TorchHelper:
                                   for param in learner.model.parameters())
         return ModelSize(num_trainable_params,
                          num_all_params - num_trainable_params)
-
-    @staticmethod
-    def evaluate_model(learner: Learner, dataset: torch.utils.data.Dataset,
-                       output_layer_activation_function: Optional[str] = None):
-        data_loader = torch.utils.data.DataLoader(
-            dataset,
-            batch_size=int(
-                learner.definition.training_process_hyperparameters["batch_size"]),
-            shuffle=False)
-
-        learner.model = learner.model.to(learner.device)
-
-        running_loss: float = 0.0
-        running_correct: int = 0
-        num_examples: int = 0
-
-        learner.model.eval()
-        with torch.no_grad():
-            for x, y in data_loader:
-                # transfer to device
-                x = x.to(learner.device)
-                y = y.to(learner.device)
-
-                y_hat = learner.model(x)
-                loss = learner.criterion(y_hat, y)
-
-                if output_layer_activation_function is not None:
-                    if output_layer_activation_function == "softmax":
-                        y_hat = torch.nn.functional.softmax(y_hat, dim=1)
-                    elif output_layer_activation_function == "sigmoid":
-                        y_hat = torch.sigmoid(y_hat)
-
-                # binarize y_hat
-                if learner.definition.task == c.TaskType.MULTI_CLASS_CLASSIFICATION:
-                    indices = torch.argmax(y_hat, dim=1)
-                    correct = torch.eq(indices, y).view(-1)
-                elif learner.definition.task == c.TaskType.MULTI_LABEL_CLASSIFICATION:
-                    y_hat = torch.gt(y_hat, 0.5)
-                    y = y.type_as(y_hat)
-
-                    correct = torch.all(y == y_hat, dim=-1)
-
-                running_correct += torch.sum(correct).item()
-                running_loss += loss.item() * x.size(0)
-                num_examples += correct.shape[0]
-
-        overall_loss = running_loss / num_examples
-        overall_accuracy = running_correct / num_examples
-
-        return {"loss": overall_loss, "accuracy": overall_accuracy}
 
     @staticmethod
     def get_optimizer(optimizer_hyperparameters, model_parameters):

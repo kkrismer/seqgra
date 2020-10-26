@@ -14,10 +14,10 @@ from seqgra.learner import DNAMultiClassClassificationLearner
 from seqgra.learner import DNAMultiLabelClassificationLearner
 from seqgra.learner import ProteinMultiClassClassificationLearner
 from seqgra.learner import ProteinMultiLabelClassificationLearner
-from seqgra.learner.torch.torchdataset import DNAMultiClassDataSet
-from seqgra.learner.torch.torchdataset import DNAMultiLabelDataSet
-from seqgra.learner.torch.torchdataset import ProteinMultiClassDataSet
-from seqgra.learner.torch.torchdataset import ProteinMultiLabelDataSet
+from seqgra.learner.torch.torchdataset import MultiClassDataSet
+from seqgra.learner.torch.torchdataset import MultiLabelDataSet
+from seqgra.learner.torch.torchdataset import IterableMultiClassDataSet
+from seqgra.learner.torch.torchdataset import IterableMultiLabelDataSet
 from seqgra.learner.torch import TorchHelper
 from seqgra.model import ModelDefinition
 
@@ -69,23 +69,65 @@ class TorchDNAMultiClassClassificationLearner(
         TorchHelper.set_seed(self)
 
     def _train_model(self,
-                     x_train: List[str], y_train: List[str],
-                     x_val: List[str], y_val: List[str]) -> None:
-        # one hot encode input and labels
-        encoded_x_train = self.encode_x(x_train)
-        encoded_y_train = self.encode_y(y_train)
-        encoded_x_val = self.encode_x(x_val)
-        encoded_y_val = self.encode_y(y_val)
+                     file_name_train: Optional[str] = None,
+                     file_name_val: Optional[str] = None,
+                     x_train: Optional[List[str]] = None,
+                     y_train: Optional[List[str]] = None,
+                     x_val: Optional[List[str]] = None,
+                     y_val: Optional[List[str]] = None) -> None:
+        if x_train is not None and y_train is not None:
+            training_dataset: torch.utils.data.Dataset = MultiClassDataSet(
+                self.encode_x(x_train), self.encode_y(y_train))
+        elif file_name_train is not None:
+            training_dataset: torch.utils.data.Dataset = IterableMultiClassDataSet(
+                file_name_train, self)
+        else:
+            raise Exception(
+                "specify either file_name_train or x_train, y_train")
 
-        training_dataset: DNAMultiClassDataSet = DNAMultiClassDataSet(
-            encoded_x_train, encoded_y_train, self.definition.labels)
-        validation_dataset: DNAMultiClassDataSet = DNAMultiClassDataSet(
-            encoded_x_val, encoded_y_val, self.definition.labels)
+        if x_val is not None and y_val is not None:
+            validation_dataset: torch.utils.data.Dataset = MultiClassDataSet(
+                self.encode_x(x_val), self.encode_y(y_val))
+        elif file_name_val is not None:
+            validation_dataset: torch.utils.data.Dataset = IterableMultiClassDataSet(
+                file_name_val, self)
+        else:
+            raise Exception("specify either file_name_val or x_val, y_val")
 
-        TorchHelper.train_model(self, training_dataset,
-                                validation_dataset,
+        TorchHelper.train_model(self, training_dataset, validation_dataset,
                                 self._get_output_layer_activation_function(),
                                 silent=self.silent)
+
+    def evaluate_model(self, file_name: Optional[str] = None,
+                       x: Optional[List[str]] = None,
+                       y: Optional[List[str]] = None):
+        if x is not None and y is not None:
+            dataset: torch.utils.data.Dataset = MultiClassDataSet(
+                self.encode_x(x), self.encode_y(y))
+        elif file_name is not None:
+            dataset: torch.utils.data.Dataset = IterableMultiClassDataSet(
+                file_name, self)
+        else:
+            raise Exception("specify either file_name or x, y")
+
+        return TorchHelper.evaluate_model(
+            self, dataset, self._get_output_layer_activation_function())
+
+    def predict(self, file_name: Optional[str] = None,
+                x: Optional[Any] = None,
+                encode: bool = True):
+        if x is not None:
+            if encode:
+                x = self.encode_x(x)
+            dataset: torch.utils.data.Dataset = MultiClassDataSet(x)
+        elif file_name is not None:
+            dataset: torch.utils.data.Dataset = IterableMultiClassDataSet(
+                file_name, self, False)
+        else:
+            raise Exception("specify either file_name or x")
+
+        return TorchHelper.predict(
+            self, dataset, self._get_output_layer_activation_function())
 
     def save_model(self, file_name: Optional[str] = None) -> None:
         TorchHelper.save_model(self, file_name)
@@ -96,28 +138,8 @@ class TorchDNAMultiClassClassificationLearner(
     def load_model(self, file_name: Optional[str] = None) -> None:
         TorchHelper.load_model(self, file_name)
 
-    def predict(self, x: Any, encode: bool = True):
-        if encode:
-            x = self.encode_x(x)
-
-        dataset: DNAMultiClassDataSet = DNAMultiClassDataSet(
-            x, labels=self.definition.labels)
-
-        return TorchHelper.predict(
-            self, dataset, self._get_output_layer_activation_function())
-
     def get_num_params(self) -> ModelSize:
         return TorchHelper.get_num_params(self)
-
-    def _evaluate_model(self, x: List[str], y: List[str]):
-        encoded_x = self.encode_x(x)
-        encoded_y = self.encode_y(y)
-
-        dataset: DNAMultiClassDataSet = DNAMultiClassDataSet(
-            encoded_x, encoded_y, self.definition.labels)
-
-        return TorchHelper.evaluate_model(
-            self, dataset, self._get_output_layer_activation_function())
 
     def encode_x(self, x: List[str]):
         encoded_x = super().encode_x(x)
@@ -191,23 +213,65 @@ class TorchDNAMultiLabelClassificationLearner(
         TorchHelper.set_seed(self)
 
     def _train_model(self,
-                     x_train: List[str], y_train: List[str],
-                     x_val: List[str], y_val: List[str]) -> None:
-        # one hot encode input and labels
-        encoded_x_train = self.encode_x(x_train)
-        encoded_y_train = self.encode_y(y_train)
-        encoded_x_val = self.encode_x(x_val)
-        encoded_y_val = self.encode_y(y_val)
+                     file_name_train: Optional[str] = None,
+                     file_name_val: Optional[str] = None,
+                     x_train: Optional[List[str]] = None,
+                     y_train: Optional[List[str]] = None,
+                     x_val: Optional[List[str]] = None,
+                     y_val: Optional[List[str]] = None) -> None:
+        if x_train is not None and y_train is not None:
+            training_dataset: torch.utils.data.Dataset = MultiLabelDataSet(
+                self.encode_x(x_train), self.encode_y(y_train))
+        elif file_name_train is not None:
+            training_dataset: torch.utils.data.Dataset = IterableMultiLabelDataSet(
+                file_name_train, self)
+        else:
+            raise Exception(
+                "specify either file_name_train or x_train, y_train")
 
-        training_dataset: DNAMultiLabelDataSet = DNAMultiLabelDataSet(
-            encoded_x_train, encoded_y_train, self.definition.labels)
-        validation_dataset: DNAMultiLabelDataSet = DNAMultiLabelDataSet(
-            encoded_x_val, encoded_y_val, self.definition.labels)
+        if x_val is not None and y_val is not None:
+            validation_dataset: torch.utils.data.Dataset = MultiLabelDataSet(
+                self.encode_x(x_val), self.encode_y(y_val))
+        elif file_name_val is not None:
+            validation_dataset: torch.utils.data.Dataset = IterableMultiLabelDataSet(
+                file_name_val, self)
+        else:
+            raise Exception("specify either file_name_val or x_val, y_val")
 
-        TorchHelper.train_model(self, training_dataset,
-                                validation_dataset,
+        TorchHelper.train_model(self, training_dataset, validation_dataset,
                                 self._get_output_layer_activation_function(),
                                 silent=self.silent)
+
+    def evaluate_model(self, file_name: Optional[str] = None,
+                       x: Optional[List[str]] = None,
+                       y: Optional[List[str]] = None):
+        if x is not None and y is not None:
+            dataset: torch.utils.data.Dataset = MultiLabelDataSet(
+                self.encode_x(x), self.encode_y(y))
+        elif file_name is not None:
+            dataset: torch.utils.data.Dataset = IterableMultiLabelDataSet(
+                file_name, self)
+        else:
+            raise Exception("specify either file_name or x, y")
+
+        return TorchHelper.evaluate_model(
+            self, dataset, self._get_output_layer_activation_function())
+
+    def predict(self, file_name: Optional[str] = None,
+                x: Optional[Any] = None,
+                encode: bool = True):
+        if x is not None:
+            if encode:
+                x = self.encode_x(x)
+            dataset: torch.utils.data.Dataset = MultiLabelDataSet(x)
+        elif file_name is not None:
+            dataset: torch.utils.data.Dataset = IterableMultiLabelDataSet(
+                file_name, self, False)
+        else:
+            raise Exception("specify either file_name or x")
+
+        return TorchHelper.predict(
+            self, dataset, self._get_output_layer_activation_function())
 
     def save_model(self, file_name: Optional[str] = None) -> None:
         TorchHelper.save_model(self, file_name)
@@ -218,28 +282,8 @@ class TorchDNAMultiLabelClassificationLearner(
     def load_model(self, file_name: Optional[str] = None) -> None:
         TorchHelper.load_model(self, file_name)
 
-    def predict(self, x: Any, encode: bool = True):
-        if encode:
-            x = self.encode_x(x)
-
-        dataset: DNAMultiLabelDataSet = DNAMultiLabelDataSet(
-            x, labels=self.definition.labels)
-
-        return TorchHelper.predict(
-            self, dataset, self._get_output_layer_activation_function())
-
     def get_num_params(self) -> ModelSize:
         return TorchHelper.get_num_params(self)
-
-    def _evaluate_model(self, x: List[str], y: List[str]):
-        encoded_x = self.encode_x(x)
-        encoded_y = self.encode_y(y)
-
-        dataset: DNAMultiLabelDataSet = DNAMultiLabelDataSet(
-            encoded_x, encoded_y, self.definition.labels)
-
-        return TorchHelper.evaluate_model(
-            self, dataset, self._get_output_layer_activation_function())
 
     def encode_x(self, x: List[str]):
         encoded_x = super().encode_x(x)
@@ -313,23 +357,65 @@ class TorchProteinMultiClassClassificationLearner(
         TorchHelper.set_seed(self)
 
     def _train_model(self,
-                     x_train: List[str], y_train: List[str],
-                     x_val: List[str], y_val: List[str]) -> None:
-        # one hot encode input and labels
-        encoded_x_train = self.encode_x(x_train)
-        encoded_y_train = self.encode_y(y_train)
-        encoded_x_val = self.encode_x(x_val)
-        encoded_y_val = self.encode_y(y_val)
+                     file_name_train: Optional[str] = None,
+                     file_name_val: Optional[str] = None,
+                     x_train: Optional[List[str]] = None,
+                     y_train: Optional[List[str]] = None,
+                     x_val: Optional[List[str]] = None,
+                     y_val: Optional[List[str]] = None) -> None:
+        if x_train is not None and y_train is not None:
+            training_dataset: torch.utils.data.Dataset = MultiClassDataSet(
+                self.encode_x(x_train), self.encode_y(y_train))
+        elif file_name_train is not None:
+            training_dataset: torch.utils.data.Dataset = IterableMultiClassDataSet(
+                file_name_train, self)
+        else:
+            raise Exception(
+                "specify either file_name_train or x_train, y_train")
 
-        training_dataset: ProteinMultiClassDataSet = ProteinMultiClassDataSet(
-            encoded_x_train, encoded_y_train, self.definition.labels)
-        validation_dataset: ProteinMultiClassDataSet = ProteinMultiClassDataSet(
-            encoded_x_val, encoded_y_val, self.definition.labels)
+        if x_val is not None and y_val is not None:
+            validation_dataset: torch.utils.data.Dataset = MultiClassDataSet(
+                self.encode_x(x_val), self.encode_y(y_val))
+        elif file_name_val is not None:
+            validation_dataset: torch.utils.data.Dataset = IterableMultiClassDataSet(
+                file_name_val, self)
+        else:
+            raise Exception("specify either file_name_val or x_val, y_val")
 
-        TorchHelper.train_model(self, training_dataset,
-                                validation_dataset,
+        TorchHelper.train_model(self, training_dataset, validation_dataset,
                                 self._get_output_layer_activation_function(),
                                 silent=self.silent)
+
+    def evaluate_model(self, file_name: Optional[str] = None,
+                       x: Optional[List[str]] = None,
+                       y: Optional[List[str]] = None):
+        if x is not None and y is not None:
+            dataset: torch.utils.data.Dataset = MultiClassDataSet(
+                self.encode_x(x), self.encode_y(y))
+        elif file_name is not None:
+            dataset: torch.utils.data.Dataset = IterableMultiClassDataSet(
+                file_name, self)
+        else:
+            raise Exception("specify either file_name or x, y")
+
+        return TorchHelper.evaluate_model(
+            self, dataset, self._get_output_layer_activation_function())
+
+    def predict(self, file_name: Optional[str] = None,
+                x: Optional[Any] = None,
+                encode: bool = True):
+        if x is not None:
+            if encode:
+                x = self.encode_x(x)
+            dataset: torch.utils.data.Dataset = MultiClassDataSet(x)
+        elif file_name is not None:
+            dataset: torch.utils.data.Dataset = IterableMultiClassDataSet(
+                file_name, self, False)
+        else:
+            raise Exception("specify either file_name or x")
+
+        return TorchHelper.predict(
+            self, dataset, self._get_output_layer_activation_function())
 
     def save_model(self, file_name: Optional[str] = None) -> None:
         TorchHelper.save_model(self, file_name)
@@ -340,28 +426,8 @@ class TorchProteinMultiClassClassificationLearner(
     def load_model(self, file_name: Optional[str] = None) -> None:
         TorchHelper.load_model(self, file_name)
 
-    def predict(self, x: Any, encode: bool = True):
-        if encode:
-            x = self.encode_x(x)
-
-        dataset: ProteinMultiClassDataSet = ProteinMultiClassDataSet(
-            x, labels=self.definition.labels)
-
-        return TorchHelper.predict(
-            self, dataset, self._get_output_layer_activation_function())
-
     def get_num_params(self) -> ModelSize:
         return TorchHelper.get_num_params(self)
-
-    def _evaluate_model(self, x: List[str], y: List[str]):
-        encoded_x = self.encode_x(x)
-        encoded_y = self.encode_y(y)
-
-        dataset: ProteinMultiClassDataSet = ProteinMultiClassDataSet(
-            encoded_x, encoded_y, self.definition.labels)
-
-        return TorchHelper.evaluate_model(
-            self, dataset, self._get_output_layer_activation_function())
 
     def encode_x(self, x: List[str]):
         encoded_x = super().encode_x(x)
@@ -435,23 +501,65 @@ class TorchProteinMultiLabelClassificationLearner(
         TorchHelper.set_seed(self)
 
     def _train_model(self,
-                     x_train: List[str], y_train: List[str],
-                     x_val: List[str], y_val: List[str]) -> None:
-        # one hot encode input and labels
-        encoded_x_train = self.encode_x(x_train)
-        encoded_y_train = self.encode_y(y_train)
-        encoded_x_val = self.encode_x(x_val)
-        encoded_y_val = self.encode_y(y_val)
+                     file_name_train: Optional[str] = None,
+                     file_name_val: Optional[str] = None,
+                     x_train: Optional[List[str]] = None,
+                     y_train: Optional[List[str]] = None,
+                     x_val: Optional[List[str]] = None,
+                     y_val: Optional[List[str]] = None) -> None:
+        if x_train is not None and y_train is not None:
+            training_dataset: torch.utils.data.Dataset = MultiLabelDataSet(
+                self.encode_x(x_train), self.encode_y(y_train))
+        elif file_name_train is not None:
+            training_dataset: torch.utils.data.Dataset = IterableMultiLabelDataSet(
+                file_name_train, self)
+        else:
+            raise Exception(
+                "specify either file_name_train or x_train, y_train")
 
-        training_dataset: ProteinMultiLabelDataSet = ProteinMultiLabelDataSet(
-            encoded_x_train, encoded_y_train, self.definition.labels)
-        validation_dataset: ProteinMultiLabelDataSet = ProteinMultiLabelDataSet(
-            encoded_x_val, encoded_y_val, self.definition.labels)
+        if x_val is not None and y_val is not None:
+            validation_dataset: torch.utils.data.Dataset = MultiLabelDataSet(
+                self.encode_x(x_val), self.encode_y(y_val))
+        elif file_name_val is not None:
+            validation_dataset: torch.utils.data.Dataset = IterableMultiLabelDataSet(
+                file_name_val, self)
+        else:
+            raise Exception("specify either file_name_val or x_val, y_val")
 
-        TorchHelper.train_model(self, training_dataset,
-                                validation_dataset,
+        TorchHelper.train_model(self, training_dataset, validation_dataset,
                                 self._get_output_layer_activation_function(),
                                 silent=self.silent)
+
+    def evaluate_model(self, file_name: Optional[str] = None,
+                       x: Optional[List[str]] = None,
+                       y: Optional[List[str]] = None):
+        if x is not None and y is not None:
+            dataset: torch.utils.data.Dataset = MultiLabelDataSet(
+                self.encode_x(x), self.encode_y(y))
+        elif file_name is not None:
+            dataset: torch.utils.data.Dataset = IterableMultiLabelDataSet(
+                file_name, self)
+        else:
+            raise Exception("specify either file_name or x, y")
+
+        return TorchHelper.evaluate_model(
+            self, dataset, self._get_output_layer_activation_function())
+
+    def predict(self, file_name: Optional[str] = None,
+                x: Optional[Any] = None,
+                encode: bool = True):
+        if x is not None:
+            if encode:
+                x = self.encode_x(x)
+            dataset: torch.utils.data.Dataset = MultiLabelDataSet(x)
+        elif file_name is not None:
+            dataset: torch.utils.data.Dataset = IterableMultiLabelDataSet(
+                file_name, self, False)
+        else:
+            raise Exception("specify either file_name or x")
+
+        return TorchHelper.predict(
+            self, dataset, self._get_output_layer_activation_function())
 
     def save_model(self, file_name: Optional[str] = None) -> None:
         TorchHelper.save_model(self, file_name)
@@ -462,28 +570,8 @@ class TorchProteinMultiLabelClassificationLearner(
     def load_model(self, file_name: Optional[str] = None) -> None:
         TorchHelper.load_model(self, file_name)
 
-    def predict(self, x: Any, encode: bool = True):
-        if encode:
-            x = self.encode_x(x)
-
-        dataset: ProteinMultiLabelDataSet = ProteinMultiLabelDataSet(
-            x, labels=self.definition.labels)
-
-        return TorchHelper.predict(
-            self, dataset, self._get_output_layer_activation_function())
-
     def get_num_params(self) -> ModelSize:
         return TorchHelper.get_num_params(self)
-
-    def _evaluate_model(self, x: List[str], y: List[str]):
-        encoded_x = self.encode_x(x)
-        encoded_y = self.encode_y(y)
-
-        dataset: ProteinMultiLabelDataSet = ProteinMultiLabelDataSet(
-            encoded_x, encoded_y, self.definition.labels)
-
-        return TorchHelper.evaluate_model(
-            self, dataset, self._get_output_layer_activation_function())
 
     def encode_x(self, x: List[str]):
         encoded_x = super().encode_x(x)

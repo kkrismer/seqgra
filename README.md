@@ -62,15 +62,16 @@ models are used.
 seqgra -h
 usage: seqgra [-h]
               [-v]
-              (-d DATACONFIGFILE | -f DATAFOLDER)
-              [-m MODELCONFIGFILE]
+              (-d DATA_CONFIG_FILE | -f DATA_FOLDER)
+              [-m MODEL_CONFIG_FILE]
               [-e EVALUATORS [EVALUATORS ...]]
-              -o OUTPUTDIR
+              -o OUTPUT_DIR
+              [-i]
               [-p]
               [-s]
               [-r]
               [-g GPU]
-              [--nochecks]
+              [--no-checks]
               [--eval-sets EVAL_SETS [EVAL_SETS ...]]
               [--eval-n EVAL_N]
               [--eval-n-per-label EVAL_N_PER_LABEL]
@@ -85,16 +86,16 @@ evaluate model
 optional arguments:
   -h, --help            show this help message and exit
   -v, --version         show program's version number and exit
-  -d DATACONFIGFILE, --dataconfigfile DATACONFIGFILE
+  -d DATA_CONFIG_FILE, --data-config-file DATA_CONFIG_FILE
                         path to the segra XML data configuration file. Use 
                         this option to generate synthetic data based on a 
                         seqgra grammar (specify either -d or -f, not both)
-  -f DATAFOLDER, --datafolder DATAFOLDER
+  -f DATA_FOLDER, --data-folder DATA_FOLDER
                         experimental data folder name inside outputdir/input. 
                         Use this option to train the model on experimental or 
                         externally synthesized data (specify either -f or -d, 
                         not both)
-  -m MODELCONFIGFILE, --modelconfigfile MODELCONFIGFILE
+  -m MODEL_CONFIG_FILE, --model-config-file MODEL_CONFIG_FILE
                         path to the seqgra XML model configuration file
   -e EVALUATORS [EVALUATORS ...], --evaluators EVALUATORS [EVALUATORS ...]
                         evaluator ID or IDs: IDs of conventional evaluators 
@@ -106,9 +107,11 @@ optional arguments:
                         integrated-gradients, 
                         nonlinear-integrated-gradients, saliency, sis, 
                         smooth-grad
-  -o OUTPUTDIR, --outputdir OUTPUTDIR
+  -o OUTPUT_DIR, --output-dir OUTPUT_DIR
                         output directory, subdirectories are created for 
                         generated data, trained model, and model evaluation
+  -i, --in-memory       if this flag is set, training and validation data 
+                        will be stored in-memory instead of loaded in chunks
   -p, --print           if this flag is set, data definition, model 
                         definition, and model summary are printed
   -s, --silent          if this flag is set, only warnings and errors are 
@@ -121,7 +124,7 @@ optional arguments:
   -g GPU, --gpu GPU     ID of GPU used by TensorFlow and PyTorch (defaults to 
                         GPU ID 0); CPU is used if no GPU is available or
                         GPU ID is set to -1
-  --nochecks            if this flag is set, examples and example annotations 
+  --no-checks            if this flag is set, examples and example annotations 
                         will not be validated before training, e.g., that DNA 
                         sequences only contain A, C, G, T, N
   --eval-sets EVAL_SETS [EVAL_SETS ...]
@@ -164,22 +167,22 @@ optional arguments:
 ## Commonly used suite of seqgra commands
 
 ```
-seqgra -d DATACONFIGFILE \
-       -m MODELCONFIGFILE \
-       -o OUTPUTDIR
-seqgra -d DATACONFIGFILE \
-       -m MODELCONFIGFILE
-       -o OUTPUTDIR
+seqgra -d DATA_CONFIG_FILE \
+       -m MODEL_CONFIG_FILE \
+       -o OUTPUT_DIR
+seqgra -d DATA_CONFIG_FILE \
+       -m MODEL_CONFIG_FILE
+       -o OUTPUT_DIR
        -e metrics roc pr predict
        --eval-sets training validation test
-seqgra -d DATACONFIGFILE
-       -m MODELCONFIGFILE
-       -o OUTPUTDIR
+seqgra -d DATA_CONFIG_FILE
+       -m MODEL_CONFIG_FILE
+       -o OUTPUT_DIR
        -e sis
        --eval-n-per-label 20
-seqgra -d DATACONFIGFILE
-       -m MODELCONFIGFILE
-       -o OUTPUTDIR
+seqgra -d DATA_CONFIG_FILE
+       -m MODEL_CONFIG_FILE
+       -o OUTPUT_DIR
        -e gradient saliency gradient-x-input integrated-gradients
        --eval-n-per-label 50
 ```
@@ -193,13 +196,13 @@ seqgra -d DATACONFIGFILE
 
 **Generate synthetic data only:**
 ```
-seqgra -d DATACONFIGFILE \
-       -o OUTPUTDIR
+seqgra -d DATA_CONFIG_FILE \
+       -o OUTPUT_DIR
 ```
 
 Generated files and folders:
 <pre>
-{OUTPUTDIR}
+{OUTPUT_DIR}
 +-- input
     +-- {GRAMMAR ID}
         |-- session-info.txt
@@ -219,14 +222,14 @@ Generated files and folders:
 
 **Generate synthetic data and train model on it:**
 ```
-seqgra -d DATACONFIGFILE \
-       -m MODELCONFIGFILE \
-       -o OUTPUTDIR
+seqgra -d DATA_CONFIG_FILE \
+       -m MODEL_CONFIG_FILE \
+       -o OUTPUT_DIR
 ```
 
 Generated files and folders:
 <pre>
-{OUTPUTDIR}
+{OUTPUT_DIR}
 |-- input
 |   +-- {GRAMMAR ID}
 |       |-- session-info.txt
@@ -253,16 +256,16 @@ Generated files and folders:
 
 **Train model on previously synthesized data:**
 ```
-seqgra -d DATACONFIGFILE \
-       -m MODELCONFIGFILE \
-       -o OUTPUTDIR
+seqgra -d DATA_CONFIG_FILE \
+       -m MODEL_CONFIG_FILE \
+       -o OUTPUT_DIR
 ```
-where previously synthesized data is in the `{OUTPUTDIR}/input/{GRAMMAR ID}` 
-folder and `{GRAMMAR ID}` is defined in `{DATACONFIGFILE}`.
+where previously synthesized data is in the `{OUTPUT_DIR}/input/{GRAMMAR ID}` 
+folder and `{GRAMMAR ID}` is defined in `{DATA_CONFIG_FILE}`.
 
 Generated files and folders (pre-existing folders and files in italics):
 <pre>
-<i>{OUTPUTDIR}</i>
+<i>{OUTPUT_DIR}</i>
 |-- <i>input</i>
 |   +-- <i>{GRAMMAR ID}</i>
 |       |-- <i>session-info.txt</i>
@@ -289,18 +292,18 @@ Generated files and folders (pre-existing folders and files in italics):
 
 **Train model on experimental or externally synthesized data:**
 ```
-seqgra -f DATAFOLDER \
-       -m MODELCONFIGFILE \
-       -o OUTPUTDIR
+seqgra -f DATA_FOLDER \
+       -m MODEL_CONFIG_FILE \
+       -o OUTPUT_DIR
 ```
 where experimental or externally synthesized data is in the 
-`{OUTPUTDIR}/input/{DATAFOLDER}` folder.
+`{OUTPUT_DIR}/input/{DATA_FOLDER}` folder.
 
 Generated files and folders (pre-existing folders and files in italics):
 <pre>
-<i>{OUTPUTDIR}</i>
+<i>{OUTPUT_DIR}</i>
 |-- <i>input</i>
-|   +-- <i>{DATAFOLDER}</i>
+|   +-- <i>{DATA_FOLDER}</i>
 |       |-- <i>training.txt</i>
 |       |-- <i>training-annotation.txt</i>
 |       |-- <i>validation.txt</i>
@@ -318,15 +321,15 @@ Generated files and folders (pre-existing folders and files in italics):
 
 **Run `metrics`, `predict`, `roc`, and `pr` evaluators on model that was previously trained on synthesized data:**
 ```
-seqgra -d DATACONFIGFILE \
-       -m MODELCONFIGFILE \
+seqgra -d DATA_CONFIG_FILE \
+       -m MODEL_CONFIG_FILE \
        -e metrics predict roc pr \
-       -o OUTPUTDIR
+       -o OUTPUT_DIR
 ```
 
 Generated files and folders (pre-existing folders and files in italics):
 <pre>
-<i>{OUTPUTDIR}</i>
+<i>{OUTPUT_DIR}</i>
 |-- <i>input</i>
 |   +-- <i>{GRAMMAR ID}</i>
 |       |-- <i>session-info.txt</i>
@@ -364,10 +367,10 @@ Generated files and folders (pre-existing folders and files in italics):
 
 **Run SIS evaluator on model that was previously trained on experimental data:**
 ```
-seqgra -f DATAFOLDER \
-       -m MODELCONFIGFILE \
+seqgra -f DATA_FOLDER \
+       -m MODEL_CONFIG_FILE \
        -e sis \
-       -o OUTPUTDIR
+       -o OUTPUT_DIR
        --eval-n-per-label 30
 ```
 
@@ -377,9 +380,9 @@ for all examples in the test set, which might take a long time.
 
 Generated files and folders (pre-existing folders and files in italics):
 <pre>
-<i>{OUTPUTDIR}</i>
+<i>{OUTPUT_DIR}</i>
 |-- <i>input</i>
-|   +-- <i>{DATAFOLDER}</i>
+|   +-- <i>{DATA_FOLDER}</i>
 |       |-- <i>training.txt</i>
 |       |-- <i>training-annotation.txt</i>
 |       |-- <i>validation.txt</i>
@@ -408,10 +411,10 @@ Generated files and folders (pre-existing folders and files in italics):
 
 **Run various gradient-based evaluation method on model, which was previously trained on experimental data:**
 ```
-seqgra -f DATAFOLDER \
-       -m MODELCONFIGFILE \
+seqgra -f DATA_FOLDER \
+       -m MODEL_CONFIG_FILE \
        -e gradient gradient-x-input integrated-gradients saliency \
-       -o OUTPUTDIR
+       -o OUTPUT_DIR
        --eval-sets validation test
        --eval-n-per-label 500
 ```
@@ -422,9 +425,9 @@ seqgra -f DATAFOLDER \
 
 Generated files and folders (pre-existing folders and files in italics):
 <pre>
-<i>{OUTPUTDIR}</i>
+<i>{OUTPUT_DIR}</i>
 |-- <i>input</i>
-|   +-- <i>{DATAFOLDER}</i>
+|   +-- <i>{DATA_FOLDER}</i>
 |       |-- <i>training.txt</i>
 |       |-- <i>training-annotation.txt</i>
 |       |-- <i>validation.txt</i>

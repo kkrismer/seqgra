@@ -76,20 +76,20 @@ class Learner(ABC):
         self.metrics = ["loss", "accuracy"]
 
     def train_model(self,
-                    training_file: Optional[str] = None,
-                    validation_file: Optional[str] = None,
+                    file_name_train: Optional[str] = None,
+                    file_name_val: Optional[str] = None,
                     x_train: Optional[List[str]] = None,
                     y_train: Optional[List[str]] = None,
                     x_val: Optional[List[str]] = None,
                     y_val: Optional[List[str]] = None) -> None:
         """Train model.
 
-        Specify either `training_file` and `validation_file` or
+        Specify either `file_name_train` and `file_name_val` or
         `x_train`, `y_train`, `x_val`, and `y_val`.
 
         Arguments:
-            training_file (Optional[str]): TODO
-            validation_file (Optional[str]): TODO
+            file_name_train (Optional[str]): TODO
+            file_name_val (Optional[str]): TODO
             x_train (Optional[List[str]]): TODO
             y_train (Optional[List[str]]): TODO
             x_val (Optional[List[str]]): TODO
@@ -97,7 +97,7 @@ class Learner(ABC):
 
         Raises:
             Exception: output directory non-empty
-            Exception: specify either training_file and validation_file
+            Exception: specify either file_name_train and file_name_val
                 or x_train, y_train, x_val, y_val
         """
         if len(os.listdir(self.output_dir)) > 0:
@@ -105,18 +105,84 @@ class Learner(ABC):
 
         self.set_seed()
 
-        if training_file is not None:
-            x_train, y_train = self.parse_examples_data(training_file)
+        if file_name_train is None:
+            file_name_train = self.get_examples_file(c.DataSet.TRAINING)
 
-        if validation_file is not None:
-            x_val, y_val = self.parse_examples_data(validation_file)
+        if file_name_val is None:
+            file_name_val = self.get_examples_file(c.DataSet.VALIDATION)
 
-        if x_train is None or y_train is None or \
-           x_val is None or y_val is None:
-            raise Exception("specify either training_file and validation_file"
-                            " or x_train, y_train, x_val, y_val")
-        else:
-            self._train_model(x_train, y_train, x_val, y_val)
+        self._train_model(file_name_train, file_name_val,
+                          x_train, y_train, x_val, y_val)
+
+    @abstractmethod
+    def _train_model(self,
+                     file_name_train: Optional[str] = None,
+                     file_name_val: Optional[str] = None,
+                     x_train: Optional[List[str]] = None,
+                     y_train: Optional[List[str]] = None,
+                     x_val: Optional[List[str]] = None,
+                     y_val: Optional[List[str]] = None) -> None:
+        pass
+
+    @abstractmethod
+    def evaluate_model(self, file_name: Optional[str] = None,
+                       x: Optional[List[str]] = None,
+                       y: Optional[List[str]] = None):
+        """TODO
+
+        TODO
+
+        Arguments:
+            file_name (Optional[str]): TODO
+            x (Optional[List[str]]): TODO
+            y (Optional[List[str]]): TODO
+
+        Returns:
+            array: TODO
+
+        Raises:
+            Exception: if neither `file_name` nor (`x` and `y`) are specified
+        """
+
+    @abstractmethod
+    def predict(self, file_name: Optional[str] = None,
+                x: Optional[Any] = None, encode: bool = True):
+        """TODO
+
+        TODO
+
+        Arguments:
+            x (array): TODO
+            encode (bool, optional): whether `x` should be encoded;
+                defaults to `True`
+
+        Raises:
+            Exception: if neither `file_name` nor `x` are specified
+        """
+
+    def get_sequence_length(self, file_name: str) -> int:
+        with open(file_name, "r") as f:
+            # skip header
+            next(f)
+            line: str = f.readline()
+            seq_len: int = len(line.split("\t")[0].strip())
+
+        return seq_len
+
+    def dataset_generator(self, file_name: str):
+        with open(file_name, "r") as f:
+            # skip header
+            next(f)
+            for line in f:
+                cells: List[str] = line.split("\t")
+
+                if len(cells) == 2:
+                    # one hot encode input and labels
+                    x = self.encode_x([cells[0].strip()])[0]
+                    y = self.encode_y([cells[1].strip()])[0]
+                    yield x, y
+                else:
+                    raise Exception("invalid example: " + line)
 
     @abstractmethod
     def parse_examples_data(self, file_name: str) -> ExampleSet:
@@ -160,6 +226,10 @@ class Learner(ABC):
 
     @abstractmethod
     def get_label_set(self, y: List[str]) -> Set[str]:
+        pass
+
+    @abstractmethod
+    def check_sequence(self, x: List[str]) -> bool:
         pass
 
     def check_labels(self, y: List[str], throw_exception: bool = True) -> bool:
@@ -280,18 +350,6 @@ class Learner(ABC):
         """
 
     @abstractmethod
-    def predict(self, x: Any, encode: bool = True):
-        """TODO
-
-        TODO
-
-        Arguments:
-            x (array): TODO
-            encode (bool, optional): whether `x` should be encoded;
-                defaults to `True`
-        """
-
-    @abstractmethod
     def encode_x(self, x):
         """TODO
 
@@ -345,12 +403,6 @@ class Learner(ABC):
         TODO
         """
 
-    @abstractmethod
-    def _train_model(self,
-                     x_train: List[str], y_train: List[str],
-                     x_val: List[str], y_val: List[str]) -> None:
-        pass
-
 
 class MultiClassClassificationLearner(Learner):
     """Abstract class for multi-class classification learners.
@@ -396,37 +448,6 @@ class MultiClassClassificationLearner(Learner):
             raise Exception("task of model definition must be multi-class "
                             "classification, but is '" +
                             self.definition.task + "' instead")
-
-    def evaluate_model(self, file_name: Optional[str] = None,
-                       x: Optional[List[str]] = None,
-                       y: Optional[List[str]] = None):
-        """TODO
-
-        TODO
-
-        Arguments:
-            file_name (str): TODO
-            x (Optional[List[str]]): TODO
-            y (Optional[List[str]]): TODO
-
-        Returns:
-            array: TODO
-
-        Raises:
-            Exception: if neither `file_name` nor (`x` and `y`) are specified
-        """
-        if file_name is not None:
-            x, y = self.parse_examples_data(file_name)
-
-        if x is None or y is None:
-            raise Exception(
-                "specify either file_name or x and y")
-        else:
-            return self._evaluate_model(x, y)
-
-    @abstractmethod
-    def _evaluate_model(self, x: List[str], y: List[str]):
-        pass
 
     def get_label_set(self, y: List[str]) -> Set[str]:
         if isinstance(y, list):
@@ -479,37 +500,6 @@ class MultiLabelClassificationLearner(Learner):
             raise Exception("task of model definition must be multi-label "
                             "classification, but is '" +
                             self.definition.task, "' instead")
-
-    def evaluate_model(self, file_name: Optional[str] = None,
-                       x: Optional[List[str]] = None,
-                       y: Optional[List[List[str]]] = None):
-        """TODO
-
-        TODO
-
-        Arguments:
-            file_name (Optional[str]): TODO
-            x (Optional[List[str]]): TODO
-            y (Optional[List[List[str]]]): TODO
-
-        Returns:
-            array: TODO
-
-        Raises:
-            Exception: if neither `file_name` nor (`x` and `y`) are specified
-        """
-        if file_name is not None:
-            x, y = self.parse_examples_data(file_name)
-
-        if x is None or y is None:
-            raise Exception(
-                "specify either file_name or x and y")
-        else:
-            return self._evaluate_model(x, y)
-
-    @abstractmethod
-    def _evaluate_model(self, x: List[str], y: List[List[str]]):
-        pass
 
     def get_label_set(self, y: List[str]) -> Set[str]:
         if isinstance(y, list):
@@ -569,36 +559,6 @@ class MultipleRegressionLearner(Learner):
             raise Exception("task of model definition must be multiple "
                             "regression, but is '" +
                             self.definition.task, "' instead")
-
-    def evaluate_model(self, file_name: Optional[str] = None,
-                       x: Optional[List[str]] = None,
-                       y: Optional[List[float]] = None):
-        """TODO
-
-        TODO
-
-        Arguments:
-            file_name (Optional[str]): TODO
-            x (Optional[List[str]]): TODO
-            y (Optional[List[float]]): TODO
-
-        Returns:
-            array: TODO
-
-        Raises:
-            Exception: if neither `file_name` nor (`x` and `y`) are specified
-        """
-        if file_name is not None:
-            x, y = self.parse_examples_data(file_name)
-
-        if x is None or y is None:
-            raise Exception("specify either file_name or x and y")
-        else:
-            return self._evaluate_model(x, y)
-
-    @abstractmethod
-    def _evaluate_model(self, x: List[str], y: List[float]):
-        pass
 
     def get_label_set(self, y: List[str]) -> Set[str]:
         return set()
@@ -662,37 +622,6 @@ class MultivariateRegressionLearner(Learner):
             raise Exception("task of model definition must be multivariate "
                             "regression, but is '" +
                             self.definition.task, "' instead")
-
-    def evaluate_model(self, file_name: Optional[str] = None,
-                       x: Optional[List[str]] = None,
-                       y: Optional[List[List[float]]] = None):
-        """TODO
-
-        TODO
-
-        Arguments:
-            file_name (Optional[str]): TODO
-            x (Optional[List[str]]): TODO
-            y (Optional[List[List[float]]]): TODO
-
-        Returns:
-            array: TODO
-
-        Raises:
-            Exception: if neither `file_name` nor (`x` and `y`) are specified
-        """
-        if file_name is not None:
-            x, y = self.parse_examples_data(file_name)
-
-        if x is None or y is None:
-            raise Exception(
-                "specify either file_name or x and y")
-        else:
-            return self._evaluate_model(x, y)
-
-    @abstractmethod
-    def _evaluate_model(self, x: List[str], y: List[float]):
-        pass
 
     def get_label_set(self, y: List[str]) -> Set[str]:
         return set()

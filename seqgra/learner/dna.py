@@ -27,6 +27,7 @@ class DNAMultiClassClassificationLearner(MultiClassClassificationLearner):
                  gpu_id: int = 0, silent: bool = False) -> None:
         super().__init__(model_definition, data_dir, output_dir,
                          validate_data, gpu_id, silent=silent)
+        self.alphabet_size: int = 4
 
     def encode_x(self, x: List[str]):
         return np.stack([DNAHelper.convert_dense_to_one_hot_encoding(seq)
@@ -84,9 +85,12 @@ class DNAMultiClassClassificationLearner(MultiClassClassificationLearner):
         y: List[str] = df["y"].tolist()
 
         if self.validate_data:
-            DNAHelper.check_sequence(x)
+            self.check_sequence(x)
             self.check_labels(y)
         return ExampleSet(x, y)
+
+    def check_sequence(self, x: List[str]) -> bool:
+        return DNAHelper.check_sequence(x)
 
 
 class DNAMultiLabelClassificationLearner(MultiLabelClassificationLearner):
@@ -95,6 +99,7 @@ class DNAMultiLabelClassificationLearner(MultiLabelClassificationLearner):
                  gpu_id: int = 0, silent: bool = False) -> None:
         super().__init__(model_definition, data_dir, output_dir,
                          validate_data, gpu_id, silent=silent)
+        self.alphabet_size: int = 4
 
     def encode_x(self, x: List[str]):
         return np.stack([DNAHelper.convert_dense_to_one_hot_encoding(seq)
@@ -155,6 +160,9 @@ class DNAMultiLabelClassificationLearner(MultiLabelClassificationLearner):
         y: List[str] = df["y"].replace(np.nan, "", regex=True).tolist()
 
         if self.validate_data:
-            DNAHelper.check_sequence(x)
+            self.check_sequence(x)
             self.check_labels(y)
         return ExampleSet(x, y)
+
+    def check_sequence(self, x: List[str]) -> bool:
+        return DNAHelper.check_sequence(x)

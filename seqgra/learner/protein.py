@@ -27,6 +27,7 @@ class ProteinMultiClassClassificationLearner(MultiClassClassificationLearner):
                  gpu_id: int = 0, silent: bool = False) -> None:
         super().__init__(model_definition, data_dir, output_dir,
                          validate_data, gpu_id, silent=silent)
+        self.alphabet_size: int = 20
 
     def encode_x(self, x: List[str]):
         return np.stack([ProteinHelper.convert_dense_to_one_hot_encoding(seq)
@@ -61,9 +62,12 @@ class ProteinMultiClassClassificationLearner(MultiClassClassificationLearner):
         y: List[str] = df["y"].tolist()
 
         if self.validate_data:
-            ProteinHelper.check_sequence(x)
+            self.check_sequence(x)
             self.check_labels(y)
         return ExampleSet(x, y)
+
+    def check_sequence(self, x: List[str]) -> bool:
+        return ProteinHelper.check_sequence(x)
 
 
 class ProteinMultiLabelClassificationLearner(MultiLabelClassificationLearner):
@@ -72,6 +76,7 @@ class ProteinMultiLabelClassificationLearner(MultiLabelClassificationLearner):
                  gpu_id: int = 0, silent: bool = False) -> None:
         super().__init__(model_definition, data_dir, output_dir,
                          validate_data, gpu_id, silent=silent)
+        self.alphabet_size: int = 20
 
     def encode_x(self, x: List[str]):
         return np.stack([ProteinHelper.convert_dense_to_one_hot_encoding(seq)
@@ -112,6 +117,9 @@ class ProteinMultiLabelClassificationLearner(MultiLabelClassificationLearner):
         y: List[str] = df["y"].replace(np.nan, "", regex=True).tolist()
 
         if self.validate_data:
-            ProteinHelper.check_sequence(x)
+            self.check_sequence(x)
             self.check_labels(y)
         return ExampleSet(x, y)
+
+    def check_sequence(self, x: List[str]) -> bool:
+        return ProteinHelper.check_sequence(x)

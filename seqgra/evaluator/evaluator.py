@@ -95,7 +95,7 @@ class Evaluator(ABC):
             with open(self.output_dir + set_name + "-no-valid-examples.txt",
                       "w") as no_examples_file:
                 no_examples_file.write("no valid examples\n")
-            
+
             self.logger.warning("evaluator skipped: no valid examples")
             return None
 
@@ -201,7 +201,7 @@ class Evaluator(ABC):
         if threshold:
             # predict with learner
             encoded_y = self.learner.encode_y(y)
-            y_hat = self.learner.predict(x)
+            y_hat = self.learner.predict(x=x)
 
             # discard misclassified / mislabeled examples and
             # examples below threshold

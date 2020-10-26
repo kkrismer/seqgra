@@ -23,7 +23,7 @@ class PredictEvaluator(Evaluator):
     def _evaluate_model(self, x: List[str], y: List[str],
                         annotations: List[str]) -> Any:
         encoded_y = self.learner.encode_y(y)
-        y_hat = self.learner.predict(x)
+        y_hat = self.learner.predict(x=x)
 
         return (encoded_y, y_hat)
 
