@@ -4,6 +4,7 @@ MIT - CSAIL - Gifford Lab - seqgra
 from typing import List, Optional
 import os
 
+import numpy as np
 import pandas as pd
 
 import seqgra.constants as c
@@ -39,7 +40,13 @@ class FIETableComparator(Comparator):
         for grammar_id in grammar_ids:
             for model_id in model_ids:
                 for set_name in set_names:
+                    labels: List[str] = self.get_labels(grammar_id, model_id,
+                                                        set_name)
                     for evaluator_id in c.EvaluatorID.FEATURE_IMPORTANCE_EVALUATORS:
+                        no_valid_file_name: str = self.evaluation_dir + \
+                            grammar_id + "/" + model_id + "/" + \
+                            evaluator_id + "/" + set_name + \
+                            "-no-valid-examples.txt"
                         for thresholded in [True, False]:
                             if thresholded:
                                 statistics_file_name: str = self.evaluation_dir + \
@@ -56,7 +63,9 @@ class FIETableComparator(Comparator):
                                 df = pd.read_csv(statistics_file_name,
                                                  sep="\t")
 
+                                current_labels: List[str] = labels
                                 for _, row in df.iterrows():
+                                    current_labels.remove(row["label"].strip())
                                     grammar_id_column.append(grammar_id)
                                     model_id_column.append(model_id)
                                     set_name_column.append(set_name)
@@ -69,11 +78,45 @@ class FIETableComparator(Comparator):
                                         row["specificity"])
                                     f1_column.append(row["f1"])
                                     n_column.append(row["n"])
+
+                                # add NA for missing labels (labels without
+                                # valid examples)
+                                if current_labels:
+                                    for label in current_labels:
+                                        grammar_id_column.append(grammar_id)
+                                        model_id_column.append(model_id)
+                                        set_name_column.append(set_name)
+                                        evaluator_id_column.append(
+                                            evaluator_id)
+                                        thresholded_column.append(thresholded)
+                                        label_column.append(label)
+                                        precision_column.append(np.nan)
+                                        recall_column.append(np.nan)
+                                        specificity_column.append(np.nan)
+                                        f1_column.append(np.nan)
+                                        n_column.append(np.nan)
+                            elif os.path.isfile(no_valid_file_name):
+                                # add NA for all labels (labels without
+                                # valid examples)
+                                if labels:
+                                    for label in labels:
+                                        grammar_id_column.append(grammar_id)
+                                        model_id_column.append(model_id)
+                                        set_name_column.append(set_name)
+                                        evaluator_id_column.append(
+                                            evaluator_id)
+                                        thresholded_column.append(thresholded)
+                                        label_column.append(label)
+                                        precision_column.append(np.nan)
+                                        recall_column.append(np.nan)
+                                        specificity_column.append(np.nan)
+                                        f1_column.append(np.nan)
+                                        n_column.append(np.nan)
                             elif (thresholded and
-                                        evaluator_id == c.EvaluatorID.SIS) or \
+                                  evaluator_id == c.EvaluatorID.SIS) or \
                                     evaluator_id in c.EvaluatorID.CORE_FEATURE_IMPORTANCE_EVALUATORS:
-                                    self.logger.warning("file does not exist: %s",
-                                                        statistics_file_name)
+                                self.logger.warning("file does not exist: %s",
+                                                    statistics_file_name)
 
         df = pd.DataFrame(
             {"grammar_id": grammar_id_column,

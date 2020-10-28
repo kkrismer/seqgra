@@ -58,8 +58,13 @@ class TableComparator(Comparator):
                 trainable_params, non_trainable_params, all_params = \
                     self.get_model_params(grammar_id, model_id)
                 for set_name in set_names:
-                    num_labels: int = self.get_num_labels(grammar_id,
-                                                          model_id, set_name)
+                    labels: List[str] = self.get_labels(grammar_id, model_id,
+                                                        set_name)
+                    if labels is None:
+                        num_labels: int = np.nan
+                    else:
+                        num_labels: int = len(labels)
+
                     metrics_loss, metrics_accuracy = self.get_metrics(
                         grammar_id, model_id, set_name)
                     roc_micro_auc, roc_macro_auc = self.get_roc_auc(
@@ -108,22 +113,22 @@ class TableComparator(Comparator):
     def get_set_size(self, grammar_id: str, set_name: str) -> int:
         set_file_name: str = self.data_dir + grammar_id + "/" + \
             set_name + ".txt"
-        # do not count header
-        i: int = -1
         if os.path.isfile(set_file_name):
+            # do not count header
+            i: int = -1
             with open(set_file_name) as f:
                 for line in f:
                     i += 1
+            return i
         else:
             self.logger.warning("file does not exist: %s",
                                 set_file_name)
-
-        return i
+            return np.nan
 
     def get_last_epoch_completed(self, grammar_id: str, model_id: str) -> int:
         last_epoch_file_name: str = self.model_dir + grammar_id + "/" + \
             model_id + "/last-epoch-completed.txt"
-        last_epoch: int = -1
+        last_epoch: int = np.nan
         if os.path.isfile(last_epoch_file_name):
             with open(last_epoch_file_name) as f:
                 last_epoch = int(f.readline().strip())
@@ -137,9 +142,9 @@ class TableComparator(Comparator):
                          model_id: str) -> Tuple[int, int, int]:
         model_params_file_name: str = self.model_dir + grammar_id + "/" + \
             model_id + "/num-model-parameters.txt"
-        trainable_params: int = -1
-        non_trainable_params: int = -1
-        all_params: int = -1
+        trainable_params: int = np.nan
+        non_trainable_params: int = np.nan
+        all_params: int = np.nan
         if os.path.isfile(model_params_file_name):
             with open(model_params_file_name) as f:
                 trainable_params = int(f.readline().strip().split("\t")[1])
@@ -150,20 +155,6 @@ class TableComparator(Comparator):
                                 model_params_file_name)
 
         return trainable_params, non_trainable_params, all_params
-
-    def get_num_labels(self, grammar_id: str, model_id: str,
-                       set_name: str) -> int:
-        predict_file_name: str = self.evaluation_dir + \
-            grammar_id + "/" + \
-            model_id + "/" + c.EvaluatorID.PREDICT + \
-            "/" + set_name + "-y-hat.txt"
-        if os.path.isfile(predict_file_name):
-            df = pd.read_csv(predict_file_name, sep="\t")
-            return int(len(df.columns) / 2)
-        else:
-            self.logger.warning("file does not exist: %s",
-                                predict_file_name)
-            return -1
 
     def get_metrics(self, grammar_id: str, model_id: str,
                     set_name: str) -> Metrics:
@@ -181,7 +172,7 @@ class TableComparator(Comparator):
         else:
             self.logger.warning("file does not exist: %s",
                                 metrics_file_name)
-            return Metrics(-1, -1)
+            return Metrics(np.nan, np.nan)
 
     def get_roc_auc(self, grammar_id: str, model_id: str,
                     set_name: str) -> [float, float]:
@@ -219,7 +210,7 @@ class TableComparator(Comparator):
         else:
             self.logger.warning("file does not exist: %s",
                                 predict_file_name)
-            return (-1, -1)
+            return (np.nan, np.nan)
 
     def get_pr_auc(self, grammar_id: str, model_id: str,
                    set_name: str) -> [float, float]:
@@ -244,4 +235,4 @@ class TableComparator(Comparator):
         else:
             self.logger.warning("file does not exist: %s",
                                 predict_file_name)
-            return (-1, -1)
+            return (np.nan, np.nan)
