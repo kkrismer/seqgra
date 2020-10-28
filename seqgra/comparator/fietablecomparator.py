@@ -42,6 +42,8 @@ class FIETableComparator(Comparator):
                 for set_name in set_names:
                     labels: List[str] = self.get_labels(grammar_id, model_id,
                                                         set_name)
+                    if labels is None:
+                        labels = list()
                     for evaluator_id in c.EvaluatorID.FEATURE_IMPORTANCE_EVALUATORS:
                         no_valid_file_name: str = self.evaluation_dir + \
                             grammar_id + "/" + model_id + "/" + \
@@ -65,13 +67,15 @@ class FIETableComparator(Comparator):
 
                                 current_labels: List[str] = labels.copy()
                                 for _, row in df.iterrows():
-                                    current_labels.remove(row["label"].strip())
+                                    label: str = row["label"].strip()
+                                    if label in current_labels:
+                                        current_labels.remove(label)
                                     grammar_id_column.append(grammar_id)
                                     model_id_column.append(model_id)
                                     set_name_column.append(set_name)
                                     evaluator_id_column.append(evaluator_id)
                                     thresholded_column.append(thresholded)
-                                    label_column.append(row["label"])
+                                    label_column.append(label)
                                     precision_column.append(row["precision"])
                                     recall_column.append(row["recall"])
                                     specificity_column.append(
