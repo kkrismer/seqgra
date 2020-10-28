@@ -63,7 +63,7 @@ class FIETableComparator(Comparator):
                                 df = pd.read_csv(statistics_file_name,
                                                  sep="\t")
 
-                                current_labels: List[str] = labels
+                                current_labels: List[str] = labels.copy()
                                 for _, row in df.iterrows():
                                     current_labels.remove(row["label"].strip())
                                     grammar_id_column.append(grammar_id)
