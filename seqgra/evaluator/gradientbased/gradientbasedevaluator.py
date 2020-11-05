@@ -432,5 +432,6 @@ class GradientBasedEvaluator(FeatureImportanceEvaluator):
         fi_matrix = np.clip(fi_matrix, a_min=0.0, a_max=None)
         fi_vector = fi_matrix.sum(axis=1)
         norm: float = fi_vector.max()
-        fi_vector = fi_vector * (1 / norm)
+        if norm > 0.0:
+            fi_vector = fi_vector * (1 / norm)
         return fi_vector
