@@ -106,8 +106,9 @@ class GradientBasedEvaluator(FeatureImportanceEvaluator):
         f1_column: List[float] = list()
 
         for example_id, annotation in enumerate(annotations):
-            fi_vector = GradientBasedEvaluator._prepare_normalized_fi_vector(
+            fi_vector = GradientBasedEvaluator._prepare_fi_vector(
                 fi_matrix[example_id, :, :])
+            fi_vector = GradientBasedEvaluator._normalize_fi_vector(fi_vector)
             precision_column += \
                 [GradientBasedEvaluator._calculate_smooth_precision(
                     fi_vector, annotation)]
@@ -325,21 +326,26 @@ class GradientBasedEvaluator(FeatureImportanceEvaluator):
         example_column: List[int] = list()
         position_column: List[int] = list()
         value_column: List[int] = list()
+        unnormalized_value_column: List[int] = list()
         group_column: List[str] = list()
         label_column: List[str] = list()
 
         for example_id, annotation in enumerate(annotations):
             example_column += [example_id] * len(annotation)
             position_column += list(range(1, len(annotation) + 1))
-            fi_vector = GradientBasedEvaluator._prepare_normalized_fi_vector(
+            fi_vector = GradientBasedEvaluator._prepare_fi_vector(
                 fi_matrix[example_id, :, :])
-            value_column += list(fi_vector)
+            unnormalized_value_column += list(fi_vector)
+            normalized_fi_vector = GradientBasedEvaluator._normalize_fi_vector(
+                fi_vector)
+            value_column += list(normalized_fi_vector)
             group_column += list(annotation)
             label_column += [y[example_id]] * len(annotation)
 
         df = pd.DataFrame({"example": example_column,
                            "position": position_column,
                            "value": value_column,
+                           "unnormalized_value": unnormalized_value_column,
                            "group": group_column,
                            "label": label_column})
 
@@ -362,6 +368,8 @@ class GradientBasedEvaluator(FeatureImportanceEvaluator):
         if not grammar_positions and not math.isclose(non_grammar_fi, 0.0):
             return 1.0
         elif not grammar_positions:
+            return 0.0
+        elif math.isclose(total_fi, 0.0):
             return 0.0
         else:
             return grammar_fi / total_fi
@@ -428,10 +436,15 @@ class GradientBasedEvaluator(FeatureImportanceEvaluator):
             return true_negative / float(len(non_grammar_positions))
 
     @staticmethod
-    def _prepare_normalized_fi_vector(fi_matrix) -> Any:
-        fi_matrix = np.clip(fi_matrix, a_min=0.0, a_max=None)
-        fi_vector = fi_matrix.sum(axis=1)
+    def _normalize_fi_vector(fi_vector) -> Any:
         norm: float = fi_vector.max()
         if norm > 0.0:
-            fi_vector = fi_vector * (1 / norm)
+            fi_vector = fi_vector * (1.0 / norm)
+        else:
+            fi_vector = fi_vector * 0.0
         return fi_vector
+
+    @staticmethod
+    def _prepare_fi_vector(fi_matrix) -> Any:
+        fi_matrix = np.clip(fi_matrix, a_min=0.0, a_max=None)
+        return fi_matrix.sum(axis=1)
