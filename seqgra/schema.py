@@ -49,3 +49,17 @@ class Metrics(NamedTuple):
 class ModelSize(NamedTuple):
     num_trainable_params: int
     num_non_trainable_params: int
+
+
+class DataSessionInfo(NamedTuple):
+    seqgra_version: str
+    numpy_version: str
+    python_version: str
+
+
+class ModelSessionInfo(NamedTuple):
+    seqgra_version: str
+    numpy_version: str
+    python_version: str
+    library: str
+    library_version: str

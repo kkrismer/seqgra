@@ -13,6 +13,7 @@ from sklearn.metrics import average_precision_score
 import seqgra.constants as c
 from seqgra.comparator import Comparator
 from seqgra import Metrics
+from seqgra.schema import DataSessionInfo, ModelSessionInfo
 
 
 class TableComparator(Comparator):
@@ -31,9 +32,17 @@ class TableComparator(Comparator):
         grammar_id_column: List[str] = list()
         model_id_column: List[str] = list()
         set_name_column: List[str] = list()
+        d_seqgra_version_column: List[str] = list()
+        d_numpy_version_column: List[str] = list()
+        d_python_version_column: List[str] = list()
         d_training_set_size_column: List[int] = list()
         d_validation_set_size_column: List[int] = list()
         d_test_set_size_column: List[int] = list()
+        m_seqgra_version_column: List[str] = list()
+        m_numpy_version_column: List[str] = list()
+        m_python_version_column: List[str] = list()
+        m_library_column: List[str] = list()
+        m_library_version_column: List[str] = list()
         m_last_epoch_completed_column: List[int] = list()
         m_trainable_params_column: List[int] = list()
         m_non_trainable_params_column: List[int] = list()
@@ -47,12 +56,16 @@ class TableComparator(Comparator):
         e_pr_macro_auc_column: List[float] = list()
 
         for grammar_id in grammar_ids:
+            data_session_info: DataSessionInfo = self.get_data_session_info(
+                grammar_id)
             training_set_size: int = self.get_set_size(grammar_id, "training")
             validation_set_size: int = self.get_set_size(grammar_id,
                                                          "validation")
             test_set_size: int = self.get_set_size(grammar_id, "test")
 
             for model_id in model_ids:
+                model_session_info: ModelSessionInfo = \
+                    self.get_model_session_info(grammar_id, model_id)
                 last_epoch_completed: int = self.get_last_epoch_completed(
                     grammar_id, model_id)
                 trainable_params, non_trainable_params, all_params = \
@@ -75,9 +88,24 @@ class TableComparator(Comparator):
                     grammar_id_column.append(grammar_id)
                     model_id_column.append(model_id)
                     set_name_column.append(set_name)
+                    d_seqgra_version_column.append(
+                        data_session_info.seqgra_version)
+                    d_numpy_version_column.append(
+                        data_session_info.numpy_version)
+                    d_python_version_column.append(
+                        data_session_info.python_version)
                     d_training_set_size_column.append(training_set_size)
                     d_validation_set_size_column.append(validation_set_size)
                     d_test_set_size_column.append(test_set_size)
+                    m_seqgra_version_column.append(
+                        model_session_info.seqgra_version)
+                    m_numpy_version_column.append(
+                        model_session_info.numpy_version)
+                    m_python_version_column.append(
+                        model_session_info.python_version)
+                    m_library_column.append(model_session_info.library)
+                    m_library_version_column.append(
+                        model_session_info.library_version)
                     m_last_epoch_completed_column.append(last_epoch_completed)
                     m_trainable_params_column.append(trainable_params)
                     m_non_trainable_params_column.append(non_trainable_params)
@@ -94,20 +122,28 @@ class TableComparator(Comparator):
             {"grammar_id": grammar_id_column,
              "model_id": model_id_column,
              "set_name": set_name_column,
-             "training_set_size": d_training_set_size_column,
-             "validation_set_size": d_validation_set_size_column,
-             "test_set_size": d_test_set_size_column,
-             "last_epoch_completed": m_last_epoch_completed_column,
-             "trainable_params": m_trainable_params_column,
-             "non_trainable_params": m_non_trainable_params_column,
-             "all_params": m_all_params_column,
-             "num_labels": e_num_labels_column,
-             "metrics_loss": e_metrics_loss_column,
-             "metrics_accuracy": e_metrics_accuracy_column,
-             "roc_micro_auc": e_roc_micro_auc_column,
-             "roc_macro_auc": e_roc_macro_auc_column,
-             "pr_micro_auc": e_pr_micro_auc_column,
-             "pr_macro_auc": e_pr_macro_auc_column})
+             "d_seqgra_version": d_seqgra_version_column,
+             "d_numpy_version": d_numpy_version_column,
+             "d_python_version": d_python_version_column,
+             "d_training_set_size": d_training_set_size_column,
+             "d_validation_set_size": d_validation_set_size_column,
+             "d_test_set_size": d_test_set_size_column,
+             "m_seqgra_version": m_seqgra_version_column,
+             "m_numpy_version": m_numpy_version_column,
+             "m_python_version": m_python_version_column,
+             "m_library": m_library_column,
+             "m_library_version": m_library_version_column,
+             "m_last_epoch_completed": m_last_epoch_completed_column,
+             "m_trainable_params": m_trainable_params_column,
+             "m_non_trainable_params": m_non_trainable_params_column,
+             "m_all_params": m_all_params_column,
+             "e_num_labels": e_num_labels_column,
+             "e_metrics_loss": e_metrics_loss_column,
+             "e_metrics_accuracy": e_metrics_accuracy_column,
+             "e_roc_micro_auc": e_roc_micro_auc_column,
+             "e_roc_macro_auc": e_roc_macro_auc_column,
+             "e_pr_micro_auc": e_pr_micro_auc_column,
+             "e_pr_macro_auc": e_pr_macro_auc_column})
         df.to_csv(self.output_dir + "table.txt", sep="\t", index=False)
 
     def get_set_size(self, grammar_id: str, set_name: str) -> int:
@@ -125,16 +161,90 @@ class TableComparator(Comparator):
                                 set_file_name)
             return np.nan
 
+    @staticmethod
+    def _read_lines(file_name: str) -> Optional[List[str]]:
+        if os.path.isfile(file_name):
+            with open(file_name) as f:
+                return f.readlines()
+        else:
+            return None
+
+    @staticmethod
+    def _get_property(lines: List[str], name: str) -> str:
+        for line in lines:
+            if line.startswith(name):
+                return line.replace(name, "").strip()
+
+        return ""
+
+    def get_data_session_info(self, grammar_id: str) -> DataSessionInfo:
+        file_name: str = self.data_dir + grammar_id + "/session-info.txt"
+        lines: List[str] = TableComparator._read_lines(file_name)
+        if lines:
+            seqgra_version: str = TableComparator._get_property(
+                lines, "seqgra package version: ")
+            numpy_version: str = TableComparator._get_property(
+                lines, "NumPy version: ")
+            python_version: str = TableComparator._get_property(
+                lines, "Python version: ")
+            return DataSessionInfo(seqgra_version, numpy_version,
+                                   python_version)
+        else:
+            self.logger.warning("file does not exist: %s",
+                                file_name)
+            return DataSessionInfo("", "", "")
+
+    def get_model_session_info(self, grammar_id: str,
+                               model_id: str) -> ModelSessionInfo:
+        file_name: str = self.model_dir + grammar_id + "/" + \
+            model_id + "/session-info.txt"
+        lines: List[str] = TableComparator._read_lines(file_name)
+
+        if lines:
+            seqgra_version: str = TableComparator._get_property(
+                lines, "seqgra package version: ")
+            numpy_version: str = TableComparator._get_property(
+                lines, "NumPy version: ")
+            python_version: str = TableComparator._get_property(
+                lines, "Python version: ")
+            pytorch_version: str = TableComparator._get_property(
+                lines, "PyTorch version: ")
+            tf_version: str = TableComparator._get_property(
+                lines, "TensorFlow version: ")
+
+            if pytorch_version:
+                return ModelSessionInfo(seqgra_version,
+                                        numpy_version,
+                                        python_version,
+                                        "PyTorch",
+                                        pytorch_version)
+            elif tf_version:
+                return ModelSessionInfo(seqgra_version,
+                                        numpy_version,
+                                        python_version,
+                                        "TensorFlow",
+                                        tf_version)
+            else:
+                return ModelSessionInfo(seqgra_version,
+                                        numpy_version,
+                                        python_version,
+                                        "Bayes Optimal Classifier",
+                                        seqgra_version)
+        else:
+            self.logger.warning("file does not exist: %s",
+                                file_name)
+            return ModelSessionInfo("", "", "", "", "")
+
     def get_last_epoch_completed(self, grammar_id: str, model_id: str) -> int:
-        last_epoch_file_name: str = self.model_dir + grammar_id + "/" + \
+        file_name: str = self.model_dir + grammar_id + "/" + \
             model_id + "/last-epoch-completed.txt"
         last_epoch: int = np.nan
-        if os.path.isfile(last_epoch_file_name):
-            with open(last_epoch_file_name) as f:
+        if os.path.isfile(file_name):
+            with open(file_name) as f:
                 last_epoch = int(f.readline().strip())
         else:
             self.logger.warning("file does not exist: %s",
-                                last_epoch_file_name)
+                                file_name)
 
         return last_epoch
 
