@@ -38,6 +38,7 @@ class TableComparator(Comparator):
         d_training_set_size_column: List[int] = list()
         d_validation_set_size_column: List[int] = list()
         d_test_set_size_column: List[int] = list()
+        d_num_labels_column: List[int] = list()
         m_seqgra_version_column: List[str] = list()
         m_numpy_version_column: List[str] = list()
         m_python_version_column: List[str] = list()
@@ -47,7 +48,6 @@ class TableComparator(Comparator):
         m_trainable_params_column: List[int] = list()
         m_non_trainable_params_column: List[int] = list()
         m_all_params_column: List[int] = list()
-        e_num_labels_column: List[int] = list()
         e_metrics_loss_column: List[float] = list()
         e_metrics_accuracy_column: List[float] = list()
         e_roc_micro_auc_column: List[float] = list()
@@ -97,6 +97,7 @@ class TableComparator(Comparator):
                     d_training_set_size_column.append(training_set_size)
                     d_validation_set_size_column.append(validation_set_size)
                     d_test_set_size_column.append(test_set_size)
+                    d_num_labels_column.append(num_labels)
                     m_seqgra_version_column.append(
                         model_session_info.seqgra_version)
                     m_numpy_version_column.append(
@@ -110,7 +111,6 @@ class TableComparator(Comparator):
                     m_trainable_params_column.append(trainable_params)
                     m_non_trainable_params_column.append(non_trainable_params)
                     m_all_params_column.append(all_params)
-                    e_num_labels_column.append(num_labels)
                     e_metrics_loss_column.append(metrics_loss)
                     e_metrics_accuracy_column.append(metrics_accuracy)
                     e_roc_micro_auc_column.append(roc_micro_auc)
@@ -128,6 +128,7 @@ class TableComparator(Comparator):
              "d_training_set_size": d_training_set_size_column,
              "d_validation_set_size": d_validation_set_size_column,
              "d_test_set_size": d_test_set_size_column,
+             "d_num_labels": d_num_labels_column,
              "m_seqgra_version": m_seqgra_version_column,
              "m_numpy_version": m_numpy_version_column,
              "m_python_version": m_python_version_column,
@@ -137,7 +138,6 @@ class TableComparator(Comparator):
              "m_trainable_params": m_trainable_params_column,
              "m_non_trainable_params": m_non_trainable_params_column,
              "m_all_params": m_all_params_column,
-             "e_num_labels": e_num_labels_column,
              "e_metrics_loss": e_metrics_loss_column,
              "e_metrics_accuracy": e_metrics_accuracy_column,
              "e_roc_micro_auc": e_roc_micro_auc_column,
