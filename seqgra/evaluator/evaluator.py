@@ -87,10 +87,22 @@ class Evaluator(ABC):
             x, y, annotations = self._load_data(set_name)
 
         if x:
-            results = self._evaluate_model(x, y, annotations)
-            self._save_results(results, set_name, suppress_plots)
+            try:
+                results = self._evaluate_model(x, y, annotations)
+                self._save_results(results, set_name, suppress_plots)
 
-            return results
+                return results
+            except RuntimeError as err:
+                with open(self.output_dir + set_name + "-incompatible-model.txt",
+                          "w") as incompatible_model_file:
+                    incompatible_model_file.write(
+                        "evaluator skipped: model incompatible\n")
+                    incompatible_model_file.write("error thrown:\n")
+                    incompatible_model_file.write(str(err))
+
+                self.logger.warning("evaluator skipped: incompatible with "
+                                    "model (error thrown: %s)", err)
+                return None
         else:
             with open(self.output_dir + set_name + "-no-valid-examples.txt",
                       "w") as no_examples_file:
