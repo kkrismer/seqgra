@@ -232,7 +232,7 @@ class IterableMultiLabelDataSet(torch.utils.data.IterableDataset):
                     encoded_y_vec = self.learner.encode_y(y_vec)
                     if not isinstance(encoded_y_vec, np.ndarray):
                         encoded_y_vec = np.array(encoded_y_vec)
-                    self.y_cache = encoded_y_vec.astype(np.int64)
+                    self.y_cache = encoded_y_vec.astype(np.float32)
                 self.cache_index = 0
 
         if self.x_cache is not None and self.cache_index < self.x_cache.shape[0]:
