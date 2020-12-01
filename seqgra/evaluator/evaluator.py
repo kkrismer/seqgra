@@ -472,6 +472,9 @@ class FeatureImportanceEvaluator(Evaluator):
                            inplace=True)
         if "value" in statistics_df.columns:
             statistics_df.drop("value", axis=1, inplace=True)
+            if "unnormalized_value" in statistics_df.columns:
+                statistics_df.drop("unnormalized_value", axis=1, inplace=True)
+
             statistics_df.drop_duplicates(inplace=True)
             statistics_df.to_csv(self.output_dir + set_name + "-statistics.txt",
                                  sep="\t", index=False)
