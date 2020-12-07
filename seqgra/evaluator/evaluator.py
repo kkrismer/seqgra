@@ -339,7 +339,8 @@ class FeatureImportanceEvaluator(Evaluator):
             self, x: List[str], y: List[str],
             annotations: List[str]) -> AnnotatedExampleSet:
         # remove examples without positive labels
-        if self.learner.definition.task == c.TaskType.MULTI_LABEL_CLASSIFICATION:
+        if self.learner.definition.task == \
+            c.TaskType.MULTI_LABEL_CLASSIFICATION and y is not None:
             subset_idx = [i
                           for i, label in enumerate(y)
                           if label]
