@@ -11,11 +11,9 @@ import logging
 import os
 import sys
 import random
-import subprocess
 from typing import Dict, List, Set
 
 import numpy as np
-import pandas as pd
 import pkg_resources
 import ushuffle
 
@@ -28,6 +26,7 @@ from seqgra.model.data import Condition
 from seqgra.model.data import SpacingConstraint
 from seqgra.model.data import Rule
 from seqgra.simulator import ExampleGenerator
+from seqgra.simulator.heatmap import GrammarPositionHeatmap
 
 
 class Simulator:
@@ -71,71 +70,9 @@ class Simulator:
                                 example_set.name, 1, operation.labels)
 
     def create_grammar_heatmap(self, set_name: str) -> None:
-        file_name: str = self.output_dir + "/" + set_name + "-grammar-heatmap"
-        annotation_file_name: str = self.output_dir + "/" + set_name + "-annotation.txt"
-
-        if os.path.isfile(annotation_file_name) and \
-                not os.path.isfile(file_name + ".pdf"):
-            df = pd.read_csv(annotation_file_name, sep="\t",
-                             dtype={"annotation": "string", "y": "string"})
-            df = df.fillna("")
-            counts: Dict[str, List[int]] = dict()
-            annotations: List[str] = df["annotation"].tolist()
-            if self.definition.task == c.TaskType.MULTI_CLASS_CLASSIFICATION:
-                y: List[str] = df["y"].tolist()
-            elif self.definition.task == c.TaskType.MULTI_LABEL_CLASSIFICATION:
-                y: List[str] = df["y"].replace(np.nan, "", regex=True).tolist()
-
-            for i, annotation in enumerate(annotations):
-                labels: List[str] = None
-                if self.definition.task == c.TaskType.MULTI_CLASS_CLASSIFICATION:
-                    labels = [y[i]]
-                elif self.definition.task == c.TaskType.MULTI_LABEL_CLASSIFICATION:
-                    if y[i] == "":
-                        labels = ["none (background)"]
-                    else:
-                        labels = y[i].split("|")
-
-                for label in labels:
-                    if label not in counts:
-                        counts[label] = [0] * \
-                            self.definition.background.max_length
-
-                    for j, letter in enumerate(annotation):
-                        if letter == c.PositionType.GRAMMAR:
-                            counts[label][j] += 1
-
-            label_column: List[str] = list()
-            position_column: List[int] = list()
-            grammar_probability_column: List[float] = list()
-
-            for label, grammar_counts in counts.items():
-                for i, grammar_count in enumerate(grammar_counts):
-                    label_column.append(label)
-                    position_column.append(i + 1)
-                    grammar_probability_column.append(
-                        grammar_count / len(annotations))
-
-            plot_df = pd.DataFrame(
-                {"label": label_column,
-                 "position": position_column,
-                 "grammar_probability": grammar_probability_column})
-            plot_df.to_csv(file_name + ".txt", sep="\t", index=False)
-
-            plot_script: str = pkg_resources.resource_filename(
-                "seqgra", "simulator/plotgrammarpositionheatmap.R")
-
-            cmd = ["Rscript", "--no-save", "--no-restore", "--quiet",
-                   plot_script, file_name + ".txt", file_name + ".pdf"]
-
-            try:
-                subprocess.call(cmd, universal_newlines=True)
-            except subprocess.CalledProcessError as exception:
-                self.logger.warning("failed to create grammar position "
-                                    "heatmaps: %s", exception.output)
-            except FileNotFoundError as exception:
-                self.logger.warning("Rscript not on PATH, skipping "
-                                    "grammar position heatmaps")
+        GrammarPositionHeatmap.create(
+            self.output_dir, set_name, self.definition.task,
+            self.definition.background.max_length)
 
     def __add_shuffled_examples(self, set_name: str,
                                 preserve_frequencies_for_kmer: int,

@@ -23,9 +23,10 @@ setuptools.setup(
         "Operating System :: OS Independent",
         "Programming Language :: Python :: 3"
     ],
-    package_data={seqgra.__name__: ["data-config.xsd", "model-config.xsd",
-                                    "evaluator/plotagreement.R",
-                                    "simulator/plotgrammarpositionheatmap.R"]},
+    package_data={seqgra.__name__: [
+        "data-config.xsd", "model-config.xsd",
+        "evaluator/plotagreement.R",
+        "simulator/heatmap/heatmap.R"]},
     install_requires=[
         "Cython>=0.29",
         "lxml>=4.4.1",

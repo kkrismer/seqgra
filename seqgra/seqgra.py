@@ -32,6 +32,7 @@ from seqgra.parser import XMLDataDefinitionParser
 from seqgra.parser import ModelDefinitionParser
 from seqgra.parser import XMLModelDefinitionParser
 from seqgra.simulator import Simulator
+from seqgra.simulator.heatmap import GrammarPositionHeatmap
 
 
 def get_learner(model_definition: ModelDefinition,
@@ -314,6 +315,12 @@ def run_seqgra(data_config_file: Optional[str],
         data_definition: Optional[DataDefinition] = None
         grammar_id = data_folder.strip()
         logger.info("loaded experimental data")
+        GrammarPositionHeatmap.create(output_dir + "input/" + grammar_id,
+                                      c.DataSet.TRAINING)
+        GrammarPositionHeatmap.create(output_dir + "input/" + grammar_id,
+                                      c.DataSet.VALIDATION)
+        GrammarPositionHeatmap.create(output_dir + "input/" + grammar_id,
+                                      c.DataSet.TEST)
     else:
         # generate synthetic data
         data_config = MiscHelper.read_config_file(data_config_file)
