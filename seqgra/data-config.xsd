@@ -185,6 +185,13 @@
           <xs:sequence>
             <xs:element name="label" type="xs:string"/>
             <xs:element name="description" type="xs:string"/>
+            <xs:element name="mode" minOccurs="0" maxOccurs="1">
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:pattern value="sequential|mutually exclusive"/>
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:element>
             <xs:element name="grammar">
               <xs:complexType>
                 <xs:sequence>

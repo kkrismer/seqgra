@@ -14,10 +14,11 @@ from seqgra.model.data import Rule
 
 class Condition:
     def __init__(self, condition_id: str, label: str,
-                 description: str, grammar: List[Rule]) -> None:
+                 description: str, mode: str, grammar: List[Rule]) -> None:
         self.condition_id: str = condition_id
         self.label: str = label
         self.description: str = description
+        self.mode: str = mode
         self.grammar: List[Rule] = grammar
 
     def __str__(self):
@@ -27,6 +28,7 @@ class Condition:
                    "\tDescription:\n"]
         if self.description:
             str_rep += ["\t", self.description, "\n"]
+        str_rep += ["\tMode: ", self.mode, "\n"]
         str_rep += ["\tGrammar:\n"]
         rules_string: List[str] = [str(rule) for rule in self.grammar]
         rules_str_rep = "".join(rules_string)

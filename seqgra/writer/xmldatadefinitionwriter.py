@@ -189,6 +189,10 @@ class XMLDataDefinitionWriter(DataDefinitionWriter):
         description_element = etree.SubElement(
             condition_element, "description")
         description_element.text = condition.description
+        if condition.mode == "mutually exclusive":
+            mode_element = etree.SubElement(
+                condition_element, "mode")
+            mode_element.text = "mutually exclusive"
 
         grammar_element = etree.SubElement(condition_element, "grammar")
 

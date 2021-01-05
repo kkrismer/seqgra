@@ -176,8 +176,9 @@ class Simulator:
         c6: bool = self.check_invalid_sequence_elements()
         c7: bool = self.check_spacing_contraint_se_refs()
         c8: bool = self.check_overlapping_sequence_elements()
+        c9: bool = self.check_mutually_exclusive_probabilities()
 
-        valid = c1 and c2 and c3 and c4 and c5 and c6 and c7 and c8
+        valid = c1 and c2 and c3 and c4 and c5 and c6 and c7 and c8 and c9
         if valid:
             self.logger.info("semantic analysis of grammar completed: "
                              "no issues detected")
@@ -401,6 +402,25 @@ class Simulator:
                                               condition.condition_id,
                                               i + 1, j + 1,
                                               spacing_constraint.sequence_element2.sid)
+
+        return valid
+
+    def check_mutually_exclusive_probabilities(self) -> bool:
+        valid: bool = True
+
+        for condition in self.definition.conditions:
+            if condition.mode == "mutually exclusive":
+                p_sum: float = 0
+                for rule in condition.grammar:
+                    p_sum += rule.probability
+
+                if p_sum > 1.0:
+                    valid = False
+                    self.logger.error("condition %s [cid]: "
+                                      "in mutually exclusive rule mode "
+                                      "the sum of all rule probabilities "
+                                      "must not exceed 1.0",
+                                      condition.condition_id)
 
         return valid
 

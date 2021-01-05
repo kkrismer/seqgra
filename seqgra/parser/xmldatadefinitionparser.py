@@ -206,6 +206,10 @@ class XMLDataDefinitionParser(DataDefinitionParser):
         label: str = XMLHelper.read_text_node(condition_element, "label")
         description: str = XMLHelper.read_text_node(
             condition_element, "description")
+        mode: str = XMLHelper.read_text_node(
+            condition_element, "mode")
+        if not mode:
+            mode = "sequential"
         grammar_element: Any = \
             condition_element.getElementsByTagName("grammar")[0]
         rule_elements = grammar_element.getElementsByTagName("rule")
@@ -213,7 +217,7 @@ class XMLDataDefinitionParser(DataDefinitionParser):
             [XMLDataDefinitionParser.__parse_rule(
                 rule_element, valid_sequence_elements)
              for rule_element in rule_elements]
-        return Condition(cid, label, description, grammar)
+        return Condition(cid, label, description, mode, grammar)
 
     @staticmethod
     def __parse_rule(rule_element,

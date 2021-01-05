@@ -50,41 +50,52 @@ class ExampleGenerator:
 
             for condition in conditions:
                 if condition is not None:
-                    for rule in condition.grammar:
-                        example = ExampleGenerator.apply_rule(rule, example)
+                    if condition.mode == "mutually exclusive":
+                        p: float = random.uniform(0, 1)
+                        current_p: float = 0
+                        for rule in condition.grammar:
+                            current_p += rule.probability
+                            if p <= current_p:
+                                example = ExampleGenerator.apply_rule(rule,
+                                                                      example)
+                                break
+                    else:
+                        for rule in condition.grammar:
+                            if random.uniform(0, 1) <= rule.probability:
+                                example = ExampleGenerator.apply_rule(rule,
+                                                                      example)
         return example
 
     @staticmethod
     def apply_rule(rule: Rule, example: AnnotatedExample) -> AnnotatedExample:
-        if random.uniform(0, 1) <= rule.probability:
-            elements: Dict[str, str] = dict()
-            for sequence_element in rule.sequence_elements:
-                elements[sequence_element.sid] = sequence_element.generate()
+        elements: Dict[str, str] = dict()
+        for sequence_element in rule.sequence_elements:
+            elements[sequence_element.sid] = sequence_element.generate()
 
-            if rule.spacing_constraints is not None and \
-               len(rule.spacing_constraints) > 0:
-                # process all sequence elements with spacing constraints
-                for spacing_constraint in rule.spacing_constraints:
-                    example = \
-                        ExampleGenerator.add_spatially_constrained_elements(
-                            example,
-                            spacing_constraint,
-                            elements[spacing_constraint.sequence_element1.sid],
-                            elements[spacing_constraint.sequence_element2.sid],
-                            rule.position)
-                    if spacing_constraint.sequence_element1.sid in elements:
-                        del elements[spacing_constraint.sequence_element1.sid]
-                    if spacing_constraint.sequence_element2.sid in elements:
-                        del elements[spacing_constraint.sequence_element2.sid]
+        if rule.spacing_constraints is not None and \
+                len(rule.spacing_constraints) > 0:
+            # process all sequence elements with spacing constraints
+            for spacing_constraint in rule.spacing_constraints:
+                example = \
+                    ExampleGenerator.add_spatially_constrained_elements(
+                        example,
+                        spacing_constraint,
+                        elements[spacing_constraint.sequence_element1.sid],
+                        elements[spacing_constraint.sequence_element2.sid],
+                        rule.position)
+                if spacing_constraint.sequence_element1.sid in elements:
+                    del elements[spacing_constraint.sequence_element1.sid]
+                if spacing_constraint.sequence_element2.sid in elements:
+                    del elements[spacing_constraint.sequence_element2.sid]
 
-            # process remaining sequence elements (w/o spacing constraints)
-            for element in elements.values():
-                position: int = ExampleGenerator.get_position(
-                    rule.position,
-                    len(example.x),
-                    len(element))
-                example = ExampleGenerator.add_element(example, element,
-                                                       position)
+        # process remaining sequence elements (w/o spacing constraints)
+        for element in elements.values():
+            position: int = ExampleGenerator.get_position(
+                rule.position,
+                len(example.x),
+                len(element))
+            example = ExampleGenerator.add_element(example, element,
+                                                   position)
 
         return example
 
