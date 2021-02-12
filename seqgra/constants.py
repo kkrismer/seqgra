@@ -83,6 +83,7 @@ class ComparatorID:
     ROC: str = "roc"
     PR: str = "pr"
     TABLE: str = "table"
+    CURVE_TABLE: str = "curve-table"
     FEATURE_IMPORTANCE_EVALUATOR_TABLE: str = "fi-eval-table"
     ALL_COMPARATOR_IDS: FrozenSet[str] = frozenset(
-        [ROC, PR, TABLE, FEATURE_IMPORTANCE_EVALUATOR_TABLE])
+        [ROC, PR, TABLE, CURVE_TABLE, FEATURE_IMPORTANCE_EVALUATOR_TABLE])
