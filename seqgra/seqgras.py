@@ -67,13 +67,13 @@ def get_all_model_ids(output_dir: str, grammar_ids: List[str]) -> List[str]:
     return list(set(model_ids))
 
 
-def run_metaseqgra(analysis_name: str,
-                   comparator_ids: List[str],
-                   output_dir: str,
-                   grammar_ids: Optional[List[str]] = None,
-                   model_ids: Optional[List[str]] = None,
-                   set_names: Optional[List[str]] = None,
-                   model_labels: Optional[List[str]] = None) -> None:
+def run_seqgra_summary(analysis_name: str,
+                       comparator_ids: List[str],
+                       output_dir: str,
+                       grammar_ids: Optional[List[str]] = None,
+                       model_ids: Optional[List[str]] = None,
+                       set_names: Optional[List[str]] = None,
+                       model_labels: Optional[List[str]] = None) -> None:
     output_dir = format_output_dir(output_dir.strip())
 
     if comparator_ids:
@@ -94,8 +94,9 @@ def main():
     logging.basicConfig(level=logging.INFO)
 
     parser = argparse.ArgumentParser(
-        prog="metaseqgra",
-        description="Compare seqgra models")
+        prog="seqgras",
+        description="seqgra summary: Gather metrics across grammars, models, "
+        "evaluators")
     parser.add_argument(
         "-v",
         "--version",
@@ -167,13 +168,13 @@ def main():
             raise ValueError(
                 "invalid comparator ID {s!r}".format(s=comparator))
 
-    run_metaseqgra(args.analysisname,
-                   args.comparators,
-                   args.outputdir,
-                   args.grammar_ids,
-                   args.model_ids,
-                   args.sets,
-                   args.model_labels)
+    run_seqgra_summary(args.analysisname,
+                       args.comparators,
+                       args.outputdir,
+                       args.grammar_ids,
+                       args.model_ids,
+                       args.sets,
+                       args.model_labels)
 
 
 if __name__ == "__main__":
