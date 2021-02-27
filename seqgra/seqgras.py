@@ -17,19 +17,13 @@ from typing import List, Optional
 
 import seqgra
 import seqgra.constants as c
+from seqgra import MiscHelper
 from seqgra.comparator import Comparator
 from seqgra.comparator import PRComparator
 from seqgra.comparator import ROCComparator
 from seqgra.comparator import TableComparator
 from seqgra.comparator import CurveTableComparator
 from seqgra.comparator import FIETableComparator
-
-
-def format_output_dir(output_dir: str) -> str:
-    output_dir = output_dir.strip().replace("\\", "/")
-    if not output_dir.endswith("/"):
-        output_dir += "/"
-    return output_dir
 
 
 def get_comparator(analysis_name: str, comparator_id: str,
@@ -74,7 +68,7 @@ def run_seqgra_summary(analysis_name: str,
                        model_ids: Optional[List[str]] = None,
                        set_names: Optional[List[str]] = None,
                        model_labels: Optional[List[str]] = None) -> None:
-    output_dir = format_output_dir(output_dir.strip())
+    output_dir = MiscHelper.format_output_dir(output_dir.strip())
 
     if comparator_ids:
         for comparator_id in comparator_ids:
@@ -104,7 +98,7 @@ def main():
         version="%(prog)s " + seqgra.__version__)
     parser.add_argument(
         "-a",
-        "--analysisname",
+        "--analysis-name",
         type=str,
         required=True,
         help="analysis name (folder name for output)"
@@ -121,7 +115,7 @@ def main():
     )
     parser.add_argument(
         "-o",
-        "--outputdir",
+        "--output-dir",
         type=str,
         required=True,
         help="output directory, subdirectories are created for generated "
@@ -129,7 +123,7 @@ def main():
     )
     parser.add_argument(
         "-g",
-        "--grammar_ids",
+        "--grammar-ids",
         type=str,
         default=None,
         nargs="+",
@@ -138,7 +132,7 @@ def main():
     )
     parser.add_argument(
         "-m",
-        "--model_ids",
+        "--model-ids",
         type=str,
         default=None,
         nargs="+",
@@ -155,7 +149,7 @@ def main():
     )
     parser.add_argument(
         "-l",
-        "--model_labels",
+        "--model-labels",
         type=str,
         default=None,
         nargs="+",
