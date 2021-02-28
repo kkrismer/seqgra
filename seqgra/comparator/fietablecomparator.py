@@ -116,11 +116,6 @@ class FIETableComparator(Comparator):
                                         specificity_column.append(np.nan)
                                         f1_column.append(np.nan)
                                         n_column.append(np.nan)
-                            elif (thresholded and
-                                  evaluator_id == c.EvaluatorID.SIS) or \
-                                    evaluator_id in c.EvaluatorID.CORE_FEATURE_IMPORTANCE_EVALUATORS:
-                                self.logger.warning("file does not exist: %s",
-                                                    statistics_file_name)
 
         df = pd.DataFrame(
             {"grammar_id": grammar_id_column,

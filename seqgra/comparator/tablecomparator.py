@@ -64,59 +64,65 @@ class TableComparator(Comparator):
             test_set_size: int = self.get_set_size(grammar_id, "test")
 
             for model_id in model_ids:
-                model_session_info: ModelSessionInfo = \
-                    self.get_model_session_info(grammar_id, model_id)
-                last_epoch_completed: int = self.get_last_epoch_completed(
-                    grammar_id, model_id)
-                trainable_params, non_trainable_params, all_params = \
-                    self.get_model_params(grammar_id, model_id)
-                for set_name in set_names:
-                    labels: List[str] = self.get_labels(grammar_id, model_id,
-                                                        set_name)
-                    if labels is None:
-                        num_labels: int = np.nan
-                    else:
-                        num_labels: int = len(labels)
+                model_folder: str = self.model_dir + grammar_id + "/" + \
+                    model_id
+                if os.path.isdir(model_folder):
+                    model_session_info: ModelSessionInfo = \
+                        self.get_model_session_info(grammar_id, model_id)
+                    last_epoch_completed: int = self.get_last_epoch_completed(
+                        grammar_id, model_id)
+                    trainable_params, non_trainable_params, all_params = \
+                        self.get_model_params(grammar_id, model_id)
+                    for set_name in set_names:
+                        labels: List[str] = self.get_labels(grammar_id,
+                                                            model_id, set_name)
+                        if labels is None:
+                            num_labels: int = np.nan
+                        else:
+                            num_labels: int = len(labels)
 
-                    metrics_loss, metrics_accuracy = self.get_metrics(
-                        grammar_id, model_id, set_name)
-                    roc_micro_auc, roc_macro_auc = self.get_roc_auc(
-                        grammar_id, model_id, set_name)
-                    pr_micro_auc, pr_macro_auc = self.get_pr_auc(
-                        grammar_id, model_id, set_name)
+                        metrics_loss, metrics_accuracy = self.get_metrics(
+                            grammar_id, model_id, set_name)
+                        roc_micro_auc, roc_macro_auc = self.get_roc_auc(
+                            grammar_id, model_id, set_name)
+                        pr_micro_auc, pr_macro_auc = self.get_pr_auc(
+                            grammar_id, model_id, set_name)
 
-                    grammar_id_column.append(grammar_id)
-                    model_id_column.append(model_id)
-                    set_name_column.append(set_name)
-                    d_seqgra_version_column.append(
-                        data_session_info.seqgra_version)
-                    d_numpy_version_column.append(
-                        data_session_info.numpy_version)
-                    d_python_version_column.append(
-                        data_session_info.python_version)
-                    d_training_set_size_column.append(training_set_size)
-                    d_validation_set_size_column.append(validation_set_size)
-                    d_test_set_size_column.append(test_set_size)
-                    d_num_labels_column.append(num_labels)
-                    m_seqgra_version_column.append(
-                        model_session_info.seqgra_version)
-                    m_numpy_version_column.append(
-                        model_session_info.numpy_version)
-                    m_python_version_column.append(
-                        model_session_info.python_version)
-                    m_library_column.append(model_session_info.library)
-                    m_library_version_column.append(
-                        model_session_info.library_version)
-                    m_last_epoch_completed_column.append(last_epoch_completed)
-                    m_trainable_params_column.append(trainable_params)
-                    m_non_trainable_params_column.append(non_trainable_params)
-                    m_all_params_column.append(all_params)
-                    e_metrics_loss_column.append(metrics_loss)
-                    e_metrics_accuracy_column.append(metrics_accuracy)
-                    e_roc_micro_auc_column.append(roc_micro_auc)
-                    e_roc_macro_auc_column.append(roc_macro_auc)
-                    e_pr_micro_auc_column.append(pr_micro_auc)
-                    e_pr_macro_auc_column.append(pr_macro_auc)
+                        grammar_id_column.append(grammar_id)
+                        model_id_column.append(model_id)
+                        set_name_column.append(set_name)
+                        d_seqgra_version_column.append(
+                            data_session_info.seqgra_version)
+                        d_numpy_version_column.append(
+                            data_session_info.numpy_version)
+                        d_python_version_column.append(
+                            data_session_info.python_version)
+                        d_training_set_size_column.append(training_set_size)
+                        d_validation_set_size_column.append(
+                            validation_set_size)
+                        d_test_set_size_column.append(test_set_size)
+                        d_num_labels_column.append(num_labels)
+                        m_seqgra_version_column.append(
+                            model_session_info.seqgra_version)
+                        m_numpy_version_column.append(
+                            model_session_info.numpy_version)
+                        m_python_version_column.append(
+                            model_session_info.python_version)
+                        m_library_column.append(model_session_info.library)
+                        m_library_version_column.append(
+                            model_session_info.library_version)
+                        m_last_epoch_completed_column.append(
+                            last_epoch_completed)
+                        m_trainable_params_column.append(trainable_params)
+                        m_non_trainable_params_column.append(
+                            non_trainable_params)
+                        m_all_params_column.append(all_params)
+                        e_metrics_loss_column.append(metrics_loss)
+                        e_metrics_accuracy_column.append(metrics_accuracy)
+                        e_roc_micro_auc_column.append(roc_micro_auc)
+                        e_roc_macro_auc_column.append(roc_macro_auc)
+                        e_pr_micro_auc_column.append(pr_micro_auc)
+                        e_pr_macro_auc_column.append(pr_macro_auc)
 
         df = pd.DataFrame(
             {"grammar_id": grammar_id_column,
