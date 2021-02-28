@@ -6,6 +6,7 @@ Class with miscellaneous helper functions as static methods
 @author: Konstantin Krismer
 """
 import os
+import re
 import shutil
 
 
@@ -100,3 +101,10 @@ class MiscHelper:
             return data_file
         else:
             raise Exception("file does not exist: " + data_file)
+
+    @staticmethod
+    def sanitize_id(unsafe_id: str) -> str:
+        unsafe_id = unsafe_id.strip()
+        unsafe_id = unsafe_id.replace(" ", "-").replace("_", "-")
+        unsafe_id = unsafe_id.replace("/", "-").replace("/", "-")
+        return re.sub('[^A-Za-z0-9-]+', '', unsafe_id)

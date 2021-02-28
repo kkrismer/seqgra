@@ -26,21 +26,21 @@ from seqgra.comparator import CurveTableComparator
 from seqgra.comparator import FIETableComparator
 
 
-def get_comparator(analysis_name: str, comparator_id: str,
+def get_comparator(analysis_id: str, comparator_id: str,
                    output_dir: str,
                    model_labels: Optional[List[str]] = None) -> Comparator:
     comparator_id = comparator_id.lower().strip()
 
     if comparator_id == c.ComparatorID.ROC:
-        return ROCComparator(analysis_name, output_dir, model_labels)
+        return ROCComparator(analysis_id, output_dir, model_labels)
     elif comparator_id == c.ComparatorID.PR:
-        return PRComparator(analysis_name, output_dir, model_labels)
+        return PRComparator(analysis_id, output_dir, model_labels)
     elif comparator_id == c.ComparatorID.TABLE:
-        return TableComparator(analysis_name, output_dir, model_labels)
+        return TableComparator(analysis_id, output_dir, model_labels)
     elif comparator_id == c.ComparatorID.CURVE_TABLE:
-        return CurveTableComparator(analysis_name, output_dir, model_labels)
+        return CurveTableComparator(analysis_id, output_dir, model_labels)
     elif comparator_id == c.ComparatorID.FEATURE_IMPORTANCE_EVALUATOR_TABLE:
-        return FIETableComparator(analysis_name, output_dir, model_labels)
+        return FIETableComparator(analysis_id, output_dir, model_labels)
     else:
         raise Exception("invalid evaluator ID")
 
@@ -61,18 +61,19 @@ def get_all_model_ids(output_dir: str, grammar_ids: List[str]) -> List[str]:
     return list(set(model_ids))
 
 
-def run_seqgra_summary(analysis_name: str,
+def run_seqgra_summary(analysis_id: str,
                        comparator_ids: List[str],
                        output_dir: str,
                        grammar_ids: Optional[List[str]] = None,
                        model_ids: Optional[List[str]] = None,
                        set_names: Optional[List[str]] = None,
                        model_labels: Optional[List[str]] = None) -> None:
+    analysis_id = MiscHelper.sanitize_id(analysis_id)
     output_dir = MiscHelper.format_output_dir(output_dir.strip())
 
     if comparator_ids:
         for comparator_id in comparator_ids:
-            comparator: Comparator = get_comparator(analysis_name,
+            comparator: Comparator = get_comparator(analysis_id,
                                                     comparator_id,
                                                     output_dir,
                                                     model_labels)
@@ -98,10 +99,10 @@ def main():
         version="%(prog)s " + seqgra.__version__)
     parser.add_argument(
         "-a",
-        "--analysis-name",
+        "--analysis-id",
         type=str,
         required=True,
-        help="analysis name (folder name for output)"
+        help="analysis id (folder name for output)"
     )
     parser.add_argument(
         "-c",
@@ -162,9 +163,9 @@ def main():
             raise ValueError(
                 "invalid comparator ID {s!r}".format(s=comparator))
 
-    run_seqgra_summary(args.analysisname,
+    run_seqgra_summary(args.analysis_id,
                        args.comparators,
-                       args.outputdir,
+                       args.output_dir,
                        args.grammar_ids,
                        args.model_ids,
                        args.sets,

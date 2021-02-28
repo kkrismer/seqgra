@@ -17,10 +17,10 @@ from seqgra.comparator import Comparator
 
 
 class ROCComparator(Comparator):
-    def __init__(self, analysis_name: str, output_dir: str,
+    def __init__(self, analysis_id: str, output_dir: str,
                  model_labels: Optional[List[str]] = None,
                  silent: bool = False) -> None:
-        super().__init__(c.ComparatorID.ROC, "ROC curve", analysis_name,
+        super().__init__(c.ComparatorID.ROC, "ROC curve", analysis_id,
                          output_dir, model_labels, silent)
 
     def compare_models(self, grammar_ids: Optional[List[str]] = None,
