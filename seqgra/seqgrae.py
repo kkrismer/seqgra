@@ -14,7 +14,7 @@ import math
 import os
 import random
 import shutil
-from typing import List
+from typing import List, Optional
 
 import pandas as pd
 
@@ -74,12 +74,12 @@ def change_ds_size(data_definition: DataDefinition, ds_size: int,
     for example_set in data_definition.data_generation.sets:
         if example_set.name == c.DataSet.TRAINING:
             for example in example_set.examples:
-                example.samples = int(
-                    (example.samples / org_training_set_size) * new_training_set_size)
+                example.samples = int((example.samples /
+                                       org_training_set_size) * new_training_set_size)
         elif example_set.name == c.DataSet.VALIDATION:
             for example in example_set.examples:
-                example.samples = int(
-                    (example.samples / org_validation_set_size) * new_validation_set_size)
+                example.samples = int((example.samples /
+                                       org_validation_set_size) * new_validation_set_size)
         elif example_set.name == c.DataSet.TEST:
             for example in example_set.examples:
                 example.samples = int(
@@ -117,9 +117,11 @@ def write_data_definition_file(data_definition: DataDefinition,
     data_definition.seed = seed
     data_definition.grammar_id = get_grammar_id(data_definition.grammar_id,
                                                 ds_size, seed)
+    file_name = output_dir + data_definition.grammar_id + ".xml"
 
     XMLDataDefinitionWriter.write_data_definition_to_file(
-        data_definition, output_dir + data_definition.grammar_id + ".xml")
+        data_definition, file_name)
+    return file_name
 
 
 def write_data_definition_files(data_config_file: str,
@@ -128,15 +130,21 @@ def write_data_definition_files(data_config_file: str,
                                 d_seeds: List[int]) -> None:
     data_definition: DataDefinition = parse_data_definition_file(
         data_config_file)
+    file_names: List[List[str]] = []
 
     for ds_size in ds_sizes:
-        for d_seed in d_seeds:
-            write_data_definition_file(data_definition, output_dir,
-                                       ds_size, d_seed)
+        file_names.append([write_data_definition_file(data_definition,
+                                                      output_dir,
+                                                      ds_size, d_seed)
+                           for d_seed in d_seeds])
+    return file_names
 
 
-def subsample_data_set(data_folder, output_dir, new_data_folder,
-                       subsampling_rate) -> None:
+def subsample_data_set(data_folder: str, output_dir: str,
+                       subsampling_rate: float, seed: int) -> None:
+    random.seed(seed)
+    new_data_folder: str = get_data_folder_name(
+        data_folder, subsampling_rate, seed)
     out_folder: str = MiscHelper.prepare_path(output_dir + new_data_folder)
 
     # subsample training set
@@ -153,10 +161,11 @@ def subsample_data_set(data_folder, output_dir, new_data_folder,
         shutil.copyfile(example_in_file, example_out_file)
         shutil.copyfile(annotation_in_file, annotation_out_file)
     else:
-        example_df = pd.read_csv(example_in_file, sep="\t",
-                                 dtype={"x": "string", "y": "string"})
-        annotation_df = pd.read_csv(example_in_file, sep="\t",
-                                    dtype={"annotation": "string", "y": "string"})
+        example_df = pd.read_csv(
+            example_in_file, sep="\t", dtype={"x": "string", "y": "string"})
+        annotation_df = pd.read_csv(
+            annotation_in_file, sep="\t",
+            dtype={"annotation": "string", "y": "string"})
 
         num_examples: int = len(example_df)
         subsampled_num_examples: int = int(num_examples * subsampling_rate)
@@ -194,17 +203,20 @@ def subsample_data_set(data_folder, output_dir, new_data_folder,
     shutil.copyfile(example_in_file, example_out_file)
     shutil.copyfile(annotation_in_file, annotation_out_file)
 
+    return out_folder
+
 
 def subsample_experimental_data(data_folder: str,
                                 output_dir: str,
                                 subsampling_rates: List[float],
                                 d_seeds: List[int]) -> None:
+    folders: List[List[str]] = []
     for subsampling_rate in subsampling_rates:
-        for d_seed in d_seeds:
-            new_data_folder: str = get_data_folder_name(
-                data_folder, subsampling_rate, d_seed)
-            subsample_data_set(
-                data_folder, output_dir, new_data_folder, subsampling_rate)
+        folders.append([subsample_data_set(data_folder, output_dir,
+                                           subsampling_rate, d_seed)
+                        for d_seed in d_seeds])
+
+    return folders
 
 
 def write_model_definition_file(model_definition: ModelDefinition,
@@ -213,38 +225,110 @@ def write_model_definition_file(model_definition: ModelDefinition,
     model_definition = copy.deepcopy(model_definition)
     model_definition.seed = seed
     model_definition.model_id = get_model_id(model_definition.model_id, seed)
-
+    file_name = output_dir + model_definition.model_id + ".xml"
     XMLModelDefinitionWriter.write_model_definition_to_file(
-        model_definition, output_dir + model_definition.model_id + ".xml")
+        model_definition, file_name)
+    return file_name
 
 
 def write_model_definition_files(model_config_files: List[str],
                                  output_dir: str,
                                  m_seeds: List[int]) -> None:
+    file_names: List[List[str]] = []
     for model_config_file in model_config_files:
         model_definition: ModelDefinition = parse_model_definition_file(
             model_config_file)
+        file_names.append([write_model_definition_file(model_definition,
+                                                       output_dir, m_seed)
+                           for m_seed in m_seeds])
 
-        for m_seed in m_seeds:
-            write_model_definition_file(model_definition, output_dir,
-                                        m_seed)
+    return file_names
 
 
-def write_analysis_script(analysis_name: str,
-                          data_config_file: str,
-                          data_folder: str,
-                          model_config_files: List[str],
+def extract_id(file_name: str) -> str:
+    return os.path.basename(file_name).replace(".xml", "")
+
+
+def write_analysis_script(analysis_id: str,
+                          data_file_names: Optional[List[List[str]]],
+                          data_folders: Optional[List[List[str]]],
+                          model_file_names: List[List[str]],
                           output_dir: str,
-                          ds_sizes: List[float],
-                          d_seeds: List[int],
-                          m_seeds: List[int],
+                          analyses_dir: str,
                           seed_grid: bool,
-                          gpu: bool) -> None:
-    analyses_dir: str = MiscHelper.prepare_path(
-        output_dir + "analyses", allow_exists=True, allow_non_empty=True)
+                          gpu_id: int) -> None:
+    num_m_seeds: int = len(model_file_names[0])
+    conv_evals = "-e metrics roc pr predict --eval-sets training validation test"
+    fie_evals = "-e gradient saliency gradient-x-input integrated-gradients deconv guided-backprop --eval-n-per-label 50"
+    opts = " -o '" + output_dir + "' --no-checks -s -g " + str(gpu_id) + "\n"
+    with open(analyses_dir + analysis_id + ".sh", "w") as script_f:
+        if data_file_names:
+            num_d_seeds: int = len(data_file_names[0])
+            if seed_grid:
+                for i in range(num_d_seeds):
+                    for j in range(num_m_seeds):
+                        for ds_names in data_file_names:
+                            for model_names in model_file_names:
+                                script_f.write("seqgra -d '" + ds_names[i] +
+                                               "' -m '" + model_names[j] +
+                                               "' " + conv_evals + opts)
+                                script_f.write("seqgra -d '" + ds_names[i] +
+                                               "' -m '" + model_names[j] +
+                                               "' " + fie_evals + opts)
+            else:
+                for i in range(num_m_seeds):
+                    for ds_names in data_file_names:
+                        for model_names in model_file_names:
+                            script_f.write("seqgra -d '" + ds_names[i] +
+                                           "' -m '" + model_names[i] + "' " +
+                                           conv_evals + opts)
+                            script_f.write("seqgra -d '" + ds_names[i] +
+                                           "' -m '" + model_names[i] + "' " +
+                                           fie_evals + opts)
+        else:
+            num_d_seeds: int = len(data_folders[0])
+            if seed_grid:
+                for i in range(num_d_seeds):
+                    for j in range(num_m_seeds):
+                        for ds_names in data_folders:
+                            for model_names in model_file_names:
+                                script_f.write("seqgra -f '" + ds_names[i] +
+                                               "' -m '" + model_names[i] +
+                                               "' " + conv_evals + opts)
+                                script_f.write("seqgra -f '" + ds_names[i] +
+                                               "' -m '" + model_names[i] +
+                                               "' " + fie_evals + opts)
+            else:
+                for i in range(num_m_seeds):
+                    for ds_names in data_folders:
+                        for model_names in model_file_names:
+                            script_f.write("seqgra -f '" + ds_names[i] +
+                                           "' -m '" + model_names[i] + "' " +
+                                           conv_evals + opts)
+                            script_f.write("seqgra -f '" + ds_names[i] +
+                                           "' -m '" + model_names[i] + "' " +
+                                           fie_evals + opts)
+
+        script_f.write("\n")
+
+        if data_file_names:
+            grammar_ids: List[str] = [extract_id(seed_name)
+                                      for ds_names in data_file_names
+                                      for seed_name in ds_names]
+        else:
+            grammar_ids: List[str] = [extract_id(seed_name)
+                                      for ds_names in data_folders
+                                      for seed_name in ds_names]
+        model_ids: List[str] = [extract_id(seed_name)
+                                for model_names in model_file_names
+                                for seed_name in model_names]
+        script_f.write("seqgras -a '" + analysis_id +
+                       "' -c table curve-table fi-eval-table -o '" +
+                       output_dir + "' -g " + " ".join(grammar_ids) +
+                       " -m " + " ".join(model_ids) + "\n")
 
 
-def run_seqgra_ensemble(analysis_name: str,
+def run_seqgra_ensemble(analysis_id: str,
                         data_config_file: str,
                         data_folder: str,
                         model_config_files: List[str],
@@ -253,30 +337,40 @@ def run_seqgra_ensemble(analysis_name: str,
                         d_seeds: List[int],
                         m_seeds: List[int],
                         seed_grid: bool,
-                        gpu: bool) -> None:
+                        gpu_id: int) -> None:
+    analysis_id = MiscHelper.sanitize_id(analysis_id)
     output_dir = MiscHelper.format_output_dir(output_dir.strip())
     model_configs_dir: str = MiscHelper.prepare_path(
         output_dir + "configs/model", allow_exists=True, allow_non_empty=True)
+
+    if not seed_grid and len(d_seeds) != len(m_seeds):
+        raise Exception("number of simulation seeds must equal number of "
+                        "model seeds when seed-grid is disabled")
 
     if data_config_file:
         data_configs_dir: str = MiscHelper.prepare_path(
             output_dir + "configs/data", allow_exists=True,
             allow_non_empty=True)
-        write_data_definition_files(data_config_file, data_configs_dir,
-                                    ds_sizes, d_seeds)
+        data_file_names: List[List[str]] = write_data_definition_files(
+            data_config_file, data_configs_dir, ds_sizes, d_seeds)
+        data_folders: List[List[str]] = None
     else:
         input_data_dir: str = MiscHelper.prepare_path(
             output_dir + "input", allow_exists=True,
             allow_non_empty=True)
-        subsample_experimental_data(data_folder, input_data_dir,
-                                    ds_sizes, d_seeds)
+        data_folders: List[List[str]] = subsample_experimental_data(
+            data_folder, input_data_dir, ds_sizes, d_seeds)
+        data_file_names: List[List[str]] = None
 
-    write_model_definition_files(model_config_files, model_configs_dir,
-                                 m_seeds)
+    model_file_names: List[List[str]] = write_model_definition_files(
+        model_config_files, model_configs_dir, m_seeds)
 
-    write_analysis_script(analysis_name, data_config_file, data_folder,
-                          model_config_files, output_dir, ds_sizes, d_seeds,
-                          m_seeds, seed_grid, gpu)
+    analyses_dir: str = MiscHelper.prepare_path(
+        output_dir + "analyses", allow_exists=True, allow_non_empty=True)
+
+    write_analysis_script(analysis_id, data_file_names, data_folders,
+                          model_file_names, output_dir, analyses_dir,
+                          seed_grid, gpu_id)
 
 
 def main():
@@ -297,10 +391,10 @@ def main():
         version="%(prog)s " + seqgra.__version__)
     parser.add_argument(
         "-a",
-        "--analysis-name",
+        "--analysis-id",
         type=str,
         required=True,
-        help="analysis name (used for file name and comparators)"
+        help="analysis ID (used for script file name and comparator folders)"
     )
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument(
@@ -380,7 +474,7 @@ def main():
     args = parser.parse_args()
 
     if args.data_config_file or args.ds_sizes != default_ds_sizes:
-        run_seqgra_ensemble(args.analysis_name,
+        run_seqgra_ensemble(args.analysis_id,
                             args.data_config_file,
                             args.data_folder,
                             args.model_config_files,
@@ -391,7 +485,7 @@ def main():
                             args.seed_grid,
                             args.gpu)
     else:
-        run_seqgra_ensemble(args.analysis_name,
+        run_seqgra_ensemble(args.analysis_id,
                             args.data_config_file,
                             args.data_folder,
                             args.model_config_files,
