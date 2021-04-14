@@ -44,6 +44,7 @@ setuptools.setup(
     entry_points={
         "console_scripts": ["seqgra=seqgra.seqgra:main",
                             "seqgras=seqgra.seqgras:main",
-                            "seqgrae=seqgra.seqgrae:main"]
+                            "seqgrae=seqgra.seqgrae:main",
+                            "seqgraa=seqgra.seqgraa:main"]
     }
 )
