@@ -36,7 +36,7 @@ def obtain_feature_attribution(attr_dir: str, grammar_id: str,
 
     evaluation_dir: str = MiscHelper.prepare_path(
         attr_dir + "/" + grammar_id + "/" +
-        learner.definition.model_id + "/" + evaluator_id,
+        learner.definition.model_id,
         allow_exists=True, allow_non_empty=True)
 
     if len(os.listdir(evaluation_dir)) > 0:
