@@ -7,4 +7,5 @@ from seqgra.schema import Metrics
 from seqgra.schema import ModelSize
 from seqgra.schema import ProbabilisticToken
 from seqgra.misc import MiscHelper
+from seqgra.idresolver import IdResolver
 __version__ = "0.0.1"
