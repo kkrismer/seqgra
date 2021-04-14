@@ -17,32 +17,8 @@ from typing import List, Optional
 
 import seqgra
 import seqgra.constants as c
-from seqgra import MiscHelper
+from seqgra import MiscHelper, IdResolver
 from seqgra.comparator import Comparator
-from seqgra.comparator import PRComparator
-from seqgra.comparator import ROCComparator
-from seqgra.comparator import TableComparator
-from seqgra.comparator import CurveTableComparator
-from seqgra.comparator import FIETableComparator
-
-
-def get_comparator(analysis_id: str, comparator_id: str,
-                   output_dir: str,
-                   model_labels: Optional[List[str]] = None) -> Comparator:
-    comparator_id = comparator_id.lower().strip()
-
-    if comparator_id == c.ComparatorID.ROC:
-        return ROCComparator(analysis_id, output_dir, model_labels)
-    elif comparator_id == c.ComparatorID.PR:
-        return PRComparator(analysis_id, output_dir, model_labels)
-    elif comparator_id == c.ComparatorID.TABLE:
-        return TableComparator(analysis_id, output_dir, model_labels)
-    elif comparator_id == c.ComparatorID.CURVE_TABLE:
-        return CurveTableComparator(analysis_id, output_dir, model_labels)
-    elif comparator_id == c.ComparatorID.FEATURE_IMPORTANCE_EVALUATOR_TABLE:
-        return FIETableComparator(analysis_id, output_dir, model_labels)
-    else:
-        raise Exception("invalid evaluator ID")
 
 
 def get_all_grammar_ids(output_dir: str) -> List[str]:
@@ -73,10 +49,10 @@ def run_seqgra_summary(analysis_id: str,
 
     if comparator_ids:
         for comparator_id in comparator_ids:
-            comparator: Comparator = get_comparator(analysis_id,
-                                                    comparator_id,
-                                                    output_dir,
-                                                    model_labels)
+            comparator: Comparator = IdResolver.get_comparator(analysis_id,
+                                                               comparator_id,
+                                                               output_dir,
+                                                               model_labels)
             if not grammar_ids:
                 grammar_ids = get_all_grammar_ids(output_dir)
             if not model_ids:

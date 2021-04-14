@@ -6,9 +6,15 @@ Class with miscellaneous helper functions as static methods
 @author: Konstantin Krismer
 """
 import os
-from typing import Optional
+from typing import List, Optional
 
 import seqgra.constants as c
+from seqgra.comparator import Comparator
+from seqgra.comparator import PRComparator
+from seqgra.comparator import ROCComparator
+from seqgra.comparator import TableComparator
+from seqgra.comparator import CurveTableComparator
+from seqgra.comparator import FIETableComparator
 from seqgra.evaluator import Evaluator
 from seqgra.learner import Learner
 from seqgra.learner.bayes import BayesOptimalDNAMultiClassClassificationLearner
@@ -267,5 +273,24 @@ class IdResolver:
             from seqgra.evaluator.gradientbased import ContrastiveExcitationBackpropEvaluator  # pylint: disable=import-outside-toplevel
             return ContrastiveExcitationBackpropEvaluator(
                 learner, output_dir, eval_grad_importance_threshold, silent=silent)
+        else:
+            raise Exception("invalid evaluator ID")
+
+    @staticmethod
+    def get_comparator(analysis_id: str, comparator_id: str,
+                    output_dir: str,
+                    model_labels: Optional[List[str]] = None) -> Comparator:
+        comparator_id = comparator_id.lower().strip()
+
+        if comparator_id == c.ComparatorID.ROC:
+            return ROCComparator(analysis_id, output_dir, model_labels)
+        elif comparator_id == c.ComparatorID.PR:
+            return PRComparator(analysis_id, output_dir, model_labels)
+        elif comparator_id == c.ComparatorID.TABLE:
+            return TableComparator(analysis_id, output_dir, model_labels)
+        elif comparator_id == c.ComparatorID.CURVE_TABLE:
+            return CurveTableComparator(analysis_id, output_dir, model_labels)
+        elif comparator_id == c.ComparatorID.FEATURE_IMPORTANCE_EVALUATOR_TABLE:
+            return FIETableComparator(analysis_id, output_dir, model_labels)
         else:
             raise Exception("invalid evaluator ID")
