@@ -185,8 +185,8 @@ def main():
 
     parser = argparse.ArgumentParser(
         prog="seqgraa",
-        description="seqgra attribution: Obtain attribution/evidence for "
-        "selected examples across multiple grammars, models, evaluators")
+        description="seqgra attribution: Obtain feature attribution/evidence "
+        "for selected examples across multiple grammars, models, evaluators")
     parser.add_argument(
         "-v",
         "--version",

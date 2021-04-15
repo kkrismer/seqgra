@@ -381,7 +381,7 @@ def main():
     default_subsampling_rates: List[float] = [0.05, 0.1, 0.2, 0.4, 0.8, 1.0]
 
     parser = argparse.ArgumentParser(
-        prog="seqgras",
+        prog="seqgrae",
         description="seqgra ensemble: Test model architecture on grammar "
         "across data set sizes, simulation and model seeds")
     parser.add_argument(
@@ -435,10 +435,10 @@ def main():
         type=int,
         default=default_ds_sizes,
         nargs="+",
-        help="if -d is specified: list of data set sizes in number of "
-        "examples, where train-val-test split is always 70%:10:%20, "
+        help="if -d is specified, list of data set sizes in number of "
+        "examples, where train-val-test split is always 70-10-20, "
         "defaults to [10000, 20000, 40000, 80000, 160000, 320000, 640000, "
-        "1280000]; if -f is specified: list of subsampling rates "
+        "1280000]; if -f is specified, list of subsampling rates "
         "of training examples, 1.0 equals original data, no subsampling, "
         "defaults to [0.05, 0.1, 0.2, 0.4, 0.8, 1.0]"
     )
