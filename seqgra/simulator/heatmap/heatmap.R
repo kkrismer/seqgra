@@ -45,12 +45,10 @@ plot_heatmap <- function(input_file_name, output_file_name) {
         scale_fill_gradient(low = "white", high = muted("red")) +
         facet_wrap(vars(label), ncol = 1, scales = "free_y") +
         scale_y_discrete(expand = c(0, 0)) +  
-        labs(y = NULL, title = "Grammar position heatmap") +
+        labs(y = NULL, fill = "PGP*", title = "Grammar position heatmap") +
         theme_bw() +
         theme(axis.text.y = element_blank(),
               axis.ticks.y = element_blank(),
-              legend.title = element_blank(),
-              legend.position = "none",
               legend.key = element_rect(fill = "white", color = "black"),
               panel.grid.major = element_blank(),
               panel.grid.minor = element_blank(),
@@ -62,7 +60,8 @@ plot_heatmap <- function(input_file_name, output_file_name) {
                        bins = 30) +
         geom_density(alpha = 0.2, fill = "#66FF66") +
         facet_wrap(vars(label), ncol = 1, scales = "free_y") +
-        labs(x = "positional grammar probability", y = NULL, title = "") +
+        labs(x = "PGP*", y = NULL, title = "",
+             caption = "* positional grammar probability (PGP): probability over all examples that a specific position is a grammar position") +
         theme_bw() +
         theme(axis.text.y = element_blank(),
               axis.ticks.y = element_blank(),
