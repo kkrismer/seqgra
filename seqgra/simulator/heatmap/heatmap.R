@@ -61,7 +61,7 @@ plot_heatmap <- function(input_file_name, output_file_name) {
         geom_density(alpha = 0.2, fill = "#66FF66") +
         facet_wrap(vars(label), ncol = 1, scales = "free_y") +
         labs(x = "PGP*", y = NULL, title = "",
-             caption = "* positional grammar probability (PGP): probability over all examples that a specific position is a grammar position") +
+             caption = "* positional grammar probability (PGP): probability for a specific position to be a grammar position") +
         theme_bw() +
         theme(axis.text.y = element_blank(),
               axis.ticks.y = element_blank(),
