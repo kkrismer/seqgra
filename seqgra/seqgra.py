@@ -92,13 +92,13 @@ def run_seqgra(data_config_file: Optional[str],
             simulator.simulate_data()
             new_data = True
 
-        simulator.create_grammar_heatmap(c.DataSet.TRAINING)
-        simulator.create_grammar_heatmap(c.DataSet.VALIDATION)
-        simulator.create_grammar_heatmap(c.DataSet.TEST)
+            simulator.create_grammar_heatmap(c.DataSet.TRAINING)
+            simulator.create_grammar_heatmap(c.DataSet.VALIDATION)
+            simulator.create_grammar_heatmap(c.DataSet.TEST)
 
-        simulator.create_motif_info()
-        simulator.create_motif_kl_divergence_matrix()
-        simulator.create_empirical_similarity_score_matrix()
+            simulator.create_motif_info()
+            simulator.create_motif_kl_divergence_matrix()
+            simulator.create_empirical_similarity_score_matrix()
 
     # get learner
     if model_config_file is not None:
