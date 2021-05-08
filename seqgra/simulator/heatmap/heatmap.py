@@ -19,7 +19,6 @@ import seqgra.constants as c
 
 
 class GrammarPositionHeatmap:
-
     @staticmethod
     def detect_task(y: List[str]) -> str:
         for example_y in y:

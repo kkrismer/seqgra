@@ -26,7 +26,8 @@ setuptools.setup(
     package_data={seqgra.__name__: [
         "data-config.xsd", "model-config.xsd",
         "evaluator/plotagreement.R",
-        "simulator/heatmap/heatmap.R"]},
+        "simulator/heatmap/heatmap.R",
+        "simulator/motif/similarity.R"]},
     install_requires=[
         "Cython>=0.29",
         "lxml>=4.4.1",

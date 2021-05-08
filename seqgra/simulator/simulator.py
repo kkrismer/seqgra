@@ -27,13 +27,17 @@ from seqgra.model.data import SpacingConstraint
 from seqgra.model.data import Rule
 from seqgra.simulator import ExampleGenerator
 from seqgra.simulator.heatmap import GrammarPositionHeatmap
+from seqgra.simulator.motif import MotifInfo
+from seqgra.simulator.motif import KLDivergence
+from seqgra.simulator.motif import EmpiricalSimilarityScore
 
 
 class Simulator:
     def __init__(self, data_definition: DataDefinition,
                  output_dir: str, silent: bool = False) -> None:
         self.logger = logging.getLogger(__name__)
-        if silent:
+        self.silent = silent
+        if self.silent:
             self.logger.setLevel(os.environ.get("LOGLEVEL", "WARNING"))
         self.definition: DataDefinition = data_definition
         self.check_grammar()
@@ -73,6 +77,20 @@ class Simulator:
         GrammarPositionHeatmap.create(
             self.output_dir, set_name, self.definition.task,
             self.definition.background.max_length)
+
+    def create_motif_info(self) -> None:
+        MotifInfo.create(
+            self.output_dir, self.definition)
+
+    def create_motif_kl_divergence_matrix(self) -> None:
+        KLDivergence.create(
+            self.output_dir, self.definition, self.silent)
+
+    def create_empirical_similarity_score_matrix(
+        self, padding_size: int = 100,  num_examples: int = 100) -> None:
+        EmpiricalSimilarityScore.create(
+            self.output_dir, self.definition, padding_size, num_examples,
+            self.silent)
 
     def __add_shuffled_examples(self, set_name: str,
                                 preserve_frequencies_for_kmer: int,
