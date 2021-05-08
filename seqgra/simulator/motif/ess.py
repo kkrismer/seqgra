@@ -98,7 +98,7 @@ class EmpiricalSimilarityScore:
         df.to_csv(file_name, sep="\t", index=False)
 
         plot_script: str = pkg_resources.resource_filename(
-            "seqgra", "simulator/motif/simmatrix.R")
+            "seqgra", "simulator/motif/similarity.R")
 
         cmd = ["Rscript", "--no-save", "--no-restore", "--quiet",
                plot_script, output_dir, "ess"]
