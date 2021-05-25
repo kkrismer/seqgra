@@ -1,4 +1,9 @@
+import os
+import sys
+
 import setuptools
+
+sys.path.insert(0, os.path.dirname(__file__))
 import seqgra
 
 with open("README.md", "r") as fh:
@@ -38,7 +43,7 @@ setuptools.setup(
         "scikit-image>=0.16",
         "scikit-learn>=0.21",
         "scipy>=1.3",
-        "setuptools>=41.6",
+        "setuptools>=42",
         "ushuffle>=1.1.2"
     ],
     python_requires=">=3",
