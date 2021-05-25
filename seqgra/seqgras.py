@@ -17,8 +17,9 @@ from typing import List, Optional
 
 import seqgra
 import seqgra.constants as c
-from seqgra import MiscHelper, IdResolver
+from seqgra import MiscHelper
 from seqgra.comparator import Comparator
+from seqgra.idresolver import IdResolver
 
 
 def get_all_grammar_ids(output_dir: str) -> List[str]:

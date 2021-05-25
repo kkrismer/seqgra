@@ -17,9 +17,10 @@ from typing import List, Optional
 
 import seqgra
 import seqgra.constants as c
-from seqgra import MiscHelper, IdResolver
+from seqgra import MiscHelper
 from seqgra.evaluator import Evaluator
 from seqgra.evaluator import FeatureImportanceEvaluator
+from seqgra.idresolver import IdResolver
 from seqgra.learner import Learner
 from seqgra.model import DataDefinition
 from seqgra.model import ModelDefinition

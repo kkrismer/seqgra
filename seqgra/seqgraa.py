@@ -16,9 +16,9 @@ from typing import List
 import seqgra
 from seqgra import AnnotatedExampleSet
 from seqgra import MiscHelper
-from seqgra import IdResolver
 import seqgra.constants as c
 from seqgra.evaluator import Evaluator
+from seqgra.idresolver import IdResolver
 from seqgra.learner import Learner
 from seqgra.model import ModelDefinition
 from seqgra.parser import ModelDefinitionParser
