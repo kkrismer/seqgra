@@ -7,6 +7,7 @@ Motif info
 """
 import math
 from typing import List
+import sys
 
 import pandas as pd
 
@@ -20,7 +21,14 @@ from seqgra.model.data import MatrixBasedSequenceElement
 class MotifInfo:
     @staticmethod
     def _calculate_position_uncertainty(letter: ProbabilisticToken) -> float:
-        return letter.probability * math.log2(letter.probability) * (-1)
+        letter_probability: float = 0
+
+        if letter.probability < sys.float_info.min:
+            letter_probability = sys.float_info.min
+        else:
+            letter_probability = letter.probability
+
+        return letter_probability * math.log2(letter_probability) * (-1)
 
     @staticmethod
     def _calculate_information_content(position: List[ProbabilisticToken]) -> float:
@@ -47,14 +55,27 @@ class MotifInfo:
                                 alphabet_distribution: AlphabetDistribution) -> float:
         alphabet_size: int = len(position)
         kl_divergence: float = 0
+        letter_probability: float = 0
+        aletter_probability: float = 0
 
         for i in range(alphabet_size):
             if position[i].token != alphabet_distribution.letters[i].token:
                 raise Exception("invalid order of token: " +
                                 position[i].token + " != " +
                                 alphabet_distribution.letters[i].token)
-            kl_divergence += position[i].probability * math.log2(
-                position[i].probability / alphabet_distribution.letters[i].probability)
+            
+            if position[i].probability < sys.float_info.min:
+                letter_probability = sys.float_info.min
+            else:
+                letter_probability = position[i].probability
+                
+            if alphabet_distribution.letters[i].probability < sys.float_info.min:
+                aletter_probability = sys.float_info.min
+            else:
+                aletter_probability = alphabet_distribution.letters[i].probability
+
+            kl_divergence += letter_probability * math.log2(
+                letter_probability / aletter_probability)
 
         return kl_divergence
 

@@ -9,6 +9,7 @@ import copy
 import logging
 import math
 import subprocess
+import sys
 from typing import List
 
 import pandas as pd
@@ -26,6 +27,8 @@ class KLDivergence:
     def _calculate_kl_divergence(se1_position: List[ProbabilisticToken],
                                  se2_position: List[ProbabilisticToken]) -> float:
         kl_divergence: float = 0
+        se1_probability: float = 0
+        se2_probability: float = 0
 
         for i in range(len(se1_position)):
             se1_letter: ProbabilisticToken = se1_position[i]
@@ -33,9 +36,19 @@ class KLDivergence:
             if se1_letter.token != se2_letter.token:
                 raise Exception("invalid order of token: " +
                                 se1_letter.token + " != " + se2_letter.token)
+            
+            if se1_letter.probability < sys.float_info.min:
+                se1_probability = sys.float_info.min
+            else:
+                se1_probability = se1_letter.probability
 
-            kl_divergence += se1_letter.probability * \
-                math.log2(se1_letter.probability / se2_letter.probability)
+            if se2_letter.probability < sys.float_info.min:
+                se2_probability = sys.float_info.min
+            else:
+                se2_probability = se2_letter.probability
+
+            kl_divergence += se1_probability * \
+                math.log2(se1_probability / se2_probability)
 
         return kl_divergence
 
