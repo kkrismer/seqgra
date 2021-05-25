@@ -50,6 +50,7 @@ class GrammarPositionHeatmap:
                              dtype={"annotation": "string", "y": "string"})
             df = df.fillna("")
             counts: Dict[str, List[int]] = dict()
+            total_examples: Dict[str, int] = dict()
             annotations: List[str] = df["annotation"].tolist()
 
             if task is None:
@@ -77,6 +78,11 @@ class GrammarPositionHeatmap:
                 for label in labels:
                     if label not in counts:
                         counts[label] = [0] * max_length
+                        
+                    if label not in total_examples:
+                        total_examples[label] = 1
+                    else:
+                        total_examples[label] += 1
 
                     for j, letter in enumerate(annotation):
                         if letter == c.PositionType.GRAMMAR:
@@ -91,7 +97,7 @@ class GrammarPositionHeatmap:
                     label_column.append(label)
                     position_column.append(i + 1)
                     grammar_probability_column.append(
-                        grammar_count / len(annotations))
+                        grammar_count / total_examples[label])
 
             plot_df = pd.DataFrame(
                 {"label": label_column,
