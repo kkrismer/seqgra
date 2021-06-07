@@ -69,11 +69,11 @@ class DeepLiftEvaluator(AbstractGradientEvaluator):
     def _baseline_forward(self, inp):
         if self.baseline_inp is None:
             self.baseline_inp = inp.data.clone()
-            if self.baseline_type is "neutral":
+            if self.baseline_type == "neutral":
                 self.baseline_inp.fill_(0.25)
-            elif self.baseline_type is "zeros":
+            elif self.baseline_type == "zeros":
                 self.baseline_inp.fill_(0.0)
-            elif self.baseline_type is "shuffled":
+            elif self.baseline_type == "shuffled":
                 self.baseline_inp = self.baseline_inp[:, :, torch.randperm(
                     self.baseline_inp.size()[2])]
             # TODO baseline_inp with shuffled k-mers??
