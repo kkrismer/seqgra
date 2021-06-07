@@ -220,9 +220,9 @@ def main():
         "--output-dir",
         type=str,
         required=True,
-        help="output directory, subdirectories are created for generated "
-        "data and model configs, input data, trained models, and model "
-        "evaluations"
+        help="output directory of previous seqgra calls with subdirectories "
+        "input (simulated and experimental data) and models (trained models); "
+        "subdirectories are created for attribution analysis"
     )
     parser.add_argument(
         "-i",
