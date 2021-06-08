@@ -1,9 +1,8 @@
 """
-MIT - CSAIL - Gifford Lab - seqgra
+Miscellaneous helper functions
 
-Class with miscellaneous helper functions as static methods
-
-@author: Konstantin Krismer
+Classes:
+    - :class:`MiscHelper`: contains static helper functions
 """
 import os
 import re
@@ -11,6 +10,10 @@ import shutil
 
 
 class MiscHelper:
+    """
+    Class with miscellaneous helper functions as static methods
+    """
+
     @staticmethod
     def prepare_path(path: str, allow_exists: bool = True,
                      allow_non_empty: bool = False) -> str:
@@ -45,24 +48,25 @@ class MiscHelper:
                            suffix: str = "", decimals: int = 1,
                            length: int = 100, fill: str = "█",
                            print_end: str = "\r"):
-        """Call in a loop to create terminal progress bar
+        """
+        Call in a loop to create terminal progress bar
 
         Arguments:
             iteration (int): current iteration
-            total (int): total iterations
-            prefix (str, optional): prefix string, defaults to empty string
+            total (:obj:`list` of :obj:`str`, optional): total iterations
+            prefix (:obj:`str`, optional): prefix string, defaults to empty string
             suffix (str, optional): suffix string, defaults to empty string
-            decimals (int, optional): positive number of decimals in percent
+            decimals (`int`, optional): positive number of decimals in percent
                 complete, defaults to 1
-            length (int, optional): character length of bar, defaults to 100
-            fill (str, optional): bar fill character, defaults to "█"
-            print_end (str, optional): end character (e.g. "\r", "\r\n"),
-                defaults to "\r"
+            length (`dict` [`str`, `str`], optional): character length of bar, defaults to 100
+            fill (:obj:`dict` [:obj:`str`, :obj:`str`], optional): bar fill character, defaults to "█"
+            print_end (str, optional): end character (e.g. "\\\\r", "\\\\r\\\\n"),
+                defaults to "\\\\r"
         """
         if not hasattr(MiscHelper.print_progress_bar, "previous_bar"):
-            MiscHelper.print_progress_bar.previous_bar: str = ""
+            MiscHelper.print_progress_bar.previous_bar = ""
         if not hasattr(MiscHelper.print_progress_bar, "previous_percent"):
-            MiscHelper.print_progress_bar.previous_percent: str = ""
+            MiscHelper.print_progress_bar.previous_percent = ""
 
         if total < 1:
             total = 1

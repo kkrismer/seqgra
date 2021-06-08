@@ -101,13 +101,12 @@ class NonlinearIntegratedGradientEvaluator(AbstractGradientEvaluator):
 
     @staticmethod
     def sequence_path(args, data, k):
-        """distances = [[1,40],[1,35],[40,3],[35,1],[4,1]]
+        """
+        distances = [[1,40],[1,35],[40,3],[35,1],[4,1]]
         indices = [[1,2],[0,3],[0,4],[1,4],[2,3]]
         nddist = np.array([np.array(xi) for xi in distances])
         ndinds = np.array([np.array(xi) for xi in indices])
-        sp = shortest_path(0,4,
-                        nddist,
-                        ndinds)
+        sp = shortest_path(0,4, nddist, ndinds)
         print(sp)
 
         #unit tests change numbers to test path
