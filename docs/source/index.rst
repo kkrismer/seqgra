@@ -10,7 +10,9 @@ Welcome to seqgra's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-   root <seqgra>
+   cmd
+
+   API <seqgra>
 
 Indices and tables
 ==================

@@ -253,9 +253,7 @@ def run_seqgra(data_config_file: Optional[str],
             logger.info("skipping evaluation step: no evaluator specified")
 
 
-def main():
-    logging.basicConfig(level=logging.INFO)
-
+def create_parser():
     parser = argparse.ArgumentParser(
         prog="seqgra",
         description="Generate synthetic data based on grammar, train model on "
@@ -410,6 +408,14 @@ def main():
         "themselves; this evaluator argument is only visible to "
         "gradient-based feature importance evaluators (defaults to 0.01)"
     )
+
+    return parser
+
+
+def main():
+    logging.basicConfig(level=logging.INFO)
+
+    parser = create_parser()
     args = parser.parse_args()
 
     if args.data_folder and args.model_config_file is None:

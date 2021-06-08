@@ -373,13 +373,9 @@ def run_seqgra_ensemble(analysis_id: str,
                           seed_grid, gpu_id)
 
 
-def main():
-    logging.basicConfig(level=logging.INFO)
-
-    default_ds_sizes: List[int] = [10000, 20000, 40000, 80000, 160000,
-                                   320000, 640000, 1280000]
-    default_subsampling_rates: List[float] = [0.05, 0.1, 0.2, 0.4, 0.8, 1.0]
-
+def create_parser(default_ds_sizes: List[int] = [10000, 20000, 40000, 80000,
+                                                 160000, 320000, 640000,
+                                                 1280000]):
     parser = argparse.ArgumentParser(
         prog="seqgrae",
         description="seqgra ensemble: Test model architecture on grammar "
@@ -471,6 +467,18 @@ def main():
         help="ID of GPU used by TensorFlow and PyTorch (defaults to GPU "
         "ID 0); CPU is used if no GPU is available or GPU ID is set to -1"
     )
+
+    return parser
+
+
+def main():
+    logging.basicConfig(level=logging.INFO)
+
+    default_ds_sizes: List[int] = [10000, 20000, 40000, 80000, 160000,
+                                   320000, 640000, 1280000]
+    default_subsampling_rates: List[float] = [0.05, 0.1, 0.2, 0.4, 0.8, 1.0]
+
+    parser = create_parser(default_ds_sizes)
     args = parser.parse_args()
 
     if args.data_config_file or args.ds_sizes != default_ds_sizes:

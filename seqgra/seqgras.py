@@ -62,9 +62,7 @@ def run_seqgra_summary(analysis_id: str,
             comparator.compare_models(grammar_ids, model_ids, set_names)
 
 
-def main():
-    logging.basicConfig(level=logging.INFO)
-
+def create_parser():
     parser = argparse.ArgumentParser(
         prog="seqgras",
         description="seqgra summary: Gather metrics across grammars, models, "
@@ -133,6 +131,13 @@ def main():
         nargs="+",
         help="labels for models, must be same length as model_ids"
     )
+
+    return parser
+
+def main():
+    logging.basicConfig(level=logging.INFO)
+
+    parser = create_parser()
     args = parser.parse_args()
 
     for comparator in args.comparators:

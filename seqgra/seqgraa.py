@@ -180,9 +180,7 @@ def run_seqgra_attribution(analysis_id: str,
                                            eval_suppress_plots)
 
 
-def main():
-    logging.basicConfig(level=logging.INFO)
-
+def create_parser():
     parser = argparse.ArgumentParser(
         prog="seqgraa",
         description="seqgra attribution: Obtain feature attribution/evidence "
@@ -289,6 +287,13 @@ def main():
         help="ID of GPU used by TensorFlow and PyTorch (defaults to GPU "
         "ID 0); CPU is used if no GPU is available or GPU ID is set to -1"
     )
+
+    return parser
+
+def main():
+    logging.basicConfig(level=logging.INFO)
+
+    parser = create_parser()
     args = parser.parse_args()
 
     if args.target != "y" and args.target != "y-hat":
