@@ -7,6 +7,7 @@ Subpackages
 .. toctree::
    :maxdepth: 4
 
+   seqgra.learner.bayes
    seqgra.learner.tensorflow
    seqgra.learner.torch
 

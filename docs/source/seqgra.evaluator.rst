@@ -8,6 +8,7 @@ Subpackages
    :maxdepth: 4
 
    seqgra.evaluator.explainer
+   seqgra.evaluator.gradientbased
    seqgra.evaluator.sis
 
 Submodules
@@ -17,7 +18,6 @@ Submodules
    :maxdepth: 4
 
    seqgra.evaluator.evaluator
-   seqgra.evaluator.gradientbased
    seqgra.evaluator.metricsevaluator
    seqgra.evaluator.predictevaluator
    seqgra.evaluator.prevaluator

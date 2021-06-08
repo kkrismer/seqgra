@@ -7,6 +7,7 @@ Submodules
 .. toctree::
    :maxdepth: 4
 
+   seqgra.learner.tensorflow.kerascallback
    seqgra.learner.tensorflow.kerashelper
    seqgra.learner.tensorflow.keraslearner
 

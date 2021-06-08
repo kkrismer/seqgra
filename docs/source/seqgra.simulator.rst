@@ -1,6 +1,15 @@
 seqgra.simulator package
 ========================
 
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   seqgra.simulator.heatmap
+   seqgra.simulator.motif
+
 Submodules
 ----------
 
