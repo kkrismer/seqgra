@@ -1,5 +1,5 @@
 seqgra summary
-***********************
+==============
 
 .. argparse::
    :module: seqgra.seqgras

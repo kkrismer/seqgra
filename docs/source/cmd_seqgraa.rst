@@ -1,5 +1,5 @@
 seqgra attribution
-***********************
+==================
 
 .. argparse::
    :module: seqgra.seqgraa

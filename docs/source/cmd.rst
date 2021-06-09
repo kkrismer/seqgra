@@ -1,5 +1,5 @@
 Command line utilities
-**********************
+======================
 
 .. toctree::
    :maxdepth: 1

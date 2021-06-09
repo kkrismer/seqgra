@@ -1,5 +1,5 @@
 seqgra ensemble
-***********************
+===============
 
 .. argparse::
    :module: seqgra.seqgrae

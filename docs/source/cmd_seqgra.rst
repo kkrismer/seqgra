@@ -1,5 +1,5 @@
 seqgra core functionality
-***********************
+=========================
 
 .. argparse::
    :module: seqgra.seqgra
