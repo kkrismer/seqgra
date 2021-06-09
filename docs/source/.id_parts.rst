@@ -1,0 +1,32 @@
+
+.. role:: task-bold-border
+.. role:: input-bold-border
+.. role:: sim-exp-bold-border
+.. role:: descriptor-bold-border
+.. role:: data-set-size-bold-border
+.. role:: seed-bold-border
+.. role:: library-bold-border
+
+.. role:: task-bold
+.. role:: input-bold
+.. role:: sim-exp-bold
+.. role:: descriptor-bold
+.. role:: data-set-size-bold
+.. role:: seed-bold
+.. role:: library-bold
+
+.. role:: task-border
+.. role:: input-border
+.. role:: sim-exp-border
+.. role:: descriptor-border
+.. role:: data-set-size-border
+.. role:: seed-border
+.. role:: library-border
+
+.. role:: task
+.. role:: input
+.. role:: sim-exp
+.. role:: descriptor
+.. role:: data-set-size
+.. role:: seed
+.. role:: library
