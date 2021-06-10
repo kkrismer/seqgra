@@ -223,3 +223,19 @@
 .library {
     color: #553d84;
 }
+
+.modindex-jumpbox {
+    text-transform: uppercase;
+}
+
+table.modindextable tr.cap {
+    text-transform: uppercase;
+    font-weight: 700;
+    font-family: 'Roboto Slab',ff-tisa-web-pro,Georgia,Arial,sans-serif;
+    font-size: 150%;
+}
+
+table.genindextable td {
+    float: left;
+    width: 100% !important;
+}
