@@ -124,12 +124,12 @@ def write_data_definition_file(data_definition: DataDefinition,
     return file_name
 
 
-def write_data_definition_files(data_config_file: str,
+def write_data_definition_files(data_def_file: str,
                                 output_dir: str,
                                 ds_sizes: List[float],
                                 d_seeds: List[int]) -> None:
     data_definition: DataDefinition = parse_data_definition_file(
-        data_config_file)
+        data_def_file)
     file_names: List[List[str]] = []
 
     for ds_size in ds_sizes:
@@ -231,13 +231,13 @@ def write_model_definition_file(model_definition: ModelDefinition,
     return file_name
 
 
-def write_model_definition_files(model_config_files: List[str],
+def write_model_definition_files(model_def_files: List[str],
                                  output_dir: str,
                                  m_seeds: List[int]) -> None:
     file_names: List[List[str]] = []
-    for model_config_file in model_config_files:
+    for model_def_file in model_def_files:
         model_definition: ModelDefinition = parse_model_definition_file(
-            model_config_file)
+            model_def_file)
         file_names.append([write_model_definition_file(model_definition,
                                                        output_dir, m_seed)
                            for m_seed in m_seeds])
@@ -329,9 +329,9 @@ def write_analysis_script(analysis_id: str,
 
 
 def run_seqgra_ensemble(analysis_id: str,
-                        data_config_file: str,
+                        data_def_file: str,
                         data_folder: str,
-                        model_config_files: List[str],
+                        model_def_files: List[str],
                         output_dir: str,
                         ds_sizes: List[float],
                         d_seeds: List[int],
@@ -340,19 +340,19 @@ def run_seqgra_ensemble(analysis_id: str,
                         gpu_id: int) -> None:
     analysis_id = MiscHelper.sanitize_id(analysis_id)
     output_dir = MiscHelper.format_output_dir(output_dir.strip())
-    model_configs_dir: str = MiscHelper.prepare_path(
+    model_def_dir: str = MiscHelper.prepare_path(
         output_dir + "configs/model", allow_exists=True, allow_non_empty=True)
 
     if not seed_grid and len(d_seeds) != len(m_seeds):
         raise Exception("number of simulation seeds must equal number of "
                         "model seeds when seed-grid is disabled")
 
-    if data_config_file:
+    if data_def_file:
         data_configs_dir: str = MiscHelper.prepare_path(
             output_dir + "configs/data", allow_exists=True,
             allow_non_empty=True)
         data_file_names: List[List[str]] = write_data_definition_files(
-            data_config_file, data_configs_dir, ds_sizes, d_seeds)
+            data_def_file, data_configs_dir, ds_sizes, d_seeds)
         data_folders: List[List[str]] = None
     else:
         input_data_dir: str = MiscHelper.prepare_path(
@@ -363,7 +363,7 @@ def run_seqgra_ensemble(analysis_id: str,
         data_file_names: List[List[str]] = None
 
     model_file_names: List[List[str]] = write_model_definition_files(
-        model_config_files, model_configs_dir, m_seeds)
+        model_def_files, model_def_dir, m_seeds)
 
     analyses_dir: str = MiscHelper.prepare_path(
         output_dir + "analyses", allow_exists=True, allow_non_empty=True)
@@ -395,9 +395,9 @@ def create_parser(default_ds_sizes: List[int] = [10000, 20000, 40000, 80000,
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument(
         "-d",
-        "--data-config-file",
+        "--data-def-file",
         type=str,
-        help="path to the segra XML data configuration file. Use this option "
+        help="path to the segra XML data definition file. Use this option "
         "to generate synthetic data based on a seqgra grammar (specify "
         "either -d or -f, not both)"
     )
@@ -411,11 +411,11 @@ def create_parser(default_ds_sizes: List[int] = [10000, 20000, 40000, 80000,
     )
     parser.add_argument(
         "-m",
-        "--model-config-files",
+        "--model-def-files",
         type=str,
         required=True,
         nargs="+",
-        help="list of paths to the seqgra XML model configuration files"
+        help="list of paths to the seqgra XML model definition files"
     )
     parser.add_argument(
         "-o",
@@ -481,11 +481,11 @@ def main():
     parser = create_parser(default_ds_sizes)
     args = parser.parse_args()
 
-    if args.data_config_file or args.ds_sizes != default_ds_sizes:
+    if args.data_def_file or args.ds_sizes != default_ds_sizes:
         run_seqgra_ensemble(args.analysis_id,
-                            args.data_config_file,
+                            args.data_def_file,
                             args.data_folder,
-                            args.model_config_files,
+                            args.model_def_files,
                             args.output_dir,
                             args.ds_sizes,
                             args.d_seeds,
@@ -494,9 +494,9 @@ def main():
                             args.gpu)
     else:
         run_seqgra_ensemble(args.analysis_id,
-                            args.data_config_file,
+                            args.data_def_file,
                             args.data_folder,
-                            args.model_config_files,
+                            args.model_def_files,
                             args.output_dir,
                             default_subsampling_rates,
                             args.d_seeds,

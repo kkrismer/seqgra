@@ -89,11 +89,11 @@ def load_data(learner: Learner, examples_file: str,
     return AnnotatedExampleSet(x, y, annotations)
 
 
-def prepare_model(grammar_id: str, model_config_file: str,
+def prepare_model(grammar_id: str, model_def_file: str,
                   output_dir: str, gpu_id: int) -> Learner:
     logger = logging.getLogger(__name__)
 
-    model_config = MiscHelper.read_config_file(model_config_file)
+    model_config = MiscHelper.read_config_file(model_def_file)
     model_def_parser: ModelDefinitionParser = XMLModelDefinitionParser(
         model_config, True)
     model_definition: ModelDefinition = model_def_parser.get_model_definition()
@@ -143,7 +143,7 @@ def prepare_model(grammar_id: str, model_config_file: str,
 
 def run_seqgra_attribution(analysis_id: str,
                            grammar_ids: List[str],
-                           model_config_files: List[str],
+                           model_def_files: List[str],
                            output_dir: str,
                            examples_file: str,
                            annotations_file: str,
@@ -163,8 +163,8 @@ def run_seqgra_attribution(analysis_id: str,
 
     # get learner
     for grammar_id in grammar_ids:
-        for model_config_file in model_config_files:
-            learner: Learner = prepare_model(grammar_id, model_config_file,
+        for model_def_file in model_def_files:
+            learner: Learner = prepare_model(grammar_id, model_def_file,
                                              output_dir, gpu_id)
 
             for evaluator_id in evaluator_ids:
@@ -207,11 +207,11 @@ def create_parser():
     )
     parser.add_argument(
         "-m",
-        "--model-config-files",
+        "--model-def-files",
         type=str,
         required=True,
         nargs="+",
-        help="list of paths to the seqgra XML model configuration files"
+        help="list of paths to the seqgra XML model definition files"
     )
     parser.add_argument(
         "-o",
@@ -308,7 +308,7 @@ def main():
 
     run_seqgra_attribution(args.analysis_id,
                            args.grammar_ids,
-                           args.model_config_files,
+                           args.model_def_files,
                            args.output_dir,
                            args.examples_file,
                            args.annotations_file,

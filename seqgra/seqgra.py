@@ -32,9 +32,9 @@ from seqgra.simulator import Simulator
 from seqgra.simulator.heatmap import GrammarPositionHeatmap
 
 
-def run_seqgra(data_config_file: Optional[str],
+def run_seqgra(data_def_file: Optional[str],
                data_folder: Optional[str],
-               model_config_file: Optional[str],
+               model_def_file: Optional[str],
                evaluator_ids: Optional[List[str]],
                output_dir: str,
                in_memory: bool,
@@ -57,7 +57,7 @@ def run_seqgra(data_config_file: Optional[str],
     new_data: bool = False
     new_model: bool = False
 
-    if data_config_file is None:
+    if data_def_file is None:
         data_definition: Optional[DataDefinition] = None
         grammar_id = data_folder.strip()
         logger.info("loaded experimental data")
@@ -69,7 +69,7 @@ def run_seqgra(data_config_file: Optional[str],
                                       c.DataSet.TEST)
     else:
         # generate synthetic data
-        data_config = MiscHelper.read_config_file(data_config_file)
+        data_config = MiscHelper.read_config_file(data_def_file)
         data_def_parser: DataDefinitionParser = XMLDataDefinitionParser(
             data_config, silent)
         data_definition: DataDefinition = data_def_parser.get_data_definition()
@@ -102,8 +102,8 @@ def run_seqgra(data_config_file: Optional[str],
             simulator.create_empirical_similarity_score_matrix()
 
     # get learner
-    if model_config_file is not None:
-        model_config = MiscHelper.read_config_file(model_config_file)
+    if model_def_file is not None:
+        model_config = MiscHelper.read_config_file(model_def_file)
         model_def_parser: ModelDefinitionParser = XMLModelDefinitionParser(
             model_config, silent)
         model_definition: ModelDefinition = \
@@ -266,9 +266,9 @@ def create_parser():
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument(
         "-d",
-        "--data-config-file",
+        "--data-def-file",
         type=str,
-        help="path to the segra XML data configuration file. Use this option "
+        help="path to the segra XML data definition file. Use this option "
         "to generate synthetic data based on a seqgra grammar (specify "
         "either -d or -f, not both)"
     )
@@ -282,9 +282,9 @@ def create_parser():
     )
     parser.add_argument(
         "-m",
-        "--model-config-file",
+        "--model-def-file",
         type=str,
-        help="path to the seqgra XML model configuration file"
+        help="path to the seqgra XML model definition file"
     )
     parser.add_argument(
         "-e",
@@ -418,11 +418,11 @@ def main():
     parser = create_parser()
     args = parser.parse_args()
 
-    if args.data_folder and args.model_config_file is None:
-        parser.error("-f/--data-folder requires -m/--model-config-file.")
+    if args.data_folder and args.model_def_file is None:
+        parser.error("-f/--data-folder requires -m/--model-def-file.")
 
-    if args.evaluators and args.model_config_file is None:
-        parser.error("-e/--evaluators requires -m/--model-config-file.")
+    if args.evaluators and args.model_def_file is None:
+        parser.error("-e/--evaluators requires -m/--model-def-file.")
 
     if args.evaluators is not None:
         for evaluator in args.evaluators:
@@ -430,9 +430,9 @@ def main():
                 raise ValueError(
                     "invalid evaluator ID {s!r}".format(s=evaluator))
 
-    run_seqgra(args.data_config_file,
+    run_seqgra(args.data_def_file,
                args.data_folder,
-               args.model_config_file,
+               args.model_def_file,
                args.evaluators,
                args.output_dir,
                args.in_memory,
