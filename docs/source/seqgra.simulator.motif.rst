@@ -1,6 +1,11 @@
 seqgra.simulator.motif package
 ==============================
 
+.. automodule:: seqgra.simulator.motif
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Submodules
 ----------
 
@@ -10,11 +15,3 @@ Submodules
    seqgra.simulator.motif.ess
    seqgra.simulator.motif.kld
    seqgra.simulator.motif.motifinfo
-
-Module contents
----------------
-
-.. automodule:: seqgra.simulator.motif
-   :members:
-   :undoc-members:
-   :show-inheritance:

@@ -1,6 +1,11 @@
 seqgra package
 ==============
 
+.. automodule:: seqgra
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Subpackages
 -----------
 
@@ -29,11 +34,3 @@ Submodules
    seqgra.seqgraa
    seqgra.seqgrae
    seqgra.seqgras
-
-Module contents
----------------
-
-.. automodule:: seqgra
-   :members:
-   :undoc-members:
-   :show-inheritance:

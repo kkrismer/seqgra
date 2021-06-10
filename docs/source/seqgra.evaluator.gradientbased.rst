@@ -1,6 +1,11 @@
 seqgra.evaluator.gradientbased package
 ======================================
 
+.. automodule:: seqgra.evaluator.gradientbased
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Submodules
 ----------
 
@@ -25,11 +30,3 @@ Submodules
    seqgra.evaluator.gradientbased.nonlinearintegratedgradientevaluator
    seqgra.evaluator.gradientbased.saliencyevaluator
    seqgra.evaluator.gradientbased.smoothgradevaluator
-
-Module contents
----------------
-
-.. automodule:: seqgra.evaluator.gradientbased
-   :members:
-   :undoc-members:
-   :show-inheritance:

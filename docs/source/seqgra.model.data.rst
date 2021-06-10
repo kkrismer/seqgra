@@ -1,6 +1,11 @@
 seqgra.model.data package
 =========================
 
+.. automodule:: seqgra.model.data
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Submodules
 ----------
 
@@ -16,11 +21,3 @@ Submodules
    seqgra.model.data.rule
    seqgra.model.data.sequenceelement
    seqgra.model.data.spacingconstraint
-
-Module contents
----------------
-
-.. automodule:: seqgra.model.data
-   :members:
-   :undoc-members:
-   :show-inheritance:

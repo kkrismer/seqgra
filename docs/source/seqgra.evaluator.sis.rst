@@ -1,6 +1,11 @@
 seqgra.evaluator.sis package
 ============================
 
+.. automodule:: seqgra.evaluator.sis
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Submodules
 ----------
 
@@ -8,11 +13,3 @@ Submodules
    :maxdepth: 4
 
    seqgra.evaluator.sis.sis
-
-Module contents
----------------
-
-.. automodule:: seqgra.evaluator.sis
-   :members:
-   :undoc-members:
-   :show-inheritance:

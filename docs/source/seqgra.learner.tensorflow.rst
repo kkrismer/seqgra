@@ -1,6 +1,11 @@
 seqgra.learner.tensorflow package
 =================================
 
+.. automodule:: seqgra.learner.tensorflow
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Submodules
 ----------
 
@@ -10,11 +15,3 @@ Submodules
    seqgra.learner.tensorflow.kerascallback
    seqgra.learner.tensorflow.kerashelper
    seqgra.learner.tensorflow.keraslearner
-
-Module contents
----------------
-
-.. automodule:: seqgra.learner.tensorflow
-   :members:
-   :undoc-members:
-   :show-inheritance:

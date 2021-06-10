@@ -1,6 +1,11 @@
 seqgra.comparator package
 =========================
 
+.. automodule:: seqgra.comparator
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Submodules
 ----------
 
@@ -13,11 +18,3 @@ Submodules
    seqgra.comparator.prcomparator
    seqgra.comparator.roccomparator
    seqgra.comparator.tablecomparator
-
-Module contents
----------------
-
-.. automodule:: seqgra.comparator
-   :members:
-   :undoc-members:
-   :show-inheritance:

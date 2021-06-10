@@ -1,6 +1,11 @@
 seqgra.evaluator package
 ========================
 
+.. automodule:: seqgra.evaluator
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Subpackages
 -----------
 
@@ -23,11 +28,3 @@ Submodules
    seqgra.evaluator.prevaluator
    seqgra.evaluator.rocevaluator
    seqgra.evaluator.sisevaluator
-
-Module contents
----------------
-
-.. automodule:: seqgra.evaluator
-   :members:
-   :undoc-members:
-   :show-inheritance:

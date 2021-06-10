@@ -1,6 +1,11 @@
 seqgra.writer package
 =====================
 
+.. automodule:: seqgra.writer
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Submodules
 ----------
 
@@ -11,11 +16,3 @@ Submodules
    seqgra.writer.modeldefinitionwriter
    seqgra.writer.xmldatadefinitionwriter
    seqgra.writer.xmlmodeldefinitionwriter
-
-Module contents
----------------
-
-.. automodule:: seqgra.writer
-   :members:
-   :undoc-members:
-   :show-inheritance:

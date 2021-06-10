@@ -45,8 +45,18 @@ napoleon_numpy_docstring = False
 
 apidoc_module_dir = "../../seqgra"
 apidoc_output_dir = "."
-apidoc_extra_args = ["-f", "-e", "-T", "--implicit-namespaces"]
+apidoc_extra_args = ["-f", "-e", "-T",
+                     "--implicit-namespaces",
+                     "--module-first"]
 
+autosummary_generate = True
+
+autodoc_default_options = {
+    'members': True,
+    'show-inheritance': True,
+    'inherited-members': True,
+    'no-special-members': True,
+}
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]

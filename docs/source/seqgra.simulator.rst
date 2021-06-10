@@ -1,6 +1,11 @@
 seqgra.simulator package
 ========================
 
+.. automodule:: seqgra.simulator
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Subpackages
 -----------
 
@@ -20,11 +25,3 @@ Submodules
    seqgra.simulator.example
    seqgra.simulator.examplegenerator
    seqgra.simulator.simulator
-
-Module contents
----------------
-
-.. automodule:: seqgra.simulator
-   :members:
-   :undoc-members:
-   :show-inheritance:

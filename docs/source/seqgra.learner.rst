@@ -1,6 +1,11 @@
 seqgra.learner package
 ======================
 
+.. automodule:: seqgra.learner
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Subpackages
 -----------
 
@@ -22,11 +27,3 @@ Submodules
    seqgra.learner.learner
    seqgra.learner.protein
    seqgra.learner.proteinhelper
-
-Module contents
----------------
-
-.. automodule:: seqgra.learner
-   :members:
-   :undoc-members:
-   :show-inheritance:

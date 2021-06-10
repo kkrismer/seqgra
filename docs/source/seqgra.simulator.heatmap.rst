@@ -1,6 +1,11 @@
 seqgra.simulator.heatmap package
 ================================
 
+.. automodule:: seqgra.simulator.heatmap
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Submodules
 ----------
 
@@ -8,11 +13,3 @@ Submodules
    :maxdepth: 4
 
    seqgra.simulator.heatmap.heatmap
-
-Module contents
----------------
-
-.. automodule:: seqgra.simulator.heatmap
-   :members:
-   :undoc-members:
-   :show-inheritance:

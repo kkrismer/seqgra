@@ -1,6 +1,11 @@
 seqgra.parser package
 =====================
 
+.. automodule:: seqgra.parser
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Submodules
 ----------
 
@@ -12,11 +17,3 @@ Submodules
    seqgra.parser.xmldatadefinitionparser
    seqgra.parser.xmlhelper
    seqgra.parser.xmlmodeldefinitionparser
-
-Module contents
----------------
-
-.. automodule:: seqgra.parser
-   :members:
-   :undoc-members:
-   :show-inheritance:
