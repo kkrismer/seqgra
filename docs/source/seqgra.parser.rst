@@ -10,7 +10,7 @@ Submodules
 ----------
 
 .. toctree::
-   :maxdepth: 4
+   :maxdepth: 5
 
    seqgra.parser.datadefinitionparser
    seqgra.parser.modeldefinitionparser

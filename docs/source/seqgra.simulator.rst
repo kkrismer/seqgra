@@ -10,7 +10,7 @@ Subpackages
 -----------
 
 .. toctree::
-   :maxdepth: 4
+   :maxdepth: 5
 
    seqgra.simulator.heatmap
    seqgra.simulator.motif
@@ -19,7 +19,7 @@ Submodules
 ----------
 
 .. toctree::
-   :maxdepth: 4
+   :maxdepth: 5
 
    seqgra.simulator.backgroundgenerator
    seqgra.simulator.example

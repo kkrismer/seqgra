@@ -10,7 +10,7 @@ Submodules
 ----------
 
 .. toctree::
-   :maxdepth: 4
+   :maxdepth: 5
 
    seqgra.simulator.motif.ess
    seqgra.simulator.motif.kld

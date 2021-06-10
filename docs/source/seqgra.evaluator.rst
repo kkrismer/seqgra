@@ -10,7 +10,7 @@ Subpackages
 -----------
 
 .. toctree::
-   :maxdepth: 4
+   :maxdepth: 5
 
    seqgra.evaluator.explainer
    seqgra.evaluator.gradientbased
@@ -20,7 +20,7 @@ Submodules
 ----------
 
 .. toctree::
-   :maxdepth: 4
+   :maxdepth: 5
 
    seqgra.evaluator.evaluator
    seqgra.evaluator.metricsevaluator

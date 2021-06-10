@@ -10,7 +10,7 @@ Submodules
 ----------
 
 .. toctree::
-   :maxdepth: 4
+   :maxdepth: 5
 
    seqgra.writer.datadefinitionwriter
    seqgra.writer.modeldefinitionwriter

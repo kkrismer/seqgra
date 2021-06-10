@@ -46,6 +46,7 @@ napoleon_numpy_docstring = False
 apidoc_module_dir = "../../seqgra"
 apidoc_output_dir = "."
 apidoc_extra_args = ["-f", "-e", "-T",
+                     "-d 5",
                      "--implicit-namespaces",
                      "--module-first"]
 
@@ -75,6 +76,10 @@ modindex_common_prefix = ["seqgra."]
 # a list of builtin themes.
 #
 html_theme = "sphinx_rtd_theme"
+
+html_theme_options = {
+    "navigation_depth": 5
+}
 
 html_show_sourcelink = False
 
