@@ -8,6 +8,7 @@ python:
 
 before_install:
   - sudo apt-get -qq update
+  - pip install Cython
   - pip install lxml
 
 install:
