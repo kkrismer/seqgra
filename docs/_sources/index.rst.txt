@@ -23,15 +23,21 @@ Installation
 seqgra is a Python package that is part of both conda-forge_ and PyPI_, the 
 package repositories behind conda_ and pip_, respectively.
 
-To install seqgra with conda, run::
+To install seqgra with conda, run:
+
+.. code-block:: shell
 
     conda install -c conda-forge seqgra
 
-To install seqgra with pip, run::
+To install seqgra with pip, run:
+
+.. code-block:: shell
 
     pip install seqgra
 
-To install seqgra directly from this repository, run::
+To install seqgra directly from this repository, run:
+
+.. code-block:: shell
 
     git clone https://github.com/gifford-lab/seqgra
     cd seqgra
@@ -62,7 +68,9 @@ System requirements
 .. note::
     seqgra depends upon the Python package lxml_, which in turn 
     depends on system libraries that are not always present. On a 
-    Debian/Ubuntu machine you can satisfy those requirements using::
+    Debian/Ubuntu machine you can satisfy those requirements using:
+    
+    .. code-block:: shell
 
         sudo apt-get install libxml2-dev libxslt-dev
 

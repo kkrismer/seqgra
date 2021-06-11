@@ -15,7 +15,7 @@ help:
 .PHONY: help Makefile
 
 github:
-	@make html
+	@make clean html
 	@rm -r ../docs/
 	@mkdir ../docs
 	@touch ../docs/.nojekyll

@@ -41,19 +41,19 @@ Commonly used suite of seqgra commands
         -m MODEL_DEFINITION_FILE \
         -o OUTPUT_DIR
     seqgra -d DATA_DEFINITION_FILE \
-        -m MODEL_DEFINITION_FILE
-        -o OUTPUT_DIR
-        -e metrics roc pr predict
+        -m MODEL_DEFINITION_FILE \
+        -o OUTPUT_DIR \
+        -e metrics roc pr predict \
         --eval-sets training validation test
-    seqgra -d DATA_DEFINITION_FILE
-        -m MODEL_DEFINITION_FILE
-        -o OUTPUT_DIR
-        -e sis
+    seqgra -d DATA_DEFINITION_FILE \
+        -m MODEL_DEFINITION_FILE \
+        -o OUTPUT_DIR \
+        -e sis \
         --eval-n-per-label 20
-    seqgra -d DATA_DEFINITION_FILE
-        -m MODEL_DEFINITION_FILE
-        -o OUTPUT_DIR
-        -e gradient saliency gradient-x-input integrated-gradients
+    seqgra -d DATA_DEFINITION_FILE \
+        -m MODEL_DEFINITION_FILE \
+        -o OUTPUT_DIR \
+        -e gradient saliency gradient-x-input integrated-gradients \
         --eval-n-per-label 50
 
 #. ``seqgra`` call: generate synthetic data as defined in 
@@ -68,3 +68,10 @@ Commonly used suite of seqgra commands
 #. ``seqgra`` call: load previously trained model, call gradient-based 
    evaluators (gradient, saliency, gradient-x-input, and 
    integrated-gradients) on 50 test set examples per label
+
+seqgra use cases
+----------------
+
+Generate synthetic data only
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
