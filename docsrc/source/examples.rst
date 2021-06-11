@@ -75,6 +75,11 @@ seqgra use cases
 Generate synthetic data only
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+
+.. image:: _static/seqgra-variants-2.svg
+    :width: 100%
+    :alt: seqgra variant - synthetic data only
+
 **Command:**
 
 .. code-block:: shell
@@ -84,7 +89,7 @@ Generate synthetic data only
 
 **Generated files and folders:**
 
-.. code-block::
+.. code-block:: text
 
     {OUTPUT_DIR}
     +-- input
