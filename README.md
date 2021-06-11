@@ -1,10 +1,12 @@
 # seqgra: Synthetic rule-based biological sequence data generation for architecture evaluation and search
 
-*Travis-CI build badge placeholder*
+[![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT) [![Travis build status](https://travis-ci.com/kkrismer/seqgra.svg?branch=master)](https://travis-ci.com/kkrismer/seqgra)
 
 *PyPI version badge placeholder*
 
 *DOI badge placeholder*
+
+https://kkrismer.github.io/seqgra/
 
 ## Installation
 
