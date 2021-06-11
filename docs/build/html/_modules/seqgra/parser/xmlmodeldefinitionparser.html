@@ -1,0 +1,435 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>seqgra.parser.xmlmodeldefinitionparser &mdash; seqgra 0.0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="https://www.googletagmanager.com/gtag/js?id=G-SPQK9JRC9T"></script>
+        <script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-SPQK9JRC9T');
+</script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> seqgra
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">About seqgra</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Introduction</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Main Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples.html">Usage examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cmd.html">Command line utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dd.html">Data definition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../md.html">Model definition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../slec.html">Simulators, Learners, Evaluators, Comparators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ids.html">ID conventions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../structure.html"><code class="docutils literal notranslate"><span class="pre">output</span></code> folder structure</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Advanced features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../seqgra.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../py-modindex.html">Python module index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../genindex.html">Index</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">seqgra</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>seqgra.parser.xmlmodeldefinitionparser</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for seqgra.parser.xmlmodeldefinitionparser</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">MIT - CSAIL - Gifford Lab - seqgra</span>
+
+<span class="sd">Implementation of Parser for XML configuration files</span>
+<span class="sd">(using Strategy design pattern)</span>
+
+<span class="sd">@author: Konstantin Krismer</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">io</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Any</span>
+<span class="kn">from</span> <span class="nn">xml.dom.minidom</span> <span class="kn">import</span> <span class="n">Document</span><span class="p">,</span> <span class="n">parseString</span>
+
+<span class="kn">import</span> <span class="nn">pkg_resources</span>
+<span class="kn">from</span> <span class="nn">lxml</span> <span class="kn">import</span> <span class="n">etree</span>
+
+<span class="kn">from</span> <span class="nn">seqgra.parser</span> <span class="kn">import</span> <span class="n">XMLHelper</span>
+<span class="kn">from</span> <span class="nn">seqgra.parser</span> <span class="kn">import</span> <span class="n">ModelDefinitionParser</span>
+<span class="kn">from</span> <span class="nn">seqgra.model</span> <span class="kn">import</span> <span class="n">ModelDefinition</span>
+<span class="kn">from</span> <span class="nn">seqgra.model.model</span> <span class="kn">import</span> <span class="n">Architecture</span>
+<span class="kn">from</span> <span class="nn">seqgra.model.model</span> <span class="kn">import</span> <span class="n">Operation</span>
+
+
+<div class="viewcode-block" id="XMLModelDefinitionParser"><a class="viewcode-back" href="../../../seqgra.parser.xmlmodeldefinitionparser.html#seqgra.parser.xmlmodeldefinitionparser.XMLModelDefinitionParser">[docs]</a><span class="k">class</span> <span class="nc">XMLModelDefinitionParser</span><span class="p">(</span><span class="n">ModelDefinitionParser</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The Strategy interface declares operations common to all supported versions</span>
+<span class="sd">    of some algorithm.</span>
+
+<span class="sd">    The Context uses this interface to call the algorithm defined by Concrete</span>
+<span class="sd">    Strategies.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">silent</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">silent</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;LOGLEVEL&quot;</span><span class="p">,</span> <span class="s2">&quot;WARNING&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dom</span><span class="p">:</span> <span class="n">Document</span> <span class="o">=</span> <span class="n">parseString</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_general_element</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> \
+            <span class="bp">self</span><span class="o">.</span><span class="n">_dom</span><span class="o">.</span><span class="n">getElementsByTagName</span><span class="p">(</span><span class="s2">&quot;general&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+
+<div class="viewcode-block" id="XMLModelDefinitionParser.validate"><a class="viewcode-back" href="../../../seqgra.parser.xmlmodeldefinitionparser.html#seqgra.parser.xmlmodeldefinitionparser.XMLModelDefinitionParser.validate">[docs]</a>    <span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xml_config</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">xsd_path</span> <span class="o">=</span> <span class="n">pkg_resources</span><span class="o">.</span><span class="n">resource_filename</span><span class="p">(</span><span class="s2">&quot;seqgra&quot;</span><span class="p">,</span>
+                                                   <span class="s2">&quot;model-config.xsd&quot;</span><span class="p">)</span>
+        <span class="n">xmlschema_doc</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">xsd_path</span><span class="p">)</span>
+        <span class="n">xmlschema</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">XMLSchema</span><span class="p">(</span><span class="n">xmlschema_doc</span><span class="p">)</span>
+        <span class="n">xml_doc</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">xml_config</span><span class="o">.</span><span class="n">encode</span><span class="p">()))</span>
+        <span class="n">xmlschema</span><span class="o">.</span><span class="n">assertValid</span><span class="p">(</span><span class="n">xml_doc</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;seqgra model configuration XML file &quot;</span>
+                         <span class="s2">&quot;is well-formed and valid&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="XMLModelDefinitionParser.get_model_id"><a class="viewcode-back" href="../../../seqgra.parser.xmlmodeldefinitionparser.html#seqgra.parser.xmlmodeldefinitionparser.XMLModelDefinitionParser.get_model_id">[docs]</a>    <span class="k">def</span> <span class="nf">get_model_id</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_general_element</span><span class="o">.</span><span class="n">getAttribute</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="XMLModelDefinitionParser.get_name"><a class="viewcode-back" href="../../../seqgra.parser.xmlmodeldefinitionparser.html#seqgra.parser.xmlmodeldefinitionparser.XMLModelDefinitionParser.get_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">XMLHelper</span><span class="o">.</span><span class="n">read_text_node</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_general_element</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="XMLModelDefinitionParser.get_description"><a class="viewcode-back" href="../../../seqgra.parser.xmlmodeldefinitionparser.html#seqgra.parser.xmlmodeldefinitionparser.XMLModelDefinitionParser.get_description">[docs]</a>    <span class="k">def</span> <span class="nf">get_description</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">XMLHelper</span><span class="o">.</span><span class="n">read_text_node</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_general_element</span><span class="p">,</span> <span class="s2">&quot;description&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="XMLModelDefinitionParser.get_task"><a class="viewcode-back" href="../../../seqgra.parser.xmlmodeldefinitionparser.html#seqgra.parser.xmlmodeldefinitionparser.XMLModelDefinitionParser.get_task">[docs]</a>    <span class="k">def</span> <span class="nf">get_task</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">XMLHelper</span><span class="o">.</span><span class="n">read_text_node</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_general_element</span><span class="p">,</span> <span class="s2">&quot;task&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="XMLModelDefinitionParser.get_sequence_space"><a class="viewcode-back" href="../../../seqgra.parser.xmlmodeldefinitionparser.html#seqgra.parser.xmlmodeldefinitionparser.XMLModelDefinitionParser.get_sequence_space">[docs]</a>    <span class="k">def</span> <span class="nf">get_sequence_space</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">XMLHelper</span><span class="o">.</span><span class="n">read_text_node</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_general_element</span><span class="p">,</span> <span class="s2">&quot;sequencespace&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="XMLModelDefinitionParser.get_library"><a class="viewcode-back" href="../../../seqgra.parser.xmlmodeldefinitionparser.html#seqgra.parser.xmlmodeldefinitionparser.XMLModelDefinitionParser.get_library">[docs]</a>    <span class="k">def</span> <span class="nf">get_library</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">XMLHelper</span><span class="o">.</span><span class="n">read_text_node</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_general_element</span><span class="p">,</span> <span class="s2">&quot;library&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="XMLModelDefinitionParser.get_implementation"><a class="viewcode-back" href="../../../seqgra.parser.xmlmodeldefinitionparser.html#seqgra.parser.xmlmodeldefinitionparser.XMLModelDefinitionParser.get_implementation">[docs]</a>    <span class="k">def</span> <span class="nf">get_implementation</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">XMLHelper</span><span class="o">.</span><span class="n">read_text_node</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_general_element</span><span class="p">,</span>
+                                        <span class="s2">&quot;implementation&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="XMLModelDefinitionParser.get_input_encoding"><a class="viewcode-back" href="../../../seqgra.parser.xmlmodeldefinitionparser.html#seqgra.parser.xmlmodeldefinitionparser.XMLModelDefinitionParser.get_input_encoding">[docs]</a>    <span class="k">def</span> <span class="nf">get_input_encoding</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">XMLHelper</span><span class="o">.</span><span class="n">read_text_node</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_general_element</span><span class="p">,</span> <span class="s2">&quot;inputencoding&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="XMLModelDefinitionParser.get_labels"><a class="viewcode-back" href="../../../seqgra.parser.xmlmodeldefinitionparser.html#seqgra.parser.xmlmodeldefinitionparser.XMLModelDefinitionParser.get_labels">[docs]</a>    <span class="k">def</span> <span class="nf">get_labels</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="n">labels_element</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> \
+            <span class="bp">self</span><span class="o">.</span><span class="n">_general_element</span><span class="o">.</span><span class="n">getElementsByTagName</span><span class="p">(</span><span class="s2">&quot;labels&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">label_elements</span> <span class="o">=</span> <span class="n">labels_element</span><span class="o">.</span><span class="n">getElementsByTagName</span><span class="p">(</span><span class="s2">&quot;label&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">label_elements</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">XMLHelper</span><span class="o">.</span><span class="n">read_immediate_text_node</span><span class="p">(</span><span class="n">label_element</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">label_element</span> <span class="ow">in</span> <span class="n">label_elements</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">pattern_element</span> <span class="o">=</span> <span class="n">labels_element</span><span class="o">.</span><span class="n">getElementsByTagName</span><span class="p">(</span><span class="s2">&quot;pattern&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">pattern_element</span><span class="o">.</span><span class="n">hasAttribute</span><span class="p">(</span><span class="s2">&quot;prefix&quot;</span><span class="p">):</span>
+                <span class="n">prefix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">pattern_element</span><span class="o">.</span><span class="n">getAttribute</span><span class="p">(</span><span class="s2">&quot;prefix&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">prefix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="k">if</span> <span class="n">pattern_element</span><span class="o">.</span><span class="n">hasAttribute</span><span class="p">(</span><span class="s2">&quot;postfix&quot;</span><span class="p">):</span>
+                <span class="n">postfix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">pattern_element</span><span class="o">.</span><span class="n">getAttribute</span><span class="p">(</span><span class="s2">&quot;postfix&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">postfix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="k">if</span> <span class="n">pattern_element</span><span class="o">.</span><span class="n">hasAttribute</span><span class="p">(</span><span class="s2">&quot;min&quot;</span><span class="p">):</span>
+                <span class="n">label_index_min</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">pattern_element</span><span class="o">.</span><span class="n">getAttribute</span><span class="p">(</span><span class="s2">&quot;min&quot;</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">label_index_min</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">label_index_max</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">pattern_element</span><span class="o">.</span><span class="n">getAttribute</span><span class="p">(</span><span class="s2">&quot;max&quot;</span><span class="p">))</span>
+
+            <span class="k">return</span> <span class="p">[</span><span class="n">prefix</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="n">postfix</span>
+                    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">label_index_min</span><span class="p">,</span> <span class="n">label_index_max</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span></div>
+
+<div class="viewcode-block" id="XMLModelDefinitionParser.get_seed"><a class="viewcode-back" href="../../../seqgra.parser.xmlmodeldefinitionparser.html#seqgra.parser.xmlmodeldefinitionparser.XMLModelDefinitionParser.get_seed">[docs]</a>    <span class="k">def</span> <span class="nf">get_seed</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">XMLHelper</span><span class="o">.</span><span class="n">read_int_node</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_general_element</span><span class="p">,</span> <span class="s2">&quot;seed&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="XMLModelDefinitionParser.get_architecture"><a class="viewcode-back" href="../../../seqgra.parser.xmlmodeldefinitionparser.html#seqgra.parser.xmlmodeldefinitionparser.XMLModelDefinitionParser.get_architecture">[docs]</a>    <span class="k">def</span> <span class="nf">get_architecture</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Architecture</span><span class="p">:</span>
+        <span class="n">sequential_element</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dom</span><span class="o">.</span><span class="n">getElementsByTagName</span><span class="p">(</span><span class="s2">&quot;sequential&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sequential_element</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">operation_elements</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> \
+                <span class="n">sequential_element</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">getElementsByTagName</span><span class="p">(</span><span class="s2">&quot;operation&quot;</span><span class="p">)</span>
+            <span class="n">operations</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__parse_operation</span><span class="p">(</span><span class="n">operation_element</span><span class="p">)</span>
+                          <span class="k">for</span> <span class="n">operation_element</span> <span class="ow">in</span> <span class="n">operation_elements</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">operations</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="n">hyperparameters_element</span> <span class="o">=</span> \
+            <span class="bp">self</span><span class="o">.</span><span class="n">_dom</span><span class="o">.</span><span class="n">getElementsByTagName</span><span class="p">(</span><span class="s2">&quot;hyperparameters&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">hyperparameters_element</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">hyperparameter_elements</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> \
+                <span class="n">hyperparameters_element</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">getElementsByTagName</span><span class="p">(</span>
+                    <span class="s2">&quot;hyperparameter&quot;</span><span class="p">)</span>
+            <span class="n">hyperparameters</span> <span class="o">=</span> \
+                <span class="bp">self</span><span class="o">.</span><span class="n">__parse_hyperparameters</span><span class="p">(</span><span class="n">hyperparameter_elements</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">hyperparameters</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="n">external_element</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dom</span><span class="o">.</span><span class="n">getElementsByTagName</span><span class="p">(</span><span class="s2">&quot;external&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">external_element</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">external_model_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> \
+                <span class="n">XMLHelper</span><span class="o">.</span><span class="n">read_immediate_text_node</span><span class="p">(</span><span class="n">external_element</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">external_model_format</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> \
+                <span class="n">external_element</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">getAttribute</span><span class="p">(</span><span class="s2">&quot;format&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">external_element</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">hasAttribute</span><span class="p">(</span><span class="s2">&quot;classname&quot;</span><span class="p">):</span>
+                <span class="n">external_model_class_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> \
+                    <span class="n">external_element</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">getAttribute</span><span class="p">(</span><span class="s2">&quot;classname&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">external_model_class_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">external_model_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">external_model_format</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">external_model_class_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">return</span> <span class="n">Architecture</span><span class="p">(</span><span class="n">operations</span><span class="p">,</span> <span class="n">hyperparameters</span><span class="p">,</span>
+                            <span class="n">external_model_path</span><span class="p">,</span> <span class="n">external_model_format</span><span class="p">,</span>
+                            <span class="n">external_model_class_name</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">__parse_operation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">operation_element</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Operation</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Operation</span><span class="p">(</span><span class="n">operation_element</span><span class="o">.</span><span class="n">firstChild</span><span class="o">.</span><span class="n">nodeValue</span><span class="p">,</span>
+                         <span class="nb">dict</span><span class="p">(</span><span class="n">operation_element</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">items</span><span class="p">()))</span>
+
+<div class="viewcode-block" id="XMLModelDefinitionParser.get_loss_hyperparameters"><a class="viewcode-back" href="../../../seqgra.parser.xmlmodeldefinitionparser.html#seqgra.parser.xmlmodeldefinitionparser.XMLModelDefinitionParser.get_loss_hyperparameters">[docs]</a>    <span class="k">def</span> <span class="nf">get_loss_hyperparameters</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+        <span class="n">loss_element</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dom</span><span class="o">.</span><span class="n">getElementsByTagName</span><span class="p">(</span><span class="s2">&quot;loss&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">loss_element</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">hyperparameter_elements</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> \
+                <span class="n">loss_element</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">getElementsByTagName</span><span class="p">(</span><span class="s2">&quot;hyperparameter&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__parse_hyperparameters</span><span class="p">(</span><span class="n">hyperparameter_elements</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="XMLModelDefinitionParser.get_optimizer_hyperparameters"><a class="viewcode-back" href="../../../seqgra.parser.xmlmodeldefinitionparser.html#seqgra.parser.xmlmodeldefinitionparser.XMLModelDefinitionParser.get_optimizer_hyperparameters">[docs]</a>    <span class="k">def</span> <span class="nf">get_optimizer_hyperparameters</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+        <span class="n">optimizer_element</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dom</span><span class="o">.</span><span class="n">getElementsByTagName</span><span class="p">(</span><span class="s2">&quot;optimizer&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">optimizer_element</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">hyperparameter_elements</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> \
+                <span class="n">optimizer_element</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">getElementsByTagName</span><span class="p">(</span><span class="s2">&quot;hyperparameter&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__parse_hyperparameters</span><span class="p">(</span><span class="n">hyperparameter_elements</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="XMLModelDefinitionParser.get_training_process_hyperparameters"><a class="viewcode-back" href="../../../seqgra.parser.xmlmodeldefinitionparser.html#seqgra.parser.xmlmodeldefinitionparser.XMLModelDefinitionParser.get_training_process_hyperparameters">[docs]</a>    <span class="k">def</span> <span class="nf">get_training_process_hyperparameters</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+        <span class="n">training_process_element</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> \
+            <span class="bp">self</span><span class="o">.</span><span class="n">_dom</span><span class="o">.</span><span class="n">getElementsByTagName</span><span class="p">(</span><span class="s2">&quot;trainingprocess&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">training_process_element</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">hyperparameter_elements</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> \
+                <span class="n">training_process_element</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">getElementsByTagName</span><span class="p">(</span><span class="s2">&quot;hyperparameter&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__parse_hyperparameters</span><span class="p">(</span><span class="n">hyperparameter_elements</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span></div>
+
+    <span class="k">def</span> <span class="nf">__parse_hyperparameters</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                                <span class="n">hyperparameter_elements</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+        <span class="n">hyperparams</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">hyperparameter_element</span> <span class="ow">in</span> <span class="n">hyperparameter_elements</span><span class="p">:</span>
+            <span class="n">hyperparams</span><span class="p">[</span><span class="n">hyperparameter_element</span><span class="o">.</span><span class="n">getAttribute</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">)]</span> <span class="o">=</span> \
+                <span class="n">hyperparameter_element</span><span class="o">.</span><span class="n">firstChild</span><span class="o">.</span><span class="n">nodeValue</span>
+
+        <span class="k">return</span> <span class="n">hyperparams</span>
+
+<div class="viewcode-block" id="XMLModelDefinitionParser.get_model_definition"><a class="viewcode-back" href="../../../seqgra.parser.xmlmodeldefinitionparser.html#seqgra.parser.xmlmodeldefinitionparser.XMLModelDefinitionParser.get_model_definition">[docs]</a>    <span class="k">def</span> <span class="nf">get_model_definition</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ModelDefinition</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">ModelDefinition</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_model_id</span><span class="p">(),</span>
+                               <span class="bp">self</span><span class="o">.</span><span class="n">get_name</span><span class="p">(),</span>
+                               <span class="bp">self</span><span class="o">.</span><span class="n">get_description</span><span class="p">(),</span>
+                               <span class="bp">self</span><span class="o">.</span><span class="n">get_task</span><span class="p">(),</span>
+                               <span class="bp">self</span><span class="o">.</span><span class="n">get_sequence_space</span><span class="p">(),</span>
+                               <span class="bp">self</span><span class="o">.</span><span class="n">get_library</span><span class="p">(),</span>
+                               <span class="bp">self</span><span class="o">.</span><span class="n">get_implementation</span><span class="p">(),</span>
+                               <span class="bp">self</span><span class="o">.</span><span class="n">get_input_encoding</span><span class="p">(),</span>
+                               <span class="bp">self</span><span class="o">.</span><span class="n">get_labels</span><span class="p">(),</span>
+                               <span class="bp">self</span><span class="o">.</span><span class="n">get_seed</span><span class="p">(),</span>
+                               <span class="bp">self</span><span class="o">.</span><span class="n">get_architecture</span><span class="p">(),</span>
+                               <span class="bp">self</span><span class="o">.</span><span class="n">get_loss_hyperparameters</span><span class="p">(),</span>
+                               <span class="bp">self</span><span class="o">.</span><span class="n">get_optimizer_hyperparameters</span><span class="p">(),</span>
+                               <span class="bp">self</span><span class="o">.</span><span class="n">get_training_process_hyperparameters</span><span class="p">())</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Konstantin Krismer.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

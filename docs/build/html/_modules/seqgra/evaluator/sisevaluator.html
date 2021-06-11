@@ -1,0 +1,446 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>seqgra.evaluator.sisevaluator &mdash; seqgra 0.0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="https://www.googletagmanager.com/gtag/js?id=G-SPQK9JRC9T"></script>
+        <script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-SPQK9JRC9T');
+</script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> seqgra
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">About seqgra</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Introduction</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Main Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples.html">Usage examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cmd.html">Command line utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dd.html">Data definition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../md.html">Model definition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../slec.html">Simulators, Learners, Evaluators, Comparators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ids.html">ID conventions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../structure.html"><code class="docutils literal notranslate"><span class="pre">output</span></code> folder structure</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Advanced features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../seqgra.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../py-modindex.html">Python module index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../genindex.html">Index</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">seqgra</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>seqgra.evaluator.sisevaluator</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for seqgra.evaluator.sisevaluator</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">MIT - CSAIL - Gifford Lab - seqgra</span>
+
+<span class="sd">- abstract base class for all evaluators</span>
+
+<span class="sd">@author: Konstantin Krismer</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="kn">import</span> <span class="nn">seqgra.constants</span> <span class="k">as</span> <span class="nn">c</span>
+<span class="kn">from</span> <span class="nn">seqgra.evaluator</span> <span class="kn">import</span> <span class="n">FeatureImportanceEvaluator</span>
+<span class="kn">from</span> <span class="nn">seqgra.evaluator</span> <span class="kn">import</span> <span class="n">sis</span>
+<span class="kn">from</span> <span class="nn">seqgra.learner</span> <span class="kn">import</span> <span class="n">Learner</span>
+
+
+<div class="viewcode-block" id="SISEvaluator"><a class="viewcode-back" href="../../../seqgra.evaluator.sisevaluator.html#seqgra.evaluator.sisevaluator.SISEvaluator">[docs]</a><span class="k">class</span> <span class="nc">SISEvaluator</span><span class="p">(</span><span class="n">FeatureImportanceEvaluator</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">learner</span><span class="p">:</span> <span class="n">Learner</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                 <span class="n">predict_threshold</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">silent</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">c</span><span class="o">.</span><span class="n">EvaluatorID</span><span class="o">.</span><span class="n">SIS</span><span class="p">,</span> <span class="s2">&quot;Sufficient Input Subsets&quot;</span><span class="p">,</span> <span class="n">learner</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">,</span>
+            <span class="n">supported_tasks</span><span class="o">=</span><span class="p">[</span><span class="n">c</span><span class="o">.</span><span class="n">TaskType</span><span class="o">.</span><span class="n">MULTI_CLASS_CLASSIFICATION</span><span class="p">,</span>
+                             <span class="n">c</span><span class="o">.</span><span class="n">TaskType</span><span class="o">.</span><span class="n">MULTI_LABEL_CLASSIFICATION</span><span class="p">],</span>
+            <span class="n">silent</span><span class="o">=</span><span class="n">silent</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">predict_threshold</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">predict_threshold</span> <span class="o">=</span> <span class="n">predict_threshold</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">predict_threshold</span> <span class="o">=</span> <span class="mf">0.5</span>
+
+    <span class="k">def</span> <span class="nf">_evaluate_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">y</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+                        <span class="n">annotations</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+        <span class="n">x_column</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="n">y_column</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="n">label_column</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="n">annotations_column</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="n">sis_collapsed_column</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="n">sis_separated_column</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">selected_label</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">learner</span><span class="o">.</span><span class="n">get_label_set</span><span class="p">(</span><span class="n">y</span><span class="p">):</span>
+            <span class="c1"># select x, y, annotations of examples with label</span>
+            <span class="n">selected_x</span><span class="p">,</span> <span class="n">selected_y</span><span class="p">,</span> <span class="n">selected_annotations</span> <span class="o">=</span> \
+                <span class="bp">self</span><span class="o">.</span><span class="n">_subset_by_label</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">annotations</span><span class="p">,</span> <span class="p">{</span><span class="n">selected_label</span><span class="p">})</span>
+
+            <span class="n">model_label_index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">learner</span><span class="o">.</span><span class="n">definition</span><span class="o">.</span><span class="n">labels</span><span class="o">.</span><span class="n">index</span><span class="p">(</span>
+                <span class="n">selected_label</span><span class="p">)</span>
+
+            <span class="n">sis_results</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_sis</span><span class="p">(</span>
+                <span class="n">selected_x</span><span class="p">,</span> <span class="n">model_label_index</span><span class="p">)</span>
+            <span class="n">sis_collapsed</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__collapse_sis</span><span class="p">(</span><span class="n">sis_col</span><span class="p">)</span>
+                                        <span class="k">for</span> <span class="n">sis_col</span> <span class="ow">in</span> <span class="n">sis_results</span><span class="p">]</span>
+            <span class="n">sis_separated</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sis_col</span><span class="p">)</span>
+                                        <span class="k">for</span> <span class="n">sis_col</span> <span class="ow">in</span> <span class="n">sis_results</span><span class="p">]</span>
+
+            <span class="n">x_column</span> <span class="o">+=</span> <span class="n">selected_x</span>
+            <span class="n">y_column</span> <span class="o">+=</span> <span class="n">selected_y</span>
+            <span class="n">label_column</span> <span class="o">+=</span> <span class="p">[</span><span class="n">selected_label</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">selected_x</span><span class="p">)</span>
+            <span class="n">annotations_column</span> <span class="o">+=</span> <span class="n">selected_annotations</span>
+            <span class="n">sis_collapsed_column</span> <span class="o">+=</span> <span class="n">sis_collapsed</span>
+            <span class="n">sis_separated_column</span> <span class="o">+=</span> <span class="n">sis_separated</span>
+
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;x&quot;</span><span class="p">:</span> <span class="n">x_column</span><span class="p">,</span>
+                             <span class="s2">&quot;y&quot;</span><span class="p">:</span> <span class="n">y_column</span><span class="p">,</span>
+                             <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="n">label_column</span><span class="p">,</span>
+                             <span class="s2">&quot;annotation&quot;</span><span class="p">:</span> <span class="n">annotations_column</span><span class="p">,</span>
+                             <span class="s2">&quot;sis_collapsed&quot;</span><span class="p">:</span> <span class="n">sis_collapsed_column</span><span class="p">,</span>
+                             <span class="s2">&quot;sis_separated&quot;</span><span class="p">:</span> <span class="n">sis_separated_column</span><span class="p">})</span>
+
+    <span class="k">def</span> <span class="nf">_save_results</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">results</span><span class="p">,</span> <span class="n">set_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;test&quot;</span><span class="p">,</span>
+                      <span class="n">suppress_plots</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">results</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">results</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([],</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="s2">&quot;label&quot;</span><span class="p">,</span>
+                                                <span class="s2">&quot;annotation&quot;</span><span class="p">,</span>
+                                                <span class="s2">&quot;sis_collapsed&quot;</span><span class="p">,</span>
+                                                <span class="s2">&quot;sis_separated&quot;</span><span class="p">])</span>
+
+        <span class="n">results</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_dir</span> <span class="o">+</span> <span class="n">set_name</span> <span class="o">+</span> <span class="s2">&quot;-df.txt&quot;</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span>
+                       <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__get_agreement_group</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">annotation_position</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                              <span class="n">sis_position</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">masked_letter</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_masked_letter</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">annotation_position</span> <span class="o">==</span> <span class="n">c</span><span class="o">.</span><span class="n">PositionType</span><span class="o">.</span><span class="n">GRAMMAR</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">sis_position</span> <span class="o">==</span> <span class="n">masked_letter</span><span class="p">:</span>
+                <span class="k">return</span> <span class="s2">&quot;FN&quot;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="s2">&quot;TP&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">sis_position</span> <span class="o">==</span> <span class="n">masked_letter</span><span class="p">:</span>
+                <span class="k">return</span> <span class="s2">&quot;TN&quot;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="s2">&quot;FP&quot;</span>
+
+    <span class="k">def</span> <span class="nf">_convert_to_data_frame</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">results</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Takes SIS evaluator-specific results and turns them into a pandas</span>
+<span class="sd">        data frame.</span>
+
+<span class="sd">        The data frame has the following columns:</span>
+<span class="sd">            - example_column (int): example index</span>
+<span class="sd">            - position (int): position within example (one-based)</span>
+<span class="sd">            - group (str): group label, one of the following:</span>
+<span class="sd">                - &quot;TP&quot;: grammar position, important for model prediction</span>
+<span class="sd">                - &quot;FN&quot;: grammar position, not important for model prediction,</span>
+<span class="sd">                - &quot;FP&quot;: background position, important for model prediction,</span>
+<span class="sd">                - &quot;TN&quot;: background position, not important for model prediction</span>
+<span class="sd">            - label (str): label of example, e.g., &quot;cell type 1&quot;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">example_column</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="n">position_column</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="n">group_column</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="n">label_column</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">example_id</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">results</span><span class="o">.</span><span class="n">itertuples</span><span class="p">(),</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">example_column</span> <span class="o">+=</span> <span class="p">[</span><span class="n">example_id</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">annotation</span><span class="p">)</span>
+            <span class="n">position_column</span> <span class="o">+=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">annotation</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">row</span><span class="o">.</span><span class="n">sis_collapsed</span><span class="p">:</span>
+                <span class="n">group_column</span> <span class="o">+=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__get_agreement_group</span><span class="p">(</span><span class="n">char</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">sis_collapsed</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                                 <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">char</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">annotation</span><span class="p">)]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">group_column</span> <span class="o">+=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__get_agreement_group</span><span class="p">(</span><span class="n">char</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_masked_letter</span><span class="p">())</span>
+                                 <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">char</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">annotation</span><span class="p">)]</span>
+            <span class="n">label_column</span> <span class="o">+=</span> <span class="p">[</span><span class="n">row</span><span class="o">.</span><span class="n">label</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">annotation</span><span class="p">)</span>
+
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;example&quot;</span><span class="p">:</span> <span class="n">example_column</span><span class="p">,</span>
+                           <span class="s2">&quot;position&quot;</span><span class="p">:</span> <span class="n">position_column</span><span class="p">,</span>
+                           <span class="s2">&quot;group&quot;</span><span class="p">:</span> <span class="n">group_column</span><span class="p">,</span>
+                           <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="n">label_column</span><span class="p">})</span>
+
+        <span class="k">return</span> <span class="n">df</span>
+
+    <span class="k">def</span> <span class="nf">_visualize_grammar_agreement</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">results</span><span class="p">,</span>
+                                     <span class="n">set_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;test&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_convert_to_data_frame</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_dir</span> <span class="o">+</span> <span class="n">set_name</span> <span class="o">+</span>
+                      <span class="s2">&quot;-grammar-agreement-thresholded-df.txt&quot;</span><span class="p">,</span>
+                      <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+            <span class="n">pdf_file_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">set_name</span> <span class="o">+</span> <span class="s2">&quot;-grammar-agreement-thresholded.pdf&quot;</span>
+            <span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prepare_r_data_frame</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+            <span class="n">caption</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;prediction threshold for SIS: &quot;</span> <span class="o">+</span> \
+                <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">predict_threshold</span><span class="p">)</span> <span class="o">+</span> \
+                <span class="s2">&quot;:NL:(model prediction of true class exceeds this threshold with grammar positions alone)&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_execute_plotting_command</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">set_name</span><span class="p">,</span> <span class="n">pdf_file_name</span><span class="p">,</span>
+                                           <span class="bp">self</span><span class="o">.</span><span class="n">evaluator_name</span><span class="p">,</span> <span class="n">caption</span><span class="p">)</span>
+
+<div class="viewcode-block" id="SISEvaluator.find_sis"><a class="viewcode-back" href="../../../seqgra.evaluator.sisevaluator.html#seqgra.evaluator.sisevaluator.SISEvaluator.find_sis">[docs]</a>    <span class="k">def</span> <span class="nf">find_sis</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">label_index</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
+        <span class="n">encoded_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">learner</span><span class="o">.</span><span class="n">encode_x</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">sis_predict</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">learner</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span>
+                <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">encode</span><span class="o">=</span><span class="kc">False</span><span class="p">))[:,</span> <span class="n">label_index</span><span class="p">]</span>
+
+        <span class="n">input_shape</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">encoded_x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">learner</span><span class="o">.</span><span class="n">definition</span><span class="o">.</span><span class="n">library</span> <span class="o">==</span> <span class="n">c</span><span class="o">.</span><span class="n">LibraryType</span><span class="o">.</span><span class="n">TENSORFLOW</span><span class="p">:</span>
+            <span class="n">broadcast_axis</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">learner</span><span class="o">.</span><span class="n">definition</span><span class="o">.</span><span class="n">library</span> <span class="o">==</span> <span class="n">c</span><span class="o">.</span><span class="n">LibraryType</span><span class="o">.</span><span class="n">TORCH</span><span class="p">:</span>
+            <span class="n">broadcast_axis</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">learner</span><span class="o">.</span><span class="n">definition</span><span class="o">.</span><span class="n">library</span> <span class="o">==</span> <span class="n">c</span><span class="o">.</span><span class="n">LibraryType</span><span class="o">.</span><span class="n">BAYES_OPTIMAL_CLASSIFIER</span><span class="p">:</span>
+            <span class="n">broadcast_axis</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;unknown library type&quot;</span><span class="p">)</span>
+
+        <span class="n">fully_masked_input</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">input_shape</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.25</span>
+        <span class="n">initial_mask</span> <span class="o">=</span> <span class="n">sis</span><span class="o">.</span><span class="n">make_empty_boolean_mask_broadcast_over_axis</span><span class="p">(</span>
+            <span class="n">input_shape</span><span class="p">,</span> <span class="n">broadcast_axis</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__produce_masked_inputs</span><span class="p">(</span>
+            <span class="n">encoded_x</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">sis_predict</span><span class="p">,</span>
+            <span class="n">fully_masked_input</span><span class="p">,</span> <span class="n">initial_mask</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">encoded_x</span><span class="p">))]</span></div>
+
+    <span class="k">def</span> <span class="nf">__get_masked_letter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">learner</span><span class="o">.</span><span class="n">definition</span><span class="o">.</span><span class="n">sequence_space</span> <span class="o">==</span> <span class="n">c</span><span class="o">.</span><span class="n">SequenceSpaceType</span><span class="o">.</span><span class="n">DNA</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">c</span><span class="o">.</span><span class="n">PositionType</span><span class="o">.</span><span class="n">DNA_MASKED</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">c</span><span class="o">.</span><span class="n">PositionType</span><span class="o">.</span><span class="n">AA_MASKED</span>
+
+    <span class="k">def</span> <span class="nf">__collapse_sis</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sis</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">masked_letter</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_masked_letter</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">sis</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">sis</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">sis</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">collapsed_sis</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">sis</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">sis</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">char</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">collapsed_sis</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">char</span> <span class="o">==</span> <span class="n">masked_letter</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">sis</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="n">masked_letter</span><span class="p">:</span>
+                            <span class="n">collapsed_sis</span> <span class="o">=</span> <span class="n">collapsed_sis</span><span class="p">[:</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> \
+                                <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">collapsed_sis</span><span class="p">[(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):]</span>
+            <span class="k">return</span> <span class="n">collapsed_sis</span>
+
+    <span class="k">def</span> <span class="nf">__produce_masked_inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">sis_predict</span><span class="p">,</span> <span class="n">fully_masked_input</span><span class="p">,</span>
+                                <span class="n">initial_mask</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="n">collection</span> <span class="o">=</span> <span class="n">sis</span><span class="o">.</span><span class="n">sis_collection</span><span class="p">(</span><span class="n">sis_predict</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict_threshold</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span>
+                                        <span class="n">fully_masked_input</span><span class="p">,</span>
+                                        <span class="n">initial_mask</span><span class="o">=</span><span class="n">initial_mask</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">collection</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">sis_masked_inputs</span> <span class="o">=</span> <span class="n">sis</span><span class="o">.</span><span class="n">produce_masked_inputs</span><span class="p">(</span>
+                <span class="n">x</span><span class="p">,</span> <span class="n">fully_masked_input</span><span class="p">,</span>
+                <span class="p">[</span><span class="n">sr</span><span class="o">.</span><span class="n">mask</span> <span class="k">for</span> <span class="n">sr</span> <span class="ow">in</span> <span class="n">collection</span><span class="p">])</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">learner</span><span class="o">.</span><span class="n">decode_x</span><span class="p">(</span><span class="n">sis_masked_inputs</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">list</span><span class="p">()</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Konstantin Krismer.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

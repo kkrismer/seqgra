@@ -1,0 +1,374 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>seqgra.learner.torch.torchhelper module &mdash; seqgra 0.0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="https://www.googletagmanager.com/gtag/js?id=G-SPQK9JRC9T"></script>
+        <script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-SPQK9JRC9T');
+</script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="seqgra.learner.torch.torchlearner module" href="seqgra.learner.torch.torchlearner.html" />
+    <link rel="prev" title="seqgra.learner.torch.torchdataset module" href="seqgra.learner.torch.torchdataset.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> seqgra
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">About seqgra</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Main Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Usage examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cmd.html">Command line utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dd.html">Data definition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="md.html">Model definition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slec.html">Simulators, Learners, Evaluators, Comparators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ids.html">ID conventions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="structure.html"><code class="docutils literal notranslate"><span class="pre">output</span></code> folder structure</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Advanced features</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="seqgra.html">API reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="seqgra.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="seqgra.comparator.html">seqgra.comparator package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="seqgra.evaluator.html">seqgra.evaluator package</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="seqgra.learner.html">seqgra.learner package</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="seqgra.learner.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l5"><a class="reference internal" href="seqgra.learner.bayes.html">seqgra.learner.bayes package</a></li>
+<li class="toctree-l5"><a class="reference internal" href="seqgra.learner.tensorflow.html">seqgra.learner.tensorflow package</a></li>
+<li class="toctree-l5 current"><a class="reference internal" href="seqgra.learner.torch.html">seqgra.learner.torch package</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="seqgra.learner.html#submodules">Submodules</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="seqgra.model.html">seqgra.model package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="seqgra.parser.html">seqgra.parser package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="seqgra.simulator.html">seqgra.simulator package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="seqgra.writer.html">seqgra.writer package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="seqgra.html#submodules">Submodules</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="py-modindex.html">Python module index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="genindex.html">Index</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">seqgra</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="seqgra.html">seqgra package</a> &raquo;</li>
+        
+          <li><a href="seqgra.learner.html">seqgra.learner package</a> &raquo;</li>
+        
+          <li><a href="seqgra.learner.torch.html">seqgra.learner.torch package</a> &raquo;</li>
+        
+      <li>seqgra.learner.torch.torchhelper module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-seqgra.learner.torch.torchhelper">
+<span id="seqgra-learner-torch-torchhelper-module"></span><h1>seqgra.learner.torch.torchhelper module<a class="headerlink" href="#module-seqgra.learner.torch.torchhelper" title="Permalink to this headline">¶</a></h1>
+<p>MIT - CSAIL - Gifford Lab - seqgra</p>
+<p>PyTorch learner helper class</p>
+<p>&#64;author: Konstantin Krismer</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchhelper.TorchHelper">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">TorchHelper</span></span><a class="reference internal" href="_modules/seqgra/learner/torch/torchhelper.html#TorchHelper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.torch.torchhelper.TorchHelper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchhelper.TorchHelper.MULTIPLE_REGRESSION_LOSSES">
+<span class="sig-name descname"><span class="pre">MULTIPLE_REGRESSION_LOSSES</span></span><em class="property"><span class="pre">:</span> <span class="pre">FrozenSet</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><em class="property"> <span class="pre">=</span> <span class="pre">frozenset({'l1loss',</span> <span class="pre">'mseloss',</span> <span class="pre">'smoothl1loss'})</span></em><a class="headerlink" href="#seqgra.learner.torch.torchhelper.TorchHelper.MULTIPLE_REGRESSION_LOSSES" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchhelper.TorchHelper.MULTIVARIATE_REGRESSION_LOSSES">
+<span class="sig-name descname"><span class="pre">MULTIVARIATE_REGRESSION_LOSSES</span></span><em class="property"><span class="pre">:</span> <span class="pre">FrozenSet</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><em class="property"> <span class="pre">=</span> <span class="pre">frozenset({'l1loss',</span> <span class="pre">'mseloss',</span> <span class="pre">'smoothl1loss'})</span></em><a class="headerlink" href="#seqgra.learner.torch.torchhelper.TorchHelper.MULTIVARIATE_REGRESSION_LOSSES" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchhelper.TorchHelper.MULTI_CLASS_CLASSIFICATION_LOSSES">
+<span class="sig-name descname"><span class="pre">MULTI_CLASS_CLASSIFICATION_LOSSES</span></span><em class="property"><span class="pre">:</span> <span class="pre">FrozenSet</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><em class="property"> <span class="pre">=</span> <span class="pre">frozenset({'cosineembeddingloss',</span> <span class="pre">'crossentropyloss',</span> <span class="pre">'hingeembeddingloss',</span> <span class="pre">'kldivloss',</span> <span class="pre">'nllloss'})</span></em><a class="headerlink" href="#seqgra.learner.torch.torchhelper.TorchHelper.MULTI_CLASS_CLASSIFICATION_LOSSES" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchhelper.TorchHelper.MULTI_LABEL_CLASSIFICATION_LOSSES">
+<span class="sig-name descname"><span class="pre">MULTI_LABEL_CLASSIFICATION_LOSSES</span></span><em class="property"><span class="pre">:</span> <span class="pre">FrozenSet</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><em class="property"> <span class="pre">=</span> <span class="pre">frozenset({'bceloss',</span> <span class="pre">'bcewithlogitsloss'})</span></em><a class="headerlink" href="#seqgra.learner.torch.torchhelper.TorchHelper.MULTI_LABEL_CLASSIFICATION_LOSSES" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchhelper.TorchHelper.create_model">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">create_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">learner</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="seqgra.learner.learner.html#seqgra.learner.learner.Learner" title="seqgra.learner.learner.Learner"><span class="pre">seqgra.learner.learner.Learner</span></a></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="_modules/seqgra/learner/torch/torchhelper.html#TorchHelper.create_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.torch.torchhelper.TorchHelper.create_model" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchhelper.TorchHelper.evaluate_model">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">evaluate_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">learner</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="seqgra.learner.learner.html#seqgra.learner.learner.Learner" title="seqgra.learner.learner.Learner"><span class="pre">seqgra.learner.learner.Learner</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">torch.utils.data.dataset.Dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_layer_activation_function</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/seqgra/learner/torch/torchhelper.html#TorchHelper.evaluate_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.torch.torchhelper.TorchHelper.evaluate_model" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchhelper.TorchHelper.get_best_model_file_name">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">get_best_model_file_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">best_model_dir</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="reference internal" href="_modules/seqgra/learner/torch/torchhelper.html#TorchHelper.get_best_model_file_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.torch.torchhelper.TorchHelper.get_best_model_file_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchhelper.TorchHelper.get_loss">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">get_loss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">loss_hyperparameters</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/seqgra/learner/torch/torchhelper.html#TorchHelper.get_loss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.torch.torchhelper.TorchHelper.get_loss" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchhelper.TorchHelper.get_metrics">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">get_metrics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">learner</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="seqgra.learner.learner.html#seqgra.learner.learner.Learner" title="seqgra.learner.learner.Learner"><span class="pre">seqgra.learner.learner.Learner</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_layer_activation_function</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/seqgra/learner/torch/torchhelper.html#TorchHelper.get_metrics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.torch.torchhelper.TorchHelper.get_metrics" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchhelper.TorchHelper.get_num_params">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">get_num_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">learner</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="seqgra.learner.learner.html#seqgra.learner.learner.Learner" title="seqgra.learner.learner.Learner"><span class="pre">seqgra.learner.learner.Learner</span></a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="seqgra.schema.html#seqgra.schema.ModelSize" title="seqgra.schema.ModelSize"><span class="pre">seqgra.schema.ModelSize</span></a><a class="reference internal" href="_modules/seqgra/learner/torch/torchhelper.html#TorchHelper.get_num_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.torch.torchhelper.TorchHelper.get_num_params" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchhelper.TorchHelper.get_optimizer">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">get_optimizer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">optimizer_hyperparameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_parameters</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/seqgra/learner/torch/torchhelper.html#TorchHelper.get_optimizer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.torch.torchhelper.TorchHelper.get_optimizer" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchhelper.TorchHelper.load_model">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">load_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">learner</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="seqgra.learner.learner.html#seqgra.learner.learner.Learner" title="seqgra.learner.learner.Learner"><span class="pre">seqgra.learner.learner.Learner</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="_modules/seqgra/learner/torch/torchhelper.html#TorchHelper.load_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.torch.torchhelper.TorchHelper.load_model" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchhelper.TorchHelper.predict">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">learner</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="seqgra.learner.learner.html#seqgra.learner.learner.Learner" title="seqgra.learner.learner.Learner"><span class="pre">seqgra.learner.learner.Learner</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">torch.utils.data.dataset.Dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_layer_activation_function</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/seqgra/learner/torch/torchhelper.html#TorchHelper.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.torch.torchhelper.TorchHelper.predict" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is the forward calculation from x to y
+:returns: Output tensor with the computed logits.
+:rtype: softmax_linear</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchhelper.TorchHelper.print_model_summary">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">print_model_summary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">learner</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="seqgra.learner.learner.html#seqgra.learner.learner.Learner" title="seqgra.learner.learner.Learner"><span class="pre">seqgra.learner.learner.Learner</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/seqgra/learner/torch/torchhelper.html#TorchHelper.print_model_summary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.torch.torchhelper.TorchHelper.print_model_summary" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchhelper.TorchHelper.save_model">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">save_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">learner</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="seqgra.learner.learner.html#seqgra.learner.learner.Learner" title="seqgra.learner.learner.Learner"><span class="pre">seqgra.learner.learner.Learner</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="_modules/seqgra/learner/torch/torchhelper.html#TorchHelper.save_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.torch.torchhelper.TorchHelper.save_model" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchhelper.TorchHelper.set_seed">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">set_seed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">learner</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="seqgra.learner.learner.html#seqgra.learner.learner.Learner" title="seqgra.learner.learner.Learner"><span class="pre">seqgra.learner.learner.Learner</span></a></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="_modules/seqgra/learner/torch/torchhelper.html#TorchHelper.set_seed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.torch.torchhelper.TorchHelper.set_seed" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchhelper.TorchHelper.train_model">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">train_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">learner</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="seqgra.learner.learner.html#seqgra.learner.learner.Learner" title="seqgra.learner.learner.Learner"><span class="pre">seqgra.learner.learner.Learner</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">training_dataset</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">torch.utils.data.dataset.Dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validation_dataset</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">torch.utils.data.dataset.Dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_layer_activation_function</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="_modules/seqgra/learner/torch/torchhelper.html#TorchHelper.train_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.torch.torchhelper.TorchHelper.train_model" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchhelper.TorchHelper.train_model_basic">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">train_model_basic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">learner</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="seqgra.learner.learner.html#seqgra.learner.learner.Learner" title="seqgra.learner.learner.Learner"><span class="pre">seqgra.learner.learner.Learner</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">training_dataset</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">torch.utils.data.dataset.Dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validation_dataset</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">torch.utils.data.dataset.Dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_layer_activation_function</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="_modules/seqgra/learner/torch/torchhelper.html#TorchHelper.train_model_basic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.torch.torchhelper.TorchHelper.train_model_basic" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchhelper.TorchHelper.write_session_info">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">write_session_info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">learner</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="seqgra.learner.learner.html#seqgra.learner.learner.Learner" title="seqgra.learner.learner.Learner"><span class="pre">seqgra.learner.learner.Learner</span></a></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="_modules/seqgra/learner/torch/torchhelper.html#TorchHelper.write_session_info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.torch.torchhelper.TorchHelper.write_session_info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="seqgra.learner.torch.torchlearner.html" class="btn btn-neutral float-right" title="seqgra.learner.torch.torchlearner module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="seqgra.learner.torch.torchdataset.html" class="btn btn-neutral float-left" title="seqgra.learner.torch.torchdataset module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Konstantin Krismer.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

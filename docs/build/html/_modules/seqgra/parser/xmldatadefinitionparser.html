@@ -1,0 +1,548 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>seqgra.parser.xmldatadefinitionparser &mdash; seqgra 0.0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="https://www.googletagmanager.com/gtag/js?id=G-SPQK9JRC9T"></script>
+        <script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-SPQK9JRC9T');
+</script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> seqgra
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">About seqgra</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Introduction</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Main Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples.html">Usage examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cmd.html">Command line utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dd.html">Data definition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../md.html">Model definition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../slec.html">Simulators, Learners, Evaluators, Comparators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ids.html">ID conventions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../structure.html"><code class="docutils literal notranslate"><span class="pre">output</span></code> folder structure</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Advanced features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../seqgra.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../py-modindex.html">Python module index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../genindex.html">Index</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">seqgra</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>seqgra.parser.xmldatadefinitionparser</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for seqgra.parser.xmldatadefinitionparser</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">MIT - CSAIL - Gifford Lab - seqgra</span>
+
+<span class="sd">Implementation of Parser for XML configuration files </span>
+<span class="sd">(using Strategy design pattern)</span>
+
+<span class="sd">@author: Konstantin Krismer</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">io</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Dict</span>
+<span class="kn">from</span> <span class="nn">xml.dom.minidom</span> <span class="kn">import</span> <span class="n">Document</span><span class="p">,</span> <span class="n">parseString</span>
+
+<span class="kn">import</span> <span class="nn">pkg_resources</span>
+<span class="kn">from</span> <span class="nn">lxml</span> <span class="kn">import</span> <span class="n">etree</span>
+
+<span class="kn">from</span> <span class="nn">seqgra</span> <span class="kn">import</span> <span class="n">ProbabilisticToken</span>
+<span class="kn">from</span> <span class="nn">seqgra.parser</span> <span class="kn">import</span> <span class="n">XMLHelper</span>
+<span class="kn">from</span> <span class="nn">seqgra.parser</span> <span class="kn">import</span> <span class="n">DataDefinitionParser</span>
+<span class="kn">from</span> <span class="nn">seqgra.model</span> <span class="kn">import</span> <span class="n">DataDefinition</span>
+<span class="kn">from</span> <span class="nn">seqgra.model.data</span> <span class="kn">import</span> <span class="n">Background</span>
+<span class="kn">from</span> <span class="nn">seqgra.model.data</span> <span class="kn">import</span> <span class="n">DataGeneration</span>
+<span class="kn">from</span> <span class="nn">seqgra.model.data</span> <span class="kn">import</span> <span class="n">DataGenerationExample</span>
+<span class="kn">from</span> <span class="nn">seqgra.model.data</span> <span class="kn">import</span> <span class="n">DataGenerationSet</span>
+<span class="kn">from</span> <span class="nn">seqgra.model.data</span> <span class="kn">import</span> <span class="n">Condition</span>
+<span class="kn">from</span> <span class="nn">seqgra.model.data</span> <span class="kn">import</span> <span class="n">SequenceElement</span>
+<span class="kn">from</span> <span class="nn">seqgra.model.data</span> <span class="kn">import</span> <span class="n">KmerBasedSequenceElement</span>
+<span class="kn">from</span> <span class="nn">seqgra.model.data</span> <span class="kn">import</span> <span class="n">MatrixBasedSequenceElement</span>
+<span class="kn">from</span> <span class="nn">seqgra.model.data</span> <span class="kn">import</span> <span class="n">AlphabetDistribution</span>
+<span class="kn">from</span> <span class="nn">seqgra.model.data</span> <span class="kn">import</span> <span class="n">Rule</span>
+<span class="kn">from</span> <span class="nn">seqgra.model.data</span> <span class="kn">import</span> <span class="n">SpacingConstraint</span>
+<span class="kn">from</span> <span class="nn">seqgra.model.data</span> <span class="kn">import</span> <span class="n">PostprocessingOperation</span>
+
+
+<div class="viewcode-block" id="XMLDataDefinitionParser"><a class="viewcode-back" href="../../../seqgra.parser.xmldatadefinitionparser.html#seqgra.parser.xmldatadefinitionparser.XMLDataDefinitionParser">[docs]</a><span class="k">class</span> <span class="nc">XMLDataDefinitionParser</span><span class="p">(</span><span class="n">DataDefinitionParser</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The Strategy interface declares operations common to all supported versions</span>
+<span class="sd">    of some algorithm.</span>
+
+<span class="sd">    The Context uses this interface to call the algorithm defined by Concrete</span>
+<span class="sd">    Strategies.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">silent</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">silent</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;LOGLEVEL&quot;</span><span class="p">,</span> <span class="s2">&quot;WARNING&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dom</span><span class="p">:</span> <span class="n">Document</span> <span class="o">=</span> <span class="n">parseString</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_general_element</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> \
+            <span class="bp">self</span><span class="o">.</span><span class="n">_dom</span><span class="o">.</span><span class="n">getElementsByTagName</span><span class="p">(</span><span class="s2">&quot;general&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+
+<div class="viewcode-block" id="XMLDataDefinitionParser.validate"><a class="viewcode-back" href="../../../seqgra.parser.xmldatadefinitionparser.html#seqgra.parser.xmldatadefinitionparser.XMLDataDefinitionParser.validate">[docs]</a>    <span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xml_config</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">xsd_path</span> <span class="o">=</span> <span class="n">pkg_resources</span><span class="o">.</span><span class="n">resource_filename</span><span class="p">(</span><span class="s2">&quot;seqgra&quot;</span><span class="p">,</span> <span class="s2">&quot;data-config.xsd&quot;</span><span class="p">)</span>
+        <span class="n">xmlschema_doc</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">xsd_path</span><span class="p">)</span>
+        <span class="n">xmlschema</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">XMLSchema</span><span class="p">(</span><span class="n">xmlschema_doc</span><span class="p">)</span>
+        <span class="n">xml_doc</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">xml_config</span><span class="o">.</span><span class="n">encode</span><span class="p">()))</span>
+        <span class="n">xmlschema</span><span class="o">.</span><span class="n">assertValid</span><span class="p">(</span><span class="n">xml_doc</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;seqgra data configuration XML &quot;</span>
+                         <span class="s2">&quot;file is well-formed and valid&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="XMLDataDefinitionParser.get_grammar_id"><a class="viewcode-back" href="../../../seqgra.parser.xmldatadefinitionparser.html#seqgra.parser.xmldatadefinitionparser.XMLDataDefinitionParser.get_grammar_id">[docs]</a>    <span class="k">def</span> <span class="nf">get_grammar_id</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_general_element</span><span class="o">.</span><span class="n">getAttribute</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="XMLDataDefinitionParser.get_name"><a class="viewcode-back" href="../../../seqgra.parser.xmldatadefinitionparser.html#seqgra.parser.xmldatadefinitionparser.XMLDataDefinitionParser.get_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">XMLHelper</span><span class="o">.</span><span class="n">read_text_node</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_general_element</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="XMLDataDefinitionParser.get_description"><a class="viewcode-back" href="../../../seqgra.parser.xmldatadefinitionparser.html#seqgra.parser.xmldatadefinitionparser.XMLDataDefinitionParser.get_description">[docs]</a>    <span class="k">def</span> <span class="nf">get_description</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">XMLHelper</span><span class="o">.</span><span class="n">read_text_node</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_general_element</span><span class="p">,</span> <span class="s2">&quot;description&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="XMLDataDefinitionParser.get_task"><a class="viewcode-back" href="../../../seqgra.parser.xmldatadefinitionparser.html#seqgra.parser.xmldatadefinitionparser.XMLDataDefinitionParser.get_task">[docs]</a>    <span class="k">def</span> <span class="nf">get_task</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">XMLHelper</span><span class="o">.</span><span class="n">read_text_node</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_general_element</span><span class="p">,</span> <span class="s2">&quot;task&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="XMLDataDefinitionParser.get_sequence_space"><a class="viewcode-back" href="../../../seqgra.parser.xmldatadefinitionparser.html#seqgra.parser.xmldatadefinitionparser.XMLDataDefinitionParser.get_sequence_space">[docs]</a>    <span class="k">def</span> <span class="nf">get_sequence_space</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">XMLHelper</span><span class="o">.</span><span class="n">read_text_node</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_general_element</span><span class="p">,</span> <span class="s2">&quot;sequencespace&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="XMLDataDefinitionParser.get_seed"><a class="viewcode-back" href="../../../seqgra.parser.xmldatadefinitionparser.html#seqgra.parser.xmldatadefinitionparser.XMLDataDefinitionParser.get_seed">[docs]</a>    <span class="k">def</span> <span class="nf">get_seed</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">XMLHelper</span><span class="o">.</span><span class="n">read_int_node</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_general_element</span><span class="p">,</span> <span class="s2">&quot;seed&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="XMLDataDefinitionParser.get_background"><a class="viewcode-back" href="../../../seqgra.parser.xmldatadefinitionparser.html#seqgra.parser.xmldatadefinitionparser.XMLDataDefinitionParser.get_background">[docs]</a>    <span class="k">def</span> <span class="nf">get_background</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">valid_conditions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Condition</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Background</span><span class="p">:</span>
+        <span class="n">background_element</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> \
+            <span class="bp">self</span><span class="o">.</span><span class="n">_dom</span><span class="o">.</span><span class="n">getElementsByTagName</span><span class="p">(</span><span class="s2">&quot;background&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">min_length</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">XMLHelper</span><span class="o">.</span><span class="n">read_int_node</span><span class="p">(</span>
+            <span class="n">background_element</span><span class="p">,</span> <span class="s2">&quot;minlength&quot;</span><span class="p">)</span>
+        <span class="n">max_length</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">XMLHelper</span><span class="o">.</span><span class="n">read_int_node</span><span class="p">(</span>
+            <span class="n">background_element</span><span class="p">,</span> <span class="s2">&quot;maxlength&quot;</span><span class="p">)</span>
+
+        <span class="n">distribution_elements</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> \
+            <span class="n">background_element</span><span class="o">.</span><span class="n">getElementsByTagName</span><span class="p">(</span><span class="s2">&quot;alphabetdistribution&quot;</span><span class="p">)</span>
+        <span class="n">distributions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">AlphabetDistribution</span><span class="p">]</span> <span class="o">=</span> \
+            <span class="p">[</span><span class="n">XMLDataDefinitionParser</span><span class="o">.</span><span class="n">__parse_alphabet_distribution</span><span class="p">(</span>
+                <span class="n">distribution_element</span><span class="p">,</span> <span class="n">valid_conditions</span><span class="p">)</span>
+             <span class="k">for</span> <span class="n">distribution_element</span> <span class="ow">in</span> <span class="n">distribution_elements</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">Background</span><span class="p">(</span><span class="n">min_length</span><span class="p">,</span> <span class="n">max_length</span><span class="p">,</span> <span class="n">distributions</span><span class="p">)</span></div>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">__parse_alphabet_distribution</span><span class="p">(</span>
+            <span class="n">alphabet_distribution_element</span><span class="p">,</span>
+            <span class="n">valid_conditions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Condition</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">AlphabetDistribution</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">alphabet_distribution_element</span><span class="o">.</span><span class="n">hasAttribute</span><span class="p">(</span><span class="s2">&quot;cid&quot;</span><span class="p">):</span>
+            <span class="n">condition</span><span class="p">:</span> <span class="n">Condition</span> <span class="o">=</span> <span class="n">Condition</span><span class="o">.</span><span class="n">get_by_id</span><span class="p">(</span>
+                <span class="n">valid_conditions</span><span class="p">,</span>
+                <span class="n">alphabet_distribution_element</span><span class="o">.</span><span class="n">getAttribute</span><span class="p">(</span><span class="s2">&quot;cid&quot;</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">condition</span><span class="p">:</span> <span class="n">Condition</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="n">alphabet_distribution_element</span><span class="o">.</span><span class="n">hasAttribute</span><span class="p">(</span><span class="s2">&quot;setname&quot;</span><span class="p">):</span>
+            <span class="n">set_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> \
+                <span class="n">alphabet_distribution_element</span><span class="o">.</span><span class="n">getAttribute</span><span class="p">(</span><span class="s2">&quot;setname&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">set_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="n">letter_elements</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> \
+            <span class="n">alphabet_distribution_element</span><span class="o">.</span><span class="n">getElementsByTagName</span><span class="p">(</span><span class="s2">&quot;letter&quot;</span><span class="p">)</span>
+        <span class="n">letters</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">ProbabilisticToken</span><span class="p">]</span> <span class="o">=</span> \
+            <span class="p">[</span><span class="n">XMLDataDefinitionParser</span><span class="o">.</span><span class="n">__parse_letter</span><span class="p">(</span><span class="n">letter_element</span><span class="p">)</span>
+             <span class="k">for</span> <span class="n">letter_element</span> <span class="ow">in</span> <span class="n">letter_elements</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">AlphabetDistribution</span><span class="p">(</span><span class="n">letters</span><span class="p">,</span> <span class="n">condition</span><span class="p">,</span> <span class="n">set_name</span><span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">__parse_letter</span><span class="p">(</span><span class="n">letter_element</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ProbabilisticToken</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">ProbabilisticToken</span><span class="p">(</span>
+            <span class="n">XMLHelper</span><span class="o">.</span><span class="n">read_immediate_text_node</span><span class="p">(</span><span class="n">letter_element</span><span class="p">),</span>
+            <span class="nb">float</span><span class="p">(</span><span class="n">letter_element</span><span class="o">.</span><span class="n">getAttribute</span><span class="p">(</span><span class="s2">&quot;probability&quot;</span><span class="p">)))</span>
+
+<div class="viewcode-block" id="XMLDataDefinitionParser.get_data_generation"><a class="viewcode-back" href="../../../seqgra.parser.xmldatadefinitionparser.html#seqgra.parser.xmldatadefinitionparser.XMLDataDefinitionParser.get_data_generation">[docs]</a>    <span class="k">def</span> <span class="nf">get_data_generation</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">valid_conditions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Condition</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">DataGeneration</span><span class="p">:</span>
+        <span class="n">data_generation_element</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> \
+            <span class="bp">self</span><span class="o">.</span><span class="n">_dom</span><span class="o">.</span><span class="n">getElementsByTagName</span><span class="p">(</span><span class="s2">&quot;datageneration&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">postprocessing_element</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> \
+            <span class="n">data_generation_element</span><span class="o">.</span><span class="n">getElementsByTagName</span><span class="p">(</span><span class="s2">&quot;postprocessing&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">postprocessing_element</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">postprocessing_element</span> <span class="o">=</span> <span class="n">postprocessing_element</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">operation_elements</span> <span class="o">=</span> \
+                <span class="n">postprocessing_element</span><span class="o">.</span><span class="n">getElementsByTagName</span><span class="p">(</span><span class="s2">&quot;operation&quot;</span><span class="p">)</span>
+            <span class="n">postprocessing</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">PostprocessingOperation</span><span class="p">]</span> <span class="o">=</span> \
+                <span class="p">[</span><span class="n">XMLDataDefinitionParser</span><span class="o">.</span><span class="n">__parse_operation</span><span class="p">(</span><span class="n">operation_element</span><span class="p">)</span>
+                 <span class="k">for</span> <span class="n">operation_element</span> <span class="ow">in</span> <span class="n">operation_elements</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">postprocessing</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="n">sets_element</span> <span class="o">=</span> <span class="n">data_generation_element</span><span class="o">.</span><span class="n">getElementsByTagName</span><span class="p">(</span><span class="s2">&quot;sets&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">set_elements</span> <span class="o">=</span> <span class="n">sets_element</span><span class="o">.</span><span class="n">getElementsByTagName</span><span class="p">(</span><span class="s2">&quot;set&quot;</span><span class="p">)</span>
+        <span class="n">sets</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">DataGenerationSet</span><span class="p">]</span> <span class="o">=</span> \
+            <span class="p">[</span><span class="n">XMLDataDefinitionParser</span><span class="o">.</span><span class="n">__parse_set</span><span class="p">(</span><span class="n">set_element</span><span class="p">,</span> <span class="n">valid_conditions</span><span class="p">)</span>
+             <span class="k">for</span> <span class="n">set_element</span> <span class="ow">in</span> <span class="n">set_elements</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">DataGeneration</span><span class="p">(</span><span class="n">sets</span><span class="p">,</span> <span class="n">postprocessing</span><span class="p">)</span></div>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">__parse_operation</span><span class="p">(</span><span class="n">operation_element</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+        <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">XMLHelper</span><span class="o">.</span><span class="n">read_immediate_text_node</span><span class="p">(</span><span class="n">operation_element</span><span class="p">)</span>
+        <span class="n">labels</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">operation_element</span><span class="o">.</span><span class="n">getAttribute</span><span class="p">(</span><span class="s2">&quot;labels&quot;</span><span class="p">)</span>
+        <span class="n">all_params</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> \
+            <span class="n">operation_element</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">all_params</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="c1"># remove labels attribute</span>
+            <span class="n">all_params</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">parameters</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">all_params</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">parameters</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">return</span> <span class="n">PostprocessingOperation</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">__parse_set</span><span class="p">(</span><span class="n">set_element</span><span class="p">,</span>
+                    <span class="n">valid_conditions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Condition</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">DataGenerationSet</span><span class="p">:</span>
+        <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">set_element</span><span class="o">.</span><span class="n">getAttribute</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">)</span>
+        <span class="n">example_elements</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="n">set_element</span><span class="o">.</span><span class="n">getElementsByTagName</span><span class="p">(</span><span class="s2">&quot;example&quot;</span><span class="p">)</span>
+        <span class="n">examples</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">DataGenerationExample</span><span class="p">]</span> <span class="o">=</span> \
+            <span class="p">[</span><span class="n">XMLDataDefinitionParser</span><span class="o">.</span><span class="n">__parse_example</span><span class="p">(</span>
+                <span class="n">example_element</span><span class="p">,</span> <span class="n">valid_conditions</span><span class="p">)</span>
+             <span class="k">for</span> <span class="n">example_element</span> <span class="ow">in</span> <span class="n">example_elements</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">DataGenerationSet</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">examples</span><span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">__parse_example</span><span class="p">(</span>
+            <span class="n">example_element</span><span class="p">,</span>
+            <span class="n">valid_conditions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Condition</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">DataGenerationExample</span><span class="p">:</span>
+        <span class="n">samples</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">example_element</span><span class="o">.</span><span class="n">getAttribute</span><span class="p">(</span><span class="s2">&quot;samples&quot;</span><span class="p">))</span>
+        <span class="n">condition_elements</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> \
+            <span class="n">example_element</span><span class="o">.</span><span class="n">getElementsByTagName</span><span class="p">(</span><span class="s2">&quot;conditionref&quot;</span><span class="p">)</span>
+        <span class="n">conditions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Condition</span><span class="p">]</span> <span class="o">=</span> \
+            <span class="p">[</span><span class="n">Condition</span><span class="o">.</span><span class="n">get_by_id</span><span class="p">(</span><span class="n">valid_conditions</span><span class="p">,</span>
+                                 <span class="n">condition_element</span><span class="o">.</span><span class="n">getAttribute</span><span class="p">(</span><span class="s2">&quot;cid&quot;</span><span class="p">))</span>
+             <span class="k">for</span> <span class="n">condition_element</span> <span class="ow">in</span> <span class="n">condition_elements</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">DataGenerationExample</span><span class="p">(</span><span class="n">samples</span><span class="p">,</span> <span class="n">conditions</span><span class="p">)</span>
+
+<div class="viewcode-block" id="XMLDataDefinitionParser.get_conditions"><a class="viewcode-back" href="../../../seqgra.parser.xmldatadefinitionparser.html#seqgra.parser.xmldatadefinitionparser.XMLDataDefinitionParser.get_conditions">[docs]</a>    <span class="k">def</span> <span class="nf">get_conditions</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">valid_sequence_elements</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">SequenceElement</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Condition</span><span class="p">]:</span>
+        <span class="n">conditions_element</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> \
+            <span class="bp">self</span><span class="o">.</span><span class="n">_dom</span><span class="o">.</span><span class="n">getElementsByTagName</span><span class="p">(</span><span class="s2">&quot;conditions&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">condition_elements</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> \
+            <span class="n">conditions_element</span><span class="o">.</span><span class="n">getElementsByTagName</span><span class="p">(</span><span class="s2">&quot;condition&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">XMLDataDefinitionParser</span><span class="o">.</span><span class="n">__parse_condition</span><span class="p">(</span>
+            <span class="n">condition_element</span><span class="p">,</span> <span class="n">valid_sequence_elements</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">condition_element</span> <span class="ow">in</span> <span class="n">condition_elements</span><span class="p">]</span></div>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">__parse_condition</span><span class="p">(</span>
+            <span class="n">condition_element</span><span class="p">,</span>
+            <span class="n">valid_sequence_elements</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">SequenceElement</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Condition</span><span class="p">:</span>
+        <span class="n">cid</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">condition_element</span><span class="o">.</span><span class="n">getAttribute</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">)</span>
+        <span class="n">label</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">XMLHelper</span><span class="o">.</span><span class="n">read_text_node</span><span class="p">(</span><span class="n">condition_element</span><span class="p">,</span> <span class="s2">&quot;label&quot;</span><span class="p">)</span>
+        <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">XMLHelper</span><span class="o">.</span><span class="n">read_text_node</span><span class="p">(</span>
+            <span class="n">condition_element</span><span class="p">,</span> <span class="s2">&quot;description&quot;</span><span class="p">)</span>
+        <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">XMLHelper</span><span class="o">.</span><span class="n">read_text_node</span><span class="p">(</span>
+            <span class="n">condition_element</span><span class="p">,</span> <span class="s2">&quot;mode&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">mode</span><span class="p">:</span>
+            <span class="n">mode</span> <span class="o">=</span> <span class="s2">&quot;sequential&quot;</span>
+        <span class="n">grammar_element</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> \
+            <span class="n">condition_element</span><span class="o">.</span><span class="n">getElementsByTagName</span><span class="p">(</span><span class="s2">&quot;grammar&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">rule_elements</span> <span class="o">=</span> <span class="n">grammar_element</span><span class="o">.</span><span class="n">getElementsByTagName</span><span class="p">(</span><span class="s2">&quot;rule&quot;</span><span class="p">)</span>
+        <span class="n">grammar</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Rule</span><span class="p">]</span> <span class="o">=</span> \
+            <span class="p">[</span><span class="n">XMLDataDefinitionParser</span><span class="o">.</span><span class="n">__parse_rule</span><span class="p">(</span>
+                <span class="n">rule_element</span><span class="p">,</span> <span class="n">valid_sequence_elements</span><span class="p">)</span>
+             <span class="k">for</span> <span class="n">rule_element</span> <span class="ow">in</span> <span class="n">rule_elements</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">Condition</span><span class="p">(</span><span class="n">cid</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">description</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">grammar</span><span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">__parse_rule</span><span class="p">(</span><span class="n">rule_element</span><span class="p">,</span>
+                     <span class="n">valid_sequence_elements</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">SequenceElement</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Rule</span><span class="p">:</span>
+        <span class="n">position</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">XMLHelper</span><span class="o">.</span><span class="n">read_text_node</span><span class="p">(</span><span class="n">rule_element</span><span class="p">,</span> <span class="s2">&quot;position&quot;</span><span class="p">)</span>
+        <span class="n">probability</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">XMLHelper</span><span class="o">.</span><span class="n">read_float_node</span><span class="p">(</span>
+            <span class="n">rule_element</span><span class="p">,</span> <span class="s2">&quot;probability&quot;</span><span class="p">)</span>
+
+        <span class="n">sref_elements</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="n">rule_element</span><span class="o">.</span><span class="n">getElementsByTagName</span><span class="p">(</span>
+            <span class="s2">&quot;sequenceelementrefs&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">getElementsByTagName</span><span class="p">(</span><span class="s2">&quot;sequenceelementref&quot;</span><span class="p">)</span>
+        <span class="n">sequence_elements</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">SequenceElement</span><span class="p">]</span> <span class="o">=</span> \
+            <span class="p">[</span><span class="n">SequenceElement</span><span class="o">.</span><span class="n">get_by_id</span><span class="p">(</span><span class="n">valid_sequence_elements</span><span class="p">,</span>
+                                       <span class="n">sref_element</span><span class="o">.</span><span class="n">getAttribute</span><span class="p">(</span><span class="s2">&quot;sid&quot;</span><span class="p">))</span>
+             <span class="k">for</span> <span class="n">sref_element</span> <span class="ow">in</span> <span class="n">sref_elements</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">rule_element</span><span class="o">.</span><span class="n">getElementsByTagName</span><span class="p">(</span><span class="s2">&quot;spacingconstraints&quot;</span><span class="p">))</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">spacing_constraint_elements</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="n">rule_element</span><span class="o">.</span><span class="n">getElementsByTagName</span><span class="p">(</span>
+                <span class="s2">&quot;spacingconstraints&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">getElementsByTagName</span><span class="p">(</span><span class="s2">&quot;spacingconstraint&quot;</span><span class="p">)</span>
+            <span class="n">spacing_constraints</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">SpacingConstraint</span><span class="p">]</span> <span class="o">=</span> \
+                <span class="p">[</span><span class="n">XMLDataDefinitionParser</span><span class="o">.</span><span class="n">__parse_spacing_constraint</span><span class="p">(</span>
+                    <span class="n">spacing_constraint_element</span><span class="p">,</span> <span class="n">valid_sequence_elements</span><span class="p">)</span>
+                 <span class="k">for</span> <span class="n">spacing_constraint_element</span> <span class="ow">in</span> <span class="n">spacing_constraint_elements</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">spacing_constraints</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">SpacingConstraint</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">return</span> <span class="n">Rule</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">probability</span><span class="p">,</span> <span class="n">sequence_elements</span><span class="p">,</span>
+                    <span class="n">spacing_constraints</span><span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">__parse_spacing_constraint</span><span class="p">(</span>
+            <span class="n">spacing_constraint_element</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+            <span class="n">valid_sequence_elements</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">SequenceElement</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">SpacingConstraint</span><span class="p">:</span>
+        <span class="n">sequence_element1</span><span class="p">:</span> <span class="n">SequenceElement</span> <span class="o">=</span> <span class="n">SequenceElement</span><span class="o">.</span><span class="n">get_by_id</span><span class="p">(</span>
+            <span class="n">valid_sequence_elements</span><span class="p">,</span>
+            <span class="n">spacing_constraint_element</span><span class="o">.</span><span class="n">getAttribute</span><span class="p">(</span><span class="s2">&quot;sid1&quot;</span><span class="p">))</span>
+        <span class="n">sequence_element2</span><span class="p">:</span> <span class="n">SequenceElement</span> <span class="o">=</span> <span class="n">SequenceElement</span><span class="o">.</span><span class="n">get_by_id</span><span class="p">(</span>
+            <span class="n">valid_sequence_elements</span><span class="p">,</span>
+            <span class="n">spacing_constraint_element</span><span class="o">.</span><span class="n">getAttribute</span><span class="p">(</span><span class="s2">&quot;sid2&quot;</span><span class="p">))</span>
+        <span class="n">min_distance</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span>
+            <span class="n">spacing_constraint_element</span><span class="o">.</span><span class="n">getAttribute</span><span class="p">(</span><span class="s2">&quot;mindistance&quot;</span><span class="p">))</span>
+        <span class="n">max_distance</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span>
+            <span class="n">spacing_constraint_element</span><span class="o">.</span><span class="n">getAttribute</span><span class="p">(</span><span class="s2">&quot;maxdistance&quot;</span><span class="p">))</span>
+        <span class="n">order</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">spacing_constraint_element</span><span class="o">.</span><span class="n">getAttribute</span><span class="p">(</span><span class="s2">&quot;order&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">SpacingConstraint</span><span class="p">(</span><span class="n">sequence_element1</span><span class="p">,</span> <span class="n">sequence_element2</span><span class="p">,</span>
+                                 <span class="n">min_distance</span><span class="p">,</span> <span class="n">max_distance</span><span class="p">,</span> <span class="n">order</span><span class="p">)</span>
+
+<div class="viewcode-block" id="XMLDataDefinitionParser.get_sequence_elements"><a class="viewcode-back" href="../../../seqgra.parser.xmldatadefinitionparser.html#seqgra.parser.xmldatadefinitionparser.XMLDataDefinitionParser.get_sequence_elements">[docs]</a>    <span class="k">def</span> <span class="nf">get_sequence_elements</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">SequenceElement</span><span class="p">]:</span>
+        <span class="n">sequence_elements_element</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> \
+            <span class="bp">self</span><span class="o">.</span><span class="n">_dom</span><span class="o">.</span><span class="n">getElementsByTagName</span><span class="p">(</span><span class="s2">&quot;sequenceelements&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">sequence_element_elements</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span> <span class="o">=</span> \
+            <span class="n">sequence_elements_element</span><span class="o">.</span><span class="n">getElementsByTagName</span><span class="p">(</span><span class="s2">&quot;sequenceelement&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">XMLDataDefinitionParser</span><span class="o">.</span><span class="n">__parse_sequence_element</span><span class="p">(</span><span class="n">sequence_element_element</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">sequence_element_element</span> <span class="ow">in</span> <span class="n">sequence_element_elements</span><span class="p">]</span></div>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">__parse_sequence_element</span><span class="p">(</span><span class="n">sequence_element_element</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SequenceElement</span><span class="p">:</span>
+        <span class="n">sid</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">sequence_element_element</span><span class="o">.</span><span class="n">getAttribute</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">)</span>
+        <span class="n">kmer_based_element</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> \
+            <span class="n">sequence_element_element</span><span class="o">.</span><span class="n">getElementsByTagName</span><span class="p">(</span><span class="s2">&quot;kmerbased&quot;</span><span class="p">)</span>
+        <span class="n">matrix_based_element</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> \
+            <span class="n">sequence_element_element</span><span class="o">.</span><span class="n">getElementsByTagName</span><span class="p">(</span><span class="s2">&quot;matrixbased&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">kmer_based_element</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">kmer_elements</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> \
+                <span class="n">kmer_based_element</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">getElementsByTagName</span><span class="p">(</span><span class="s2">&quot;kmer&quot;</span><span class="p">)</span>
+            <span class="n">kmers</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">ProbabilisticToken</span><span class="p">]</span> <span class="o">=</span> \
+                <span class="p">[</span><span class="n">XMLDataDefinitionParser</span><span class="o">.</span><span class="n">__parse_letter</span><span class="p">(</span><span class="n">kmer_element</span><span class="p">)</span>
+                 <span class="k">for</span> <span class="n">kmer_element</span> <span class="ow">in</span> <span class="n">kmer_elements</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">KmerBasedSequenceElement</span><span class="p">(</span><span class="n">sid</span><span class="p">,</span> <span class="n">kmers</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">matrix_based_element</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">position_elements</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> \
+                <span class="n">matrix_based_element</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">getElementsByTagName</span><span class="p">(</span><span class="s2">&quot;position&quot;</span><span class="p">)</span>
+            <span class="n">positions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">ProbabilisticToken</span><span class="p">]]</span> <span class="o">=</span> \
+                <span class="p">[</span><span class="n">XMLDataDefinitionParser</span><span class="o">.</span><span class="n">__parse_position</span><span class="p">(</span><span class="n">position_element</span><span class="p">)</span>
+                 <span class="k">for</span> <span class="n">position_element</span> <span class="ow">in</span> <span class="n">position_elements</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">MatrixBasedSequenceElement</span><span class="p">(</span><span class="n">sid</span><span class="p">,</span> <span class="n">positions</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;sequence element is invalid&quot;</span><span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">__parse_position</span><span class="p">(</span><span class="n">position_element</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">ProbabilisticToken</span><span class="p">]:</span>
+        <span class="n">letter_elements</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="n">position_element</span><span class="o">.</span><span class="n">getElementsByTagName</span><span class="p">(</span><span class="s2">&quot;letter&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">XMLDataDefinitionParser</span><span class="o">.</span><span class="n">__parse_letter</span><span class="p">(</span><span class="n">letter_element</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">letter_element</span> <span class="ow">in</span> <span class="n">letter_elements</span><span class="p">]</span>
+
+<div class="viewcode-block" id="XMLDataDefinitionParser.get_data_definition"><a class="viewcode-back" href="../../../seqgra.parser.xmldatadefinitionparser.html#seqgra.parser.xmldatadefinitionparser.XMLDataDefinitionParser.get_data_definition">[docs]</a>    <span class="k">def</span> <span class="nf">get_data_definition</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DataDefinition</span><span class="p">:</span>
+        <span class="n">sequence_elements</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">SequenceElement</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_sequence_elements</span><span class="p">()</span>
+        <span class="n">conditions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Condition</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_conditions</span><span class="p">(</span><span class="n">sequence_elements</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">DataDefinition</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_grammar_id</span><span class="p">(),</span>
+                              <span class="bp">self</span><span class="o">.</span><span class="n">get_name</span><span class="p">(),</span>
+                              <span class="bp">self</span><span class="o">.</span><span class="n">get_description</span><span class="p">(),</span>
+                              <span class="bp">self</span><span class="o">.</span><span class="n">get_task</span><span class="p">(),</span>
+                              <span class="bp">self</span><span class="o">.</span><span class="n">get_sequence_space</span><span class="p">(),</span>
+                              <span class="bp">self</span><span class="o">.</span><span class="n">get_seed</span><span class="p">(),</span>
+                              <span class="bp">self</span><span class="o">.</span><span class="n">get_background</span><span class="p">(</span><span class="n">conditions</span><span class="p">),</span>
+                              <span class="bp">self</span><span class="o">.</span><span class="n">get_data_generation</span><span class="p">(</span><span class="n">conditions</span><span class="p">),</span>
+                              <span class="n">conditions</span><span class="p">,</span>
+                              <span class="n">sequence_elements</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Konstantin Krismer.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

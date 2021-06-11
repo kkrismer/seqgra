@@ -1,0 +1,704 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>seqgra.evaluator.explainer.ebp.functions module &mdash; seqgra 0.0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="https://www.googletagmanager.com/gtag/js?id=G-SPQK9JRC9T"></script>
+        <script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-SPQK9JRC9T');
+</script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> seqgra
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">About seqgra</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Main Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Usage examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cmd.html">Command line utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dd.html">Data definition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="md.html">Model definition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slec.html">Simulators, Learners, Evaluators, Comparators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ids.html">ID conventions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="structure.html"><code class="docutils literal notranslate"><span class="pre">output</span></code> folder structure</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Advanced features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="seqgra.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="py-modindex.html">Python module index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="genindex.html">Index</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">seqgra</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>seqgra.evaluator.explainer.ebp.functions module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-seqgra.evaluator.explainer.ebp.functions">
+<span id="seqgra-evaluator-explainer-ebp-functions-module"></span><h1>seqgra.evaluator.explainer.ebp.functions module<a class="headerlink" href="#module-seqgra.evaluator.explainer.ebp.functions" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="seqgra.evaluator.explainer.ebp.functions.EBAvgPool2d">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">EBAvgPool2d</span></span><a class="reference internal" href="_modules/seqgra/evaluator/explainer/ebp/functions.html#EBAvgPool2d"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.evaluator.explainer.ebp.functions.EBAvgPool2d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.autograd.function.Function</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.evaluator.explainer.ebp.functions.EBAvgPool2d.apply">
+<span class="sig-name descname"><span class="pre">apply</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#seqgra.evaluator.explainer.ebp.functions.EBAvgPool2d.apply" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.evaluator.explainer.ebp.functions.EBAvgPool2d.backward">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">backward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ctx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grad_output</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/seqgra/evaluator/explainer/ebp/functions.html#EBAvgPool2d.backward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.evaluator.explainer.ebp.functions.EBAvgPool2d.backward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines a formula for differentiating the operation.</p>
+<p>This function is to be overridden by all subclasses.</p>
+<p>It must accept a context <code class="xref py py-attr docutils literal notranslate"><span class="pre">ctx</span></code> as the first argument, followed by
+as many outputs did <a class="reference internal" href="#seqgra.evaluator.explainer.ebp.functions.EBAvgPool2d.forward" title="seqgra.evaluator.explainer.ebp.functions.EBAvgPool2d.forward"><code class="xref py py-func docutils literal notranslate"><span class="pre">forward()</span></code></a> return, and it should return as many
+tensors, as there were inputs to <a class="reference internal" href="#seqgra.evaluator.explainer.ebp.functions.EBAvgPool2d.forward" title="seqgra.evaluator.explainer.ebp.functions.EBAvgPool2d.forward"><code class="xref py py-func docutils literal notranslate"><span class="pre">forward()</span></code></a>. Each argument is the
+gradient w.r.t the given output, and each returned value should be the
+gradient w.r.t. the corresponding input.</p>
+<p>The context can be used to retrieve tensors saved during the forward
+pass. It also has an attribute <code class="xref py py-attr docutils literal notranslate"><span class="pre">ctx.needs_input_grad</span></code> as a tuple
+of booleans representing whether each input needs gradient. E.g.,
+<a class="reference internal" href="#seqgra.evaluator.explainer.ebp.functions.EBAvgPool2d.backward" title="seqgra.evaluator.explainer.ebp.functions.EBAvgPool2d.backward"><code class="xref py py-func docutils literal notranslate"><span class="pre">backward()</span></code></a> will have <code class="docutils literal notranslate"><span class="pre">ctx.needs_input_grad[0]</span> <span class="pre">=</span> <span class="pre">True</span></code> if the
+first input to <a class="reference internal" href="#seqgra.evaluator.explainer.ebp.functions.EBAvgPool2d.forward" title="seqgra.evaluator.explainer.ebp.functions.EBAvgPool2d.forward"><code class="xref py py-func docutils literal notranslate"><span class="pre">forward()</span></code></a> needs gradient computated w.r.t. the
+output.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.evaluator.explainer.ebp.functions.EBAvgPool2d.dirty_tensors">
+<span class="sig-name descname"><span class="pre">dirty_tensors</span></span><a class="headerlink" href="#seqgra.evaluator.explainer.ebp.functions.EBAvgPool2d.dirty_tensors" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.evaluator.explainer.ebp.functions.EBAvgPool2d.forward">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ctx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kernel_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stride</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">padding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ceil_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">count_include_pad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/seqgra/evaluator/explainer/ebp/functions.html#EBAvgPool2d.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.evaluator.explainer.ebp.functions.EBAvgPool2d.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs the operation.</p>
+<p>This function is to be overridden by all subclasses.</p>
+<p>It must accept a context ctx as the first argument, followed by any
+number of arguments (tensors or other types).</p>
+<p>The context can be used to store tensors that can be then retrieved
+during the backward pass.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.evaluator.explainer.ebp.functions.EBAvgPool2d.is_traceable">
+<span class="sig-name descname"><span class="pre">is_traceable</span></span><em class="property"> <span class="pre">=</span> <span class="pre">False</span></em><a class="headerlink" href="#seqgra.evaluator.explainer.ebp.functions.EBAvgPool2d.is_traceable" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.evaluator.explainer.ebp.functions.EBAvgPool2d.mark_dirty">
+<span class="sig-name descname"><span class="pre">mark_dirty</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#seqgra.evaluator.explainer.ebp.functions.EBAvgPool2d.mark_dirty" title="Permalink to this definition">¶</a></dt>
+<dd><p>Marks given tensors as modified in an in-place operation.</p>
+<p><strong>This should be called at most once, only from inside the</strong>
+<a class="reference internal" href="#seqgra.evaluator.explainer.ebp.functions.EBAvgPool2d.forward" title="seqgra.evaluator.explainer.ebp.functions.EBAvgPool2d.forward"><code class="xref py py-func docutils literal notranslate"><span class="pre">forward()</span></code></a> <strong>method, and all arguments should be inputs.</strong></p>
+<p>Every tensor that’s been modified in-place in a call to <a class="reference internal" href="#seqgra.evaluator.explainer.ebp.functions.EBAvgPool2d.forward" title="seqgra.evaluator.explainer.ebp.functions.EBAvgPool2d.forward"><code class="xref py py-func docutils literal notranslate"><span class="pre">forward()</span></code></a>
+should be given to this function, to ensure correctness of our checks.
+It doesn’t matter whether the function is called before or after
+modification.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.evaluator.explainer.ebp.functions.EBAvgPool2d.mark_non_differentiable">
+<span class="sig-name descname"><span class="pre">mark_non_differentiable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#seqgra.evaluator.explainer.ebp.functions.EBAvgPool2d.mark_non_differentiable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Marks outputs as non-differentiable.</p>
+<p><strong>This should be called at most once, only from inside the</strong>
+<a class="reference internal" href="#seqgra.evaluator.explainer.ebp.functions.EBAvgPool2d.forward" title="seqgra.evaluator.explainer.ebp.functions.EBAvgPool2d.forward"><code class="xref py py-func docutils literal notranslate"><span class="pre">forward()</span></code></a> <strong>method, and all arguments should be outputs.</strong></p>
+<p>This will mark outputs as not requiring gradients, increasing the
+efficiency of backward computation. You still need to accept a gradient
+for each output in <code class="xref py py-meth docutils literal notranslate"><span class="pre">backward()</span></code>, but it’s always going to
+be a zero tensor with the same shape as the shape of a corresponding
+output.</p>
+<p>This is used e.g. for indices returned from a max <code class="xref py py-class docutils literal notranslate"><span class="pre">Function</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.evaluator.explainer.ebp.functions.EBAvgPool2d.mark_shared_storage">
+<span class="sig-name descname"><span class="pre">mark_shared_storage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">pairs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#seqgra.evaluator.explainer.ebp.functions.EBAvgPool2d.mark_shared_storage" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.evaluator.explainer.ebp.functions.EBAvgPool2d.materialize_grads">
+<span class="sig-name descname"><span class="pre">materialize_grads</span></span><a class="headerlink" href="#seqgra.evaluator.explainer.ebp.functions.EBAvgPool2d.materialize_grads" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.evaluator.explainer.ebp.functions.EBAvgPool2d.metadata">
+<span class="sig-name descname"><span class="pre">metadata</span></span><a class="headerlink" href="#seqgra.evaluator.explainer.ebp.functions.EBAvgPool2d.metadata" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.evaluator.explainer.ebp.functions.EBAvgPool2d.name">
+<span class="sig-name descname"><span class="pre">name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#seqgra.evaluator.explainer.ebp.functions.EBAvgPool2d.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.evaluator.explainer.ebp.functions.EBAvgPool2d.needs_input_grad">
+<span class="sig-name descname"><span class="pre">needs_input_grad</span></span><a class="headerlink" href="#seqgra.evaluator.explainer.ebp.functions.EBAvgPool2d.needs_input_grad" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.evaluator.explainer.ebp.functions.EBAvgPool2d.next_functions">
+<span class="sig-name descname"><span class="pre">next_functions</span></span><a class="headerlink" href="#seqgra.evaluator.explainer.ebp.functions.EBAvgPool2d.next_functions" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.evaluator.explainer.ebp.functions.EBAvgPool2d.non_differentiable">
+<span class="sig-name descname"><span class="pre">non_differentiable</span></span><a class="headerlink" href="#seqgra.evaluator.explainer.ebp.functions.EBAvgPool2d.non_differentiable" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.evaluator.explainer.ebp.functions.EBAvgPool2d.register_hook">
+<span class="sig-name descname"><span class="pre">register_hook</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#seqgra.evaluator.explainer.ebp.functions.EBAvgPool2d.register_hook" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.evaluator.explainer.ebp.functions.EBAvgPool2d.requires_grad">
+<span class="sig-name descname"><span class="pre">requires_grad</span></span><a class="headerlink" href="#seqgra.evaluator.explainer.ebp.functions.EBAvgPool2d.requires_grad" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.evaluator.explainer.ebp.functions.EBAvgPool2d.save_for_backward">
+<span class="sig-name descname"><span class="pre">save_for_backward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">tensors</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#seqgra.evaluator.explainer.ebp.functions.EBAvgPool2d.save_for_backward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves given tensors for a future call to <code class="xref py py-func docutils literal notranslate"><span class="pre">backward()</span></code>.</p>
+<p><strong>This should be called at most once, and only from inside the</strong>
+<a class="reference internal" href="#seqgra.evaluator.explainer.ebp.functions.EBAvgPool2d.forward" title="seqgra.evaluator.explainer.ebp.functions.EBAvgPool2d.forward"><code class="xref py py-func docutils literal notranslate"><span class="pre">forward()</span></code></a> <strong>method.</strong></p>
+<p>Later, saved tensors can be accessed through the <a class="reference internal" href="#seqgra.evaluator.explainer.ebp.functions.EBAvgPool2d.saved_tensors" title="seqgra.evaluator.explainer.ebp.functions.EBAvgPool2d.saved_tensors"><code class="xref py py-attr docutils literal notranslate"><span class="pre">saved_tensors</span></code></a>
+attribute. Before returning them to the user, a check is made to ensure
+they weren’t used in any in-place operation that modified their content.</p>
+<p>Arguments can also be <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.evaluator.explainer.ebp.functions.EBAvgPool2d.saved_tensors">
+<span class="sig-name descname"><span class="pre">saved_tensors</span></span><a class="headerlink" href="#seqgra.evaluator.explainer.ebp.functions.EBAvgPool2d.saved_tensors" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.evaluator.explainer.ebp.functions.EBAvgPool2d.saved_variables">
+<span class="sig-name descname"><span class="pre">saved_variables</span></span><a class="headerlink" href="#seqgra.evaluator.explainer.ebp.functions.EBAvgPool2d.saved_variables" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.evaluator.explainer.ebp.functions.EBAvgPool2d.set_materialize_grads">
+<span class="sig-name descname"><span class="pre">set_materialize_grads</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#seqgra.evaluator.explainer.ebp.functions.EBAvgPool2d.set_materialize_grads" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets whether to materialize output grad tensors. Default is true.</p>
+<p><strong>This should be called only from inside the</strong> <a class="reference internal" href="#seqgra.evaluator.explainer.ebp.functions.EBAvgPool2d.forward" title="seqgra.evaluator.explainer.ebp.functions.EBAvgPool2d.forward"><code class="xref py py-func docutils literal notranslate"><span class="pre">forward()</span></code></a> <strong>method</strong></p>
+<p>If true, undefined output grad tensors will be expanded to tensors full
+of zeros prior to calling the <a class="reference internal" href="#seqgra.evaluator.explainer.ebp.functions.EBAvgPool2d.backward" title="seqgra.evaluator.explainer.ebp.functions.EBAvgPool2d.backward"><code class="xref py py-func docutils literal notranslate"><span class="pre">backward()</span></code></a> method.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.evaluator.explainer.ebp.functions.EBAvgPool2d.to_save">
+<span class="sig-name descname"><span class="pre">to_save</span></span><a class="headerlink" href="#seqgra.evaluator.explainer.ebp.functions.EBAvgPool2d.to_save" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="seqgra.evaluator.explainer.ebp.functions.EBConv2d">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">EBConv2d</span></span><a class="reference internal" href="_modules/seqgra/evaluator/explainer/ebp/functions.html#EBConv2d"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.evaluator.explainer.ebp.functions.EBConv2d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.autograd.function.Function</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.evaluator.explainer.ebp.functions.EBConv2d.apply">
+<span class="sig-name descname"><span class="pre">apply</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#seqgra.evaluator.explainer.ebp.functions.EBConv2d.apply" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.evaluator.explainer.ebp.functions.EBConv2d.backward">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">backward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ctx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grad_output</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/seqgra/evaluator/explainer/ebp/functions.html#EBConv2d.backward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.evaluator.explainer.ebp.functions.EBConv2d.backward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines a formula for differentiating the operation.</p>
+<p>This function is to be overridden by all subclasses.</p>
+<p>It must accept a context <code class="xref py py-attr docutils literal notranslate"><span class="pre">ctx</span></code> as the first argument, followed by
+as many outputs did <a class="reference internal" href="#seqgra.evaluator.explainer.ebp.functions.EBConv2d.forward" title="seqgra.evaluator.explainer.ebp.functions.EBConv2d.forward"><code class="xref py py-func docutils literal notranslate"><span class="pre">forward()</span></code></a> return, and it should return as many
+tensors, as there were inputs to <a class="reference internal" href="#seqgra.evaluator.explainer.ebp.functions.EBConv2d.forward" title="seqgra.evaluator.explainer.ebp.functions.EBConv2d.forward"><code class="xref py py-func docutils literal notranslate"><span class="pre">forward()</span></code></a>. Each argument is the
+gradient w.r.t the given output, and each returned value should be the
+gradient w.r.t. the corresponding input.</p>
+<p>The context can be used to retrieve tensors saved during the forward
+pass. It also has an attribute <code class="xref py py-attr docutils literal notranslate"><span class="pre">ctx.needs_input_grad</span></code> as a tuple
+of booleans representing whether each input needs gradient. E.g.,
+<a class="reference internal" href="#seqgra.evaluator.explainer.ebp.functions.EBConv2d.backward" title="seqgra.evaluator.explainer.ebp.functions.EBConv2d.backward"><code class="xref py py-func docutils literal notranslate"><span class="pre">backward()</span></code></a> will have <code class="docutils literal notranslate"><span class="pre">ctx.needs_input_grad[0]</span> <span class="pre">=</span> <span class="pre">True</span></code> if the
+first input to <a class="reference internal" href="#seqgra.evaluator.explainer.ebp.functions.EBConv2d.forward" title="seqgra.evaluator.explainer.ebp.functions.EBConv2d.forward"><code class="xref py py-func docutils literal notranslate"><span class="pre">forward()</span></code></a> needs gradient computated w.r.t. the
+output.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.evaluator.explainer.ebp.functions.EBConv2d.dirty_tensors">
+<span class="sig-name descname"><span class="pre">dirty_tensors</span></span><a class="headerlink" href="#seqgra.evaluator.explainer.ebp.functions.EBConv2d.dirty_tensors" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.evaluator.explainer.ebp.functions.EBConv2d.forward">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ctx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bias</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stride</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">padding</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dilation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/seqgra/evaluator/explainer/ebp/functions.html#EBConv2d.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.evaluator.explainer.ebp.functions.EBConv2d.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs the operation.</p>
+<p>This function is to be overridden by all subclasses.</p>
+<p>It must accept a context ctx as the first argument, followed by any
+number of arguments (tensors or other types).</p>
+<p>The context can be used to store tensors that can be then retrieved
+during the backward pass.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.evaluator.explainer.ebp.functions.EBConv2d.is_traceable">
+<span class="sig-name descname"><span class="pre">is_traceable</span></span><em class="property"> <span class="pre">=</span> <span class="pre">False</span></em><a class="headerlink" href="#seqgra.evaluator.explainer.ebp.functions.EBConv2d.is_traceable" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.evaluator.explainer.ebp.functions.EBConv2d.mark_dirty">
+<span class="sig-name descname"><span class="pre">mark_dirty</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#seqgra.evaluator.explainer.ebp.functions.EBConv2d.mark_dirty" title="Permalink to this definition">¶</a></dt>
+<dd><p>Marks given tensors as modified in an in-place operation.</p>
+<p><strong>This should be called at most once, only from inside the</strong>
+<a class="reference internal" href="#seqgra.evaluator.explainer.ebp.functions.EBConv2d.forward" title="seqgra.evaluator.explainer.ebp.functions.EBConv2d.forward"><code class="xref py py-func docutils literal notranslate"><span class="pre">forward()</span></code></a> <strong>method, and all arguments should be inputs.</strong></p>
+<p>Every tensor that’s been modified in-place in a call to <a class="reference internal" href="#seqgra.evaluator.explainer.ebp.functions.EBConv2d.forward" title="seqgra.evaluator.explainer.ebp.functions.EBConv2d.forward"><code class="xref py py-func docutils literal notranslate"><span class="pre">forward()</span></code></a>
+should be given to this function, to ensure correctness of our checks.
+It doesn’t matter whether the function is called before or after
+modification.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.evaluator.explainer.ebp.functions.EBConv2d.mark_non_differentiable">
+<span class="sig-name descname"><span class="pre">mark_non_differentiable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#seqgra.evaluator.explainer.ebp.functions.EBConv2d.mark_non_differentiable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Marks outputs as non-differentiable.</p>
+<p><strong>This should be called at most once, only from inside the</strong>
+<a class="reference internal" href="#seqgra.evaluator.explainer.ebp.functions.EBConv2d.forward" title="seqgra.evaluator.explainer.ebp.functions.EBConv2d.forward"><code class="xref py py-func docutils literal notranslate"><span class="pre">forward()</span></code></a> <strong>method, and all arguments should be outputs.</strong></p>
+<p>This will mark outputs as not requiring gradients, increasing the
+efficiency of backward computation. You still need to accept a gradient
+for each output in <code class="xref py py-meth docutils literal notranslate"><span class="pre">backward()</span></code>, but it’s always going to
+be a zero tensor with the same shape as the shape of a corresponding
+output.</p>
+<p>This is used e.g. for indices returned from a max <code class="xref py py-class docutils literal notranslate"><span class="pre">Function</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.evaluator.explainer.ebp.functions.EBConv2d.mark_shared_storage">
+<span class="sig-name descname"><span class="pre">mark_shared_storage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">pairs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#seqgra.evaluator.explainer.ebp.functions.EBConv2d.mark_shared_storage" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.evaluator.explainer.ebp.functions.EBConv2d.materialize_grads">
+<span class="sig-name descname"><span class="pre">materialize_grads</span></span><a class="headerlink" href="#seqgra.evaluator.explainer.ebp.functions.EBConv2d.materialize_grads" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.evaluator.explainer.ebp.functions.EBConv2d.metadata">
+<span class="sig-name descname"><span class="pre">metadata</span></span><a class="headerlink" href="#seqgra.evaluator.explainer.ebp.functions.EBConv2d.metadata" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.evaluator.explainer.ebp.functions.EBConv2d.name">
+<span class="sig-name descname"><span class="pre">name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#seqgra.evaluator.explainer.ebp.functions.EBConv2d.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.evaluator.explainer.ebp.functions.EBConv2d.needs_input_grad">
+<span class="sig-name descname"><span class="pre">needs_input_grad</span></span><a class="headerlink" href="#seqgra.evaluator.explainer.ebp.functions.EBConv2d.needs_input_grad" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.evaluator.explainer.ebp.functions.EBConv2d.next_functions">
+<span class="sig-name descname"><span class="pre">next_functions</span></span><a class="headerlink" href="#seqgra.evaluator.explainer.ebp.functions.EBConv2d.next_functions" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.evaluator.explainer.ebp.functions.EBConv2d.non_differentiable">
+<span class="sig-name descname"><span class="pre">non_differentiable</span></span><a class="headerlink" href="#seqgra.evaluator.explainer.ebp.functions.EBConv2d.non_differentiable" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.evaluator.explainer.ebp.functions.EBConv2d.register_hook">
+<span class="sig-name descname"><span class="pre">register_hook</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#seqgra.evaluator.explainer.ebp.functions.EBConv2d.register_hook" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.evaluator.explainer.ebp.functions.EBConv2d.requires_grad">
+<span class="sig-name descname"><span class="pre">requires_grad</span></span><a class="headerlink" href="#seqgra.evaluator.explainer.ebp.functions.EBConv2d.requires_grad" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.evaluator.explainer.ebp.functions.EBConv2d.save_for_backward">
+<span class="sig-name descname"><span class="pre">save_for_backward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">tensors</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#seqgra.evaluator.explainer.ebp.functions.EBConv2d.save_for_backward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves given tensors for a future call to <code class="xref py py-func docutils literal notranslate"><span class="pre">backward()</span></code>.</p>
+<p><strong>This should be called at most once, and only from inside the</strong>
+<a class="reference internal" href="#seqgra.evaluator.explainer.ebp.functions.EBConv2d.forward" title="seqgra.evaluator.explainer.ebp.functions.EBConv2d.forward"><code class="xref py py-func docutils literal notranslate"><span class="pre">forward()</span></code></a> <strong>method.</strong></p>
+<p>Later, saved tensors can be accessed through the <a class="reference internal" href="#seqgra.evaluator.explainer.ebp.functions.EBConv2d.saved_tensors" title="seqgra.evaluator.explainer.ebp.functions.EBConv2d.saved_tensors"><code class="xref py py-attr docutils literal notranslate"><span class="pre">saved_tensors</span></code></a>
+attribute. Before returning them to the user, a check is made to ensure
+they weren’t used in any in-place operation that modified their content.</p>
+<p>Arguments can also be <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.evaluator.explainer.ebp.functions.EBConv2d.saved_tensors">
+<span class="sig-name descname"><span class="pre">saved_tensors</span></span><a class="headerlink" href="#seqgra.evaluator.explainer.ebp.functions.EBConv2d.saved_tensors" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.evaluator.explainer.ebp.functions.EBConv2d.saved_variables">
+<span class="sig-name descname"><span class="pre">saved_variables</span></span><a class="headerlink" href="#seqgra.evaluator.explainer.ebp.functions.EBConv2d.saved_variables" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.evaluator.explainer.ebp.functions.EBConv2d.set_materialize_grads">
+<span class="sig-name descname"><span class="pre">set_materialize_grads</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#seqgra.evaluator.explainer.ebp.functions.EBConv2d.set_materialize_grads" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets whether to materialize output grad tensors. Default is true.</p>
+<p><strong>This should be called only from inside the</strong> <a class="reference internal" href="#seqgra.evaluator.explainer.ebp.functions.EBConv2d.forward" title="seqgra.evaluator.explainer.ebp.functions.EBConv2d.forward"><code class="xref py py-func docutils literal notranslate"><span class="pre">forward()</span></code></a> <strong>method</strong></p>
+<p>If true, undefined output grad tensors will be expanded to tensors full
+of zeros prior to calling the <a class="reference internal" href="#seqgra.evaluator.explainer.ebp.functions.EBConv2d.backward" title="seqgra.evaluator.explainer.ebp.functions.EBConv2d.backward"><code class="xref py py-func docutils literal notranslate"><span class="pre">backward()</span></code></a> method.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.evaluator.explainer.ebp.functions.EBConv2d.to_save">
+<span class="sig-name descname"><span class="pre">to_save</span></span><a class="headerlink" href="#seqgra.evaluator.explainer.ebp.functions.EBConv2d.to_save" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="seqgra.evaluator.explainer.ebp.functions.EBLinear">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">EBLinear</span></span><a class="reference internal" href="_modules/seqgra/evaluator/explainer/ebp/functions.html#EBLinear"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.evaluator.explainer.ebp.functions.EBLinear" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.autograd.function.Function</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.evaluator.explainer.ebp.functions.EBLinear.apply">
+<span class="sig-name descname"><span class="pre">apply</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#seqgra.evaluator.explainer.ebp.functions.EBLinear.apply" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.evaluator.explainer.ebp.functions.EBLinear.backward">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">backward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ctx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grad_output</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/seqgra/evaluator/explainer/ebp/functions.html#EBLinear.backward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.evaluator.explainer.ebp.functions.EBLinear.backward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines a formula for differentiating the operation.</p>
+<p>This function is to be overridden by all subclasses.</p>
+<p>It must accept a context <code class="xref py py-attr docutils literal notranslate"><span class="pre">ctx</span></code> as the first argument, followed by
+as many outputs did <a class="reference internal" href="#seqgra.evaluator.explainer.ebp.functions.EBLinear.forward" title="seqgra.evaluator.explainer.ebp.functions.EBLinear.forward"><code class="xref py py-func docutils literal notranslate"><span class="pre">forward()</span></code></a> return, and it should return as many
+tensors, as there were inputs to <a class="reference internal" href="#seqgra.evaluator.explainer.ebp.functions.EBLinear.forward" title="seqgra.evaluator.explainer.ebp.functions.EBLinear.forward"><code class="xref py py-func docutils literal notranslate"><span class="pre">forward()</span></code></a>. Each argument is the
+gradient w.r.t the given output, and each returned value should be the
+gradient w.r.t. the corresponding input.</p>
+<p>The context can be used to retrieve tensors saved during the forward
+pass. It also has an attribute <code class="xref py py-attr docutils literal notranslate"><span class="pre">ctx.needs_input_grad</span></code> as a tuple
+of booleans representing whether each input needs gradient. E.g.,
+<a class="reference internal" href="#seqgra.evaluator.explainer.ebp.functions.EBLinear.backward" title="seqgra.evaluator.explainer.ebp.functions.EBLinear.backward"><code class="xref py py-func docutils literal notranslate"><span class="pre">backward()</span></code></a> will have <code class="docutils literal notranslate"><span class="pre">ctx.needs_input_grad[0]</span> <span class="pre">=</span> <span class="pre">True</span></code> if the
+first input to <a class="reference internal" href="#seqgra.evaluator.explainer.ebp.functions.EBLinear.forward" title="seqgra.evaluator.explainer.ebp.functions.EBLinear.forward"><code class="xref py py-func docutils literal notranslate"><span class="pre">forward()</span></code></a> needs gradient computated w.r.t. the
+output.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.evaluator.explainer.ebp.functions.EBLinear.dirty_tensors">
+<span class="sig-name descname"><span class="pre">dirty_tensors</span></span><a class="headerlink" href="#seqgra.evaluator.explainer.ebp.functions.EBLinear.dirty_tensors" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.evaluator.explainer.ebp.functions.EBLinear.forward">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ctx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/seqgra/evaluator/explainer/ebp/functions.html#EBLinear.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.evaluator.explainer.ebp.functions.EBLinear.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs the operation.</p>
+<p>This function is to be overridden by all subclasses.</p>
+<p>It must accept a context ctx as the first argument, followed by any
+number of arguments (tensors or other types).</p>
+<p>The context can be used to store tensors that can be then retrieved
+during the backward pass.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.evaluator.explainer.ebp.functions.EBLinear.is_traceable">
+<span class="sig-name descname"><span class="pre">is_traceable</span></span><em class="property"> <span class="pre">=</span> <span class="pre">False</span></em><a class="headerlink" href="#seqgra.evaluator.explainer.ebp.functions.EBLinear.is_traceable" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.evaluator.explainer.ebp.functions.EBLinear.mark_dirty">
+<span class="sig-name descname"><span class="pre">mark_dirty</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#seqgra.evaluator.explainer.ebp.functions.EBLinear.mark_dirty" title="Permalink to this definition">¶</a></dt>
+<dd><p>Marks given tensors as modified in an in-place operation.</p>
+<p><strong>This should be called at most once, only from inside the</strong>
+<a class="reference internal" href="#seqgra.evaluator.explainer.ebp.functions.EBLinear.forward" title="seqgra.evaluator.explainer.ebp.functions.EBLinear.forward"><code class="xref py py-func docutils literal notranslate"><span class="pre">forward()</span></code></a> <strong>method, and all arguments should be inputs.</strong></p>
+<p>Every tensor that’s been modified in-place in a call to <a class="reference internal" href="#seqgra.evaluator.explainer.ebp.functions.EBLinear.forward" title="seqgra.evaluator.explainer.ebp.functions.EBLinear.forward"><code class="xref py py-func docutils literal notranslate"><span class="pre">forward()</span></code></a>
+should be given to this function, to ensure correctness of our checks.
+It doesn’t matter whether the function is called before or after
+modification.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.evaluator.explainer.ebp.functions.EBLinear.mark_non_differentiable">
+<span class="sig-name descname"><span class="pre">mark_non_differentiable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#seqgra.evaluator.explainer.ebp.functions.EBLinear.mark_non_differentiable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Marks outputs as non-differentiable.</p>
+<p><strong>This should be called at most once, only from inside the</strong>
+<a class="reference internal" href="#seqgra.evaluator.explainer.ebp.functions.EBLinear.forward" title="seqgra.evaluator.explainer.ebp.functions.EBLinear.forward"><code class="xref py py-func docutils literal notranslate"><span class="pre">forward()</span></code></a> <strong>method, and all arguments should be outputs.</strong></p>
+<p>This will mark outputs as not requiring gradients, increasing the
+efficiency of backward computation. You still need to accept a gradient
+for each output in <code class="xref py py-meth docutils literal notranslate"><span class="pre">backward()</span></code>, but it’s always going to
+be a zero tensor with the same shape as the shape of a corresponding
+output.</p>
+<p>This is used e.g. for indices returned from a max <code class="xref py py-class docutils literal notranslate"><span class="pre">Function</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.evaluator.explainer.ebp.functions.EBLinear.mark_shared_storage">
+<span class="sig-name descname"><span class="pre">mark_shared_storage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">pairs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#seqgra.evaluator.explainer.ebp.functions.EBLinear.mark_shared_storage" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.evaluator.explainer.ebp.functions.EBLinear.materialize_grads">
+<span class="sig-name descname"><span class="pre">materialize_grads</span></span><a class="headerlink" href="#seqgra.evaluator.explainer.ebp.functions.EBLinear.materialize_grads" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.evaluator.explainer.ebp.functions.EBLinear.metadata">
+<span class="sig-name descname"><span class="pre">metadata</span></span><a class="headerlink" href="#seqgra.evaluator.explainer.ebp.functions.EBLinear.metadata" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.evaluator.explainer.ebp.functions.EBLinear.name">
+<span class="sig-name descname"><span class="pre">name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#seqgra.evaluator.explainer.ebp.functions.EBLinear.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.evaluator.explainer.ebp.functions.EBLinear.needs_input_grad">
+<span class="sig-name descname"><span class="pre">needs_input_grad</span></span><a class="headerlink" href="#seqgra.evaluator.explainer.ebp.functions.EBLinear.needs_input_grad" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.evaluator.explainer.ebp.functions.EBLinear.next_functions">
+<span class="sig-name descname"><span class="pre">next_functions</span></span><a class="headerlink" href="#seqgra.evaluator.explainer.ebp.functions.EBLinear.next_functions" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.evaluator.explainer.ebp.functions.EBLinear.non_differentiable">
+<span class="sig-name descname"><span class="pre">non_differentiable</span></span><a class="headerlink" href="#seqgra.evaluator.explainer.ebp.functions.EBLinear.non_differentiable" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.evaluator.explainer.ebp.functions.EBLinear.register_hook">
+<span class="sig-name descname"><span class="pre">register_hook</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#seqgra.evaluator.explainer.ebp.functions.EBLinear.register_hook" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.evaluator.explainer.ebp.functions.EBLinear.requires_grad">
+<span class="sig-name descname"><span class="pre">requires_grad</span></span><a class="headerlink" href="#seqgra.evaluator.explainer.ebp.functions.EBLinear.requires_grad" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.evaluator.explainer.ebp.functions.EBLinear.save_for_backward">
+<span class="sig-name descname"><span class="pre">save_for_backward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">tensors</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#seqgra.evaluator.explainer.ebp.functions.EBLinear.save_for_backward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves given tensors for a future call to <code class="xref py py-func docutils literal notranslate"><span class="pre">backward()</span></code>.</p>
+<p><strong>This should be called at most once, and only from inside the</strong>
+<a class="reference internal" href="#seqgra.evaluator.explainer.ebp.functions.EBLinear.forward" title="seqgra.evaluator.explainer.ebp.functions.EBLinear.forward"><code class="xref py py-func docutils literal notranslate"><span class="pre">forward()</span></code></a> <strong>method.</strong></p>
+<p>Later, saved tensors can be accessed through the <a class="reference internal" href="#seqgra.evaluator.explainer.ebp.functions.EBLinear.saved_tensors" title="seqgra.evaluator.explainer.ebp.functions.EBLinear.saved_tensors"><code class="xref py py-attr docutils literal notranslate"><span class="pre">saved_tensors</span></code></a>
+attribute. Before returning them to the user, a check is made to ensure
+they weren’t used in any in-place operation that modified their content.</p>
+<p>Arguments can also be <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.evaluator.explainer.ebp.functions.EBLinear.saved_tensors">
+<span class="sig-name descname"><span class="pre">saved_tensors</span></span><a class="headerlink" href="#seqgra.evaluator.explainer.ebp.functions.EBLinear.saved_tensors" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.evaluator.explainer.ebp.functions.EBLinear.saved_variables">
+<span class="sig-name descname"><span class="pre">saved_variables</span></span><a class="headerlink" href="#seqgra.evaluator.explainer.ebp.functions.EBLinear.saved_variables" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.evaluator.explainer.ebp.functions.EBLinear.set_materialize_grads">
+<span class="sig-name descname"><span class="pre">set_materialize_grads</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#seqgra.evaluator.explainer.ebp.functions.EBLinear.set_materialize_grads" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets whether to materialize output grad tensors. Default is true.</p>
+<p><strong>This should be called only from inside the</strong> <a class="reference internal" href="#seqgra.evaluator.explainer.ebp.functions.EBLinear.forward" title="seqgra.evaluator.explainer.ebp.functions.EBLinear.forward"><code class="xref py py-func docutils literal notranslate"><span class="pre">forward()</span></code></a> <strong>method</strong></p>
+<p>If true, undefined output grad tensors will be expanded to tensors full
+of zeros prior to calling the <a class="reference internal" href="#seqgra.evaluator.explainer.ebp.functions.EBLinear.backward" title="seqgra.evaluator.explainer.ebp.functions.EBLinear.backward"><code class="xref py py-func docutils literal notranslate"><span class="pre">backward()</span></code></a> method.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.evaluator.explainer.ebp.functions.EBLinear.to_save">
+<span class="sig-name descname"><span class="pre">to_save</span></span><a class="headerlink" href="#seqgra.evaluator.explainer.ebp.functions.EBLinear.to_save" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Konstantin Krismer.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,305 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>seqgra.simulator.examplegenerator module &mdash; seqgra 0.0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="https://www.googletagmanager.com/gtag/js?id=G-SPQK9JRC9T"></script>
+        <script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-SPQK9JRC9T');
+</script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="seqgra.simulator.simulator module" href="seqgra.simulator.simulator.html" />
+    <link rel="prev" title="seqgra.simulator.example module" href="seqgra.simulator.example.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> seqgra
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">About seqgra</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Main Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Usage examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cmd.html">Command line utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dd.html">Data definition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="md.html">Model definition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slec.html">Simulators, Learners, Evaluators, Comparators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ids.html">ID conventions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="structure.html"><code class="docutils literal notranslate"><span class="pre">output</span></code> folder structure</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Advanced features</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="seqgra.html">API reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="seqgra.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="seqgra.comparator.html">seqgra.comparator package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="seqgra.evaluator.html">seqgra.evaluator package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="seqgra.learner.html">seqgra.learner package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="seqgra.model.html">seqgra.model package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="seqgra.parser.html">seqgra.parser package</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="seqgra.simulator.html">seqgra.simulator package</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="seqgra.simulator.html#subpackages">Subpackages</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="seqgra.simulator.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l5"><a class="reference internal" href="seqgra.simulator.backgroundgenerator.html">seqgra.simulator.backgroundgenerator module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="seqgra.simulator.example.html">seqgra.simulator.example module</a></li>
+<li class="toctree-l5 current"><a class="current reference internal" href="#">seqgra.simulator.examplegenerator module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="seqgra.simulator.simulator.html">seqgra.simulator.simulator module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="seqgra.writer.html">seqgra.writer package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="seqgra.html#submodules">Submodules</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="py-modindex.html">Python module index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="genindex.html">Index</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">seqgra</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="seqgra.html">seqgra package</a> &raquo;</li>
+        
+          <li><a href="seqgra.simulator.html">seqgra.simulator package</a> &raquo;</li>
+        
+      <li>seqgra.simulator.examplegenerator module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-seqgra.simulator.examplegenerator">
+<span id="seqgra-simulator-examplegenerator-module"></span><h1>seqgra.simulator.examplegenerator module<a class="headerlink" href="#module-seqgra.simulator.examplegenerator" title="Permalink to this headline">¶</a></h1>
+<p>MIT - CSAIL - Gifford Lab - seqgra</p>
+<p>Example generator</p>
+<p>&#64;author: Konstantin Krismer</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="seqgra.simulator.examplegenerator.ExampleGenerator">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">ExampleGenerator</span></span><a class="reference internal" href="_modules/seqgra/simulator/examplegenerator.html#ExampleGenerator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.simulator.examplegenerator.ExampleGenerator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.simulator.examplegenerator.ExampleGenerator.add_element">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">add_element</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">example</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="seqgra.schema.html#seqgra.schema.AnnotatedExample" title="seqgra.schema.AnnotatedExample"><span class="pre">seqgra.schema.AnnotatedExample</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">element</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">position</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="seqgra.schema.html#seqgra.schema.AnnotatedExample" title="seqgra.schema.AnnotatedExample"><span class="pre">seqgra.schema.AnnotatedExample</span></a><a class="reference internal" href="_modules/seqgra/simulator/examplegenerator.html#ExampleGenerator.add_element"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.simulator.examplegenerator.ExampleGenerator.add_element" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.simulator.examplegenerator.ExampleGenerator.add_spatially_constrained_elements">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">add_spatially_constrained_elements</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">example</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="seqgra.schema.html#seqgra.schema.AnnotatedExample" title="seqgra.schema.AnnotatedExample"><span class="pre">seqgra.schema.AnnotatedExample</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">spacing_constraint</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="seqgra.model.data.spacingconstraint.html#seqgra.model.data.spacingconstraint.SpacingConstraint" title="seqgra.model.data.spacingconstraint.SpacingConstraint"><span class="pre">seqgra.model.data.spacingconstraint.SpacingConstraint</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">element1</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">element2</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rule_position</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="seqgra.schema.html#seqgra.schema.AnnotatedExample" title="seqgra.schema.AnnotatedExample"><span class="pre">seqgra.schema.AnnotatedExample</span></a><a class="reference internal" href="_modules/seqgra/simulator/examplegenerator.html#ExampleGenerator.add_spatially_constrained_elements"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.simulator.examplegenerator.ExampleGenerator.add_spatially_constrained_elements" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.simulator.examplegenerator.ExampleGenerator.apply_rule">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">apply_rule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rule</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="seqgra.model.data.rule.html#seqgra.model.data.rule.Rule" title="seqgra.model.data.rule.Rule"><span class="pre">seqgra.model.data.rule.Rule</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">example</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="seqgra.schema.html#seqgra.schema.AnnotatedExample" title="seqgra.schema.AnnotatedExample"><span class="pre">seqgra.schema.AnnotatedExample</span></a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="seqgra.schema.html#seqgra.schema.AnnotatedExample" title="seqgra.schema.AnnotatedExample"><span class="pre">seqgra.schema.AnnotatedExample</span></a><a class="reference internal" href="_modules/seqgra/simulator/examplegenerator.html#ExampleGenerator.apply_rule"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.simulator.examplegenerator.ExampleGenerator.apply_rule" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.simulator.examplegenerator.ExampleGenerator.generate_example">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">generate_example</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conditions</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="seqgra.model.data.condition.html#seqgra.model.data.condition.Condition" title="seqgra.model.data.condition.Condition"><span class="pre">seqgra.model.data.condition.Condition</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">set_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="seqgra.model.data.background.html#seqgra.model.data.background.Background" title="seqgra.model.data.background.Background"><span class="pre">seqgra.model.data.background.Background</span></a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="seqgra.schema.html#seqgra.schema.AnnotatedExample" title="seqgra.schema.AnnotatedExample"><span class="pre">seqgra.schema.AnnotatedExample</span></a><a class="reference internal" href="_modules/seqgra/simulator/examplegenerator.html#ExampleGenerator.generate_example"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.simulator.examplegenerator.ExampleGenerator.generate_example" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.simulator.examplegenerator.ExampleGenerator.get_distance">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">get_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">example</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="seqgra.schema.html#seqgra.schema.AnnotatedExample" title="seqgra.schema.AnnotatedExample"><span class="pre">seqgra.schema.AnnotatedExample</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">spacing_constraint</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="seqgra.model.data.spacingconstraint.html#seqgra.model.data.spacingconstraint.SpacingConstraint" title="seqgra.model.data.spacingconstraint.SpacingConstraint"><span class="pre">seqgra.model.data.spacingconstraint.SpacingConstraint</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">element1</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">element2</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rule_position</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">int</span><a class="reference internal" href="_modules/seqgra/simulator/examplegenerator.html#ExampleGenerator.get_distance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.simulator.examplegenerator.ExampleGenerator.get_distance" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.simulator.examplegenerator.ExampleGenerator.get_position">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">get_position</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rule_position</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sequence_length</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">element_length</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">int</span><a class="reference internal" href="_modules/seqgra/simulator/examplegenerator.html#ExampleGenerator.get_position"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.simulator.examplegenerator.ExampleGenerator.get_position" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="seqgra.simulator.simulator.html" class="btn btn-neutral float-right" title="seqgra.simulator.simulator module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="seqgra.simulator.example.html" class="btn btn-neutral float-left" title="seqgra.simulator.example module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Konstantin Krismer.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

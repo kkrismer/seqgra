@@ -1,0 +1,734 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>seqgra.evaluator.evaluator &mdash; seqgra 0.0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="https://www.googletagmanager.com/gtag/js?id=G-SPQK9JRC9T"></script>
+        <script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-SPQK9JRC9T');
+</script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> seqgra
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">About seqgra</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Introduction</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Main Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples.html">Usage examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cmd.html">Command line utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dd.html">Data definition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../md.html">Model definition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../slec.html">Simulators, Learners, Evaluators, Comparators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ids.html">ID conventions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../structure.html"><code class="docutils literal notranslate"><span class="pre">output</span></code> folder structure</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Advanced features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../seqgra.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../py-modindex.html">Python module index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../genindex.html">Index</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">seqgra</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>seqgra.evaluator.evaluator</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for seqgra.evaluator.evaluator</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Abstract base class for all evaluators</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">subprocess</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Set</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">pkg_resources</span>
+
+<span class="kn">import</span> <span class="nn">seqgra.constants</span> <span class="k">as</span> <span class="nn">c</span>
+<span class="kn">from</span> <span class="nn">seqgra</span> <span class="kn">import</span> <span class="n">AnnotatedExampleSet</span>
+<span class="kn">from</span> <span class="nn">seqgra</span> <span class="kn">import</span> <span class="n">MiscHelper</span>
+<span class="kn">from</span> <span class="nn">seqgra.learner</span> <span class="kn">import</span> <span class="n">Learner</span>
+
+
+<div class="viewcode-block" id="Evaluator"><a class="viewcode-back" href="../../../seqgra.evaluator.evaluator.html#seqgra.evaluator.evaluator.Evaluator">[docs]</a><span class="k">class</span> <span class="nc">Evaluator</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">evaluator_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">evaluator_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                 <span class="n">learner</span><span class="p">:</span> <span class="n">Learner</span><span class="p">,</span>
+                 <span class="n">output_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                 <span class="n">supported_tasks</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">supported_sequence_spaces</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">supported_libraries</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">silent</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">silent</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;LOGLEVEL&quot;</span><span class="p">,</span> <span class="s2">&quot;WARNING&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">evaluator_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">evaluator_id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">evaluator_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">evaluator_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">learner</span><span class="p">:</span> <span class="n">Learner</span> <span class="o">=</span> <span class="n">learner</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">output_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">MiscHelper</span><span class="o">.</span><span class="n">prepare_path</span><span class="p">(</span><span class="n">output_dir</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span>
+                                                       <span class="bp">self</span><span class="o">.</span><span class="n">evaluator_id</span><span class="p">,</span>
+                                                       <span class="n">allow_exists</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">supported_tasks</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">supported_tasks</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">TaskType</span><span class="o">.</span><span class="n">ALL_TASKS</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">supported_tasks</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">supported_tasks</span>
+        <span class="k">if</span> <span class="n">supported_sequence_spaces</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">supported_sequence_spaces</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> \
+                <span class="n">c</span><span class="o">.</span><span class="n">SequenceSpaceType</span><span class="o">.</span><span class="n">ALL_SEQUENCE_SPACES</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">supported_sequence_spaces</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> \
+                <span class="n">supported_sequence_spaces</span>
+        <span class="k">if</span> <span class="n">supported_libraries</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">supported_libraries</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">LibraryType</span><span class="o">.</span><span class="n">ALL_LIBRARIES</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">supported_libraries</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">supported_libraries</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__detect_incompatibilities</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">__detect_incompatibilities</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">throw_exception</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+        <span class="n">message</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">learner</span><span class="o">.</span><span class="n">definition</span><span class="o">.</span><span class="n">task</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">supported_tasks</span><span class="p">:</span>
+            <span class="n">message</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;learner task incompatible with evaluator&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">learner</span><span class="o">.</span><span class="n">definition</span><span class="o">.</span><span class="n">sequence_space</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">supported_sequence_spaces</span><span class="p">:</span>
+            <span class="n">message</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;learner sequence space incompatible with evaluator&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">learner</span><span class="o">.</span><span class="n">definition</span><span class="o">.</span><span class="n">library</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">supported_libraries</span><span class="p">:</span>
+            <span class="n">message</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;learner library incompatible with evaluator&quot;</span>
+
+        <span class="k">if</span> <span class="n">message</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">throw_exception</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Evaluator.evaluate_model"><a class="viewcode-back" href="../../../seqgra.evaluator.evaluator.html#seqgra.evaluator.evaluator.Evaluator.evaluate_model">[docs]</a>    <span class="k">def</span> <span class="nf">evaluate_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">set_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;test&quot;</span><span class="p">,</span>
+                       <span class="n">subset_idx</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                       <span class="n">subset_n</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                       <span class="n">subset_labels</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                       <span class="n">subset_n_per_label</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+                       <span class="n">subset_shuffle</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+                       <span class="n">subset_threshold</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                       <span class="n">suppress_plots</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">subset_idx</span><span class="p">:</span>
+            <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">annotations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_data</span><span class="p">(</span><span class="n">set_name</span><span class="p">,</span> <span class="n">subset_idx</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">subset_n</span> <span class="ow">or</span> <span class="n">subset_labels</span> <span class="ow">or</span> \
+                <span class="n">subset_n_per_label</span> <span class="ow">or</span> <span class="n">subset_threshold</span><span class="p">:</span>
+            <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">annotations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">select_n_examples</span><span class="p">(</span><span class="n">set_name</span><span class="p">,</span> <span class="n">subset_n</span><span class="p">,</span>
+                                                       <span class="n">subset_labels</span><span class="p">,</span>
+                                                       <span class="n">subset_n_per_label</span><span class="p">,</span>
+                                                       <span class="n">subset_shuffle</span><span class="p">,</span>
+                                                       <span class="n">subset_threshold</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">annotations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_data</span><span class="p">(</span><span class="n">set_name</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">x</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">results</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_evaluate_model</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">annotations</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_save_results</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">set_name</span><span class="p">,</span> <span class="n">suppress_plots</span><span class="p">)</span>
+
+                <span class="k">return</span> <span class="n">results</span>
+            <span class="k">except</span> <span class="ne">RuntimeError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_dir</span> <span class="o">+</span> <span class="n">set_name</span> <span class="o">+</span> <span class="s2">&quot;-incompatible-model.txt&quot;</span><span class="p">,</span>
+                          <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">incompatible_model_file</span><span class="p">:</span>
+                    <span class="n">incompatible_model_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+                        <span class="s2">&quot;evaluator skipped: model incompatible</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="n">incompatible_model_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;error thrown:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="n">incompatible_model_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">err</span><span class="p">))</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;evaluator skipped: incompatible with &quot;</span>
+                                    <span class="s2">&quot;model (error thrown: </span><span class="si">%s</span><span class="s2">)&quot;</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_dir</span> <span class="o">+</span> <span class="n">set_name</span> <span class="o">+</span> <span class="s2">&quot;-no-valid-examples.txt&quot;</span><span class="p">,</span>
+                      <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">no_examples_file</span><span class="p">:</span>
+                <span class="n">no_examples_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;no valid examples</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;evaluator skipped: no valid examples&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span></div>
+
+    <span class="k">def</span> <span class="nf">_load_data</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">set_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;test&quot;</span><span class="p">,</span>
+            <span class="n">subset_idx</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AnnotatedExampleSet</span><span class="p">:</span>
+        <span class="c1"># load data</span>
+        <span class="n">examples_file</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">learner</span><span class="o">.</span><span class="n">get_examples_file</span><span class="p">(</span><span class="n">set_name</span><span class="p">)</span>
+        <span class="n">annotations_file</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">learner</span><span class="o">.</span><span class="n">get_annotations_file</span><span class="p">(</span><span class="n">set_name</span><span class="p">)</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">learner</span><span class="o">.</span><span class="n">parse_examples_data</span><span class="p">(</span><span class="n">examples_file</span><span class="p">)</span>
+        <span class="n">annotations</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">learner</span><span class="o">.</span><span class="n">parse_annotations_data</span><span class="p">(</span><span class="n">annotations_file</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">subset_idx</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">AnnotatedExampleSet</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">annotations</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_subset</span><span class="p">(</span><span class="n">subset_idx</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">annotations</span><span class="p">)</span>
+
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">_evaluate_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">y</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+                        <span class="n">annotations</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+        <span class="k">pass</span>
+
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">_save_results</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">results</span><span class="p">,</span> <span class="n">set_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;test&quot;</span><span class="p">,</span>
+                      <span class="n">suppress_plots</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">pass</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_subset</span><span class="p">(</span><span class="n">idx</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">x</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">y</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+                <span class="n">annotations</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">AnnotatedExampleSet</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">annotations</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;x, y, and annotations have to be the same length&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">idx</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">max</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;max(idx) &gt;= len(x)&quot;</span><span class="p">)</span>
+
+            <span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">idx</span><span class="p">]</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">idx</span><span class="p">]</span>
+            <span class="n">annotations</span> <span class="o">=</span> <span class="p">[</span><span class="n">annotations</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">idx</span><span class="p">]</span>
+
+            <span class="k">return</span> <span class="n">AnnotatedExampleSet</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">annotations</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">AnnotatedExampleSet</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_subset_by_label</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">y</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+                         <span class="n">annotations</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+                         <span class="n">valid_labels</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">AnnotatedExampleSet</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">valid_labels</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">valid_labels</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">valid_labels</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">valid_labels</span><span class="p">,</span> <span class="nb">set</span><span class="p">):</span>
+            <span class="n">valid_labels</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="n">valid_labels</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">learner</span><span class="o">.</span><span class="n">definition</span><span class="o">.</span><span class="n">task</span> <span class="o">==</span> <span class="n">c</span><span class="o">.</span><span class="n">TaskType</span><span class="o">.</span><span class="n">MULTI_CLASS_CLASSIFICATION</span><span class="p">:</span>
+            <span class="n">subset_idx</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span>
+                          <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">label</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+                          <span class="k">if</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">valid_labels</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">learner</span><span class="o">.</span><span class="n">definition</span><span class="o">.</span><span class="n">task</span> <span class="o">==</span> <span class="n">c</span><span class="o">.</span><span class="n">TaskType</span><span class="o">.</span><span class="n">MULTI_LABEL_CLASSIFICATION</span><span class="p">:</span>
+            <span class="n">subset_idx</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">label</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">y</span><span class="p">):</span>
+                <span class="n">is_valid</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="k">for</span> <span class="n">example_label</span> <span class="ow">in</span> <span class="n">label</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;|&quot;</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">example_label</span> <span class="ow">in</span> <span class="n">valid_labels</span><span class="p">:</span>
+                        <span class="n">is_valid</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="k">if</span> <span class="n">is_valid</span><span class="p">:</span>
+                    <span class="n">subset_idx</span> <span class="o">+=</span> <span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">subset_idx</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">AnnotatedExampleSet</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_subset</span><span class="p">(</span><span class="n">subset_idx</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">annotations</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_subset_by_compatibility</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">y</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+            <span class="n">annotations</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">AnnotatedExampleSet</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">AnnotatedExampleSet</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">annotations</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Evaluator.select_examples"><a class="viewcode-back" href="../../../seqgra.evaluator.evaluator.html#seqgra.evaluator.evaluator.Evaluator.select_examples">[docs]</a>    <span class="k">def</span> <span class="nf">select_examples</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">set_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;test&quot;</span><span class="p">,</span>
+            <span class="n">labels</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">threshold</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AnnotatedExampleSet</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Returns all correctly classified examples that exceed the threshold.</span>
+
+<span class="sd">        for the specified labels</span>
+<span class="sd">        and set that exceed the threshold.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">            TODO</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            TODO</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">examples_file</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">learner</span><span class="o">.</span><span class="n">get_examples_file</span><span class="p">(</span><span class="n">set_name</span><span class="p">)</span>
+        <span class="n">annotations_file</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">learner</span><span class="o">.</span><span class="n">get_annotations_file</span><span class="p">(</span><span class="n">set_name</span><span class="p">)</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">learner</span><span class="o">.</span><span class="n">parse_examples_data</span><span class="p">(</span><span class="n">examples_file</span><span class="p">)</span>
+        <span class="n">annotations</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">learner</span><span class="o">.</span><span class="n">parse_annotations_data</span><span class="p">(</span><span class="n">annotations_file</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">labels</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># discard examples with y not in labels</span>
+            <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">annotations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_subset_by_label</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">annotations</span><span class="p">,</span>
+                                                      <span class="n">labels</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">threshold</span><span class="p">:</span>
+            <span class="c1"># predict with learner</span>
+            <span class="n">encoded_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">learner</span><span class="o">.</span><span class="n">encode_y</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+            <span class="n">y_hat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">learner</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">)</span>
+
+            <span class="c1"># discard misclassified / mislabeled examples and</span>
+            <span class="c1"># examples below threshold</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">learner</span><span class="o">.</span><span class="n">definition</span><span class="o">.</span><span class="n">task</span> <span class="o">==</span> <span class="n">c</span><span class="o">.</span><span class="n">TaskType</span><span class="o">.</span><span class="n">MULTI_CLASS_CLASSIFICATION</span><span class="p">:</span>
+                <span class="n">subset_idx</span> <span class="o">=</span> \
+                    <span class="p">[</span><span class="n">i</span>
+                     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+                     <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">y_hat</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">encoded_y</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="ow">and</span>
+                     <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">y_hat</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">&gt;</span> <span class="n">threshold</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">learner</span><span class="o">.</span><span class="n">definition</span><span class="o">.</span><span class="n">task</span> <span class="o">==</span> <span class="n">c</span><span class="o">.</span><span class="n">TaskType</span><span class="o">.</span><span class="n">MULTI_LABEL_CLASSIFICATION</span><span class="p">:</span>
+                <span class="n">subset_idx</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+                <span class="c1"># example is mislabeled if prediction for one label is wrong</span>
+                <span class="c1"># correctly labeled example:</span>
+                <span class="c1"># if label == True -&gt; prediction &gt; threshold</span>
+                <span class="c1"># if label == False -&gt; prediction &lt; (1 - threshold)</span>
+                <span class="k">for</span> <span class="n">example_index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)):</span>
+                    <span class="n">is_valid</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="k">for</span> <span class="n">label_index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">learner</span><span class="o">.</span><span class="n">definition</span><span class="o">.</span><span class="n">labels</span><span class="p">)):</span>
+                        <span class="k">if</span> <span class="p">(</span><span class="n">encoded_y</span><span class="p">[</span><span class="n">example_index</span><span class="p">,</span> <span class="n">label_index</span><span class="p">]</span> <span class="ow">and</span>
+                            <span class="n">y_hat</span><span class="p">[</span><span class="n">example_index</span><span class="p">,</span> <span class="n">label_index</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">threshold</span><span class="p">)</span> <span class="ow">or</span> \
+                                <span class="p">(</span><span class="ow">not</span> <span class="n">encoded_y</span><span class="p">[</span><span class="n">example_index</span><span class="p">,</span> <span class="n">label_index</span><span class="p">]</span> <span class="ow">and</span>
+                                    <span class="n">y_hat</span><span class="p">[</span><span class="n">example_index</span><span class="p">,</span> <span class="n">label_index</span><span class="p">]</span> <span class="o">&gt;</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">threshold</span><span class="p">)):</span>
+                            <span class="n">is_valid</span> <span class="o">=</span> <span class="kc">False</span>
+
+                    <span class="k">if</span> <span class="n">is_valid</span><span class="p">:</span>
+                        <span class="n">subset_idx</span> <span class="o">+=</span> <span class="p">[</span><span class="n">example_index</span><span class="p">]</span>
+
+            <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">annotations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_subset</span><span class="p">(</span><span class="n">subset_idx</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">annotations</span><span class="p">)</span>
+
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">annotations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_subset_by_compatibility</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">annotations</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">AnnotatedExampleSet</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">annotations</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Evaluator.select_n_examples"><a class="viewcode-back" href="../../../seqgra.evaluator.evaluator.html#seqgra.evaluator.evaluator.Evaluator.select_n_examples">[docs]</a>    <span class="k">def</span> <span class="nf">select_n_examples</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">set_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;test&quot;</span><span class="p">,</span>
+            <span class="n">n</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">labels</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">n_per_label</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="n">shuffle</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="n">threshold</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AnnotatedExampleSet</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">n_per_label</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">labels</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">labels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">learner</span><span class="o">.</span><span class="n">definition</span><span class="o">.</span><span class="n">labels</span>
+            <span class="n">x</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+            <span class="n">y</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+            <span class="n">annotations</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">labels</span><span class="p">:</span>
+                <span class="n">examples</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">select_n_examples</span><span class="p">(</span><span class="n">set_name</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span>
+                                                  <span class="n">shuffle</span><span class="p">,</span> <span class="n">threshold</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">examples</span><span class="o">.</span><span class="n">x</span><span class="p">:</span>
+                    <span class="n">x</span> <span class="o">+=</span> <span class="n">examples</span><span class="o">.</span><span class="n">x</span>
+                    <span class="n">y</span> <span class="o">+=</span> <span class="n">examples</span><span class="o">.</span><span class="n">y</span>
+                    <span class="n">annotations</span> <span class="o">+=</span> <span class="n">examples</span><span class="o">.</span><span class="n">annotations</span>
+            <span class="k">return</span> <span class="n">AnnotatedExampleSet</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">annotations</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">annotations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">select_examples</span><span class="p">(</span><span class="n">set_name</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span>
+                                                     <span class="n">threshold</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">n</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">x</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">labels</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">threshold</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;no example in set &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span><span class="p">,</span> <span class="n">set_name</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">labels</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">threshold</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;no correctly labeled example with &quot;</span>
+                                        <span class="s2">&quot;prediction threshold &gt; </span><span class="si">%s</span><span class="s2"> in set &quot;</span>
+                                        <span class="s2">&quot;&#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span><span class="p">,</span> <span class="n">threshold</span><span class="p">,</span> <span class="n">set_name</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">labels</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">threshold</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;no example in set &#39;</span><span class="si">%s</span><span class="s2">&#39; &quot;</span>
+                                        <span class="s2">&quot;that has one of the following &quot;</span>
+                                        <span class="s2">&quot;labels: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">set_name</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">labels</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">threshold</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;no correctly labeled example with &quot;</span>
+                                        <span class="s2">&quot;prediction threshold &gt; </span><span class="si">%s</span><span class="s2"> in set &quot;</span>
+                                        <span class="s2">&quot;&#39;</span><span class="si">%s</span><span class="s2">&#39; that has one of the following &quot;</span>
+                                        <span class="s2">&quot;labels: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">threshold</span><span class="p">,</span> <span class="n">set_name</span><span class="p">,</span>
+                                        <span class="n">labels</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">AnnotatedExampleSet</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">n</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+                <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">shuffle</span><span class="p">:</span>
+                <span class="n">subset_idx</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)))</span>
+                <span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">subset_idx</span><span class="p">)</span>
+                <span class="n">subset_idx</span> <span class="o">=</span> <span class="n">subset_idx</span><span class="p">[:</span><span class="n">n</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">subset_idx</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
+
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_subset</span><span class="p">(</span><span class="n">subset_idx</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">annotations</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="FeatureImportanceEvaluator"><a class="viewcode-back" href="../../../seqgra.evaluator.evaluator.html#seqgra.evaluator.evaluator.FeatureImportanceEvaluator">[docs]</a><span class="k">class</span> <span class="nc">FeatureImportanceEvaluator</span><span class="p">(</span><span class="n">Evaluator</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">evaluator_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">evaluator_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                 <span class="n">learner</span><span class="p">:</span> <span class="n">Learner</span><span class="p">,</span>
+                 <span class="n">output_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                 <span class="n">supported_tasks</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">supported_sequence_spaces</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">supported_libraries</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">silent</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">evaluator_id</span><span class="p">,</span> <span class="n">evaluator_name</span><span class="p">,</span> <span class="n">learner</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">,</span>
+                         <span class="n">supported_tasks</span><span class="p">,</span>
+                         <span class="n">supported_sequence_spaces</span><span class="p">,</span>
+                         <span class="n">supported_libraries</span><span class="p">,</span> <span class="n">silent</span><span class="p">)</span>
+
+<div class="viewcode-block" id="FeatureImportanceEvaluator.evaluate_model"><a class="viewcode-back" href="../../../seqgra.evaluator.evaluator.html#seqgra.evaluator.evaluator.FeatureImportanceEvaluator.evaluate_model">[docs]</a>    <span class="k">def</span> <span class="nf">evaluate_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">set_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;test&quot;</span><span class="p">,</span>
+                       <span class="n">subset_idx</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                       <span class="n">subset_n</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                       <span class="n">subset_labels</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                       <span class="n">subset_n_per_label</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+                       <span class="n">subset_shuffle</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+                       <span class="n">subset_threshold</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                       <span class="n">suppress_plots</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">evaluate_model</span><span class="p">(</span><span class="n">set_name</span><span class="p">,</span> <span class="n">subset_idx</span><span class="p">,</span> <span class="n">subset_n</span><span class="p">,</span>
+                                         <span class="n">subset_labels</span><span class="p">,</span> <span class="n">subset_n_per_label</span><span class="p">,</span>
+                                         <span class="n">subset_shuffle</span><span class="p">,</span> <span class="n">subset_threshold</span><span class="p">,</span>
+                                         <span class="n">suppress_plots</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">suppress_plots</span> <span class="ow">and</span> <span class="n">results</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_visualize_grammar_agreement</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">set_name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">results</span></div>
+
+    <span class="k">def</span> <span class="nf">_subset_by_compatibility</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">y</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+            <span class="n">annotations</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">AnnotatedExampleSet</span><span class="p">:</span>
+        <span class="c1"># remove examples without positive labels</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">learner</span><span class="o">.</span><span class="n">definition</span><span class="o">.</span><span class="n">task</span> <span class="o">==</span> \
+            <span class="n">c</span><span class="o">.</span><span class="n">TaskType</span><span class="o">.</span><span class="n">MULTI_LABEL_CLASSIFICATION</span> <span class="ow">and</span> <span class="n">y</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">subset_idx</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span>
+                          <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">label</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+                          <span class="k">if</span> <span class="n">label</span><span class="p">]</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_subset</span><span class="p">(</span><span class="n">subset_idx</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">annotations</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">AnnotatedExampleSet</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">annotations</span><span class="p">)</span>
+
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">_convert_to_data_frame</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">results</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Takes evaluator-specific results and turns them into a pandas</span>
+<span class="sd">        data frame.</span>
+
+<span class="sd">        The data frame must have at least the following columns:</span>
+<span class="sd">            - example_column (int): example index</span>
+<span class="sd">            - position (int): position within example (one-based)</span>
+<span class="sd">            - group (str): group label, one of the following:</span>
+<span class="sd">                - &quot;TP&quot;: grammar position, important for model prediction</span>
+<span class="sd">                - &quot;FN&quot;: grammar position, not important for model prediction,</span>
+<span class="sd">                - &quot;FP&quot;: background position, important for model prediction,</span>
+<span class="sd">                - &quot;TN&quot;: background position, not important for model prediction</span>
+<span class="sd">            - label (str): label of example, e.g., &quot;cell type 1&quot;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_calculate_precision</span><span class="p">(</span><span class="n">positions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="n">num_true_positive</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">positions</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s2">&quot;TP&quot;</span><span class="p">)</span>
+        <span class="n">num_false_positive</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">positions</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s2">&quot;FP&quot;</span><span class="p">)</span>
+        <span class="n">num_false_negative</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">positions</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s2">&quot;FN&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">num_true_positive</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">num_false_positive</span> <span class="ow">and</span> \
+                <span class="ow">not</span> <span class="n">num_false_negative</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mf">1.0</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="n">num_true_positive</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">num_false_positive</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mf">0.0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">num_true_positive</span> <span class="o">/</span> <span class="p">(</span><span class="n">num_true_positive</span> <span class="o">+</span> <span class="n">num_false_positive</span><span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_calculate_recall</span><span class="p">(</span><span class="n">positions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="n">num_true_positive</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">positions</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s2">&quot;TP&quot;</span><span class="p">)</span>
+        <span class="n">num_false_positive</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">positions</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s2">&quot;FP&quot;</span><span class="p">)</span>
+        <span class="n">num_false_negative</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">positions</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s2">&quot;FN&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">num_true_positive</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">num_false_positive</span> <span class="ow">and</span> \
+                <span class="ow">not</span> <span class="n">num_false_negative</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mf">1.0</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="n">num_true_positive</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">num_false_negative</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mf">0.0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">num_true_positive</span> <span class="o">/</span> <span class="p">(</span><span class="n">num_true_positive</span> <span class="o">+</span> <span class="n">num_false_negative</span><span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_calculate_specificity</span><span class="p">(</span><span class="n">positions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="n">num_true_negative</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">positions</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s2">&quot;TN&quot;</span><span class="p">)</span>
+        <span class="n">num_false_positive</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">positions</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s2">&quot;FP&quot;</span><span class="p">)</span>
+        <span class="n">num_false_negative</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">positions</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s2">&quot;FN&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">num_true_negative</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">num_false_positive</span> <span class="ow">and</span> \
+                <span class="ow">not</span> <span class="n">num_false_negative</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mf">1.0</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">num_true_negative</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">num_false_positive</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mf">0.0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">num_true_negative</span> <span class="o">/</span> <span class="p">(</span><span class="n">num_true_negative</span> <span class="o">+</span> <span class="n">num_false_positive</span><span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_calculate_f1</span><span class="p">(</span><span class="n">positions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="n">precision</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">FeatureImportanceEvaluator</span><span class="o">.</span><span class="n">_calculate_precision</span><span class="p">(</span>
+            <span class="n">positions</span><span class="p">)</span>
+        <span class="n">recall</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">FeatureImportanceEvaluator</span><span class="o">.</span><span class="n">_calculate_recall</span><span class="p">(</span><span class="n">positions</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">precision</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">recall</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mf">0.0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="p">((</span><span class="n">precision</span> <span class="o">*</span> <span class="n">recall</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">precision</span> <span class="o">+</span> <span class="n">recall</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">_prepare_r_data_frame</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;precision&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;recall&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;specificity&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;f1&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;n&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">for</span> <span class="n">example_id</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">example</span><span class="o">.</span><span class="n">tolist</span><span class="p">()):</span>
+            <span class="n">example_df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">example</span> <span class="o">==</span> <span class="n">example_id</span><span class="p">]</span>
+            <span class="n">conf_matrix</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">example_df</span><span class="o">.</span><span class="n">group</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">example</span> <span class="o">==</span> <span class="n">example_id</span><span class="p">,</span> <span class="s2">&quot;precision&quot;</span><span class="p">]</span> <span class="o">=</span> \
+                <span class="n">FeatureImportanceEvaluator</span><span class="o">.</span><span class="n">_calculate_precision</span><span class="p">(</span><span class="n">conf_matrix</span><span class="p">)</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">example</span> <span class="o">==</span> <span class="n">example_id</span><span class="p">,</span> <span class="s2">&quot;recall&quot;</span><span class="p">]</span> <span class="o">=</span> \
+                <span class="n">FeatureImportanceEvaluator</span><span class="o">.</span><span class="n">_calculate_recall</span><span class="p">(</span><span class="n">conf_matrix</span><span class="p">)</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">example</span> <span class="o">==</span> <span class="n">example_id</span><span class="p">,</span> <span class="s2">&quot;specificity&quot;</span><span class="p">]</span> <span class="o">=</span> \
+                <span class="n">FeatureImportanceEvaluator</span><span class="o">.</span><span class="n">_calculate_specificity</span><span class="p">(</span><span class="n">conf_matrix</span><span class="p">)</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">example</span> <span class="o">==</span> <span class="n">example_id</span><span class="p">,</span> <span class="s2">&quot;f1&quot;</span><span class="p">]</span> <span class="o">=</span> \
+                <span class="n">FeatureImportanceEvaluator</span><span class="o">.</span><span class="n">_calculate_f1</span><span class="p">(</span><span class="n">conf_matrix</span><span class="p">)</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">example</span> <span class="o">==</span> <span class="n">example_id</span><span class="p">,</span> <span class="s2">&quot;n&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">example_df</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+
+        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;precision&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;label&quot;</span><span class="p">)[</span><span class="s2">&quot;precision&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="s2">&quot;mean&quot;</span><span class="p">)</span>
+        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;recall&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;label&quot;</span><span class="p">)[</span><span class="s2">&quot;recall&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="s2">&quot;mean&quot;</span><span class="p">)</span>
+        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;specificity&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span>
+            <span class="s2">&quot;label&quot;</span><span class="p">)[</span><span class="s2">&quot;specificity&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="s2">&quot;mean&quot;</span><span class="p">)</span>
+        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;f1&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;label&quot;</span><span class="p">)[</span><span class="s2">&quot;f1&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="s2">&quot;mean&quot;</span><span class="p">)</span>
+        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;n&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;label&quot;</span><span class="p">)[</span><span class="s2">&quot;n&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="s2">&quot;sum&quot;</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">df</span>
+
+    <span class="k">def</span> <span class="nf">_visualize_grammar_agreement</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">results</span><span class="p">,</span>
+                                     <span class="n">set_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;test&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_convert_to_data_frame</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_dir</span> <span class="o">+</span> <span class="n">set_name</span> <span class="o">+</span>
+                      <span class="s2">&quot;-grammar-agreement-thresholded-df.txt&quot;</span><span class="p">,</span>
+                      <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">pdf_file_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">set_name</span> <span class="o">+</span> <span class="s2">&quot;-grammar-agreement-thresholded.pdf&quot;</span>
+            <span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prepare_r_data_frame</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_execute_plotting_command</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">set_name</span><span class="p">,</span> <span class="n">pdf_file_name</span><span class="p">,</span>
+                                           <span class="bp">self</span><span class="o">.</span><span class="n">evaluator_name</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_execute_plotting_command</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">set_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">pdf_file_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+            <span class="n">title</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">caption</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">plot_script</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">pkg_resources</span><span class="o">.</span><span class="n">resource_filename</span><span class="p">(</span>
+            <span class="s2">&quot;seqgra&quot;</span><span class="p">,</span> <span class="s2">&quot;evaluator/plotagreement.R&quot;</span><span class="p">)</span>
+
+        <span class="n">temp_file_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_dir</span> <span class="o">+</span> <span class="s2">&quot;temp.txt&quot;</span>
+        <span class="n">pdf_file_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_dir</span> <span class="o">+</span> <span class="n">pdf_file_name</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">temp_file_name</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">statistics_df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">statistics_df</span> <span class="o">=</span> <span class="n">statistics_df</span><span class="o">.</span><span class="n">astype</span><span class="p">({</span><span class="s2">&quot;n&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">})</span>
+        <span class="n">statistics_df</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s2">&quot;example&quot;</span><span class="p">,</span> <span class="s2">&quot;position&quot;</span><span class="p">,</span> <span class="s2">&quot;group&quot;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                           <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;value&quot;</span> <span class="ow">in</span> <span class="n">statistics_df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="n">statistics_df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s2">&quot;unnormalized_value&quot;</span> <span class="ow">in</span> <span class="n">statistics_df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                <span class="n">statistics_df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s2">&quot;unnormalized_value&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+            <span class="n">statistics_df</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">statistics_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_dir</span> <span class="o">+</span> <span class="n">set_name</span> <span class="o">+</span> <span class="s2">&quot;-statistics.txt&quot;</span><span class="p">,</span>
+                                 <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">statistics_df</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">statistics_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_dir</span> <span class="o">+</span> <span class="n">set_name</span> <span class="o">+</span> <span class="s2">&quot;-statistics-thresholded.txt&quot;</span><span class="p">,</span>
+                                 <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">caption</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Rscript&quot;</span><span class="p">,</span> <span class="s2">&quot;--no-save&quot;</span><span class="p">,</span> <span class="s2">&quot;--no-restore&quot;</span><span class="p">,</span> <span class="s2">&quot;--quiet&quot;</span><span class="p">,</span>
+                   <span class="n">plot_script</span><span class="p">,</span> <span class="n">temp_file_name</span><span class="p">,</span> <span class="n">pdf_file_name</span><span class="p">,</span> <span class="n">title</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Rscript&quot;</span><span class="p">,</span> <span class="s2">&quot;--no-save&quot;</span><span class="p">,</span> <span class="s2">&quot;--no-restore&quot;</span><span class="p">,</span> <span class="s2">&quot;--quiet&quot;</span><span class="p">,</span>
+                   <span class="n">plot_script</span><span class="p">,</span> <span class="n">temp_file_name</span><span class="p">,</span> <span class="n">pdf_file_name</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span>
+                   <span class="n">caption</span><span class="p">]</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">universal_newlines</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">CalledProcessError</span> <span class="k">as</span> <span class="n">exception</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;failed to create grammar-model-agreement &quot;</span>
+                                <span class="s2">&quot;plots: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">exception</span><span class="o">.</span><span class="n">output</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">FileNotFoundError</span> <span class="k">as</span> <span class="n">exception</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Rscript not on PATH, skipping &quot;</span>
+                                <span class="s2">&quot;grammar-model-agreement plots&quot;</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">temp_file_name</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Konstantin Krismer.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

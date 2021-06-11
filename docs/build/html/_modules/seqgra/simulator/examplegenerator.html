@@ -1,0 +1,399 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>seqgra.simulator.examplegenerator &mdash; seqgra 0.0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="https://www.googletagmanager.com/gtag/js?id=G-SPQK9JRC9T"></script>
+        <script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-SPQK9JRC9T');
+</script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> seqgra
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">About seqgra</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Introduction</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Main Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples.html">Usage examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cmd.html">Command line utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dd.html">Data definition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../md.html">Model definition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../slec.html">Simulators, Learners, Evaluators, Comparators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ids.html">ID conventions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../structure.html"><code class="docutils literal notranslate"><span class="pre">output</span></code> folder structure</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Advanced features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../seqgra.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../py-modindex.html">Python module index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../genindex.html">Index</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">seqgra</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>seqgra.simulator.examplegenerator</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for seqgra.simulator.examplegenerator</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">MIT - CSAIL - Gifford Lab - seqgra</span>
+
+<span class="sd">Example generator</span>
+
+<span class="sd">@author: Konstantin Krismer</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span>
+<span class="kn">import</span> <span class="nn">random</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">seqgra</span> <span class="kn">import</span> <span class="n">AnnotatedExample</span>
+<span class="kn">import</span> <span class="nn">seqgra.constants</span> <span class="k">as</span> <span class="nn">c</span>
+<span class="kn">from</span> <span class="nn">seqgra.model.data</span> <span class="kn">import</span> <span class="n">Rule</span>
+<span class="kn">from</span> <span class="nn">seqgra.model.data</span> <span class="kn">import</span> <span class="n">Condition</span>
+<span class="kn">from</span> <span class="nn">seqgra.model.data</span> <span class="kn">import</span> <span class="n">Background</span>
+<span class="kn">from</span> <span class="nn">seqgra.model.data</span> <span class="kn">import</span> <span class="n">SpacingConstraint</span>
+<span class="kn">from</span> <span class="nn">seqgra.simulator</span> <span class="kn">import</span> <span class="n">BackgroundGenerator</span>
+
+
+<div class="viewcode-block" id="ExampleGenerator"><a class="viewcode-back" href="../../../seqgra.simulator.examplegenerator.html#seqgra.simulator.examplegenerator.ExampleGenerator">[docs]</a><span class="k">class</span> <span class="nc">ExampleGenerator</span><span class="p">:</span>
+<div class="viewcode-block" id="ExampleGenerator.generate_example"><a class="viewcode-back" href="../../../seqgra.simulator.examplegenerator.html#seqgra.simulator.examplegenerator.ExampleGenerator.generate_example">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">generate_example</span><span class="p">(</span><span class="n">conditions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Condition</span><span class="p">],</span> <span class="n">set_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                         <span class="n">background</span><span class="p">:</span> <span class="n">Background</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AnnotatedExample</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">conditions</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">background</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> \
+                <span class="n">BackgroundGenerator</span><span class="o">.</span><span class="n">generate_background</span><span class="p">(</span><span class="n">background</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                                                        <span class="n">set_name</span><span class="p">)</span>
+            <span class="n">annotation</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                <span class="p">[</span><span class="n">c</span><span class="o">.</span><span class="n">PositionType</span><span class="o">.</span><span class="n">BACKGROUND</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">background</span><span class="p">))</span>
+            <span class="n">example</span><span class="p">:</span> <span class="n">AnnotatedExample</span> <span class="o">=</span> <span class="n">AnnotatedExample</span><span class="p">(</span><span class="n">background</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
+                                                         <span class="n">annotation</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># randomly shuffle the order of the conditions,</span>
+            <span class="c1"># which determines in what order the condition rules are applied</span>
+            <span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">conditions</span><span class="p">)</span>
+            <span class="c1"># pick the background distribution of the first</span>
+            <span class="c1"># condition (after random shuffle)</span>
+            <span class="n">background</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> \
+                <span class="n">BackgroundGenerator</span><span class="o">.</span><span class="n">generate_background</span><span class="p">(</span><span class="n">background</span><span class="p">,</span>
+                                                        <span class="n">conditions</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                                                        <span class="n">set_name</span><span class="p">)</span>
+            <span class="n">annotation</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                <span class="p">[</span><span class="n">c</span><span class="o">.</span><span class="n">PositionType</span><span class="o">.</span><span class="n">BACKGROUND</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">background</span><span class="p">))</span>
+            <span class="n">example</span><span class="p">:</span> <span class="n">AnnotatedExample</span> <span class="o">=</span> <span class="n">AnnotatedExample</span><span class="p">(</span>
+                <span class="n">background</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">annotation</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">condition</span> <span class="ow">in</span> <span class="n">conditions</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">condition</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">condition</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;mutually exclusive&quot;</span><span class="p">:</span>
+                        <span class="n">p</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+                        <span class="n">current_p</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span>
+                        <span class="k">for</span> <span class="n">rule</span> <span class="ow">in</span> <span class="n">condition</span><span class="o">.</span><span class="n">grammar</span><span class="p">:</span>
+                            <span class="n">current_p</span> <span class="o">+=</span> <span class="n">rule</span><span class="o">.</span><span class="n">probability</span>
+                            <span class="k">if</span> <span class="n">p</span> <span class="o">&lt;=</span> <span class="n">current_p</span><span class="p">:</span>
+                                <span class="n">example</span> <span class="o">=</span> <span class="n">ExampleGenerator</span><span class="o">.</span><span class="n">apply_rule</span><span class="p">(</span><span class="n">rule</span><span class="p">,</span>
+                                                                      <span class="n">example</span><span class="p">)</span>
+                                <span class="k">break</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">for</span> <span class="n">rule</span> <span class="ow">in</span> <span class="n">condition</span><span class="o">.</span><span class="n">grammar</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">rule</span><span class="o">.</span><span class="n">probability</span><span class="p">:</span>
+                                <span class="n">example</span> <span class="o">=</span> <span class="n">ExampleGenerator</span><span class="o">.</span><span class="n">apply_rule</span><span class="p">(</span><span class="n">rule</span><span class="p">,</span>
+                                                                      <span class="n">example</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">example</span></div>
+
+<div class="viewcode-block" id="ExampleGenerator.apply_rule"><a class="viewcode-back" href="../../../seqgra.simulator.examplegenerator.html#seqgra.simulator.examplegenerator.ExampleGenerator.apply_rule">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">apply_rule</span><span class="p">(</span><span class="n">rule</span><span class="p">:</span> <span class="n">Rule</span><span class="p">,</span> <span class="n">example</span><span class="p">:</span> <span class="n">AnnotatedExample</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AnnotatedExample</span><span class="p">:</span>
+        <span class="n">elements</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">sequence_element</span> <span class="ow">in</span> <span class="n">rule</span><span class="o">.</span><span class="n">sequence_elements</span><span class="p">:</span>
+            <span class="n">elements</span><span class="p">[</span><span class="n">sequence_element</span><span class="o">.</span><span class="n">sid</span><span class="p">]</span> <span class="o">=</span> <span class="n">sequence_element</span><span class="o">.</span><span class="n">generate</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">rule</span><span class="o">.</span><span class="n">spacing_constraints</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> \
+                <span class="nb">len</span><span class="p">(</span><span class="n">rule</span><span class="o">.</span><span class="n">spacing_constraints</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># process all sequence elements with spacing constraints</span>
+            <span class="k">for</span> <span class="n">spacing_constraint</span> <span class="ow">in</span> <span class="n">rule</span><span class="o">.</span><span class="n">spacing_constraints</span><span class="p">:</span>
+                <span class="n">example</span> <span class="o">=</span> \
+                    <span class="n">ExampleGenerator</span><span class="o">.</span><span class="n">add_spatially_constrained_elements</span><span class="p">(</span>
+                        <span class="n">example</span><span class="p">,</span>
+                        <span class="n">spacing_constraint</span><span class="p">,</span>
+                        <span class="n">elements</span><span class="p">[</span><span class="n">spacing_constraint</span><span class="o">.</span><span class="n">sequence_element1</span><span class="o">.</span><span class="n">sid</span><span class="p">],</span>
+                        <span class="n">elements</span><span class="p">[</span><span class="n">spacing_constraint</span><span class="o">.</span><span class="n">sequence_element2</span><span class="o">.</span><span class="n">sid</span><span class="p">],</span>
+                        <span class="n">rule</span><span class="o">.</span><span class="n">position</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">spacing_constraint</span><span class="o">.</span><span class="n">sequence_element1</span><span class="o">.</span><span class="n">sid</span> <span class="ow">in</span> <span class="n">elements</span><span class="p">:</span>
+                    <span class="k">del</span> <span class="n">elements</span><span class="p">[</span><span class="n">spacing_constraint</span><span class="o">.</span><span class="n">sequence_element1</span><span class="o">.</span><span class="n">sid</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">spacing_constraint</span><span class="o">.</span><span class="n">sequence_element2</span><span class="o">.</span><span class="n">sid</span> <span class="ow">in</span> <span class="n">elements</span><span class="p">:</span>
+                    <span class="k">del</span> <span class="n">elements</span><span class="p">[</span><span class="n">spacing_constraint</span><span class="o">.</span><span class="n">sequence_element2</span><span class="o">.</span><span class="n">sid</span><span class="p">]</span>
+
+        <span class="c1"># process remaining sequence elements (w/o spacing constraints)</span>
+        <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">elements</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="n">position</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">ExampleGenerator</span><span class="o">.</span><span class="n">get_position</span><span class="p">(</span>
+                <span class="n">rule</span><span class="o">.</span><span class="n">position</span><span class="p">,</span>
+                <span class="nb">len</span><span class="p">(</span><span class="n">example</span><span class="o">.</span><span class="n">x</span><span class="p">),</span>
+                <span class="nb">len</span><span class="p">(</span><span class="n">element</span><span class="p">))</span>
+            <span class="n">example</span> <span class="o">=</span> <span class="n">ExampleGenerator</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">element</span><span class="p">,</span>
+                                                   <span class="n">position</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">example</span></div>
+
+<div class="viewcode-block" id="ExampleGenerator.get_position"><a class="viewcode-back" href="../../../seqgra.simulator.examplegenerator.html#seqgra.simulator.examplegenerator.ExampleGenerator.get_position">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_position</span><span class="p">(</span><span class="n">rule_position</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">sequence_length</span><span class="p">,</span>
+                     <span class="n">element_length</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">rule_position</span> <span class="o">==</span> <span class="s2">&quot;random&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span>
+                                     <span class="n">high</span><span class="o">=</span><span class="n">sequence_length</span> <span class="o">-</span> <span class="n">element_length</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">rule_position</span> <span class="o">==</span> <span class="s2">&quot;start&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span>
+        <span class="k">elif</span> <span class="n">rule_position</span> <span class="o">==</span> <span class="s2">&quot;end&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">sequence_length</span> <span class="o">-</span> <span class="n">element_length</span>
+        <span class="k">elif</span> <span class="n">rule_position</span> <span class="o">==</span> <span class="s2">&quot;center&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">sequence_length</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">-</span> <span class="n">element_length</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">rule_position</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span></div>
+
+<div class="viewcode-block" id="ExampleGenerator.get_distance"><a class="viewcode-back" href="../../../seqgra.simulator.examplegenerator.html#seqgra.simulator.examplegenerator.ExampleGenerator.get_distance">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_distance</span><span class="p">(</span><span class="n">example</span><span class="p">:</span> <span class="n">AnnotatedExample</span><span class="p">,</span>
+                     <span class="n">spacing_constraint</span><span class="p">:</span> <span class="n">SpacingConstraint</span><span class="p">,</span>
+                     <span class="n">element1</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">element2</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">rule_position</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="n">max_length</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">example</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">rule_position</span> <span class="o">!=</span> <span class="s2">&quot;random&quot;</span> <span class="ow">and</span> \
+           <span class="n">rule_position</span> <span class="o">!=</span> <span class="s2">&quot;start&quot;</span> <span class="ow">and</span> \
+           <span class="n">rule_position</span> <span class="o">!=</span> <span class="s2">&quot;end&quot;</span> <span class="ow">and</span> \
+           <span class="n">rule_position</span> <span class="o">!=</span> <span class="s2">&quot;center&quot;</span><span class="p">:</span>
+            <span class="n">position</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">rule_position</span><span class="p">)</span>
+            <span class="n">max_length</span> <span class="o">-=</span> <span class="n">position</span>
+
+        <span class="n">max_distance</span> <span class="o">=</span> <span class="n">max_length</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">element1</span><span class="p">)</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">element2</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span>
+            <span class="n">spacing_constraint</span><span class="o">.</span><span class="n">min_distance</span><span class="p">,</span>
+            <span class="n">high</span><span class="o">=</span><span class="nb">min</span><span class="p">(</span><span class="n">spacing_constraint</span><span class="o">.</span><span class="n">max_distance</span><span class="p">,</span> <span class="n">max_distance</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ExampleGenerator.add_spatially_constrained_elements"><a class="viewcode-back" href="../../../seqgra.simulator.examplegenerator.html#seqgra.simulator.examplegenerator.ExampleGenerator.add_spatially_constrained_elements">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">add_spatially_constrained_elements</span><span class="p">(</span>
+            <span class="n">example</span><span class="p">:</span> <span class="n">AnnotatedExample</span><span class="p">,</span>
+            <span class="n">spacing_constraint</span><span class="p">:</span> <span class="n">SpacingConstraint</span><span class="p">,</span>
+            <span class="n">element1</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+            <span class="n">element2</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+            <span class="n">rule_position</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AnnotatedExample</span><span class="p">:</span>
+        <span class="n">distance</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">ExampleGenerator</span><span class="o">.</span><span class="n">get_distance</span><span class="p">(</span><span class="n">example</span><span class="p">,</span>
+                                                      <span class="n">spacing_constraint</span><span class="p">,</span>
+                                                      <span class="n">element1</span><span class="p">,</span> <span class="n">element2</span><span class="p">,</span>
+                                                      <span class="n">rule_position</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">spacing_constraint</span><span class="o">.</span><span class="n">order</span> <span class="o">==</span> <span class="s2">&quot;random&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mf">0.5</span><span class="p">:</span>
+                <span class="n">element1</span><span class="p">,</span> <span class="n">element2</span> <span class="o">=</span> <span class="n">element2</span><span class="p">,</span> <span class="n">element1</span>
+
+        <span class="n">position1</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">ExampleGenerator</span><span class="o">.</span><span class="n">get_position</span><span class="p">(</span>
+            <span class="n">rule_position</span><span class="p">,</span>
+            <span class="nb">len</span><span class="p">(</span><span class="n">example</span><span class="o">.</span><span class="n">x</span><span class="p">),</span>
+            <span class="nb">len</span><span class="p">(</span><span class="n">element1</span><span class="p">)</span> <span class="o">+</span> <span class="n">distance</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">element2</span><span class="p">))</span>
+        <span class="n">example</span> <span class="o">=</span> <span class="n">ExampleGenerator</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">element1</span><span class="p">,</span> <span class="n">position1</span><span class="p">)</span>
+
+        <span class="n">position2</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">position1</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">element1</span><span class="p">)</span> <span class="o">+</span> <span class="n">distance</span>
+        <span class="n">example</span> <span class="o">=</span> <span class="n">ExampleGenerator</span><span class="o">.</span><span class="n">add_element</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">element2</span><span class="p">,</span> <span class="n">position2</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">example</span></div>
+
+<div class="viewcode-block" id="ExampleGenerator.add_element"><a class="viewcode-back" href="../../../seqgra.simulator.examplegenerator.html#seqgra.simulator.examplegenerator.ExampleGenerator.add_element">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">add_element</span><span class="p">(</span><span class="n">example</span><span class="p">:</span> <span class="n">AnnotatedExample</span><span class="p">,</span> <span class="n">element</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                    <span class="n">position</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AnnotatedExample</span><span class="p">:</span>
+        <span class="n">example</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">example</span><span class="o">.</span><span class="n">x</span><span class="p">[:</span><span class="n">position</span><span class="p">]</span> <span class="o">+</span> <span class="n">element</span> <span class="o">+</span> \
+            <span class="n">example</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="n">position</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">element</span><span class="p">):]</span>
+        <span class="n">example</span><span class="o">.</span><span class="n">annotation</span> <span class="o">=</span> <span class="n">example</span><span class="o">.</span><span class="n">annotation</span><span class="p">[:</span><span class="n">position</span><span class="p">]</span> <span class="o">+</span> \
+            <span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">PositionType</span><span class="o">.</span><span class="n">GRAMMAR</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">element</span><span class="p">))</span> <span class="o">+</span> \
+            <span class="n">example</span><span class="o">.</span><span class="n">annotation</span><span class="p">[</span><span class="n">position</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">element</span><span class="p">):]</span>
+        <span class="k">return</span> <span class="n">example</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Konstantin Krismer.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
