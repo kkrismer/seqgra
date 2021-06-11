@@ -1,0 +1,1470 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>seqgra.learner.torch.torchlearner module &mdash; seqgra 0.0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="https://www.googletagmanager.com/gtag/js?id=G-SPQK9JRC9T"></script>
+        <script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-SPQK9JRC9T');
+</script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="seqgra.learner.dna module" href="seqgra.learner.dna.html" />
+    <link rel="prev" title="seqgra.learner.torch.torchhelper module" href="seqgra.learner.torch.torchhelper.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> seqgra
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">About seqgra</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Main Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Usage examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cmd.html">Command line utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dd.html">Data definition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="md.html">Model definition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slec.html">Simulators, Learners, Evaluators, Comparators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ids.html">ID conventions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="structure.html"><code class="docutils literal notranslate"><span class="pre">output</span></code> folder structure</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Advanced features</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="seqgra.html">API reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="seqgra.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="seqgra.comparator.html">seqgra.comparator package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="seqgra.evaluator.html">seqgra.evaluator package</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="seqgra.learner.html">seqgra.learner package</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="seqgra.learner.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l5"><a class="reference internal" href="seqgra.learner.bayes.html">seqgra.learner.bayes package</a></li>
+<li class="toctree-l5"><a class="reference internal" href="seqgra.learner.tensorflow.html">seqgra.learner.tensorflow package</a></li>
+<li class="toctree-l5 current"><a class="reference internal" href="seqgra.learner.torch.html">seqgra.learner.torch package</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="seqgra.learner.html#submodules">Submodules</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="seqgra.model.html">seqgra.model package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="seqgra.parser.html">seqgra.parser package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="seqgra.simulator.html">seqgra.simulator package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="seqgra.writer.html">seqgra.writer package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="seqgra.html#submodules">Submodules</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="py-modindex.html">Python module index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="genindex.html">Index</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">seqgra</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="seqgra.html">seqgra package</a> &raquo;</li>
+        
+          <li><a href="seqgra.learner.html">seqgra.learner package</a> &raquo;</li>
+        
+          <li><a href="seqgra.learner.torch.html">seqgra.learner.torch package</a> &raquo;</li>
+        
+      <li>seqgra.learner.torch.torchlearner module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-seqgra.learner.torch.torchlearner">
+<span id="seqgra-learner-torch-torchlearner-module"></span><h1>seqgra.learner.torch.torchlearner module<a class="headerlink" href="#module-seqgra.learner.torch.torchlearner" title="Permalink to this headline">¶</a></h1>
+<p>MIT - CSAIL - Gifford Lab - seqgra</p>
+<p>PyTorch learners</p>
+<p>&#64;author: Konstantin Krismer</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchDNAMultiClassClassificationLearner">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">TorchDNAMultiClassClassificationLearner</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_definition</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="seqgra.model.model.modeldefinition.html#seqgra.model.model.modeldefinition.ModelDefinition" title="seqgra.model.model.modeldefinition.ModelDefinition"><span class="pre">seqgra.model.model.modeldefinition.ModelDefinition</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dir</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dir</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validate_data</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gpu_id</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/seqgra/learner/torch/torchlearner.html#TorchDNAMultiClassClassificationLearner"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchDNAMultiClassClassificationLearner" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="seqgra.learner.dna.html#seqgra.learner.dna.DNAMultiClassClassificationLearner" title="seqgra.learner.dna.DNAMultiClassClassificationLearner"><code class="xref py py-class docutils literal notranslate"><span class="pre">seqgra.learner.dna.DNAMultiClassClassificationLearner</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchDNAMultiClassClassificationLearner.check_annotations">
+<span class="sig-name descname"><span class="pre">check_annotations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">annotations</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">bool</span><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchDNAMultiClassClassificationLearner.check_annotations" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchDNAMultiClassClassificationLearner.check_labels">
+<span class="sig-name descname"><span class="pre">check_labels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">throw_exception</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">bool</span><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchDNAMultiClassClassificationLearner.check_labels" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchDNAMultiClassClassificationLearner.check_sequence">
+<span class="sig-name descname"><span class="pre">check_sequence</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">bool</span><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchDNAMultiClassClassificationLearner.check_sequence" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchDNAMultiClassClassificationLearner.create_model">
+<span class="sig-name descname"><span class="pre">create_model</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="_modules/seqgra/learner/torch/torchlearner.html#TorchDNAMultiClassClassificationLearner.create_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchDNAMultiClassClassificationLearner.create_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Abstract method to create library-specific model.</p>
+<p>Machine learning library specific implementations are provided for
+TensorFlow and PyTorch.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchDNAMultiClassClassificationLearner.dataset_generator">
+<span class="sig-name descname"><span class="pre">dataset_generator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchDNAMultiClassClassificationLearner.dataset_generator" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchDNAMultiClassClassificationLearner.decode_x">
+<span class="sig-name descname"><span class="pre">decode_x</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/seqgra/learner/torch/torchlearner.html#TorchDNAMultiClassClassificationLearner.decode_x"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchDNAMultiClassClassificationLearner.decode_x" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>x</strong> (<em>array</em>) – TODO</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchDNAMultiClassClassificationLearner.decode_y">
+<span class="sig-name descname"><span class="pre">decode_y</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchDNAMultiClassClassificationLearner.decode_y" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>y</strong> (<em>array</em>) – TODO</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchDNAMultiClassClassificationLearner.encode_x">
+<span class="sig-name descname"><span class="pre">encode_x</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/seqgra/learner/torch/torchlearner.html#TorchDNAMultiClassClassificationLearner.encode_x"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchDNAMultiClassClassificationLearner.encode_x" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>x</strong> (<em>array</em>) – TODO</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchDNAMultiClassClassificationLearner.encode_y">
+<span class="sig-name descname"><span class="pre">encode_y</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchDNAMultiClassClassificationLearner.encode_y" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>y</strong> (<em>array</em>) – TODO</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchDNAMultiClassClassificationLearner.evaluate_model">
+<span class="sig-name descname"><span class="pre">evaluate_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/seqgra/learner/torch/torchlearner.html#TorchDNAMultiClassClassificationLearner.evaluate_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchDNAMultiClassClassificationLearner.evaluate_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file_name</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – TODO</p></li>
+<li><p><strong>x</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em>) – TODO</p></li>
+<li><p><strong>y</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em>) – TODO</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>TODO</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>array</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>Exception</strong> – if neither <cite>file_name</cite> nor (<cite>x</cite> and <cite>y</cite>) are specified</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchDNAMultiClassClassificationLearner.get_annotations_file">
+<span class="sig-name descname"><span class="pre">get_annotations_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">set_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'test'</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchDNAMultiClassClassificationLearner.get_annotations_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get path to annotations file.</p>
+<p>E.g., <cite>get_annotations_file(“training”)</cite> returns
+<cite>{OUTPUTDIR}/input/{GRAMMAR ID}/training-annotation.txt</cite>, if it exists.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>set_name</strong> (<em>str</em><em>, </em><em>optional</em>) – set name can be one of the following:
+<cite>training</cite>, <cite>validation</cite>, or <cite>test</cite>; defaults to <cite>test</cite></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>file path to annotations file</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>Exception</strong> – in case requested annotations file does not exist</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchDNAMultiClassClassificationLearner.get_examples_file">
+<span class="sig-name descname"><span class="pre">get_examples_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">set_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'test'</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchDNAMultiClassClassificationLearner.get_examples_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get path to examples file.</p>
+<p>E.g., <cite>get_examples_file(“training”)</cite> returns
+<cite>{OUTPUTDIR}/input/{GRAMMAR ID}/training.txt</cite>, if it exists.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>set_name</strong> (<em>str</em><em>, </em><em>optional</em>) – set name can be one of the following:
+<cite>training</cite>, <cite>validation</cite>, or <cite>test</cite>; defaults to <cite>test</cite></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>file path to examples file</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>Exception</strong> – in case requested examples file does not exist</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchDNAMultiClassClassificationLearner.get_label_set">
+<span class="sig-name descname"><span class="pre">get_label_set</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchDNAMultiClassClassificationLearner.get_label_set" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchDNAMultiClassClassificationLearner.get_num_params">
+<span class="sig-name descname"><span class="pre">get_num_params</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="seqgra.schema.html#seqgra.schema.ModelSize" title="seqgra.schema.ModelSize"><span class="pre">seqgra.schema.ModelSize</span></a><a class="reference internal" href="_modules/seqgra/learner/torch/torchlearner.html#TorchDNAMultiClassClassificationLearner.get_num_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchDNAMultiClassClassificationLearner.get_num_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchDNAMultiClassClassificationLearner.get_sequence_length">
+<span class="sig-name descname"><span class="pre">get_sequence_length</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">int</span><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchDNAMultiClassClassificationLearner.get_sequence_length" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchDNAMultiClassClassificationLearner.load_model">
+<span class="sig-name descname"><span class="pre">load_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="_modules/seqgra/learner/torch/torchlearner.html#TorchDNAMultiClassClassificationLearner.load_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchDNAMultiClassClassificationLearner.load_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>file_name</strong> (<em>str</em><em>, </em><em>optional</em>) – file name in output dir;
+default is library-dependent</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchDNAMultiClassClassificationLearner.parse_annotations_data">
+<span class="sig-name descname"><span class="pre">parse_annotations_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="seqgra.schema.html#seqgra.schema.AnnotationSet" title="seqgra.schema.AnnotationSet"><span class="pre">seqgra.schema.AnnotationSet</span></a><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchDNAMultiClassClassificationLearner.parse_annotations_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method to parse annotations data file.</p>
+<p>Checks validity of annotations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>file_name</strong> (<em>str</em>) – file name</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>annotations (List[str]): annotations
+y (List[str]): labels</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="seqgra.schema.html#seqgra.schema.AnnotationSet" title="seqgra.schema.AnnotationSet">AnnotationSet</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchDNAMultiClassClassificationLearner.parse_examples_data">
+<span class="sig-name descname"><span class="pre">parse_examples_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="seqgra.schema.html#seqgra.schema.ExampleSet" title="seqgra.schema.ExampleSet"><span class="pre">seqgra.schema.ExampleSet</span></a><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchDNAMultiClassClassificationLearner.parse_examples_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Abstract method to parse examples data file.</p>
+<p>Checks validity of sequences with sequence data type specific
+implementations provided for DNA and amino acid sequences.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>file_name</strong> (<em>str</em>) – file name</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>x (List[str]): sequences
+y (List[str]): labels</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="seqgra.schema.html#seqgra.schema.ExampleSet" title="seqgra.schema.ExampleSet">ExampleSet</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchDNAMultiClassClassificationLearner.predict">
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encode</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/seqgra/learner/torch/torchlearner.html#TorchDNAMultiClassClassificationLearner.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchDNAMultiClassClassificationLearner.predict" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>array</em>) – TODO</p></li>
+<li><p><strong>encode</strong> (<em>bool</em><em>, </em><em>optional</em>) – whether <cite>x</cite> should be encoded;
+defaults to <cite>True</cite></p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>Exception</strong> – if neither <cite>file_name</cite> nor <cite>x</cite> are specified</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchDNAMultiClassClassificationLearner.print_model_summary">
+<span class="sig-name descname"><span class="pre">print_model_summary</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/seqgra/learner/torch/torchlearner.html#TorchDNAMultiClassClassificationLearner.print_model_summary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchDNAMultiClassClassificationLearner.print_model_summary" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchDNAMultiClassClassificationLearner.save_model">
+<span class="sig-name descname"><span class="pre">save_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="_modules/seqgra/learner/torch/torchlearner.html#TorchDNAMultiClassClassificationLearner.save_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchDNAMultiClassClassificationLearner.save_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>file_name</strong> (<em>str</em><em>, </em><em>optional</em>) – file name in output dir;
+default is library-dependent</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchDNAMultiClassClassificationLearner.set_seed">
+<span class="sig-name descname"><span class="pre">set_seed</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="_modules/seqgra/learner/torch/torchlearner.html#TorchDNAMultiClassClassificationLearner.set_seed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchDNAMultiClassClassificationLearner.set_seed" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchDNAMultiClassClassificationLearner.train_model">
+<span class="sig-name descname"><span class="pre">train_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name_train</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_name_val</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_train</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_train</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_val</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_val</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchDNAMultiClassClassificationLearner.train_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Train model.</p>
+<p>Specify either <cite>file_name_train</cite> and <cite>file_name_val</cite> or
+<cite>x_train</cite>, <cite>y_train</cite>, <cite>x_val</cite>, and <cite>y_val</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file_name_train</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – TODO</p></li>
+<li><p><strong>file_name_val</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – TODO</p></li>
+<li><p><strong>x_train</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em>) – TODO</p></li>
+<li><p><strong>y_train</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em>) – TODO</p></li>
+<li><p><strong>x_val</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em>) – TODO</p></li>
+<li><p><strong>y_val</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em>) – TODO</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>Exception</strong> – output directory non-empty</p></li>
+<li><p><strong>Exception</strong> – specify either file_name_train and file_name_val
+    or x_train, y_train, x_val, y_val</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchDNAMultiClassClassificationLearner.write_session_info">
+<span class="sig-name descname"><span class="pre">write_session_info</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="_modules/seqgra/learner/torch/torchlearner.html#TorchDNAMultiClassClassificationLearner.write_session_info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchDNAMultiClassClassificationLearner.write_session_info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchDNAMultiLabelClassificationLearner">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">TorchDNAMultiLabelClassificationLearner</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_definition</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="seqgra.model.model.modeldefinition.html#seqgra.model.model.modeldefinition.ModelDefinition" title="seqgra.model.model.modeldefinition.ModelDefinition"><span class="pre">seqgra.model.model.modeldefinition.ModelDefinition</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dir</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dir</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validate_data</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gpu_id</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/seqgra/learner/torch/torchlearner.html#TorchDNAMultiLabelClassificationLearner"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchDNAMultiLabelClassificationLearner" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="seqgra.learner.dna.html#seqgra.learner.dna.DNAMultiLabelClassificationLearner" title="seqgra.learner.dna.DNAMultiLabelClassificationLearner"><code class="xref py py-class docutils literal notranslate"><span class="pre">seqgra.learner.dna.DNAMultiLabelClassificationLearner</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchDNAMultiLabelClassificationLearner.check_annotations">
+<span class="sig-name descname"><span class="pre">check_annotations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">annotations</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">bool</span><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchDNAMultiLabelClassificationLearner.check_annotations" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchDNAMultiLabelClassificationLearner.check_labels">
+<span class="sig-name descname"><span class="pre">check_labels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">throw_exception</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">bool</span><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchDNAMultiLabelClassificationLearner.check_labels" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchDNAMultiLabelClassificationLearner.check_sequence">
+<span class="sig-name descname"><span class="pre">check_sequence</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">bool</span><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchDNAMultiLabelClassificationLearner.check_sequence" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchDNAMultiLabelClassificationLearner.create_model">
+<span class="sig-name descname"><span class="pre">create_model</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="_modules/seqgra/learner/torch/torchlearner.html#TorchDNAMultiLabelClassificationLearner.create_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchDNAMultiLabelClassificationLearner.create_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Abstract method to create library-specific model.</p>
+<p>Machine learning library specific implementations are provided for
+TensorFlow and PyTorch.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchDNAMultiLabelClassificationLearner.dataset_generator">
+<span class="sig-name descname"><span class="pre">dataset_generator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchDNAMultiLabelClassificationLearner.dataset_generator" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchDNAMultiLabelClassificationLearner.decode_x">
+<span class="sig-name descname"><span class="pre">decode_x</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/seqgra/learner/torch/torchlearner.html#TorchDNAMultiLabelClassificationLearner.decode_x"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchDNAMultiLabelClassificationLearner.decode_x" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>x</strong> (<em>array</em>) – TODO</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchDNAMultiLabelClassificationLearner.decode_y">
+<span class="sig-name descname"><span class="pre">decode_y</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchDNAMultiLabelClassificationLearner.decode_y" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>y</strong> (<em>array</em>) – TODO</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchDNAMultiLabelClassificationLearner.encode_x">
+<span class="sig-name descname"><span class="pre">encode_x</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/seqgra/learner/torch/torchlearner.html#TorchDNAMultiLabelClassificationLearner.encode_x"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchDNAMultiLabelClassificationLearner.encode_x" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>x</strong> (<em>array</em>) – TODO</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchDNAMultiLabelClassificationLearner.encode_y">
+<span class="sig-name descname"><span class="pre">encode_y</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchDNAMultiLabelClassificationLearner.encode_y" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>y</strong> (<em>array</em>) – TODO</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchDNAMultiLabelClassificationLearner.evaluate_model">
+<span class="sig-name descname"><span class="pre">evaluate_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/seqgra/learner/torch/torchlearner.html#TorchDNAMultiLabelClassificationLearner.evaluate_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchDNAMultiLabelClassificationLearner.evaluate_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file_name</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – TODO</p></li>
+<li><p><strong>x</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em>) – TODO</p></li>
+<li><p><strong>y</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em>) – TODO</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>TODO</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>array</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>Exception</strong> – if neither <cite>file_name</cite> nor (<cite>x</cite> and <cite>y</cite>) are specified</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchDNAMultiLabelClassificationLearner.get_annotations_file">
+<span class="sig-name descname"><span class="pre">get_annotations_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">set_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'test'</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchDNAMultiLabelClassificationLearner.get_annotations_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get path to annotations file.</p>
+<p>E.g., <cite>get_annotations_file(“training”)</cite> returns
+<cite>{OUTPUTDIR}/input/{GRAMMAR ID}/training-annotation.txt</cite>, if it exists.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>set_name</strong> (<em>str</em><em>, </em><em>optional</em>) – set name can be one of the following:
+<cite>training</cite>, <cite>validation</cite>, or <cite>test</cite>; defaults to <cite>test</cite></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>file path to annotations file</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>Exception</strong> – in case requested annotations file does not exist</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchDNAMultiLabelClassificationLearner.get_examples_file">
+<span class="sig-name descname"><span class="pre">get_examples_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">set_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'test'</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchDNAMultiLabelClassificationLearner.get_examples_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get path to examples file.</p>
+<p>E.g., <cite>get_examples_file(“training”)</cite> returns
+<cite>{OUTPUTDIR}/input/{GRAMMAR ID}/training.txt</cite>, if it exists.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>set_name</strong> (<em>str</em><em>, </em><em>optional</em>) – set name can be one of the following:
+<cite>training</cite>, <cite>validation</cite>, or <cite>test</cite>; defaults to <cite>test</cite></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>file path to examples file</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>Exception</strong> – in case requested examples file does not exist</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchDNAMultiLabelClassificationLearner.get_label_set">
+<span class="sig-name descname"><span class="pre">get_label_set</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchDNAMultiLabelClassificationLearner.get_label_set" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchDNAMultiLabelClassificationLearner.get_num_params">
+<span class="sig-name descname"><span class="pre">get_num_params</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="seqgra.schema.html#seqgra.schema.ModelSize" title="seqgra.schema.ModelSize"><span class="pre">seqgra.schema.ModelSize</span></a><a class="reference internal" href="_modules/seqgra/learner/torch/torchlearner.html#TorchDNAMultiLabelClassificationLearner.get_num_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchDNAMultiLabelClassificationLearner.get_num_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchDNAMultiLabelClassificationLearner.get_sequence_length">
+<span class="sig-name descname"><span class="pre">get_sequence_length</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">int</span><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchDNAMultiLabelClassificationLearner.get_sequence_length" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchDNAMultiLabelClassificationLearner.load_model">
+<span class="sig-name descname"><span class="pre">load_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="_modules/seqgra/learner/torch/torchlearner.html#TorchDNAMultiLabelClassificationLearner.load_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchDNAMultiLabelClassificationLearner.load_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>file_name</strong> (<em>str</em><em>, </em><em>optional</em>) – file name in output dir;
+default is library-dependent</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchDNAMultiLabelClassificationLearner.parse_annotations_data">
+<span class="sig-name descname"><span class="pre">parse_annotations_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="seqgra.schema.html#seqgra.schema.AnnotationSet" title="seqgra.schema.AnnotationSet"><span class="pre">seqgra.schema.AnnotationSet</span></a><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchDNAMultiLabelClassificationLearner.parse_annotations_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method to parse annotations data file.</p>
+<p>Checks validity of annotations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>file_name</strong> (<em>str</em>) – file name</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>annotations (List[str]): annotations
+y (List[str]): labels</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="seqgra.schema.html#seqgra.schema.AnnotationSet" title="seqgra.schema.AnnotationSet">AnnotationSet</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchDNAMultiLabelClassificationLearner.parse_examples_data">
+<span class="sig-name descname"><span class="pre">parse_examples_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="seqgra.schema.html#seqgra.schema.ExampleSet" title="seqgra.schema.ExampleSet"><span class="pre">seqgra.schema.ExampleSet</span></a><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchDNAMultiLabelClassificationLearner.parse_examples_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Abstract method to parse examples data file.</p>
+<p>Checks validity of sequences with sequence data type specific
+implementations provided for DNA and amino acid sequences.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>file_name</strong> (<em>str</em>) – file name</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>x (List[str]): sequences
+y (List[str]): labels</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="seqgra.schema.html#seqgra.schema.ExampleSet" title="seqgra.schema.ExampleSet">ExampleSet</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchDNAMultiLabelClassificationLearner.predict">
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encode</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/seqgra/learner/torch/torchlearner.html#TorchDNAMultiLabelClassificationLearner.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchDNAMultiLabelClassificationLearner.predict" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>array</em>) – TODO</p></li>
+<li><p><strong>encode</strong> (<em>bool</em><em>, </em><em>optional</em>) – whether <cite>x</cite> should be encoded;
+defaults to <cite>True</cite></p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>Exception</strong> – if neither <cite>file_name</cite> nor <cite>x</cite> are specified</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchDNAMultiLabelClassificationLearner.print_model_summary">
+<span class="sig-name descname"><span class="pre">print_model_summary</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/seqgra/learner/torch/torchlearner.html#TorchDNAMultiLabelClassificationLearner.print_model_summary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchDNAMultiLabelClassificationLearner.print_model_summary" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchDNAMultiLabelClassificationLearner.save_model">
+<span class="sig-name descname"><span class="pre">save_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="_modules/seqgra/learner/torch/torchlearner.html#TorchDNAMultiLabelClassificationLearner.save_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchDNAMultiLabelClassificationLearner.save_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>file_name</strong> (<em>str</em><em>, </em><em>optional</em>) – file name in output dir;
+default is library-dependent</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchDNAMultiLabelClassificationLearner.set_seed">
+<span class="sig-name descname"><span class="pre">set_seed</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="_modules/seqgra/learner/torch/torchlearner.html#TorchDNAMultiLabelClassificationLearner.set_seed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchDNAMultiLabelClassificationLearner.set_seed" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchDNAMultiLabelClassificationLearner.train_model">
+<span class="sig-name descname"><span class="pre">train_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name_train</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_name_val</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_train</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_train</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_val</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_val</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchDNAMultiLabelClassificationLearner.train_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Train model.</p>
+<p>Specify either <cite>file_name_train</cite> and <cite>file_name_val</cite> or
+<cite>x_train</cite>, <cite>y_train</cite>, <cite>x_val</cite>, and <cite>y_val</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file_name_train</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – TODO</p></li>
+<li><p><strong>file_name_val</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – TODO</p></li>
+<li><p><strong>x_train</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em>) – TODO</p></li>
+<li><p><strong>y_train</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em>) – TODO</p></li>
+<li><p><strong>x_val</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em>) – TODO</p></li>
+<li><p><strong>y_val</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em>) – TODO</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>Exception</strong> – output directory non-empty</p></li>
+<li><p><strong>Exception</strong> – specify either file_name_train and file_name_val
+    or x_train, y_train, x_val, y_val</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchDNAMultiLabelClassificationLearner.write_session_info">
+<span class="sig-name descname"><span class="pre">write_session_info</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="_modules/seqgra/learner/torch/torchlearner.html#TorchDNAMultiLabelClassificationLearner.write_session_info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchDNAMultiLabelClassificationLearner.write_session_info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchProteinMultiClassClassificationLearner">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">TorchProteinMultiClassClassificationLearner</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_definition</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="seqgra.model.model.modeldefinition.html#seqgra.model.model.modeldefinition.ModelDefinition" title="seqgra.model.model.modeldefinition.ModelDefinition"><span class="pre">seqgra.model.model.modeldefinition.ModelDefinition</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dir</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dir</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validate_data</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gpu_id</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/seqgra/learner/torch/torchlearner.html#TorchProteinMultiClassClassificationLearner"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchProteinMultiClassClassificationLearner" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="seqgra.learner.protein.html#seqgra.learner.protein.ProteinMultiClassClassificationLearner" title="seqgra.learner.protein.ProteinMultiClassClassificationLearner"><code class="xref py py-class docutils literal notranslate"><span class="pre">seqgra.learner.protein.ProteinMultiClassClassificationLearner</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchProteinMultiClassClassificationLearner.check_annotations">
+<span class="sig-name descname"><span class="pre">check_annotations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">annotations</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">bool</span><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchProteinMultiClassClassificationLearner.check_annotations" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchProteinMultiClassClassificationLearner.check_labels">
+<span class="sig-name descname"><span class="pre">check_labels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">throw_exception</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">bool</span><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchProteinMultiClassClassificationLearner.check_labels" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchProteinMultiClassClassificationLearner.check_sequence">
+<span class="sig-name descname"><span class="pre">check_sequence</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">bool</span><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchProteinMultiClassClassificationLearner.check_sequence" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchProteinMultiClassClassificationLearner.create_model">
+<span class="sig-name descname"><span class="pre">create_model</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="_modules/seqgra/learner/torch/torchlearner.html#TorchProteinMultiClassClassificationLearner.create_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchProteinMultiClassClassificationLearner.create_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Abstract method to create library-specific model.</p>
+<p>Machine learning library specific implementations are provided for
+TensorFlow and PyTorch.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchProteinMultiClassClassificationLearner.dataset_generator">
+<span class="sig-name descname"><span class="pre">dataset_generator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchProteinMultiClassClassificationLearner.dataset_generator" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchProteinMultiClassClassificationLearner.decode_x">
+<span class="sig-name descname"><span class="pre">decode_x</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/seqgra/learner/torch/torchlearner.html#TorchProteinMultiClassClassificationLearner.decode_x"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchProteinMultiClassClassificationLearner.decode_x" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>x</strong> (<em>array</em>) – TODO</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchProteinMultiClassClassificationLearner.decode_y">
+<span class="sig-name descname"><span class="pre">decode_y</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchProteinMultiClassClassificationLearner.decode_y" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>y</strong> (<em>array</em>) – TODO</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchProteinMultiClassClassificationLearner.encode_x">
+<span class="sig-name descname"><span class="pre">encode_x</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/seqgra/learner/torch/torchlearner.html#TorchProteinMultiClassClassificationLearner.encode_x"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchProteinMultiClassClassificationLearner.encode_x" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>x</strong> (<em>array</em>) – TODO</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchProteinMultiClassClassificationLearner.encode_y">
+<span class="sig-name descname"><span class="pre">encode_y</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchProteinMultiClassClassificationLearner.encode_y" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>y</strong> (<em>array</em>) – TODO</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchProteinMultiClassClassificationLearner.evaluate_model">
+<span class="sig-name descname"><span class="pre">evaluate_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/seqgra/learner/torch/torchlearner.html#TorchProteinMultiClassClassificationLearner.evaluate_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchProteinMultiClassClassificationLearner.evaluate_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file_name</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – TODO</p></li>
+<li><p><strong>x</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em>) – TODO</p></li>
+<li><p><strong>y</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em>) – TODO</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>TODO</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>array</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>Exception</strong> – if neither <cite>file_name</cite> nor (<cite>x</cite> and <cite>y</cite>) are specified</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchProteinMultiClassClassificationLearner.get_annotations_file">
+<span class="sig-name descname"><span class="pre">get_annotations_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">set_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'test'</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchProteinMultiClassClassificationLearner.get_annotations_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get path to annotations file.</p>
+<p>E.g., <cite>get_annotations_file(“training”)</cite> returns
+<cite>{OUTPUTDIR}/input/{GRAMMAR ID}/training-annotation.txt</cite>, if it exists.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>set_name</strong> (<em>str</em><em>, </em><em>optional</em>) – set name can be one of the following:
+<cite>training</cite>, <cite>validation</cite>, or <cite>test</cite>; defaults to <cite>test</cite></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>file path to annotations file</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>Exception</strong> – in case requested annotations file does not exist</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchProteinMultiClassClassificationLearner.get_examples_file">
+<span class="sig-name descname"><span class="pre">get_examples_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">set_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'test'</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchProteinMultiClassClassificationLearner.get_examples_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get path to examples file.</p>
+<p>E.g., <cite>get_examples_file(“training”)</cite> returns
+<cite>{OUTPUTDIR}/input/{GRAMMAR ID}/training.txt</cite>, if it exists.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>set_name</strong> (<em>str</em><em>, </em><em>optional</em>) – set name can be one of the following:
+<cite>training</cite>, <cite>validation</cite>, or <cite>test</cite>; defaults to <cite>test</cite></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>file path to examples file</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>Exception</strong> – in case requested examples file does not exist</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchProteinMultiClassClassificationLearner.get_label_set">
+<span class="sig-name descname"><span class="pre">get_label_set</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchProteinMultiClassClassificationLearner.get_label_set" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchProteinMultiClassClassificationLearner.get_num_params">
+<span class="sig-name descname"><span class="pre">get_num_params</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="seqgra.schema.html#seqgra.schema.ModelSize" title="seqgra.schema.ModelSize"><span class="pre">seqgra.schema.ModelSize</span></a><a class="reference internal" href="_modules/seqgra/learner/torch/torchlearner.html#TorchProteinMultiClassClassificationLearner.get_num_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchProteinMultiClassClassificationLearner.get_num_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchProteinMultiClassClassificationLearner.get_sequence_length">
+<span class="sig-name descname"><span class="pre">get_sequence_length</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">int</span><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchProteinMultiClassClassificationLearner.get_sequence_length" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchProteinMultiClassClassificationLearner.load_model">
+<span class="sig-name descname"><span class="pre">load_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="_modules/seqgra/learner/torch/torchlearner.html#TorchProteinMultiClassClassificationLearner.load_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchProteinMultiClassClassificationLearner.load_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>file_name</strong> (<em>str</em><em>, </em><em>optional</em>) – file name in output dir;
+default is library-dependent</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchProteinMultiClassClassificationLearner.parse_annotations_data">
+<span class="sig-name descname"><span class="pre">parse_annotations_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="seqgra.schema.html#seqgra.schema.AnnotationSet" title="seqgra.schema.AnnotationSet"><span class="pre">seqgra.schema.AnnotationSet</span></a><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchProteinMultiClassClassificationLearner.parse_annotations_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method to parse annotations data file.</p>
+<p>Checks validity of annotations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>file_name</strong> (<em>str</em>) – file name</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>annotations (List[str]): annotations
+y (List[str]): labels</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="seqgra.schema.html#seqgra.schema.AnnotationSet" title="seqgra.schema.AnnotationSet">AnnotationSet</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchProteinMultiClassClassificationLearner.parse_examples_data">
+<span class="sig-name descname"><span class="pre">parse_examples_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="seqgra.schema.html#seqgra.schema.ExampleSet" title="seqgra.schema.ExampleSet"><span class="pre">seqgra.schema.ExampleSet</span></a><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchProteinMultiClassClassificationLearner.parse_examples_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Abstract method to parse examples data file.</p>
+<p>Checks validity of sequences with sequence data type specific
+implementations provided for DNA and amino acid sequences.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>file_name</strong> (<em>str</em>) – file name</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>x (List[str]): sequences
+y (List[str]): labels</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="seqgra.schema.html#seqgra.schema.ExampleSet" title="seqgra.schema.ExampleSet">ExampleSet</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchProteinMultiClassClassificationLearner.predict">
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encode</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/seqgra/learner/torch/torchlearner.html#TorchProteinMultiClassClassificationLearner.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchProteinMultiClassClassificationLearner.predict" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>array</em>) – TODO</p></li>
+<li><p><strong>encode</strong> (<em>bool</em><em>, </em><em>optional</em>) – whether <cite>x</cite> should be encoded;
+defaults to <cite>True</cite></p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>Exception</strong> – if neither <cite>file_name</cite> nor <cite>x</cite> are specified</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchProteinMultiClassClassificationLearner.print_model_summary">
+<span class="sig-name descname"><span class="pre">print_model_summary</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/seqgra/learner/torch/torchlearner.html#TorchProteinMultiClassClassificationLearner.print_model_summary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchProteinMultiClassClassificationLearner.print_model_summary" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchProteinMultiClassClassificationLearner.save_model">
+<span class="sig-name descname"><span class="pre">save_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="_modules/seqgra/learner/torch/torchlearner.html#TorchProteinMultiClassClassificationLearner.save_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchProteinMultiClassClassificationLearner.save_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>file_name</strong> (<em>str</em><em>, </em><em>optional</em>) – file name in output dir;
+default is library-dependent</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchProteinMultiClassClassificationLearner.set_seed">
+<span class="sig-name descname"><span class="pre">set_seed</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="_modules/seqgra/learner/torch/torchlearner.html#TorchProteinMultiClassClassificationLearner.set_seed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchProteinMultiClassClassificationLearner.set_seed" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchProteinMultiClassClassificationLearner.train_model">
+<span class="sig-name descname"><span class="pre">train_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name_train</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_name_val</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_train</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_train</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_val</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_val</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchProteinMultiClassClassificationLearner.train_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Train model.</p>
+<p>Specify either <cite>file_name_train</cite> and <cite>file_name_val</cite> or
+<cite>x_train</cite>, <cite>y_train</cite>, <cite>x_val</cite>, and <cite>y_val</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file_name_train</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – TODO</p></li>
+<li><p><strong>file_name_val</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – TODO</p></li>
+<li><p><strong>x_train</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em>) – TODO</p></li>
+<li><p><strong>y_train</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em>) – TODO</p></li>
+<li><p><strong>x_val</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em>) – TODO</p></li>
+<li><p><strong>y_val</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em>) – TODO</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>Exception</strong> – output directory non-empty</p></li>
+<li><p><strong>Exception</strong> – specify either file_name_train and file_name_val
+    or x_train, y_train, x_val, y_val</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchProteinMultiClassClassificationLearner.write_session_info">
+<span class="sig-name descname"><span class="pre">write_session_info</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="_modules/seqgra/learner/torch/torchlearner.html#TorchProteinMultiClassClassificationLearner.write_session_info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchProteinMultiClassClassificationLearner.write_session_info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchProteinMultiLabelClassificationLearner">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">TorchProteinMultiLabelClassificationLearner</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_definition</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="seqgra.model.model.modeldefinition.html#seqgra.model.model.modeldefinition.ModelDefinition" title="seqgra.model.model.modeldefinition.ModelDefinition"><span class="pre">seqgra.model.model.modeldefinition.ModelDefinition</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dir</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dir</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validate_data</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gpu_id</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/seqgra/learner/torch/torchlearner.html#TorchProteinMultiLabelClassificationLearner"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchProteinMultiLabelClassificationLearner" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="seqgra.learner.protein.html#seqgra.learner.protein.ProteinMultiLabelClassificationLearner" title="seqgra.learner.protein.ProteinMultiLabelClassificationLearner"><code class="xref py py-class docutils literal notranslate"><span class="pre">seqgra.learner.protein.ProteinMultiLabelClassificationLearner</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchProteinMultiLabelClassificationLearner.check_annotations">
+<span class="sig-name descname"><span class="pre">check_annotations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">annotations</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">bool</span><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchProteinMultiLabelClassificationLearner.check_annotations" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchProteinMultiLabelClassificationLearner.check_labels">
+<span class="sig-name descname"><span class="pre">check_labels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">throw_exception</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">bool</span><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchProteinMultiLabelClassificationLearner.check_labels" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchProteinMultiLabelClassificationLearner.check_sequence">
+<span class="sig-name descname"><span class="pre">check_sequence</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">bool</span><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchProteinMultiLabelClassificationLearner.check_sequence" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchProteinMultiLabelClassificationLearner.create_model">
+<span class="sig-name descname"><span class="pre">create_model</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="_modules/seqgra/learner/torch/torchlearner.html#TorchProteinMultiLabelClassificationLearner.create_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchProteinMultiLabelClassificationLearner.create_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Abstract method to create library-specific model.</p>
+<p>Machine learning library specific implementations are provided for
+TensorFlow and PyTorch.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchProteinMultiLabelClassificationLearner.dataset_generator">
+<span class="sig-name descname"><span class="pre">dataset_generator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchProteinMultiLabelClassificationLearner.dataset_generator" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchProteinMultiLabelClassificationLearner.decode_x">
+<span class="sig-name descname"><span class="pre">decode_x</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/seqgra/learner/torch/torchlearner.html#TorchProteinMultiLabelClassificationLearner.decode_x"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchProteinMultiLabelClassificationLearner.decode_x" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>x</strong> (<em>array</em>) – TODO</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchProteinMultiLabelClassificationLearner.decode_y">
+<span class="sig-name descname"><span class="pre">decode_y</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchProteinMultiLabelClassificationLearner.decode_y" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>y</strong> (<em>array</em>) – TODO</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchProteinMultiLabelClassificationLearner.encode_x">
+<span class="sig-name descname"><span class="pre">encode_x</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/seqgra/learner/torch/torchlearner.html#TorchProteinMultiLabelClassificationLearner.encode_x"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchProteinMultiLabelClassificationLearner.encode_x" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>x</strong> (<em>array</em>) – TODO</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchProteinMultiLabelClassificationLearner.encode_y">
+<span class="sig-name descname"><span class="pre">encode_y</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchProteinMultiLabelClassificationLearner.encode_y" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>y</strong> (<em>array</em>) – TODO</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchProteinMultiLabelClassificationLearner.evaluate_model">
+<span class="sig-name descname"><span class="pre">evaluate_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/seqgra/learner/torch/torchlearner.html#TorchProteinMultiLabelClassificationLearner.evaluate_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchProteinMultiLabelClassificationLearner.evaluate_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file_name</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – TODO</p></li>
+<li><p><strong>x</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em>) – TODO</p></li>
+<li><p><strong>y</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em>) – TODO</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>TODO</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>array</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>Exception</strong> – if neither <cite>file_name</cite> nor (<cite>x</cite> and <cite>y</cite>) are specified</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchProteinMultiLabelClassificationLearner.get_annotations_file">
+<span class="sig-name descname"><span class="pre">get_annotations_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">set_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'test'</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchProteinMultiLabelClassificationLearner.get_annotations_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get path to annotations file.</p>
+<p>E.g., <cite>get_annotations_file(“training”)</cite> returns
+<cite>{OUTPUTDIR}/input/{GRAMMAR ID}/training-annotation.txt</cite>, if it exists.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>set_name</strong> (<em>str</em><em>, </em><em>optional</em>) – set name can be one of the following:
+<cite>training</cite>, <cite>validation</cite>, or <cite>test</cite>; defaults to <cite>test</cite></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>file path to annotations file</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>Exception</strong> – in case requested annotations file does not exist</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchProteinMultiLabelClassificationLearner.get_examples_file">
+<span class="sig-name descname"><span class="pre">get_examples_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">set_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'test'</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchProteinMultiLabelClassificationLearner.get_examples_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get path to examples file.</p>
+<p>E.g., <cite>get_examples_file(“training”)</cite> returns
+<cite>{OUTPUTDIR}/input/{GRAMMAR ID}/training.txt</cite>, if it exists.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>set_name</strong> (<em>str</em><em>, </em><em>optional</em>) – set name can be one of the following:
+<cite>training</cite>, <cite>validation</cite>, or <cite>test</cite>; defaults to <cite>test</cite></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>file path to examples file</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>Exception</strong> – in case requested examples file does not exist</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchProteinMultiLabelClassificationLearner.get_label_set">
+<span class="sig-name descname"><span class="pre">get_label_set</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchProteinMultiLabelClassificationLearner.get_label_set" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchProteinMultiLabelClassificationLearner.get_num_params">
+<span class="sig-name descname"><span class="pre">get_num_params</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="seqgra.schema.html#seqgra.schema.ModelSize" title="seqgra.schema.ModelSize"><span class="pre">seqgra.schema.ModelSize</span></a><a class="reference internal" href="_modules/seqgra/learner/torch/torchlearner.html#TorchProteinMultiLabelClassificationLearner.get_num_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchProteinMultiLabelClassificationLearner.get_num_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchProteinMultiLabelClassificationLearner.get_sequence_length">
+<span class="sig-name descname"><span class="pre">get_sequence_length</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">int</span><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchProteinMultiLabelClassificationLearner.get_sequence_length" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchProteinMultiLabelClassificationLearner.load_model">
+<span class="sig-name descname"><span class="pre">load_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="_modules/seqgra/learner/torch/torchlearner.html#TorchProteinMultiLabelClassificationLearner.load_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchProteinMultiLabelClassificationLearner.load_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>file_name</strong> (<em>str</em><em>, </em><em>optional</em>) – file name in output dir;
+default is library-dependent</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchProteinMultiLabelClassificationLearner.parse_annotations_data">
+<span class="sig-name descname"><span class="pre">parse_annotations_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="seqgra.schema.html#seqgra.schema.AnnotationSet" title="seqgra.schema.AnnotationSet"><span class="pre">seqgra.schema.AnnotationSet</span></a><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchProteinMultiLabelClassificationLearner.parse_annotations_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method to parse annotations data file.</p>
+<p>Checks validity of annotations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>file_name</strong> (<em>str</em>) – file name</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>annotations (List[str]): annotations
+y (List[str]): labels</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="seqgra.schema.html#seqgra.schema.AnnotationSet" title="seqgra.schema.AnnotationSet">AnnotationSet</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchProteinMultiLabelClassificationLearner.parse_examples_data">
+<span class="sig-name descname"><span class="pre">parse_examples_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="seqgra.schema.html#seqgra.schema.ExampleSet" title="seqgra.schema.ExampleSet"><span class="pre">seqgra.schema.ExampleSet</span></a><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchProteinMultiLabelClassificationLearner.parse_examples_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Abstract method to parse examples data file.</p>
+<p>Checks validity of sequences with sequence data type specific
+implementations provided for DNA and amino acid sequences.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>file_name</strong> (<em>str</em>) – file name</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>x (List[str]): sequences
+y (List[str]): labels</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="seqgra.schema.html#seqgra.schema.ExampleSet" title="seqgra.schema.ExampleSet">ExampleSet</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchProteinMultiLabelClassificationLearner.predict">
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encode</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/seqgra/learner/torch/torchlearner.html#TorchProteinMultiLabelClassificationLearner.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchProteinMultiLabelClassificationLearner.predict" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>array</em>) – TODO</p></li>
+<li><p><strong>encode</strong> (<em>bool</em><em>, </em><em>optional</em>) – whether <cite>x</cite> should be encoded;
+defaults to <cite>True</cite></p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>Exception</strong> – if neither <cite>file_name</cite> nor <cite>x</cite> are specified</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchProteinMultiLabelClassificationLearner.print_model_summary">
+<span class="sig-name descname"><span class="pre">print_model_summary</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/seqgra/learner/torch/torchlearner.html#TorchProteinMultiLabelClassificationLearner.print_model_summary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchProteinMultiLabelClassificationLearner.print_model_summary" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchProteinMultiLabelClassificationLearner.save_model">
+<span class="sig-name descname"><span class="pre">save_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="_modules/seqgra/learner/torch/torchlearner.html#TorchProteinMultiLabelClassificationLearner.save_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchProteinMultiLabelClassificationLearner.save_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>file_name</strong> (<em>str</em><em>, </em><em>optional</em>) – file name in output dir;
+default is library-dependent</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchProteinMultiLabelClassificationLearner.set_seed">
+<span class="sig-name descname"><span class="pre">set_seed</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="_modules/seqgra/learner/torch/torchlearner.html#TorchProteinMultiLabelClassificationLearner.set_seed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchProteinMultiLabelClassificationLearner.set_seed" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchProteinMultiLabelClassificationLearner.train_model">
+<span class="sig-name descname"><span class="pre">train_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name_train</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_name_val</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_train</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_train</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_val</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_val</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchProteinMultiLabelClassificationLearner.train_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Train model.</p>
+<p>Specify either <cite>file_name_train</cite> and <cite>file_name_val</cite> or
+<cite>x_train</cite>, <cite>y_train</cite>, <cite>x_val</cite>, and <cite>y_val</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file_name_train</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – TODO</p></li>
+<li><p><strong>file_name_val</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – TODO</p></li>
+<li><p><strong>x_train</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em>) – TODO</p></li>
+<li><p><strong>y_train</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em>) – TODO</p></li>
+<li><p><strong>x_val</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em>) – TODO</p></li>
+<li><p><strong>y_val</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em>) – TODO</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>Exception</strong> – output directory non-empty</p></li>
+<li><p><strong>Exception</strong> – specify either file_name_train and file_name_val
+    or x_train, y_train, x_val, y_val</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.torch.torchlearner.TorchProteinMultiLabelClassificationLearner.write_session_info">
+<span class="sig-name descname"><span class="pre">write_session_info</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="_modules/seqgra/learner/torch/torchlearner.html#TorchProteinMultiLabelClassificationLearner.write_session_info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.torch.torchlearner.TorchProteinMultiLabelClassificationLearner.write_session_info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="seqgra.learner.dna.html" class="btn btn-neutral float-right" title="seqgra.learner.dna module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="seqgra.learner.torch.torchhelper.html" class="btn btn-neutral float-left" title="seqgra.learner.torch.torchhelper module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Konstantin Krismer.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

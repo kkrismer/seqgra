@@ -1,0 +1,514 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>seqgra.learner.bayes.bayeslearner &mdash; seqgra 0.0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script src="https://www.googletagmanager.com/gtag/js?id=G-SPQK9JRC9T"></script>
+        <script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-SPQK9JRC9T');
+</script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> seqgra
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">About seqgra</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../intro.html">Introduction</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Main Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../examples.html">Usage examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../cmd.html">Command line utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../dd.html">Data definition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../md.html">Model definition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../slec.html">Simulators, Learners, Evaluators, Comparators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../ids.html">ID conventions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../structure.html"><code class="docutils literal notranslate"><span class="pre">output</span></code> folder structure</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Advanced features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../seqgra.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../py-modindex.html">Python module index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../genindex.html">Index</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">seqgra</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>seqgra.learner.bayes.bayeslearner</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for seqgra.learner.bayes.bayeslearner</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;MIT - CSAIL - Gifford Lab - seqgra</span>
+
+<span class="sd">TensorFlow Keras learners</span>
+
+<span class="sd">@author: Konstantin Krismer</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">from</span> <span class="nn">seqgra</span> <span class="kn">import</span> <span class="n">ModelSize</span>
+<span class="kn">from</span> <span class="nn">seqgra.learner</span> <span class="kn">import</span> <span class="n">DNAMultiClassClassificationLearner</span>
+<span class="kn">from</span> <span class="nn">seqgra.learner</span> <span class="kn">import</span> <span class="n">DNAMultiLabelClassificationLearner</span>
+<span class="kn">from</span> <span class="nn">seqgra.learner</span> <span class="kn">import</span> <span class="n">ProteinMultiClassClassificationLearner</span>
+<span class="kn">from</span> <span class="nn">seqgra.learner</span> <span class="kn">import</span> <span class="n">ProteinMultiLabelClassificationLearner</span>
+<span class="kn">from</span> <span class="nn">seqgra.learner.bayes</span> <span class="kn">import</span> <span class="n">BayesOptimalHelper</span>
+<span class="kn">from</span> <span class="nn">seqgra.model</span> <span class="kn">import</span> <span class="n">ModelDefinition</span>
+
+
+<div class="viewcode-block" id="BayesOptimalDNAMultiClassClassificationLearner"><a class="viewcode-back" href="../../../../seqgra.learner.bayes.bayeslearner.html#seqgra.learner.bayes.bayeslearner.BayesOptimalDNAMultiClassClassificationLearner">[docs]</a><span class="k">class</span> <span class="nc">BayesOptimalDNAMultiClassClassificationLearner</span><span class="p">(</span>
+        <span class="n">DNAMultiClassClassificationLearner</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_definition</span><span class="p">:</span> <span class="n">ModelDefinition</span><span class="p">,</span> <span class="n">data_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                 <span class="n">output_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">validate_data</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+                 <span class="n">silent</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">model_definition</span><span class="p">,</span> <span class="n">data_dir</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">,</span> <span class="n">validate_data</span><span class="p">,</span>
+                         <span class="n">silent</span><span class="o">=</span><span class="n">silent</span><span class="p">)</span>
+
+<div class="viewcode-block" id="BayesOptimalDNAMultiClassClassificationLearner.create_model"><a class="viewcode-back" href="../../../../seqgra.learner.bayes.bayeslearner.html#seqgra.learner.bayes.bayeslearner.BayesOptimalDNAMultiClassClassificationLearner.create_model">[docs]</a>    <span class="k">def</span> <span class="nf">create_model</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">BayesOptimalHelper</span><span class="o">.</span><span class="n">create_model</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BayesOptimalDNAMultiClassClassificationLearner.print_model_summary"><a class="viewcode-back" href="../../../../seqgra.learner.bayes.bayeslearner.html#seqgra.learner.bayes.bayeslearner.BayesOptimalDNAMultiClassClassificationLearner.print_model_summary">[docs]</a>    <span class="k">def</span> <span class="nf">print_model_summary</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">BayesOptimalHelper</span><span class="o">.</span><span class="n">print_model_summary</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BayesOptimalDNAMultiClassClassificationLearner.set_seed"><a class="viewcode-back" href="../../../../seqgra.learner.bayes.bayeslearner.html#seqgra.learner.bayes.bayeslearner.BayesOptimalDNAMultiClassClassificationLearner.set_seed">[docs]</a>    <span class="k">def</span> <span class="nf">set_seed</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">BayesOptimalHelper</span><span class="o">.</span><span class="n">set_seed</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_train_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                     <span class="n">file_name_train</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                     <span class="n">file_name_val</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                     <span class="n">x_train</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                     <span class="n">y_train</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                     <span class="n">x_val</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                     <span class="n">y_val</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">BayesOptimalHelper</span><span class="o">.</span><span class="n">train_model</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+<div class="viewcode-block" id="BayesOptimalDNAMultiClassClassificationLearner.evaluate_model"><a class="viewcode-back" href="../../../../seqgra.learner.bayes.bayeslearner.html#seqgra.learner.bayes.bayeslearner.BayesOptimalDNAMultiClassClassificationLearner.evaluate_model">[docs]</a>    <span class="k">def</span> <span class="nf">evaluate_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                       <span class="n">x</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                       <span class="n">y</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">y</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">elif</span> <span class="n">file_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_examples_data</span><span class="p">(</span><span class="n">file_name</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;specify either file_name or x, y&quot;</span><span class="p">)</span>
+
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">encode_x</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">encode_y</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">BayesOptimalHelper</span><span class="o">.</span><span class="n">evaluate_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BayesOptimalDNAMultiClassClassificationLearner.predict"><a class="viewcode-back" href="../../../../seqgra.learner.bayes.bayeslearner.html#seqgra.learner.bayes.bayeslearner.BayesOptimalDNAMultiClassClassificationLearner.predict">[docs]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="n">x</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="n">encode</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">encode</span><span class="p">:</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">encode_x</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">file_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">x</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_examples_data</span><span class="p">(</span><span class="n">file_name</span><span class="p">)</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">encode_x</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;specify either file_name or x&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">BayesOptimalHelper</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">silent</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BayesOptimalDNAMultiClassClassificationLearner.save_model"><a class="viewcode-back" href="../../../../seqgra.learner.bayes.bayeslearner.html#seqgra.learner.bayes.bayeslearner.BayesOptimalDNAMultiClassClassificationLearner.save_model">[docs]</a>    <span class="k">def</span> <span class="nf">save_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="BayesOptimalDNAMultiClassClassificationLearner.write_session_info"><a class="viewcode-back" href="../../../../seqgra.learner.bayes.bayeslearner.html#seqgra.learner.bayes.bayeslearner.BayesOptimalDNAMultiClassClassificationLearner.write_session_info">[docs]</a>    <span class="k">def</span> <span class="nf">write_session_info</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">BayesOptimalHelper</span><span class="o">.</span><span class="n">write_session_info</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BayesOptimalDNAMultiClassClassificationLearner.load_model"><a class="viewcode-back" href="../../../../seqgra.learner.bayes.bayeslearner.html#seqgra.learner.bayes.bayeslearner.BayesOptimalDNAMultiClassClassificationLearner.load_model">[docs]</a>    <span class="k">def</span> <span class="nf">load_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">create_model</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="BayesOptimalDNAMultiClassClassificationLearner.get_num_params"><a class="viewcode-back" href="../../../../seqgra.learner.bayes.bayeslearner.html#seqgra.learner.bayes.bayeslearner.BayesOptimalDNAMultiClassClassificationLearner.get_num_params">[docs]</a>    <span class="k">def</span> <span class="nf">get_num_params</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ModelSize</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">0</span></div></div>
+
+
+<div class="viewcode-block" id="BayesOptimalDNAMultiLabelClassificationLearner"><a class="viewcode-back" href="../../../../seqgra.learner.bayes.bayeslearner.html#seqgra.learner.bayes.bayeslearner.BayesOptimalDNAMultiLabelClassificationLearner">[docs]</a><span class="k">class</span> <span class="nc">BayesOptimalDNAMultiLabelClassificationLearner</span><span class="p">(</span>
+        <span class="n">DNAMultiLabelClassificationLearner</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_definition</span><span class="p">:</span> <span class="n">ModelDefinition</span><span class="p">,</span> <span class="n">data_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                 <span class="n">output_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">validate_data</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+                 <span class="n">silent</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">model_definition</span><span class="p">,</span> <span class="n">data_dir</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">,</span> <span class="n">validate_data</span><span class="p">,</span>
+                         <span class="n">silent</span><span class="o">=</span><span class="n">silent</span><span class="p">)</span>
+
+<div class="viewcode-block" id="BayesOptimalDNAMultiLabelClassificationLearner.create_model"><a class="viewcode-back" href="../../../../seqgra.learner.bayes.bayeslearner.html#seqgra.learner.bayes.bayeslearner.BayesOptimalDNAMultiLabelClassificationLearner.create_model">[docs]</a>    <span class="k">def</span> <span class="nf">create_model</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">BayesOptimalHelper</span><span class="o">.</span><span class="n">create_model</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BayesOptimalDNAMultiLabelClassificationLearner.print_model_summary"><a class="viewcode-back" href="../../../../seqgra.learner.bayes.bayeslearner.html#seqgra.learner.bayes.bayeslearner.BayesOptimalDNAMultiLabelClassificationLearner.print_model_summary">[docs]</a>    <span class="k">def</span> <span class="nf">print_model_summary</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">BayesOptimalHelper</span><span class="o">.</span><span class="n">print_model_summary</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BayesOptimalDNAMultiLabelClassificationLearner.set_seed"><a class="viewcode-back" href="../../../../seqgra.learner.bayes.bayeslearner.html#seqgra.learner.bayes.bayeslearner.BayesOptimalDNAMultiLabelClassificationLearner.set_seed">[docs]</a>    <span class="k">def</span> <span class="nf">set_seed</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">BayesOptimalHelper</span><span class="o">.</span><span class="n">set_seed</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_train_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                     <span class="n">file_name_train</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                     <span class="n">file_name_val</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                     <span class="n">x_train</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                     <span class="n">y_train</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                     <span class="n">x_val</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                     <span class="n">y_val</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">BayesOptimalHelper</span><span class="o">.</span><span class="n">train_model</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+<div class="viewcode-block" id="BayesOptimalDNAMultiLabelClassificationLearner.evaluate_model"><a class="viewcode-back" href="../../../../seqgra.learner.bayes.bayeslearner.html#seqgra.learner.bayes.bayeslearner.BayesOptimalDNAMultiLabelClassificationLearner.evaluate_model">[docs]</a>    <span class="k">def</span> <span class="nf">evaluate_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                       <span class="n">x</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                       <span class="n">y</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">y</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">elif</span> <span class="n">file_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_examples_data</span><span class="p">(</span><span class="n">file_name</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;specify either file_name or x, y&quot;</span><span class="p">)</span>
+
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">encode_x</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">encode_y</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">BayesOptimalHelper</span><span class="o">.</span><span class="n">evaluate_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BayesOptimalDNAMultiLabelClassificationLearner.predict"><a class="viewcode-back" href="../../../../seqgra.learner.bayes.bayeslearner.html#seqgra.learner.bayes.bayeslearner.BayesOptimalDNAMultiLabelClassificationLearner.predict">[docs]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="n">x</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="n">encode</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">encode</span><span class="p">:</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">encode_x</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">file_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">x</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_examples_data</span><span class="p">(</span><span class="n">file_name</span><span class="p">)</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">encode_x</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;specify either file_name or x&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">BayesOptimalHelper</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">silent</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BayesOptimalDNAMultiLabelClassificationLearner.save_model"><a class="viewcode-back" href="../../../../seqgra.learner.bayes.bayeslearner.html#seqgra.learner.bayes.bayeslearner.BayesOptimalDNAMultiLabelClassificationLearner.save_model">[docs]</a>    <span class="k">def</span> <span class="nf">save_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="BayesOptimalDNAMultiLabelClassificationLearner.write_session_info"><a class="viewcode-back" href="../../../../seqgra.learner.bayes.bayeslearner.html#seqgra.learner.bayes.bayeslearner.BayesOptimalDNAMultiLabelClassificationLearner.write_session_info">[docs]</a>    <span class="k">def</span> <span class="nf">write_session_info</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">BayesOptimalHelper</span><span class="o">.</span><span class="n">write_session_info</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BayesOptimalDNAMultiLabelClassificationLearner.load_model"><a class="viewcode-back" href="../../../../seqgra.learner.bayes.bayeslearner.html#seqgra.learner.bayes.bayeslearner.BayesOptimalDNAMultiLabelClassificationLearner.load_model">[docs]</a>    <span class="k">def</span> <span class="nf">load_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">create_model</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="BayesOptimalDNAMultiLabelClassificationLearner.get_num_params"><a class="viewcode-back" href="../../../../seqgra.learner.bayes.bayeslearner.html#seqgra.learner.bayes.bayeslearner.BayesOptimalDNAMultiLabelClassificationLearner.get_num_params">[docs]</a>    <span class="k">def</span> <span class="nf">get_num_params</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ModelSize</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">0</span></div></div>
+
+
+<div class="viewcode-block" id="BayesOptimalProteinMultiClassClassificationLearner"><a class="viewcode-back" href="../../../../seqgra.learner.bayes.bayeslearner.html#seqgra.learner.bayes.bayeslearner.BayesOptimalProteinMultiClassClassificationLearner">[docs]</a><span class="k">class</span> <span class="nc">BayesOptimalProteinMultiClassClassificationLearner</span><span class="p">(</span>
+        <span class="n">ProteinMultiClassClassificationLearner</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_definition</span><span class="p">:</span> <span class="n">ModelDefinition</span><span class="p">,</span> <span class="n">data_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                 <span class="n">output_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">validate_data</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+                 <span class="n">silent</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">model_definition</span><span class="p">,</span> <span class="n">data_dir</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">,</span> <span class="n">validate_data</span><span class="p">,</span>
+                         <span class="n">silent</span><span class="o">=</span><span class="n">silent</span><span class="p">)</span>
+
+<div class="viewcode-block" id="BayesOptimalProteinMultiClassClassificationLearner.create_model"><a class="viewcode-back" href="../../../../seqgra.learner.bayes.bayeslearner.html#seqgra.learner.bayes.bayeslearner.BayesOptimalProteinMultiClassClassificationLearner.create_model">[docs]</a>    <span class="k">def</span> <span class="nf">create_model</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">BayesOptimalHelper</span><span class="o">.</span><span class="n">create_model</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BayesOptimalProteinMultiClassClassificationLearner.print_model_summary"><a class="viewcode-back" href="../../../../seqgra.learner.bayes.bayeslearner.html#seqgra.learner.bayes.bayeslearner.BayesOptimalProteinMultiClassClassificationLearner.print_model_summary">[docs]</a>    <span class="k">def</span> <span class="nf">print_model_summary</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">BayesOptimalHelper</span><span class="o">.</span><span class="n">print_model_summary</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BayesOptimalProteinMultiClassClassificationLearner.set_seed"><a class="viewcode-back" href="../../../../seqgra.learner.bayes.bayeslearner.html#seqgra.learner.bayes.bayeslearner.BayesOptimalProteinMultiClassClassificationLearner.set_seed">[docs]</a>    <span class="k">def</span> <span class="nf">set_seed</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">BayesOptimalHelper</span><span class="o">.</span><span class="n">set_seed</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_train_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                     <span class="n">file_name_train</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                     <span class="n">file_name_val</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                     <span class="n">x_train</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                     <span class="n">y_train</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                     <span class="n">x_val</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                     <span class="n">y_val</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">BayesOptimalHelper</span><span class="o">.</span><span class="n">train_model</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+<div class="viewcode-block" id="BayesOptimalProteinMultiClassClassificationLearner.evaluate_model"><a class="viewcode-back" href="../../../../seqgra.learner.bayes.bayeslearner.html#seqgra.learner.bayes.bayeslearner.BayesOptimalProteinMultiClassClassificationLearner.evaluate_model">[docs]</a>    <span class="k">def</span> <span class="nf">evaluate_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                       <span class="n">x</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                       <span class="n">y</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">y</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">elif</span> <span class="n">file_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_examples_data</span><span class="p">(</span><span class="n">file_name</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;specify either file_name or x, y&quot;</span><span class="p">)</span>
+
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">encode_x</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">encode_y</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">BayesOptimalHelper</span><span class="o">.</span><span class="n">evaluate_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BayesOptimalProteinMultiClassClassificationLearner.predict"><a class="viewcode-back" href="../../../../seqgra.learner.bayes.bayeslearner.html#seqgra.learner.bayes.bayeslearner.BayesOptimalProteinMultiClassClassificationLearner.predict">[docs]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="n">x</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="n">encode</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">encode</span><span class="p">:</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">encode_x</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">file_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">x</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_examples_data</span><span class="p">(</span><span class="n">file_name</span><span class="p">)</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">encode_x</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;specify either file_name or x&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">BayesOptimalHelper</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">silent</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BayesOptimalProteinMultiClassClassificationLearner.save_model"><a class="viewcode-back" href="../../../../seqgra.learner.bayes.bayeslearner.html#seqgra.learner.bayes.bayeslearner.BayesOptimalProteinMultiClassClassificationLearner.save_model">[docs]</a>    <span class="k">def</span> <span class="nf">save_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="BayesOptimalProteinMultiClassClassificationLearner.write_session_info"><a class="viewcode-back" href="../../../../seqgra.learner.bayes.bayeslearner.html#seqgra.learner.bayes.bayeslearner.BayesOptimalProteinMultiClassClassificationLearner.write_session_info">[docs]</a>    <span class="k">def</span> <span class="nf">write_session_info</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">BayesOptimalHelper</span><span class="o">.</span><span class="n">write_session_info</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BayesOptimalProteinMultiClassClassificationLearner.load_model"><a class="viewcode-back" href="../../../../seqgra.learner.bayes.bayeslearner.html#seqgra.learner.bayes.bayeslearner.BayesOptimalProteinMultiClassClassificationLearner.load_model">[docs]</a>    <span class="k">def</span> <span class="nf">load_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">create_model</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="BayesOptimalProteinMultiClassClassificationLearner.get_num_params"><a class="viewcode-back" href="../../../../seqgra.learner.bayes.bayeslearner.html#seqgra.learner.bayes.bayeslearner.BayesOptimalProteinMultiClassClassificationLearner.get_num_params">[docs]</a>    <span class="k">def</span> <span class="nf">get_num_params</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ModelSize</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">0</span></div></div>
+
+
+<div class="viewcode-block" id="BayesOptimalProteinMultiLabelClassificationLearner"><a class="viewcode-back" href="../../../../seqgra.learner.bayes.bayeslearner.html#seqgra.learner.bayes.bayeslearner.BayesOptimalProteinMultiLabelClassificationLearner">[docs]</a><span class="k">class</span> <span class="nc">BayesOptimalProteinMultiLabelClassificationLearner</span><span class="p">(</span>
+        <span class="n">ProteinMultiLabelClassificationLearner</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_definition</span><span class="p">:</span> <span class="n">ModelDefinition</span><span class="p">,</span> <span class="n">data_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                 <span class="n">output_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">validate_data</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+                 <span class="n">silent</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">model_definition</span><span class="p">,</span> <span class="n">data_dir</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">,</span> <span class="n">validate_data</span><span class="p">,</span>
+                         <span class="n">silent</span><span class="o">=</span><span class="n">silent</span><span class="p">)</span>
+
+<div class="viewcode-block" id="BayesOptimalProteinMultiLabelClassificationLearner.create_model"><a class="viewcode-back" href="../../../../seqgra.learner.bayes.bayeslearner.html#seqgra.learner.bayes.bayeslearner.BayesOptimalProteinMultiLabelClassificationLearner.create_model">[docs]</a>    <span class="k">def</span> <span class="nf">create_model</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">BayesOptimalHelper</span><span class="o">.</span><span class="n">create_model</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BayesOptimalProteinMultiLabelClassificationLearner.print_model_summary"><a class="viewcode-back" href="../../../../seqgra.learner.bayes.bayeslearner.html#seqgra.learner.bayes.bayeslearner.BayesOptimalProteinMultiLabelClassificationLearner.print_model_summary">[docs]</a>    <span class="k">def</span> <span class="nf">print_model_summary</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">BayesOptimalHelper</span><span class="o">.</span><span class="n">print_model_summary</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BayesOptimalProteinMultiLabelClassificationLearner.set_seed"><a class="viewcode-back" href="../../../../seqgra.learner.bayes.bayeslearner.html#seqgra.learner.bayes.bayeslearner.BayesOptimalProteinMultiLabelClassificationLearner.set_seed">[docs]</a>    <span class="k">def</span> <span class="nf">set_seed</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">BayesOptimalHelper</span><span class="o">.</span><span class="n">set_seed</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_train_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                     <span class="n">file_name_train</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                     <span class="n">file_name_val</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                     <span class="n">x_train</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                     <span class="n">y_train</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                     <span class="n">x_val</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                     <span class="n">y_val</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">BayesOptimalHelper</span><span class="o">.</span><span class="n">train_model</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+<div class="viewcode-block" id="BayesOptimalProteinMultiLabelClassificationLearner.evaluate_model"><a class="viewcode-back" href="../../../../seqgra.learner.bayes.bayeslearner.html#seqgra.learner.bayes.bayeslearner.BayesOptimalProteinMultiLabelClassificationLearner.evaluate_model">[docs]</a>    <span class="k">def</span> <span class="nf">evaluate_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                       <span class="n">x</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                       <span class="n">y</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">y</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">elif</span> <span class="n">file_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_examples_data</span><span class="p">(</span><span class="n">file_name</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;specify either file_name or x, y&quot;</span><span class="p">)</span>
+
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">encode_x</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">encode_y</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">BayesOptimalHelper</span><span class="o">.</span><span class="n">evaluate_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BayesOptimalProteinMultiLabelClassificationLearner.predict"><a class="viewcode-back" href="../../../../seqgra.learner.bayes.bayeslearner.html#seqgra.learner.bayes.bayeslearner.BayesOptimalProteinMultiLabelClassificationLearner.predict">[docs]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="n">x</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="n">encode</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">encode</span><span class="p">:</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">encode_x</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">file_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">x</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_examples_data</span><span class="p">(</span><span class="n">file_name</span><span class="p">)</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">encode_x</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;specify either file_name or x&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">BayesOptimalHelper</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">silent</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BayesOptimalProteinMultiLabelClassificationLearner.save_model"><a class="viewcode-back" href="../../../../seqgra.learner.bayes.bayeslearner.html#seqgra.learner.bayes.bayeslearner.BayesOptimalProteinMultiLabelClassificationLearner.save_model">[docs]</a>    <span class="k">def</span> <span class="nf">save_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="BayesOptimalProteinMultiLabelClassificationLearner.write_session_info"><a class="viewcode-back" href="../../../../seqgra.learner.bayes.bayeslearner.html#seqgra.learner.bayes.bayeslearner.BayesOptimalProteinMultiLabelClassificationLearner.write_session_info">[docs]</a>    <span class="k">def</span> <span class="nf">write_session_info</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">BayesOptimalHelper</span><span class="o">.</span><span class="n">write_session_info</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BayesOptimalProteinMultiLabelClassificationLearner.load_model"><a class="viewcode-back" href="../../../../seqgra.learner.bayes.bayeslearner.html#seqgra.learner.bayes.bayeslearner.BayesOptimalProteinMultiLabelClassificationLearner.load_model">[docs]</a>    <span class="k">def</span> <span class="nf">load_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">create_model</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="BayesOptimalProteinMultiLabelClassificationLearner.get_num_params"><a class="viewcode-back" href="../../../../seqgra.learner.bayes.bayeslearner.html#seqgra.learner.bayes.bayeslearner.BayesOptimalProteinMultiLabelClassificationLearner.get_num_params">[docs]</a>    <span class="k">def</span> <span class="nf">get_num_params</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ModelSize</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">0</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Konstantin Krismer.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

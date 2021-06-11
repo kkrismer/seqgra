@@ -1,0 +1,547 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>seqgra.constants module &mdash; seqgra 0.0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="https://www.googletagmanager.com/gtag/js?id=G-SPQK9JRC9T"></script>
+        <script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-SPQK9JRC9T');
+</script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="seqgra.idresolver module" href="seqgra.idresolver.html" />
+    <link rel="prev" title="seqgra.writer.xmlmodeldefinitionwriter module" href="seqgra.writer.xmlmodeldefinitionwriter.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> seqgra
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">About seqgra</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Main Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Usage examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cmd.html">Command line utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dd.html">Data definition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="md.html">Model definition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slec.html">Simulators, Learners, Evaluators, Comparators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ids.html">ID conventions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="structure.html"><code class="docutils literal notranslate"><span class="pre">output</span></code> folder structure</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Advanced features</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="seqgra.html">API reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="seqgra.html#subpackages">Subpackages</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="seqgra.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">seqgra.constants module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="seqgra.idresolver.html">seqgra.idresolver module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="seqgra.misc.html">seqgra.misc module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="seqgra.schema.html">seqgra.schema module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="seqgra.seqgra.html">seqgra.seqgra module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="seqgra.seqgraa.html">seqgra.seqgraa module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="seqgra.seqgrae.html">seqgra.seqgrae module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="seqgra.seqgras.html">seqgra.seqgras module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="py-modindex.html">Python module index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="genindex.html">Index</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">seqgra</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="seqgra.html">seqgra package</a> &raquo;</li>
+        
+      <li>seqgra.constants module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-seqgra.constants">
+<span id="seqgra-constants-module"></span><h1>seqgra.constants module<a class="headerlink" href="#module-seqgra.constants" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="seqgra.constants.ComparatorID">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">ComparatorID</span></span><a class="reference internal" href="_modules/seqgra/constants.html#ComparatorID"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.constants.ComparatorID" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.constants.ComparatorID.ALL_COMPARATOR_IDS">
+<span class="sig-name descname"><span class="pre">ALL_COMPARATOR_IDS</span></span><em class="property"><span class="pre">:</span> <span class="pre">FrozenSet</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><em class="property"> <span class="pre">=</span> <span class="pre">frozenset({'curve-table',</span> <span class="pre">'fi-eval-table',</span> <span class="pre">'pr',</span> <span class="pre">'roc',</span> <span class="pre">'table'})</span></em><a class="headerlink" href="#seqgra.constants.ComparatorID.ALL_COMPARATOR_IDS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.constants.ComparatorID.CURVE_TABLE">
+<span class="sig-name descname"><span class="pre">CURVE_TABLE</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><em class="property"> <span class="pre">=</span> <span class="pre">'curve-table'</span></em><a class="headerlink" href="#seqgra.constants.ComparatorID.CURVE_TABLE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.constants.ComparatorID.FEATURE_IMPORTANCE_EVALUATOR_TABLE">
+<span class="sig-name descname"><span class="pre">FEATURE_IMPORTANCE_EVALUATOR_TABLE</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><em class="property"> <span class="pre">=</span> <span class="pre">'fi-eval-table'</span></em><a class="headerlink" href="#seqgra.constants.ComparatorID.FEATURE_IMPORTANCE_EVALUATOR_TABLE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.constants.ComparatorID.PR">
+<span class="sig-name descname"><span class="pre">PR</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><em class="property"> <span class="pre">=</span> <span class="pre">'pr'</span></em><a class="headerlink" href="#seqgra.constants.ComparatorID.PR" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.constants.ComparatorID.ROC">
+<span class="sig-name descname"><span class="pre">ROC</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><em class="property"> <span class="pre">=</span> <span class="pre">'roc'</span></em><a class="headerlink" href="#seqgra.constants.ComparatorID.ROC" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.constants.ComparatorID.TABLE">
+<span class="sig-name descname"><span class="pre">TABLE</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><em class="property"> <span class="pre">=</span> <span class="pre">'table'</span></em><a class="headerlink" href="#seqgra.constants.ComparatorID.TABLE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="seqgra.constants.DataSet">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">DataSet</span></span><a class="reference internal" href="_modules/seqgra/constants.html#DataSet"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.constants.DataSet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.constants.DataSet.ALL_SETS">
+<span class="sig-name descname"><span class="pre">ALL_SETS</span></span><em class="property"><span class="pre">:</span> <span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><em class="property"> <span class="pre">=</span> <span class="pre">['training',</span> <span class="pre">'validation',</span> <span class="pre">'test']</span></em><a class="headerlink" href="#seqgra.constants.DataSet.ALL_SETS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.constants.DataSet.TEST">
+<span class="sig-name descname"><span class="pre">TEST</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><em class="property"> <span class="pre">=</span> <span class="pre">'test'</span></em><a class="headerlink" href="#seqgra.constants.DataSet.TEST" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.constants.DataSet.TRAINING">
+<span class="sig-name descname"><span class="pre">TRAINING</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><em class="property"> <span class="pre">=</span> <span class="pre">'training'</span></em><a class="headerlink" href="#seqgra.constants.DataSet.TRAINING" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.constants.DataSet.VALIDATION">
+<span class="sig-name descname"><span class="pre">VALIDATION</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><em class="property"> <span class="pre">=</span> <span class="pre">'validation'</span></em><a class="headerlink" href="#seqgra.constants.DataSet.VALIDATION" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="seqgra.constants.EvaluatorID">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">EvaluatorID</span></span><a class="reference internal" href="_modules/seqgra/constants.html#EvaluatorID"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.constants.EvaluatorID" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.constants.EvaluatorID.ALL_EVALUATOR_IDS">
+<span class="sig-name descname"><span class="pre">ALL_EVALUATOR_IDS</span></span><em class="property"><span class="pre">:</span> <span class="pre">FrozenSet</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><em class="property"> <span class="pre">=</span> <span class="pre">frozenset({'contrastive-excitation-backprop',</span> <span class="pre">'deconv',</span> <span class="pre">'deep-lift',</span> <span class="pre">'excitation-backprop',</span> <span class="pre">'feedback',</span> <span class="pre">'grad-cam',</span> <span class="pre">'gradient',</span> <span class="pre">'gradient-x-input',</span> <span class="pre">'guided-backprop',</span> <span class="pre">'integrated-gradients',</span> <span class="pre">'metrics',</span> <span class="pre">'nonlinear-integrated-gradients',</span> <span class="pre">'pr',</span> <span class="pre">'predict',</span> <span class="pre">'roc',</span> <span class="pre">'saliency',</span> <span class="pre">'sis',</span> <span class="pre">'smooth-grad'})</span></em><a class="headerlink" href="#seqgra.constants.EvaluatorID.ALL_EVALUATOR_IDS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.constants.EvaluatorID.CONTRASTIVE_EXCITATION_BACKPROP">
+<span class="sig-name descname"><span class="pre">CONTRASTIVE_EXCITATION_BACKPROP</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><em class="property"> <span class="pre">=</span> <span class="pre">'contrastive-excitation-backprop'</span></em><a class="headerlink" href="#seqgra.constants.EvaluatorID.CONTRASTIVE_EXCITATION_BACKPROP" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.constants.EvaluatorID.CONVENTIONAL_EVALUATORS">
+<span class="sig-name descname"><span class="pre">CONVENTIONAL_EVALUATORS</span></span><em class="property"><span class="pre">:</span> <span class="pre">FrozenSet</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><em class="property"> <span class="pre">=</span> <span class="pre">frozenset({'metrics',</span> <span class="pre">'pr',</span> <span class="pre">'predict',</span> <span class="pre">'roc'})</span></em><a class="headerlink" href="#seqgra.constants.EvaluatorID.CONVENTIONAL_EVALUATORS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.constants.EvaluatorID.CORE_FEATURE_IMPORTANCE_EVALUATORS">
+<span class="sig-name descname"><span class="pre">CORE_FEATURE_IMPORTANCE_EVALUATORS</span></span><em class="property"><span class="pre">:</span> <span class="pre">FrozenSet</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><em class="property"> <span class="pre">=</span> <span class="pre">frozenset({'deconv',</span> <span class="pre">'deep-lift',</span> <span class="pre">'gradient',</span> <span class="pre">'gradient-x-input',</span> <span class="pre">'guided-backprop',</span> <span class="pre">'integrated-gradients',</span> <span class="pre">'saliency'})</span></em><a class="headerlink" href="#seqgra.constants.EvaluatorID.CORE_FEATURE_IMPORTANCE_EVALUATORS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.constants.EvaluatorID.DECONV">
+<span class="sig-name descname"><span class="pre">DECONV</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><em class="property"> <span class="pre">=</span> <span class="pre">'deconv'</span></em><a class="headerlink" href="#seqgra.constants.EvaluatorID.DECONV" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.constants.EvaluatorID.DEEP_LIFT">
+<span class="sig-name descname"><span class="pre">DEEP_LIFT</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><em class="property"> <span class="pre">=</span> <span class="pre">'deep-lift'</span></em><a class="headerlink" href="#seqgra.constants.EvaluatorID.DEEP_LIFT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.constants.EvaluatorID.EXCITATION_BACKPROP">
+<span class="sig-name descname"><span class="pre">EXCITATION_BACKPROP</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><em class="property"> <span class="pre">=</span> <span class="pre">'excitation-backprop'</span></em><a class="headerlink" href="#seqgra.constants.EvaluatorID.EXCITATION_BACKPROP" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.constants.EvaluatorID.FEATURE_IMPORTANCE_EVALUATORS">
+<span class="sig-name descname"><span class="pre">FEATURE_IMPORTANCE_EVALUATORS</span></span><em class="property"><span class="pre">:</span> <span class="pre">FrozenSet</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><em class="property"> <span class="pre">=</span> <span class="pre">frozenset({'contrastive-excitation-backprop',</span> <span class="pre">'deconv',</span> <span class="pre">'deep-lift',</span> <span class="pre">'excitation-backprop',</span> <span class="pre">'feedback',</span> <span class="pre">'grad-cam',</span> <span class="pre">'gradient',</span> <span class="pre">'gradient-x-input',</span> <span class="pre">'guided-backprop',</span> <span class="pre">'integrated-gradients',</span> <span class="pre">'nonlinear-integrated-gradients',</span> <span class="pre">'saliency',</span> <span class="pre">'sis',</span> <span class="pre">'smooth-grad'})</span></em><a class="headerlink" href="#seqgra.constants.EvaluatorID.FEATURE_IMPORTANCE_EVALUATORS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.constants.EvaluatorID.FEEDBACK">
+<span class="sig-name descname"><span class="pre">FEEDBACK</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><em class="property"> <span class="pre">=</span> <span class="pre">'feedback'</span></em><a class="headerlink" href="#seqgra.constants.EvaluatorID.FEEDBACK" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.constants.EvaluatorID.GRADIENT">
+<span class="sig-name descname"><span class="pre">GRADIENT</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><em class="property"> <span class="pre">=</span> <span class="pre">'gradient'</span></em><a class="headerlink" href="#seqgra.constants.EvaluatorID.GRADIENT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.constants.EvaluatorID.GRADIENT_X_INPUT">
+<span class="sig-name descname"><span class="pre">GRADIENT_X_INPUT</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><em class="property"> <span class="pre">=</span> <span class="pre">'gradient-x-input'</span></em><a class="headerlink" href="#seqgra.constants.EvaluatorID.GRADIENT_X_INPUT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.constants.EvaluatorID.GRAD_CAM">
+<span class="sig-name descname"><span class="pre">GRAD_CAM</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><em class="property"> <span class="pre">=</span> <span class="pre">'grad-cam'</span></em><a class="headerlink" href="#seqgra.constants.EvaluatorID.GRAD_CAM" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.constants.EvaluatorID.GUIDED_BACKPROP">
+<span class="sig-name descname"><span class="pre">GUIDED_BACKPROP</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><em class="property"> <span class="pre">=</span> <span class="pre">'guided-backprop'</span></em><a class="headerlink" href="#seqgra.constants.EvaluatorID.GUIDED_BACKPROP" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.constants.EvaluatorID.INTEGRATED_GRADIENTS">
+<span class="sig-name descname"><span class="pre">INTEGRATED_GRADIENTS</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><em class="property"> <span class="pre">=</span> <span class="pre">'integrated-gradients'</span></em><a class="headerlink" href="#seqgra.constants.EvaluatorID.INTEGRATED_GRADIENTS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.constants.EvaluatorID.METRICS">
+<span class="sig-name descname"><span class="pre">METRICS</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><em class="property"> <span class="pre">=</span> <span class="pre">'metrics'</span></em><a class="headerlink" href="#seqgra.constants.EvaluatorID.METRICS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.constants.EvaluatorID.MODEL_AGNOSTIC_EVALUATORS">
+<span class="sig-name descname"><span class="pre">MODEL_AGNOSTIC_EVALUATORS</span></span><em class="property"><span class="pre">:</span> <span class="pre">FrozenSet</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><em class="property"> <span class="pre">=</span> <span class="pre">frozenset({'metrics',</span> <span class="pre">'pr',</span> <span class="pre">'predict',</span> <span class="pre">'roc',</span> <span class="pre">'sis'})</span></em><a class="headerlink" href="#seqgra.constants.EvaluatorID.MODEL_AGNOSTIC_EVALUATORS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.constants.EvaluatorID.NONLINEAR_INTEGRATED_GRADIENTS">
+<span class="sig-name descname"><span class="pre">NONLINEAR_INTEGRATED_GRADIENTS</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><em class="property"> <span class="pre">=</span> <span class="pre">'nonlinear-integrated-gradients'</span></em><a class="headerlink" href="#seqgra.constants.EvaluatorID.NONLINEAR_INTEGRATED_GRADIENTS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.constants.EvaluatorID.PR">
+<span class="sig-name descname"><span class="pre">PR</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><em class="property"> <span class="pre">=</span> <span class="pre">'pr'</span></em><a class="headerlink" href="#seqgra.constants.EvaluatorID.PR" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.constants.EvaluatorID.PREDICT">
+<span class="sig-name descname"><span class="pre">PREDICT</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><em class="property"> <span class="pre">=</span> <span class="pre">'predict'</span></em><a class="headerlink" href="#seqgra.constants.EvaluatorID.PREDICT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.constants.EvaluatorID.ROC">
+<span class="sig-name descname"><span class="pre">ROC</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><em class="property"> <span class="pre">=</span> <span class="pre">'roc'</span></em><a class="headerlink" href="#seqgra.constants.EvaluatorID.ROC" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.constants.EvaluatorID.SALIENCY">
+<span class="sig-name descname"><span class="pre">SALIENCY</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><em class="property"> <span class="pre">=</span> <span class="pre">'saliency'</span></em><a class="headerlink" href="#seqgra.constants.EvaluatorID.SALIENCY" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.constants.EvaluatorID.SIS">
+<span class="sig-name descname"><span class="pre">SIS</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><em class="property"> <span class="pre">=</span> <span class="pre">'sis'</span></em><a class="headerlink" href="#seqgra.constants.EvaluatorID.SIS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.constants.EvaluatorID.SMOOTH_GRAD">
+<span class="sig-name descname"><span class="pre">SMOOTH_GRAD</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><em class="property"> <span class="pre">=</span> <span class="pre">'smooth-grad'</span></em><a class="headerlink" href="#seqgra.constants.EvaluatorID.SMOOTH_GRAD" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="seqgra.constants.LibraryType">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">LibraryType</span></span><a class="reference internal" href="_modules/seqgra/constants.html#LibraryType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.constants.LibraryType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.constants.LibraryType.ALL_LIBRARIES">
+<span class="sig-name descname"><span class="pre">ALL_LIBRARIES</span></span><em class="property"><span class="pre">:</span> <span class="pre">FrozenSet</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><em class="property"> <span class="pre">=</span> <span class="pre">frozenset({'BayesOptimalClassifier',</span> <span class="pre">'PyTorch',</span> <span class="pre">'TensorFlow'})</span></em><a class="headerlink" href="#seqgra.constants.LibraryType.ALL_LIBRARIES" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.constants.LibraryType.BAYES_OPTIMAL_CLASSIFIER">
+<span class="sig-name descname"><span class="pre">BAYES_OPTIMAL_CLASSIFIER</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><em class="property"> <span class="pre">=</span> <span class="pre">'BayesOptimalClassifier'</span></em><a class="headerlink" href="#seqgra.constants.LibraryType.BAYES_OPTIMAL_CLASSIFIER" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.constants.LibraryType.TENSORFLOW">
+<span class="sig-name descname"><span class="pre">TENSORFLOW</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><em class="property"> <span class="pre">=</span> <span class="pre">'TensorFlow'</span></em><a class="headerlink" href="#seqgra.constants.LibraryType.TENSORFLOW" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.constants.LibraryType.TORCH">
+<span class="sig-name descname"><span class="pre">TORCH</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><em class="property"> <span class="pre">=</span> <span class="pre">'PyTorch'</span></em><a class="headerlink" href="#seqgra.constants.LibraryType.TORCH" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="seqgra.constants.PositionType">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">PositionType</span></span><a class="reference internal" href="_modules/seqgra/constants.html#PositionType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.constants.PositionType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.constants.PositionType.AA_MASKED">
+<span class="sig-name descname"><span class="pre">AA_MASKED</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><em class="property"> <span class="pre">=</span> <span class="pre">'X'</span></em><a class="headerlink" href="#seqgra.constants.PositionType.AA_MASKED" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.constants.PositionType.BACKGROUND">
+<span class="sig-name descname"><span class="pre">BACKGROUND</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><em class="property"> <span class="pre">=</span> <span class="pre">'_'</span></em><a class="headerlink" href="#seqgra.constants.PositionType.BACKGROUND" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.constants.PositionType.CONFOUNDER">
+<span class="sig-name descname"><span class="pre">CONFOUNDER</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><em class="property"> <span class="pre">=</span> <span class="pre">'C'</span></em><a class="headerlink" href="#seqgra.constants.PositionType.CONFOUNDER" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.constants.PositionType.DNA_MASKED">
+<span class="sig-name descname"><span class="pre">DNA_MASKED</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><em class="property"> <span class="pre">=</span> <span class="pre">'N'</span></em><a class="headerlink" href="#seqgra.constants.PositionType.DNA_MASKED" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.constants.PositionType.GRAMMAR">
+<span class="sig-name descname"><span class="pre">GRAMMAR</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><em class="property"> <span class="pre">=</span> <span class="pre">'G'</span></em><a class="headerlink" href="#seqgra.constants.PositionType.GRAMMAR" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="seqgra.constants.SequenceSpaceType">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">SequenceSpaceType</span></span><a class="reference internal" href="_modules/seqgra/constants.html#SequenceSpaceType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.constants.SequenceSpaceType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.constants.SequenceSpaceType.ALL_SEQUENCE_SPACES">
+<span class="sig-name descname"><span class="pre">ALL_SEQUENCE_SPACES</span></span><em class="property"><span class="pre">:</span> <span class="pre">FrozenSet</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><em class="property"> <span class="pre">=</span> <span class="pre">frozenset({'DNA',</span> <span class="pre">'protein'})</span></em><a class="headerlink" href="#seqgra.constants.SequenceSpaceType.ALL_SEQUENCE_SPACES" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.constants.SequenceSpaceType.DNA">
+<span class="sig-name descname"><span class="pre">DNA</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><em class="property"> <span class="pre">=</span> <span class="pre">'DNA'</span></em><a class="headerlink" href="#seqgra.constants.SequenceSpaceType.DNA" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.constants.SequenceSpaceType.PROTEIN">
+<span class="sig-name descname"><span class="pre">PROTEIN</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><em class="property"> <span class="pre">=</span> <span class="pre">'protein'</span></em><a class="headerlink" href="#seqgra.constants.SequenceSpaceType.PROTEIN" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="seqgra.constants.TaskType">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">TaskType</span></span><a class="reference internal" href="_modules/seqgra/constants.html#TaskType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.constants.TaskType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.constants.TaskType.ALL_TASKS">
+<span class="sig-name descname"><span class="pre">ALL_TASKS</span></span><em class="property"><span class="pre">:</span> <span class="pre">FrozenSet</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><em class="property"> <span class="pre">=</span> <span class="pre">frozenset({'multi-class</span> <span class="pre">classification',</span> <span class="pre">'multi-label</span> <span class="pre">classification',</span> <span class="pre">'multiple</span> <span class="pre">regression',</span> <span class="pre">'multivariate</span> <span class="pre">regression'})</span></em><a class="headerlink" href="#seqgra.constants.TaskType.ALL_TASKS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.constants.TaskType.MULTIPLE_REGRESSION">
+<span class="sig-name descname"><span class="pre">MULTIPLE_REGRESSION</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><em class="property"> <span class="pre">=</span> <span class="pre">'multiple</span> <span class="pre">regression'</span></em><a class="headerlink" href="#seqgra.constants.TaskType.MULTIPLE_REGRESSION" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.constants.TaskType.MULTIVARIATE_REGRESSION">
+<span class="sig-name descname"><span class="pre">MULTIVARIATE_REGRESSION</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><em class="property"> <span class="pre">=</span> <span class="pre">'multivariate</span> <span class="pre">regression'</span></em><a class="headerlink" href="#seqgra.constants.TaskType.MULTIVARIATE_REGRESSION" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.constants.TaskType.MULTI_CLASS_CLASSIFICATION">
+<span class="sig-name descname"><span class="pre">MULTI_CLASS_CLASSIFICATION</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><em class="property"> <span class="pre">=</span> <span class="pre">'multi-class</span> <span class="pre">classification'</span></em><a class="headerlink" href="#seqgra.constants.TaskType.MULTI_CLASS_CLASSIFICATION" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="seqgra.constants.TaskType.MULTI_LABEL_CLASSIFICATION">
+<span class="sig-name descname"><span class="pre">MULTI_LABEL_CLASSIFICATION</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><em class="property"> <span class="pre">=</span> <span class="pre">'multi-label</span> <span class="pre">classification'</span></em><a class="headerlink" href="#seqgra.constants.TaskType.MULTI_LABEL_CLASSIFICATION" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="seqgra.idresolver.html" class="btn btn-neutral float-right" title="seqgra.idresolver module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="seqgra.writer.xmlmodeldefinitionwriter.html" class="btn btn-neutral float-left" title="seqgra.writer.xmlmodeldefinitionwriter module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Konstantin Krismer.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

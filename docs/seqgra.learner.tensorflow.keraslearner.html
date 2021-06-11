@@ -1,0 +1,1470 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>seqgra.learner.tensorflow.keraslearner module &mdash; seqgra 0.0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="https://www.googletagmanager.com/gtag/js?id=G-SPQK9JRC9T"></script>
+        <script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-SPQK9JRC9T');
+</script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="seqgra.learner.torch package" href="seqgra.learner.torch.html" />
+    <link rel="prev" title="seqgra.learner.tensorflow.kerashelper module" href="seqgra.learner.tensorflow.kerashelper.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> seqgra
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">About seqgra</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Main Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Usage examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cmd.html">Command line utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dd.html">Data definition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="md.html">Model definition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slec.html">Simulators, Learners, Evaluators, Comparators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ids.html">ID conventions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="structure.html"><code class="docutils literal notranslate"><span class="pre">output</span></code> folder structure</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Advanced features</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="seqgra.html">API reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="seqgra.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="seqgra.comparator.html">seqgra.comparator package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="seqgra.evaluator.html">seqgra.evaluator package</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="seqgra.learner.html">seqgra.learner package</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="seqgra.learner.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l5"><a class="reference internal" href="seqgra.learner.bayes.html">seqgra.learner.bayes package</a></li>
+<li class="toctree-l5 current"><a class="reference internal" href="seqgra.learner.tensorflow.html">seqgra.learner.tensorflow package</a></li>
+<li class="toctree-l5"><a class="reference internal" href="seqgra.learner.torch.html">seqgra.learner.torch package</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="seqgra.learner.html#submodules">Submodules</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="seqgra.model.html">seqgra.model package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="seqgra.parser.html">seqgra.parser package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="seqgra.simulator.html">seqgra.simulator package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="seqgra.writer.html">seqgra.writer package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="seqgra.html#submodules">Submodules</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="py-modindex.html">Python module index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="genindex.html">Index</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">seqgra</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="seqgra.html">seqgra package</a> &raquo;</li>
+        
+          <li><a href="seqgra.learner.html">seqgra.learner package</a> &raquo;</li>
+        
+          <li><a href="seqgra.learner.tensorflow.html">seqgra.learner.tensorflow package</a> &raquo;</li>
+        
+      <li>seqgra.learner.tensorflow.keraslearner module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-seqgra.learner.tensorflow.keraslearner">
+<span id="seqgra-learner-tensorflow-keraslearner-module"></span><h1>seqgra.learner.tensorflow.keraslearner module<a class="headerlink" href="#module-seqgra.learner.tensorflow.keraslearner" title="Permalink to this headline">¶</a></h1>
+<p>MIT - CSAIL - Gifford Lab - seqgra</p>
+<p>TensorFlow Keras learners</p>
+<p>&#64;author: Konstantin Krismer</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasDNAMultiClassClassificationLearner">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">KerasDNAMultiClassClassificationLearner</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_definition</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="seqgra.model.model.modeldefinition.html#seqgra.model.model.modeldefinition.ModelDefinition" title="seqgra.model.model.modeldefinition.ModelDefinition"><span class="pre">seqgra.model.model.modeldefinition.ModelDefinition</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dir</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dir</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validate_data</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gpu_id</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/seqgra/learner/tensorflow/keraslearner.html#KerasDNAMultiClassClassificationLearner"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasDNAMultiClassClassificationLearner" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="seqgra.learner.dna.html#seqgra.learner.dna.DNAMultiClassClassificationLearner" title="seqgra.learner.dna.DNAMultiClassClassificationLearner"><code class="xref py py-class docutils literal notranslate"><span class="pre">seqgra.learner.dna.DNAMultiClassClassificationLearner</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasDNAMultiClassClassificationLearner.check_annotations">
+<span class="sig-name descname"><span class="pre">check_annotations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">annotations</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">bool</span><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasDNAMultiClassClassificationLearner.check_annotations" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasDNAMultiClassClassificationLearner.check_labels">
+<span class="sig-name descname"><span class="pre">check_labels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">throw_exception</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">bool</span><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasDNAMultiClassClassificationLearner.check_labels" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasDNAMultiClassClassificationLearner.check_sequence">
+<span class="sig-name descname"><span class="pre">check_sequence</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">bool</span><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasDNAMultiClassClassificationLearner.check_sequence" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasDNAMultiClassClassificationLearner.create_model">
+<span class="sig-name descname"><span class="pre">create_model</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="_modules/seqgra/learner/tensorflow/keraslearner.html#KerasDNAMultiClassClassificationLearner.create_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasDNAMultiClassClassificationLearner.create_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Abstract method to create library-specific model.</p>
+<p>Machine learning library specific implementations are provided for
+TensorFlow and PyTorch.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasDNAMultiClassClassificationLearner.dataset_generator">
+<span class="sig-name descname"><span class="pre">dataset_generator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasDNAMultiClassClassificationLearner.dataset_generator" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasDNAMultiClassClassificationLearner.decode_x">
+<span class="sig-name descname"><span class="pre">decode_x</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/seqgra/learner/tensorflow/keraslearner.html#KerasDNAMultiClassClassificationLearner.decode_x"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasDNAMultiClassClassificationLearner.decode_x" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>x</strong> (<em>array</em>) – TODO</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasDNAMultiClassClassificationLearner.decode_y">
+<span class="sig-name descname"><span class="pre">decode_y</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasDNAMultiClassClassificationLearner.decode_y" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>y</strong> (<em>array</em>) – TODO</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasDNAMultiClassClassificationLearner.encode_x">
+<span class="sig-name descname"><span class="pre">encode_x</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/seqgra/learner/tensorflow/keraslearner.html#KerasDNAMultiClassClassificationLearner.encode_x"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasDNAMultiClassClassificationLearner.encode_x" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>x</strong> (<em>array</em>) – TODO</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasDNAMultiClassClassificationLearner.encode_y">
+<span class="sig-name descname"><span class="pre">encode_y</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasDNAMultiClassClassificationLearner.encode_y" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>y</strong> (<em>array</em>) – TODO</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasDNAMultiClassClassificationLearner.evaluate_model">
+<span class="sig-name descname"><span class="pre">evaluate_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/seqgra/learner/tensorflow/keraslearner.html#KerasDNAMultiClassClassificationLearner.evaluate_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasDNAMultiClassClassificationLearner.evaluate_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file_name</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – TODO</p></li>
+<li><p><strong>x</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em>) – TODO</p></li>
+<li><p><strong>y</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em>) – TODO</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>TODO</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>array</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>Exception</strong> – if neither <cite>file_name</cite> nor (<cite>x</cite> and <cite>y</cite>) are specified</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasDNAMultiClassClassificationLearner.get_annotations_file">
+<span class="sig-name descname"><span class="pre">get_annotations_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">set_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'test'</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasDNAMultiClassClassificationLearner.get_annotations_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get path to annotations file.</p>
+<p>E.g., <cite>get_annotations_file(“training”)</cite> returns
+<cite>{OUTPUTDIR}/input/{GRAMMAR ID}/training-annotation.txt</cite>, if it exists.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>set_name</strong> (<em>str</em><em>, </em><em>optional</em>) – set name can be one of the following:
+<cite>training</cite>, <cite>validation</cite>, or <cite>test</cite>; defaults to <cite>test</cite></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>file path to annotations file</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>Exception</strong> – in case requested annotations file does not exist</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasDNAMultiClassClassificationLearner.get_examples_file">
+<span class="sig-name descname"><span class="pre">get_examples_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">set_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'test'</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasDNAMultiClassClassificationLearner.get_examples_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get path to examples file.</p>
+<p>E.g., <cite>get_examples_file(“training”)</cite> returns
+<cite>{OUTPUTDIR}/input/{GRAMMAR ID}/training.txt</cite>, if it exists.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>set_name</strong> (<em>str</em><em>, </em><em>optional</em>) – set name can be one of the following:
+<cite>training</cite>, <cite>validation</cite>, or <cite>test</cite>; defaults to <cite>test</cite></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>file path to examples file</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>Exception</strong> – in case requested examples file does not exist</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasDNAMultiClassClassificationLearner.get_label_set">
+<span class="sig-name descname"><span class="pre">get_label_set</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasDNAMultiClassClassificationLearner.get_label_set" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasDNAMultiClassClassificationLearner.get_num_params">
+<span class="sig-name descname"><span class="pre">get_num_params</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="seqgra.schema.html#seqgra.schema.ModelSize" title="seqgra.schema.ModelSize"><span class="pre">seqgra.schema.ModelSize</span></a><a class="reference internal" href="_modules/seqgra/learner/tensorflow/keraslearner.html#KerasDNAMultiClassClassificationLearner.get_num_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasDNAMultiClassClassificationLearner.get_num_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasDNAMultiClassClassificationLearner.get_sequence_length">
+<span class="sig-name descname"><span class="pre">get_sequence_length</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">int</span><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasDNAMultiClassClassificationLearner.get_sequence_length" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasDNAMultiClassClassificationLearner.load_model">
+<span class="sig-name descname"><span class="pre">load_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="_modules/seqgra/learner/tensorflow/keraslearner.html#KerasDNAMultiClassClassificationLearner.load_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasDNAMultiClassClassificationLearner.load_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>file_name</strong> (<em>str</em><em>, </em><em>optional</em>) – file name in output dir;
+default is library-dependent</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasDNAMultiClassClassificationLearner.parse_annotations_data">
+<span class="sig-name descname"><span class="pre">parse_annotations_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="seqgra.schema.html#seqgra.schema.AnnotationSet" title="seqgra.schema.AnnotationSet"><span class="pre">seqgra.schema.AnnotationSet</span></a><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasDNAMultiClassClassificationLearner.parse_annotations_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method to parse annotations data file.</p>
+<p>Checks validity of annotations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>file_name</strong> (<em>str</em>) – file name</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>annotations (List[str]): annotations
+y (List[str]): labels</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="seqgra.schema.html#seqgra.schema.AnnotationSet" title="seqgra.schema.AnnotationSet">AnnotationSet</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasDNAMultiClassClassificationLearner.parse_examples_data">
+<span class="sig-name descname"><span class="pre">parse_examples_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="seqgra.schema.html#seqgra.schema.ExampleSet" title="seqgra.schema.ExampleSet"><span class="pre">seqgra.schema.ExampleSet</span></a><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasDNAMultiClassClassificationLearner.parse_examples_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Abstract method to parse examples data file.</p>
+<p>Checks validity of sequences with sequence data type specific
+implementations provided for DNA and amino acid sequences.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>file_name</strong> (<em>str</em>) – file name</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>x (List[str]): sequences
+y (List[str]): labels</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="seqgra.schema.html#seqgra.schema.ExampleSet" title="seqgra.schema.ExampleSet">ExampleSet</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasDNAMultiClassClassificationLearner.predict">
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encode</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/seqgra/learner/tensorflow/keraslearner.html#KerasDNAMultiClassClassificationLearner.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasDNAMultiClassClassificationLearner.predict" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>array</em>) – TODO</p></li>
+<li><p><strong>encode</strong> (<em>bool</em><em>, </em><em>optional</em>) – whether <cite>x</cite> should be encoded;
+defaults to <cite>True</cite></p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>Exception</strong> – if neither <cite>file_name</cite> nor <cite>x</cite> are specified</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasDNAMultiClassClassificationLearner.print_model_summary">
+<span class="sig-name descname"><span class="pre">print_model_summary</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/seqgra/learner/tensorflow/keraslearner.html#KerasDNAMultiClassClassificationLearner.print_model_summary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasDNAMultiClassClassificationLearner.print_model_summary" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasDNAMultiClassClassificationLearner.save_model">
+<span class="sig-name descname"><span class="pre">save_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="_modules/seqgra/learner/tensorflow/keraslearner.html#KerasDNAMultiClassClassificationLearner.save_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasDNAMultiClassClassificationLearner.save_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>file_name</strong> (<em>str</em><em>, </em><em>optional</em>) – file name in output dir;
+default is library-dependent</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasDNAMultiClassClassificationLearner.set_seed">
+<span class="sig-name descname"><span class="pre">set_seed</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="_modules/seqgra/learner/tensorflow/keraslearner.html#KerasDNAMultiClassClassificationLearner.set_seed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasDNAMultiClassClassificationLearner.set_seed" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasDNAMultiClassClassificationLearner.train_model">
+<span class="sig-name descname"><span class="pre">train_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name_train</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_name_val</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_train</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_train</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_val</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_val</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasDNAMultiClassClassificationLearner.train_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Train model.</p>
+<p>Specify either <cite>file_name_train</cite> and <cite>file_name_val</cite> or
+<cite>x_train</cite>, <cite>y_train</cite>, <cite>x_val</cite>, and <cite>y_val</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file_name_train</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – TODO</p></li>
+<li><p><strong>file_name_val</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – TODO</p></li>
+<li><p><strong>x_train</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em>) – TODO</p></li>
+<li><p><strong>y_train</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em>) – TODO</p></li>
+<li><p><strong>x_val</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em>) – TODO</p></li>
+<li><p><strong>y_val</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em>) – TODO</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>Exception</strong> – output directory non-empty</p></li>
+<li><p><strong>Exception</strong> – specify either file_name_train and file_name_val
+    or x_train, y_train, x_val, y_val</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasDNAMultiClassClassificationLearner.write_session_info">
+<span class="sig-name descname"><span class="pre">write_session_info</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="_modules/seqgra/learner/tensorflow/keraslearner.html#KerasDNAMultiClassClassificationLearner.write_session_info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasDNAMultiClassClassificationLearner.write_session_info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasDNAMultiLabelClassificationLearner">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">KerasDNAMultiLabelClassificationLearner</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_definition</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="seqgra.model.model.modeldefinition.html#seqgra.model.model.modeldefinition.ModelDefinition" title="seqgra.model.model.modeldefinition.ModelDefinition"><span class="pre">seqgra.model.model.modeldefinition.ModelDefinition</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dir</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dir</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validate_data</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gpu_id</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/seqgra/learner/tensorflow/keraslearner.html#KerasDNAMultiLabelClassificationLearner"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasDNAMultiLabelClassificationLearner" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="seqgra.learner.dna.html#seqgra.learner.dna.DNAMultiLabelClassificationLearner" title="seqgra.learner.dna.DNAMultiLabelClassificationLearner"><code class="xref py py-class docutils literal notranslate"><span class="pre">seqgra.learner.dna.DNAMultiLabelClassificationLearner</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasDNAMultiLabelClassificationLearner.check_annotations">
+<span class="sig-name descname"><span class="pre">check_annotations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">annotations</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">bool</span><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasDNAMultiLabelClassificationLearner.check_annotations" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasDNAMultiLabelClassificationLearner.check_labels">
+<span class="sig-name descname"><span class="pre">check_labels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">throw_exception</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">bool</span><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasDNAMultiLabelClassificationLearner.check_labels" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasDNAMultiLabelClassificationLearner.check_sequence">
+<span class="sig-name descname"><span class="pre">check_sequence</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">bool</span><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasDNAMultiLabelClassificationLearner.check_sequence" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasDNAMultiLabelClassificationLearner.create_model">
+<span class="sig-name descname"><span class="pre">create_model</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="_modules/seqgra/learner/tensorflow/keraslearner.html#KerasDNAMultiLabelClassificationLearner.create_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasDNAMultiLabelClassificationLearner.create_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Abstract method to create library-specific model.</p>
+<p>Machine learning library specific implementations are provided for
+TensorFlow and PyTorch.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasDNAMultiLabelClassificationLearner.dataset_generator">
+<span class="sig-name descname"><span class="pre">dataset_generator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasDNAMultiLabelClassificationLearner.dataset_generator" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasDNAMultiLabelClassificationLearner.decode_x">
+<span class="sig-name descname"><span class="pre">decode_x</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/seqgra/learner/tensorflow/keraslearner.html#KerasDNAMultiLabelClassificationLearner.decode_x"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasDNAMultiLabelClassificationLearner.decode_x" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>x</strong> (<em>array</em>) – TODO</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasDNAMultiLabelClassificationLearner.decode_y">
+<span class="sig-name descname"><span class="pre">decode_y</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasDNAMultiLabelClassificationLearner.decode_y" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>y</strong> (<em>array</em>) – TODO</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasDNAMultiLabelClassificationLearner.encode_x">
+<span class="sig-name descname"><span class="pre">encode_x</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/seqgra/learner/tensorflow/keraslearner.html#KerasDNAMultiLabelClassificationLearner.encode_x"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasDNAMultiLabelClassificationLearner.encode_x" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>x</strong> (<em>array</em>) – TODO</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasDNAMultiLabelClassificationLearner.encode_y">
+<span class="sig-name descname"><span class="pre">encode_y</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasDNAMultiLabelClassificationLearner.encode_y" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>y</strong> (<em>array</em>) – TODO</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasDNAMultiLabelClassificationLearner.evaluate_model">
+<span class="sig-name descname"><span class="pre">evaluate_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/seqgra/learner/tensorflow/keraslearner.html#KerasDNAMultiLabelClassificationLearner.evaluate_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasDNAMultiLabelClassificationLearner.evaluate_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file_name</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – TODO</p></li>
+<li><p><strong>x</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em>) – TODO</p></li>
+<li><p><strong>y</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em>) – TODO</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>TODO</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>array</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>Exception</strong> – if neither <cite>file_name</cite> nor (<cite>x</cite> and <cite>y</cite>) are specified</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasDNAMultiLabelClassificationLearner.get_annotations_file">
+<span class="sig-name descname"><span class="pre">get_annotations_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">set_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'test'</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasDNAMultiLabelClassificationLearner.get_annotations_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get path to annotations file.</p>
+<p>E.g., <cite>get_annotations_file(“training”)</cite> returns
+<cite>{OUTPUTDIR}/input/{GRAMMAR ID}/training-annotation.txt</cite>, if it exists.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>set_name</strong> (<em>str</em><em>, </em><em>optional</em>) – set name can be one of the following:
+<cite>training</cite>, <cite>validation</cite>, or <cite>test</cite>; defaults to <cite>test</cite></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>file path to annotations file</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>Exception</strong> – in case requested annotations file does not exist</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasDNAMultiLabelClassificationLearner.get_examples_file">
+<span class="sig-name descname"><span class="pre">get_examples_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">set_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'test'</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasDNAMultiLabelClassificationLearner.get_examples_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get path to examples file.</p>
+<p>E.g., <cite>get_examples_file(“training”)</cite> returns
+<cite>{OUTPUTDIR}/input/{GRAMMAR ID}/training.txt</cite>, if it exists.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>set_name</strong> (<em>str</em><em>, </em><em>optional</em>) – set name can be one of the following:
+<cite>training</cite>, <cite>validation</cite>, or <cite>test</cite>; defaults to <cite>test</cite></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>file path to examples file</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>Exception</strong> – in case requested examples file does not exist</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasDNAMultiLabelClassificationLearner.get_label_set">
+<span class="sig-name descname"><span class="pre">get_label_set</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasDNAMultiLabelClassificationLearner.get_label_set" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasDNAMultiLabelClassificationLearner.get_num_params">
+<span class="sig-name descname"><span class="pre">get_num_params</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="seqgra.schema.html#seqgra.schema.ModelSize" title="seqgra.schema.ModelSize"><span class="pre">seqgra.schema.ModelSize</span></a><a class="reference internal" href="_modules/seqgra/learner/tensorflow/keraslearner.html#KerasDNAMultiLabelClassificationLearner.get_num_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasDNAMultiLabelClassificationLearner.get_num_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasDNAMultiLabelClassificationLearner.get_sequence_length">
+<span class="sig-name descname"><span class="pre">get_sequence_length</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">int</span><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasDNAMultiLabelClassificationLearner.get_sequence_length" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasDNAMultiLabelClassificationLearner.load_model">
+<span class="sig-name descname"><span class="pre">load_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="_modules/seqgra/learner/tensorflow/keraslearner.html#KerasDNAMultiLabelClassificationLearner.load_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasDNAMultiLabelClassificationLearner.load_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>file_name</strong> (<em>str</em><em>, </em><em>optional</em>) – file name in output dir;
+default is library-dependent</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasDNAMultiLabelClassificationLearner.parse_annotations_data">
+<span class="sig-name descname"><span class="pre">parse_annotations_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="seqgra.schema.html#seqgra.schema.AnnotationSet" title="seqgra.schema.AnnotationSet"><span class="pre">seqgra.schema.AnnotationSet</span></a><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasDNAMultiLabelClassificationLearner.parse_annotations_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method to parse annotations data file.</p>
+<p>Checks validity of annotations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>file_name</strong> (<em>str</em>) – file name</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>annotations (List[str]): annotations
+y (List[str]): labels</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="seqgra.schema.html#seqgra.schema.AnnotationSet" title="seqgra.schema.AnnotationSet">AnnotationSet</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasDNAMultiLabelClassificationLearner.parse_examples_data">
+<span class="sig-name descname"><span class="pre">parse_examples_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="seqgra.schema.html#seqgra.schema.ExampleSet" title="seqgra.schema.ExampleSet"><span class="pre">seqgra.schema.ExampleSet</span></a><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasDNAMultiLabelClassificationLearner.parse_examples_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Abstract method to parse examples data file.</p>
+<p>Checks validity of sequences with sequence data type specific
+implementations provided for DNA and amino acid sequences.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>file_name</strong> (<em>str</em>) – file name</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>x (List[str]): sequences
+y (List[str]): labels</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="seqgra.schema.html#seqgra.schema.ExampleSet" title="seqgra.schema.ExampleSet">ExampleSet</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasDNAMultiLabelClassificationLearner.predict">
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encode</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/seqgra/learner/tensorflow/keraslearner.html#KerasDNAMultiLabelClassificationLearner.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasDNAMultiLabelClassificationLearner.predict" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>array</em>) – TODO</p></li>
+<li><p><strong>encode</strong> (<em>bool</em><em>, </em><em>optional</em>) – whether <cite>x</cite> should be encoded;
+defaults to <cite>True</cite></p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>Exception</strong> – if neither <cite>file_name</cite> nor <cite>x</cite> are specified</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasDNAMultiLabelClassificationLearner.print_model_summary">
+<span class="sig-name descname"><span class="pre">print_model_summary</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/seqgra/learner/tensorflow/keraslearner.html#KerasDNAMultiLabelClassificationLearner.print_model_summary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasDNAMultiLabelClassificationLearner.print_model_summary" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasDNAMultiLabelClassificationLearner.save_model">
+<span class="sig-name descname"><span class="pre">save_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="_modules/seqgra/learner/tensorflow/keraslearner.html#KerasDNAMultiLabelClassificationLearner.save_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasDNAMultiLabelClassificationLearner.save_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>file_name</strong> (<em>str</em><em>, </em><em>optional</em>) – file name in output dir;
+default is library-dependent</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasDNAMultiLabelClassificationLearner.set_seed">
+<span class="sig-name descname"><span class="pre">set_seed</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="_modules/seqgra/learner/tensorflow/keraslearner.html#KerasDNAMultiLabelClassificationLearner.set_seed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasDNAMultiLabelClassificationLearner.set_seed" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasDNAMultiLabelClassificationLearner.train_model">
+<span class="sig-name descname"><span class="pre">train_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name_train</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_name_val</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_train</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_train</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_val</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_val</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasDNAMultiLabelClassificationLearner.train_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Train model.</p>
+<p>Specify either <cite>file_name_train</cite> and <cite>file_name_val</cite> or
+<cite>x_train</cite>, <cite>y_train</cite>, <cite>x_val</cite>, and <cite>y_val</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file_name_train</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – TODO</p></li>
+<li><p><strong>file_name_val</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – TODO</p></li>
+<li><p><strong>x_train</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em>) – TODO</p></li>
+<li><p><strong>y_train</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em>) – TODO</p></li>
+<li><p><strong>x_val</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em>) – TODO</p></li>
+<li><p><strong>y_val</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em>) – TODO</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>Exception</strong> – output directory non-empty</p></li>
+<li><p><strong>Exception</strong> – specify either file_name_train and file_name_val
+    or x_train, y_train, x_val, y_val</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasDNAMultiLabelClassificationLearner.write_session_info">
+<span class="sig-name descname"><span class="pre">write_session_info</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="_modules/seqgra/learner/tensorflow/keraslearner.html#KerasDNAMultiLabelClassificationLearner.write_session_info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasDNAMultiLabelClassificationLearner.write_session_info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasProteinMultiClassClassificationLearner">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">KerasProteinMultiClassClassificationLearner</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_definition</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="seqgra.model.model.modeldefinition.html#seqgra.model.model.modeldefinition.ModelDefinition" title="seqgra.model.model.modeldefinition.ModelDefinition"><span class="pre">seqgra.model.model.modeldefinition.ModelDefinition</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dir</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dir</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validate_data</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gpu_id</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/seqgra/learner/tensorflow/keraslearner.html#KerasProteinMultiClassClassificationLearner"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasProteinMultiClassClassificationLearner" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="seqgra.learner.protein.html#seqgra.learner.protein.ProteinMultiClassClassificationLearner" title="seqgra.learner.protein.ProteinMultiClassClassificationLearner"><code class="xref py py-class docutils literal notranslate"><span class="pre">seqgra.learner.protein.ProteinMultiClassClassificationLearner</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasProteinMultiClassClassificationLearner.check_annotations">
+<span class="sig-name descname"><span class="pre">check_annotations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">annotations</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">bool</span><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasProteinMultiClassClassificationLearner.check_annotations" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasProteinMultiClassClassificationLearner.check_labels">
+<span class="sig-name descname"><span class="pre">check_labels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">throw_exception</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">bool</span><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasProteinMultiClassClassificationLearner.check_labels" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasProteinMultiClassClassificationLearner.check_sequence">
+<span class="sig-name descname"><span class="pre">check_sequence</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">bool</span><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasProteinMultiClassClassificationLearner.check_sequence" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasProteinMultiClassClassificationLearner.create_model">
+<span class="sig-name descname"><span class="pre">create_model</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="_modules/seqgra/learner/tensorflow/keraslearner.html#KerasProteinMultiClassClassificationLearner.create_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasProteinMultiClassClassificationLearner.create_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Abstract method to create library-specific model.</p>
+<p>Machine learning library specific implementations are provided for
+TensorFlow and PyTorch.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasProteinMultiClassClassificationLearner.dataset_generator">
+<span class="sig-name descname"><span class="pre">dataset_generator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasProteinMultiClassClassificationLearner.dataset_generator" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasProteinMultiClassClassificationLearner.decode_x">
+<span class="sig-name descname"><span class="pre">decode_x</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/seqgra/learner/tensorflow/keraslearner.html#KerasProteinMultiClassClassificationLearner.decode_x"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasProteinMultiClassClassificationLearner.decode_x" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>x</strong> (<em>array</em>) – TODO</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasProteinMultiClassClassificationLearner.decode_y">
+<span class="sig-name descname"><span class="pre">decode_y</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasProteinMultiClassClassificationLearner.decode_y" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>y</strong> (<em>array</em>) – TODO</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasProteinMultiClassClassificationLearner.encode_x">
+<span class="sig-name descname"><span class="pre">encode_x</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/seqgra/learner/tensorflow/keraslearner.html#KerasProteinMultiClassClassificationLearner.encode_x"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasProteinMultiClassClassificationLearner.encode_x" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>x</strong> (<em>array</em>) – TODO</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasProteinMultiClassClassificationLearner.encode_y">
+<span class="sig-name descname"><span class="pre">encode_y</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasProteinMultiClassClassificationLearner.encode_y" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>y</strong> (<em>array</em>) – TODO</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasProteinMultiClassClassificationLearner.evaluate_model">
+<span class="sig-name descname"><span class="pre">evaluate_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/seqgra/learner/tensorflow/keraslearner.html#KerasProteinMultiClassClassificationLearner.evaluate_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasProteinMultiClassClassificationLearner.evaluate_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file_name</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – TODO</p></li>
+<li><p><strong>x</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em>) – TODO</p></li>
+<li><p><strong>y</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em>) – TODO</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>TODO</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>array</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>Exception</strong> – if neither <cite>file_name</cite> nor (<cite>x</cite> and <cite>y</cite>) are specified</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasProteinMultiClassClassificationLearner.get_annotations_file">
+<span class="sig-name descname"><span class="pre">get_annotations_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">set_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'test'</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasProteinMultiClassClassificationLearner.get_annotations_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get path to annotations file.</p>
+<p>E.g., <cite>get_annotations_file(“training”)</cite> returns
+<cite>{OUTPUTDIR}/input/{GRAMMAR ID}/training-annotation.txt</cite>, if it exists.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>set_name</strong> (<em>str</em><em>, </em><em>optional</em>) – set name can be one of the following:
+<cite>training</cite>, <cite>validation</cite>, or <cite>test</cite>; defaults to <cite>test</cite></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>file path to annotations file</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>Exception</strong> – in case requested annotations file does not exist</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasProteinMultiClassClassificationLearner.get_examples_file">
+<span class="sig-name descname"><span class="pre">get_examples_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">set_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'test'</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasProteinMultiClassClassificationLearner.get_examples_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get path to examples file.</p>
+<p>E.g., <cite>get_examples_file(“training”)</cite> returns
+<cite>{OUTPUTDIR}/input/{GRAMMAR ID}/training.txt</cite>, if it exists.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>set_name</strong> (<em>str</em><em>, </em><em>optional</em>) – set name can be one of the following:
+<cite>training</cite>, <cite>validation</cite>, or <cite>test</cite>; defaults to <cite>test</cite></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>file path to examples file</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>Exception</strong> – in case requested examples file does not exist</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasProteinMultiClassClassificationLearner.get_label_set">
+<span class="sig-name descname"><span class="pre">get_label_set</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasProteinMultiClassClassificationLearner.get_label_set" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasProteinMultiClassClassificationLearner.get_num_params">
+<span class="sig-name descname"><span class="pre">get_num_params</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="seqgra.schema.html#seqgra.schema.ModelSize" title="seqgra.schema.ModelSize"><span class="pre">seqgra.schema.ModelSize</span></a><a class="reference internal" href="_modules/seqgra/learner/tensorflow/keraslearner.html#KerasProteinMultiClassClassificationLearner.get_num_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasProteinMultiClassClassificationLearner.get_num_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasProteinMultiClassClassificationLearner.get_sequence_length">
+<span class="sig-name descname"><span class="pre">get_sequence_length</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">int</span><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasProteinMultiClassClassificationLearner.get_sequence_length" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasProteinMultiClassClassificationLearner.load_model">
+<span class="sig-name descname"><span class="pre">load_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="_modules/seqgra/learner/tensorflow/keraslearner.html#KerasProteinMultiClassClassificationLearner.load_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasProteinMultiClassClassificationLearner.load_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>file_name</strong> (<em>str</em><em>, </em><em>optional</em>) – file name in output dir;
+default is library-dependent</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasProteinMultiClassClassificationLearner.parse_annotations_data">
+<span class="sig-name descname"><span class="pre">parse_annotations_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="seqgra.schema.html#seqgra.schema.AnnotationSet" title="seqgra.schema.AnnotationSet"><span class="pre">seqgra.schema.AnnotationSet</span></a><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasProteinMultiClassClassificationLearner.parse_annotations_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method to parse annotations data file.</p>
+<p>Checks validity of annotations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>file_name</strong> (<em>str</em>) – file name</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>annotations (List[str]): annotations
+y (List[str]): labels</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="seqgra.schema.html#seqgra.schema.AnnotationSet" title="seqgra.schema.AnnotationSet">AnnotationSet</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasProteinMultiClassClassificationLearner.parse_examples_data">
+<span class="sig-name descname"><span class="pre">parse_examples_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="seqgra.schema.html#seqgra.schema.ExampleSet" title="seqgra.schema.ExampleSet"><span class="pre">seqgra.schema.ExampleSet</span></a><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasProteinMultiClassClassificationLearner.parse_examples_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Abstract method to parse examples data file.</p>
+<p>Checks validity of sequences with sequence data type specific
+implementations provided for DNA and amino acid sequences.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>file_name</strong> (<em>str</em>) – file name</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>x (List[str]): sequences
+y (List[str]): labels</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="seqgra.schema.html#seqgra.schema.ExampleSet" title="seqgra.schema.ExampleSet">ExampleSet</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasProteinMultiClassClassificationLearner.predict">
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encode</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/seqgra/learner/tensorflow/keraslearner.html#KerasProteinMultiClassClassificationLearner.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasProteinMultiClassClassificationLearner.predict" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>array</em>) – TODO</p></li>
+<li><p><strong>encode</strong> (<em>bool</em><em>, </em><em>optional</em>) – whether <cite>x</cite> should be encoded;
+defaults to <cite>True</cite></p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>Exception</strong> – if neither <cite>file_name</cite> nor <cite>x</cite> are specified</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasProteinMultiClassClassificationLearner.print_model_summary">
+<span class="sig-name descname"><span class="pre">print_model_summary</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/seqgra/learner/tensorflow/keraslearner.html#KerasProteinMultiClassClassificationLearner.print_model_summary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasProteinMultiClassClassificationLearner.print_model_summary" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasProteinMultiClassClassificationLearner.save_model">
+<span class="sig-name descname"><span class="pre">save_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="_modules/seqgra/learner/tensorflow/keraslearner.html#KerasProteinMultiClassClassificationLearner.save_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasProteinMultiClassClassificationLearner.save_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>file_name</strong> (<em>str</em><em>, </em><em>optional</em>) – file name in output dir;
+default is library-dependent</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasProteinMultiClassClassificationLearner.set_seed">
+<span class="sig-name descname"><span class="pre">set_seed</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="_modules/seqgra/learner/tensorflow/keraslearner.html#KerasProteinMultiClassClassificationLearner.set_seed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasProteinMultiClassClassificationLearner.set_seed" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasProteinMultiClassClassificationLearner.train_model">
+<span class="sig-name descname"><span class="pre">train_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name_train</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_name_val</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_train</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_train</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_val</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_val</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasProteinMultiClassClassificationLearner.train_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Train model.</p>
+<p>Specify either <cite>file_name_train</cite> and <cite>file_name_val</cite> or
+<cite>x_train</cite>, <cite>y_train</cite>, <cite>x_val</cite>, and <cite>y_val</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file_name_train</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – TODO</p></li>
+<li><p><strong>file_name_val</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – TODO</p></li>
+<li><p><strong>x_train</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em>) – TODO</p></li>
+<li><p><strong>y_train</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em>) – TODO</p></li>
+<li><p><strong>x_val</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em>) – TODO</p></li>
+<li><p><strong>y_val</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em>) – TODO</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>Exception</strong> – output directory non-empty</p></li>
+<li><p><strong>Exception</strong> – specify either file_name_train and file_name_val
+    or x_train, y_train, x_val, y_val</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasProteinMultiClassClassificationLearner.write_session_info">
+<span class="sig-name descname"><span class="pre">write_session_info</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="_modules/seqgra/learner/tensorflow/keraslearner.html#KerasProteinMultiClassClassificationLearner.write_session_info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasProteinMultiClassClassificationLearner.write_session_info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasProteinMultiLabelClassificationLearner">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">KerasProteinMultiLabelClassificationLearner</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_definition</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="seqgra.model.model.modeldefinition.html#seqgra.model.model.modeldefinition.ModelDefinition" title="seqgra.model.model.modeldefinition.ModelDefinition"><span class="pre">seqgra.model.model.modeldefinition.ModelDefinition</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dir</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dir</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validate_data</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gpu_id</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/seqgra/learner/tensorflow/keraslearner.html#KerasProteinMultiLabelClassificationLearner"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasProteinMultiLabelClassificationLearner" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="seqgra.learner.protein.html#seqgra.learner.protein.ProteinMultiLabelClassificationLearner" title="seqgra.learner.protein.ProteinMultiLabelClassificationLearner"><code class="xref py py-class docutils literal notranslate"><span class="pre">seqgra.learner.protein.ProteinMultiLabelClassificationLearner</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasProteinMultiLabelClassificationLearner.check_annotations">
+<span class="sig-name descname"><span class="pre">check_annotations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">annotations</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">bool</span><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasProteinMultiLabelClassificationLearner.check_annotations" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasProteinMultiLabelClassificationLearner.check_labels">
+<span class="sig-name descname"><span class="pre">check_labels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">throw_exception</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">bool</span><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasProteinMultiLabelClassificationLearner.check_labels" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasProteinMultiLabelClassificationLearner.check_sequence">
+<span class="sig-name descname"><span class="pre">check_sequence</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">bool</span><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasProteinMultiLabelClassificationLearner.check_sequence" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasProteinMultiLabelClassificationLearner.create_model">
+<span class="sig-name descname"><span class="pre">create_model</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="_modules/seqgra/learner/tensorflow/keraslearner.html#KerasProteinMultiLabelClassificationLearner.create_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasProteinMultiLabelClassificationLearner.create_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Abstract method to create library-specific model.</p>
+<p>Machine learning library specific implementations are provided for
+TensorFlow and PyTorch.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasProteinMultiLabelClassificationLearner.dataset_generator">
+<span class="sig-name descname"><span class="pre">dataset_generator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasProteinMultiLabelClassificationLearner.dataset_generator" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasProteinMultiLabelClassificationLearner.decode_x">
+<span class="sig-name descname"><span class="pre">decode_x</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/seqgra/learner/tensorflow/keraslearner.html#KerasProteinMultiLabelClassificationLearner.decode_x"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasProteinMultiLabelClassificationLearner.decode_x" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>x</strong> (<em>array</em>) – TODO</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasProteinMultiLabelClassificationLearner.decode_y">
+<span class="sig-name descname"><span class="pre">decode_y</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasProteinMultiLabelClassificationLearner.decode_y" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>y</strong> (<em>array</em>) – TODO</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasProteinMultiLabelClassificationLearner.encode_x">
+<span class="sig-name descname"><span class="pre">encode_x</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/seqgra/learner/tensorflow/keraslearner.html#KerasProteinMultiLabelClassificationLearner.encode_x"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasProteinMultiLabelClassificationLearner.encode_x" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>x</strong> (<em>array</em>) – TODO</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasProteinMultiLabelClassificationLearner.encode_y">
+<span class="sig-name descname"><span class="pre">encode_y</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasProteinMultiLabelClassificationLearner.encode_y" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>y</strong> (<em>array</em>) – TODO</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasProteinMultiLabelClassificationLearner.evaluate_model">
+<span class="sig-name descname"><span class="pre">evaluate_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/seqgra/learner/tensorflow/keraslearner.html#KerasProteinMultiLabelClassificationLearner.evaluate_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasProteinMultiLabelClassificationLearner.evaluate_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file_name</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – TODO</p></li>
+<li><p><strong>x</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em>) – TODO</p></li>
+<li><p><strong>y</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em>) – TODO</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>TODO</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>array</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>Exception</strong> – if neither <cite>file_name</cite> nor (<cite>x</cite> and <cite>y</cite>) are specified</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasProteinMultiLabelClassificationLearner.get_annotations_file">
+<span class="sig-name descname"><span class="pre">get_annotations_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">set_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'test'</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasProteinMultiLabelClassificationLearner.get_annotations_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get path to annotations file.</p>
+<p>E.g., <cite>get_annotations_file(“training”)</cite> returns
+<cite>{OUTPUTDIR}/input/{GRAMMAR ID}/training-annotation.txt</cite>, if it exists.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>set_name</strong> (<em>str</em><em>, </em><em>optional</em>) – set name can be one of the following:
+<cite>training</cite>, <cite>validation</cite>, or <cite>test</cite>; defaults to <cite>test</cite></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>file path to annotations file</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>Exception</strong> – in case requested annotations file does not exist</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasProteinMultiLabelClassificationLearner.get_examples_file">
+<span class="sig-name descname"><span class="pre">get_examples_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">set_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'test'</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasProteinMultiLabelClassificationLearner.get_examples_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get path to examples file.</p>
+<p>E.g., <cite>get_examples_file(“training”)</cite> returns
+<cite>{OUTPUTDIR}/input/{GRAMMAR ID}/training.txt</cite>, if it exists.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>set_name</strong> (<em>str</em><em>, </em><em>optional</em>) – set name can be one of the following:
+<cite>training</cite>, <cite>validation</cite>, or <cite>test</cite>; defaults to <cite>test</cite></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>file path to examples file</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>Exception</strong> – in case requested examples file does not exist</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasProteinMultiLabelClassificationLearner.get_label_set">
+<span class="sig-name descname"><span class="pre">get_label_set</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasProteinMultiLabelClassificationLearner.get_label_set" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasProteinMultiLabelClassificationLearner.get_num_params">
+<span class="sig-name descname"><span class="pre">get_num_params</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="seqgra.schema.html#seqgra.schema.ModelSize" title="seqgra.schema.ModelSize"><span class="pre">seqgra.schema.ModelSize</span></a><a class="reference internal" href="_modules/seqgra/learner/tensorflow/keraslearner.html#KerasProteinMultiLabelClassificationLearner.get_num_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasProteinMultiLabelClassificationLearner.get_num_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasProteinMultiLabelClassificationLearner.get_sequence_length">
+<span class="sig-name descname"><span class="pre">get_sequence_length</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">int</span><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasProteinMultiLabelClassificationLearner.get_sequence_length" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasProteinMultiLabelClassificationLearner.load_model">
+<span class="sig-name descname"><span class="pre">load_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="_modules/seqgra/learner/tensorflow/keraslearner.html#KerasProteinMultiLabelClassificationLearner.load_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasProteinMultiLabelClassificationLearner.load_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>file_name</strong> (<em>str</em><em>, </em><em>optional</em>) – file name in output dir;
+default is library-dependent</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasProteinMultiLabelClassificationLearner.parse_annotations_data">
+<span class="sig-name descname"><span class="pre">parse_annotations_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="seqgra.schema.html#seqgra.schema.AnnotationSet" title="seqgra.schema.AnnotationSet"><span class="pre">seqgra.schema.AnnotationSet</span></a><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasProteinMultiLabelClassificationLearner.parse_annotations_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method to parse annotations data file.</p>
+<p>Checks validity of annotations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>file_name</strong> (<em>str</em>) – file name</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>annotations (List[str]): annotations
+y (List[str]): labels</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="seqgra.schema.html#seqgra.schema.AnnotationSet" title="seqgra.schema.AnnotationSet">AnnotationSet</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasProteinMultiLabelClassificationLearner.parse_examples_data">
+<span class="sig-name descname"><span class="pre">parse_examples_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="seqgra.schema.html#seqgra.schema.ExampleSet" title="seqgra.schema.ExampleSet"><span class="pre">seqgra.schema.ExampleSet</span></a><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasProteinMultiLabelClassificationLearner.parse_examples_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Abstract method to parse examples data file.</p>
+<p>Checks validity of sequences with sequence data type specific
+implementations provided for DNA and amino acid sequences.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>file_name</strong> (<em>str</em>) – file name</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>x (List[str]): sequences
+y (List[str]): labels</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="seqgra.schema.html#seqgra.schema.ExampleSet" title="seqgra.schema.ExampleSet">ExampleSet</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasProteinMultiLabelClassificationLearner.predict">
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encode</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/seqgra/learner/tensorflow/keraslearner.html#KerasProteinMultiLabelClassificationLearner.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasProteinMultiLabelClassificationLearner.predict" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>array</em>) – TODO</p></li>
+<li><p><strong>encode</strong> (<em>bool</em><em>, </em><em>optional</em>) – whether <cite>x</cite> should be encoded;
+defaults to <cite>True</cite></p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>Exception</strong> – if neither <cite>file_name</cite> nor <cite>x</cite> are specified</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasProteinMultiLabelClassificationLearner.print_model_summary">
+<span class="sig-name descname"><span class="pre">print_model_summary</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/seqgra/learner/tensorflow/keraslearner.html#KerasProteinMultiLabelClassificationLearner.print_model_summary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasProteinMultiLabelClassificationLearner.print_model_summary" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasProteinMultiLabelClassificationLearner.save_model">
+<span class="sig-name descname"><span class="pre">save_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="_modules/seqgra/learner/tensorflow/keraslearner.html#KerasProteinMultiLabelClassificationLearner.save_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasProteinMultiLabelClassificationLearner.save_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>file_name</strong> (<em>str</em><em>, </em><em>optional</em>) – file name in output dir;
+default is library-dependent</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasProteinMultiLabelClassificationLearner.set_seed">
+<span class="sig-name descname"><span class="pre">set_seed</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="_modules/seqgra/learner/tensorflow/keraslearner.html#KerasProteinMultiLabelClassificationLearner.set_seed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasProteinMultiLabelClassificationLearner.set_seed" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>TODO</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasProteinMultiLabelClassificationLearner.train_model">
+<span class="sig-name descname"><span class="pre">train_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name_train</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_name_val</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_train</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_train</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_val</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_val</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasProteinMultiLabelClassificationLearner.train_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Train model.</p>
+<p>Specify either <cite>file_name_train</cite> and <cite>file_name_val</cite> or
+<cite>x_train</cite>, <cite>y_train</cite>, <cite>x_val</cite>, and <cite>y_val</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file_name_train</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – TODO</p></li>
+<li><p><strong>file_name_val</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – TODO</p></li>
+<li><p><strong>x_train</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em>) – TODO</p></li>
+<li><p><strong>y_train</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em>) – TODO</p></li>
+<li><p><strong>x_val</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em>) – TODO</p></li>
+<li><p><strong>y_val</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em>) – TODO</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>Exception</strong> – output directory non-empty</p></li>
+<li><p><strong>Exception</strong> – specify either file_name_train and file_name_val
+    or x_train, y_train, x_val, y_val</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="seqgra.learner.tensorflow.keraslearner.KerasProteinMultiLabelClassificationLearner.write_session_info">
+<span class="sig-name descname"><span class="pre">write_session_info</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="_modules/seqgra/learner/tensorflow/keraslearner.html#KerasProteinMultiLabelClassificationLearner.write_session_info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#seqgra.learner.tensorflow.keraslearner.KerasProteinMultiLabelClassificationLearner.write_session_info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="seqgra.learner.torch.html" class="btn btn-neutral float-right" title="seqgra.learner.torch package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="seqgra.learner.tensorflow.kerashelper.html" class="btn btn-neutral float-left" title="seqgra.learner.tensorflow.kerashelper module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Konstantin Krismer.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

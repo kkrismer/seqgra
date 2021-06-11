@@ -1,0 +1,1029 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>seqgra.learner.torch.torchhelper &mdash; seqgra 0.0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script src="https://www.googletagmanager.com/gtag/js?id=G-SPQK9JRC9T"></script>
+        <script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-SPQK9JRC9T');
+</script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> seqgra
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">About seqgra</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../intro.html">Introduction</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Main Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../examples.html">Usage examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../cmd.html">Command line utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../dd.html">Data definition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../md.html">Model definition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../slec.html">Simulators, Learners, Evaluators, Comparators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../ids.html">ID conventions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../structure.html"><code class="docutils literal notranslate"><span class="pre">output</span></code> folder structure</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Advanced features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../seqgra.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../py-modindex.html">Python module index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../genindex.html">Index</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">seqgra</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>seqgra.learner.torch.torchhelper</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for seqgra.learner.torch.torchhelper</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;MIT - CSAIL - Gifford Lab - seqgra</span>
+
+<span class="sd">PyTorch learner helper class</span>
+
+<span class="sd">@author: Konstantin Krismer</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">ast</span> <span class="kn">import</span> <span class="n">literal_eval</span>
+<span class="kn">from</span> <span class="nn">distutils.util</span> <span class="kn">import</span> <span class="n">strtobool</span>
+<span class="kn">import</span> <span class="nn">importlib</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">FrozenSet</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">from</span> <span class="nn">ignite.engine</span> <span class="kn">import</span> <span class="n">Events</span>
+<span class="kn">from</span> <span class="nn">ignite.engine</span> <span class="kn">import</span> <span class="n">create_supervised_trainer</span>
+<span class="kn">from</span> <span class="nn">ignite.engine</span> <span class="kn">import</span> <span class="n">create_supervised_evaluator</span>
+<span class="kn">from</span> <span class="nn">ignite.metrics</span> <span class="kn">import</span> <span class="n">Accuracy</span><span class="p">,</span> <span class="n">Loss</span>
+<span class="kn">from</span> <span class="nn">ignite.handlers</span> <span class="kn">import</span> <span class="n">EarlyStopping</span><span class="p">,</span> <span class="n">ModelCheckpoint</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pkg_resources</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+
+<span class="kn">from</span> <span class="nn">seqgra</span> <span class="kn">import</span> <span class="n">ModelSize</span>
+<span class="kn">import</span> <span class="nn">seqgra.constants</span> <span class="k">as</span> <span class="nn">c</span>
+<span class="kn">from</span> <span class="nn">seqgra.learner</span> <span class="kn">import</span> <span class="n">Learner</span>
+
+
+<div class="viewcode-block" id="TorchHelper"><a class="viewcode-back" href="../../../../seqgra.learner.torch.torchhelper.html#seqgra.learner.torch.torchhelper.TorchHelper">[docs]</a><span class="k">class</span> <span class="nc">TorchHelper</span><span class="p">:</span>
+    <span class="n">MULTI_CLASS_CLASSIFICATION_LOSSES</span><span class="p">:</span> <span class="n">FrozenSet</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nb">frozenset</span><span class="p">(</span>
+        <span class="p">[</span><span class="s2">&quot;crossentropyloss&quot;</span><span class="p">,</span> <span class="s2">&quot;nllloss&quot;</span><span class="p">,</span> <span class="s2">&quot;kldivloss&quot;</span><span class="p">,</span> <span class="s2">&quot;hingeembeddingloss&quot;</span><span class="p">,</span>
+         <span class="s2">&quot;cosineembeddingloss&quot;</span><span class="p">])</span>
+
+    <span class="n">MULTI_LABEL_CLASSIFICATION_LOSSES</span><span class="p">:</span> <span class="n">FrozenSet</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nb">frozenset</span><span class="p">(</span>
+        <span class="p">[</span><span class="s2">&quot;bcewithlogitsloss&quot;</span><span class="p">,</span> <span class="s2">&quot;bceloss&quot;</span><span class="p">])</span>
+
+    <span class="n">MULTIPLE_REGRESSION_LOSSES</span><span class="p">:</span> <span class="n">FrozenSet</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nb">frozenset</span><span class="p">(</span>
+        <span class="p">[</span><span class="s2">&quot;l1loss&quot;</span><span class="p">,</span> <span class="s2">&quot;mseloss&quot;</span><span class="p">,</span> <span class="s2">&quot;smoothl1loss&quot;</span><span class="p">])</span>
+
+    <span class="n">MULTIVARIATE_REGRESSION_LOSSES</span><span class="p">:</span> <span class="n">FrozenSet</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">MULTIPLE_REGRESSION_LOSSES</span>
+
+<div class="viewcode-block" id="TorchHelper.create_model"><a class="viewcode-back" href="../../../../seqgra.learner.torch.torchhelper.html#seqgra.learner.torch.torchhelper.TorchHelper.create_model">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">create_model</span><span class="p">(</span><span class="n">learner</span><span class="p">:</span> <span class="n">Learner</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">learner</span><span class="o">.</span><span class="n">definition</span><span class="o">.</span><span class="n">architecture</span><span class="o">.</span><span class="n">external_model_path</span>
+        <span class="n">class_name</span> <span class="o">=</span> <span class="n">learner</span><span class="o">.</span><span class="n">definition</span><span class="o">.</span><span class="n">architecture</span><span class="o">.</span><span class="n">external_model_class_name</span>
+        <span class="n">learner</span><span class="o">.</span><span class="n">set_seed</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;embedded architecture definition not supported&quot;</span>
+                            <span class="s2">&quot; for PyTorch models&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> \
+                <span class="n">learner</span><span class="o">.</span><span class="n">definition</span><span class="o">.</span><span class="n">architecture</span><span class="o">.</span><span class="n">external_model_format</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">learner</span><span class="o">.</span><span class="n">definition</span><span class="o">.</span><span class="n">architecture</span><span class="o">.</span><span class="n">external_model_format</span> <span class="o">==</span> <span class="s2">&quot;pytorch-module&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">class_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+                            <span class="s2">&quot;PyTorch model class name not specified&quot;</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">module_spec</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">spec_from_file_location</span><span class="p">(</span>
+                            <span class="s2">&quot;model&quot;</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+                        <span class="n">torch_model_module</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">module_from_spec</span><span class="p">(</span>
+                            <span class="n">module_spec</span><span class="p">)</span>
+                        <span class="n">module_spec</span><span class="o">.</span><span class="n">loader</span><span class="o">.</span><span class="n">exec_module</span><span class="p">(</span><span class="n">torch_model_module</span><span class="p">)</span>
+                        <span class="n">torch_model_class</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">torch_model_module</span><span class="p">,</span>
+                                                    <span class="n">class_name</span><span class="p">)</span>
+                        <span class="n">learner</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">torch_model_class</span><span class="p">()</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+                        <span class="s2">&quot;PyTorch model class file does not exist: &quot;</span> <span class="o">+</span> <span class="n">path</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+                    <span class="s2">&quot;unsupported PyTorch model format: &quot;</span> <span class="o">+</span>
+                    <span class="n">learner</span><span class="o">.</span><span class="n">definition</span><span class="o">.</span><span class="n">architecture</span><span class="o">.</span><span class="n">external_model_format</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;neither internal nor external architecture &quot;</span>
+                            <span class="s2">&quot;definition provided&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">learner</span><span class="o">.</span><span class="n">definition</span><span class="o">.</span><span class="n">optimizer_hyperparameters</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;optimizer undefined&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">learner</span><span class="o">.</span><span class="n">optimizer</span> <span class="o">=</span> <span class="n">TorchHelper</span><span class="o">.</span><span class="n">get_optimizer</span><span class="p">(</span>
+                <span class="n">learner</span><span class="o">.</span><span class="n">definition</span><span class="o">.</span><span class="n">optimizer_hyperparameters</span><span class="p">,</span>
+                <span class="n">learner</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">())</span>
+
+        <span class="k">if</span> <span class="n">learner</span><span class="o">.</span><span class="n">definition</span><span class="o">.</span><span class="n">loss_hyperparameters</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;loss undefined&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">learner</span><span class="o">.</span><span class="n">criterion</span> <span class="o">=</span> <span class="n">TorchHelper</span><span class="o">.</span><span class="n">get_loss</span><span class="p">(</span>
+                <span class="n">learner</span><span class="o">.</span><span class="n">definition</span><span class="o">.</span><span class="n">loss_hyperparameters</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">learner</span><span class="o">.</span><span class="n">metrics</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;metrics undefined&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TorchHelper.print_model_summary"><a class="viewcode-back" href="../../../../seqgra.learner.torch.torchhelper.html#seqgra.learner.torch.torchhelper.TorchHelper.print_model_summary">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">print_model_summary</span><span class="p">(</span><span class="n">learner</span><span class="p">:</span> <span class="n">Learner</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">learner</span><span class="o">.</span><span class="n">model</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">learner</span><span class="o">.</span><span class="n">model</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;uninitialized model&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TorchHelper.set_seed"><a class="viewcode-back" href="../../../../seqgra.learner.torch.torchhelper.html#seqgra.learner.torch.torchhelper.TorchHelper.set_seed">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">set_seed</span><span class="p">(</span><span class="n">learner</span><span class="p">:</span> <span class="n">Learner</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">learner</span><span class="o">.</span><span class="n">definition</span><span class="o">.</span><span class="n">seed</span><span class="p">)</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">learner</span><span class="o">.</span><span class="n">definition</span><span class="o">.</span><span class="n">seed</span><span class="p">)</span>
+        <span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="n">learner</span><span class="o">.</span><span class="n">definition</span><span class="o">.</span><span class="n">seed</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TorchHelper.train_model"><a class="viewcode-back" href="../../../../seqgra.learner.torch.torchhelper.html#seqgra.learner.torch.torchhelper.TorchHelper.train_model">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">train_model</span><span class="p">(</span>
+            <span class="n">learner</span><span class="p">:</span> <span class="n">Learner</span><span class="p">,</span>
+            <span class="n">training_dataset</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">Dataset</span><span class="p">,</span>
+            <span class="n">validation_dataset</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">Dataset</span><span class="p">,</span>
+            <span class="n">output_layer_activation_function</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">silent</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">silent</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;LOGLEVEL&quot;</span><span class="p">,</span> <span class="s2">&quot;WARNING&quot;</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">learner</span><span class="o">.</span><span class="n">model</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">learner</span><span class="o">.</span><span class="n">create_model</span><span class="p">()</span>
+
+        <span class="c1"># save number of model parameters</span>
+        <span class="n">num_trainable_params</span><span class="p">,</span> <span class="n">num_non_trainable_params</span> <span class="o">=</span> <span class="n">learner</span><span class="o">.</span><span class="n">get_num_params</span><span class="p">()</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">learner</span><span class="o">.</span><span class="n">output_dir</span> <span class="o">+</span>
+                  <span class="s2">&quot;num-model-parameters.txt&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">model_param_file</span><span class="p">:</span>
+            <span class="n">model_param_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;number of trainable parameters</span><span class="se">\t</span><span class="s2">&quot;</span> <span class="o">+</span>
+                                   <span class="nb">str</span><span class="p">(</span><span class="n">num_trainable_params</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">model_param_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;number of non-trainable parameters</span><span class="se">\t</span><span class="s2">&quot;</span> <span class="o">+</span>
+                                   <span class="nb">str</span><span class="p">(</span><span class="n">num_non_trainable_params</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">model_param_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;number of all parameters</span><span class="se">\t</span><span class="s2">&quot;</span> <span class="o">+</span>
+                                   <span class="nb">str</span><span class="p">(</span><span class="n">num_trainable_params</span> <span class="o">+</span>
+                                       <span class="n">num_non_trainable_params</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="n">batch_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span>
+            <span class="n">learner</span><span class="o">.</span><span class="n">definition</span><span class="o">.</span><span class="n">training_process_hyperparameters</span><span class="p">[</span><span class="s2">&quot;batch_size&quot;</span><span class="p">])</span>
+
+        <span class="c1"># init data loaders</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">training_dataset</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">IterableDataset</span><span class="p">):</span>
+            <span class="c1"># examples are shuffled in IterableDataSet class</span>
+            <span class="n">shuffle</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">shuffle</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span>
+                <span class="n">strtobool</span><span class="p">(</span><span class="n">learner</span><span class="o">.</span><span class="n">definition</span><span class="o">.</span><span class="n">training_process_hyperparameters</span><span class="p">[</span><span class="s2">&quot;shuffle&quot;</span><span class="p">]))</span>
+
+        <span class="n">training_loader</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span>
+            <span class="n">training_dataset</span><span class="p">,</span>
+            <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span>
+            <span class="n">shuffle</span><span class="o">=</span><span class="n">shuffle</span><span class="p">)</span>
+
+        <span class="n">validation_loader</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span>
+            <span class="n">validation_dataset</span><span class="p">,</span>
+            <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span>
+            <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="c1"># GPU or CPU?</span>
+        <span class="n">learner</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">learner</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">learner</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;using device: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">learner</span><span class="o">.</span><span class="n">device_label</span><span class="p">)</span>
+
+        <span class="c1"># training loop</span>
+        <span class="n">trainer</span> <span class="o">=</span> <span class="n">create_supervised_trainer</span><span class="p">(</span><span class="n">learner</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">learner</span><span class="o">.</span><span class="n">optimizer</span><span class="p">,</span>
+                                            <span class="n">learner</span><span class="o">.</span><span class="n">criterion</span><span class="p">,</span>
+                                            <span class="n">device</span><span class="o">=</span><span class="n">learner</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+        <span class="n">train_evaluator</span> <span class="o">=</span> <span class="n">create_supervised_evaluator</span><span class="p">(</span>
+            <span class="n">learner</span><span class="o">.</span><span class="n">model</span><span class="p">,</span>
+            <span class="n">metrics</span><span class="o">=</span><span class="n">TorchHelper</span><span class="o">.</span><span class="n">get_metrics</span><span class="p">(</span>
+                <span class="n">learner</span><span class="p">,</span> <span class="n">output_layer_activation_function</span><span class="p">),</span>
+            <span class="n">device</span><span class="o">=</span><span class="n">learner</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+        <span class="n">val_evaluator</span> <span class="o">=</span> <span class="n">create_supervised_evaluator</span><span class="p">(</span>
+            <span class="n">learner</span><span class="o">.</span><span class="n">model</span><span class="p">,</span>
+            <span class="n">metrics</span><span class="o">=</span><span class="n">TorchHelper</span><span class="o">.</span><span class="n">get_metrics</span><span class="p">(</span>
+                <span class="n">learner</span><span class="p">,</span> <span class="n">output_layer_activation_function</span><span class="p">),</span>
+            <span class="n">device</span><span class="o">=</span><span class="n">learner</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+
+        <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;ignite.engine.engine.Engine&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">WARNING</span><span class="p">)</span>
+
+        <span class="n">num_epochs</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span>
+            <span class="n">learner</span><span class="o">.</span><span class="n">definition</span><span class="o">.</span><span class="n">training_process_hyperparameters</span><span class="p">[</span><span class="s2">&quot;epochs&quot;</span><span class="p">])</span>
+
+        <span class="nd">@trainer</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="n">Events</span><span class="o">.</span><span class="n">EPOCH_COMPLETED</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">log_training_results</span><span class="p">(</span><span class="n">trainer</span><span class="p">):</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;epoch </span><span class="si">{}</span><span class="s2">/</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">trainer</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">epoch</span><span class="p">,</span> <span class="n">num_epochs</span><span class="p">))</span>
+            <span class="n">train_evaluator</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">training_loader</span><span class="p">)</span>
+            <span class="n">metrics</span> <span class="o">=</span> <span class="n">train_evaluator</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">metrics</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">TorchHelper</span><span class="o">.</span><span class="n">_format_metrics_output</span><span class="p">(</span>
+                <span class="n">metrics</span><span class="p">,</span> <span class="s2">&quot;training set&quot;</span><span class="p">))</span>
+
+        <span class="nd">@trainer</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="n">Events</span><span class="o">.</span><span class="n">EPOCH_COMPLETED</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">log_validation_results</span><span class="p">(</span><span class="n">trainer</span><span class="p">):</span>
+            <span class="n">val_evaluator</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">validation_loader</span><span class="p">)</span>
+            <span class="n">metrics</span> <span class="o">=</span> <span class="n">val_evaluator</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">metrics</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">TorchHelper</span><span class="o">.</span><span class="n">_format_metrics_output</span><span class="p">(</span><span class="n">metrics</span><span class="p">,</span>
+                                                           <span class="s2">&quot;validation set&quot;</span><span class="p">))</span>
+
+        <span class="nd">@trainer</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="n">Events</span><span class="o">.</span><span class="n">EPOCH_COMPLETED</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">log_last_epoch</span><span class="p">(</span><span class="n">trainer</span><span class="p">):</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">learner</span><span class="o">.</span><span class="n">output_dir</span> <span class="o">+</span> <span class="s2">&quot;last-epoch-completed.txt&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">last_epoch_file</span><span class="p">:</span>
+                <span class="n">last_epoch_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">trainer</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">epoch</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># save best model</span>
+        <span class="k">def</span> <span class="nf">score_fn</span><span class="p">(</span><span class="n">engine</span><span class="p">):</span>
+            <span class="k">if</span> <span class="s2">&quot;loss&quot;</span> <span class="ow">in</span> <span class="n">learner</span><span class="o">.</span><span class="n">metrics</span><span class="p">:</span>
+                <span class="n">score</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">metrics</span><span class="p">[</span><span class="s2">&quot;loss&quot;</span><span class="p">]</span>
+                <span class="n">score</span> <span class="o">=</span> <span class="o">-</span><span class="n">score</span>
+            <span class="k">elif</span> <span class="s2">&quot;accuracy&quot;</span> <span class="ow">in</span> <span class="n">learner</span><span class="o">.</span><span class="n">metrics</span><span class="p">:</span>
+                <span class="n">score</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">metrics</span><span class="p">[</span><span class="s2">&quot;accuracy&quot;</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;no metric to track performance&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">score</span>
+
+        <span class="n">best_model_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">learner</span><span class="o">.</span><span class="n">output_dir</span> <span class="o">+</span> <span class="s2">&quot;tmp&quot;</span>
+        <span class="n">best_model_saver_handler</span> <span class="o">=</span> <span class="n">ModelCheckpoint</span><span class="p">(</span>
+            <span class="n">best_model_dir</span><span class="p">,</span>
+            <span class="n">score_function</span><span class="o">=</span><span class="n">score_fn</span><span class="p">,</span>
+            <span class="n">filename_prefix</span><span class="o">=</span><span class="s2">&quot;best&quot;</span><span class="p">,</span>
+            <span class="n">n_saved</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">create_dir</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">val_evaluator</span><span class="o">.</span><span class="n">add_event_handler</span><span class="p">(</span><span class="n">Events</span><span class="o">.</span><span class="n">COMPLETED</span><span class="p">,</span>
+                                        <span class="n">best_model_saver_handler</span><span class="p">,</span>
+                                        <span class="p">{</span><span class="s2">&quot;model&quot;</span><span class="p">:</span> <span class="n">learner</span><span class="o">.</span><span class="n">model</span><span class="p">})</span>
+
+        <span class="c1"># early stopping callback</span>
+        <span class="k">if</span> <span class="nb">bool</span><span class="p">(</span><span class="n">strtobool</span><span class="p">(</span><span class="n">learner</span><span class="o">.</span><span class="n">definition</span><span class="o">.</span><span class="n">training_process_hyperparameters</span><span class="p">[</span><span class="s2">&quot;early_stopping&quot;</span><span class="p">])):</span>
+            <span class="k">if</span> <span class="s2">&quot;early_stopping_patience&quot;</span> <span class="ow">in</span> <span class="n">learner</span><span class="o">.</span><span class="n">definition</span><span class="o">.</span><span class="n">training_process_hyperparameters</span><span class="p">:</span>
+                <span class="n">patience</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span>
+                    <span class="n">learner</span><span class="o">.</span><span class="n">definition</span><span class="o">.</span><span class="n">training_process_hyperparameters</span><span class="p">[</span><span class="s2">&quot;early_stopping_patience&quot;</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">patience</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span>
+            <span class="n">es_handler</span> <span class="o">=</span> <span class="n">EarlyStopping</span><span class="p">(</span><span class="n">patience</span><span class="o">=</span><span class="n">patience</span><span class="p">,</span>
+                                       <span class="n">score_function</span><span class="o">=</span><span class="n">score_fn</span><span class="p">,</span>
+                                       <span class="n">trainer</span><span class="o">=</span><span class="n">trainer</span><span class="p">,</span>
+                                       <span class="n">min_delta</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">val_evaluator</span><span class="o">.</span><span class="n">add_event_handler</span><span class="p">(</span><span class="n">Events</span><span class="o">.</span><span class="n">COMPLETED</span><span class="p">,</span> <span class="n">es_handler</span><span class="p">)</span>
+
+        <span class="n">trainer</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">training_loader</span><span class="p">,</span> <span class="n">max_epochs</span><span class="o">=</span><span class="n">num_epochs</span><span class="p">)</span>
+
+        <span class="c1"># load best model after training</span>
+        <span class="n">best_model</span> <span class="o">=</span> <span class="n">TorchHelper</span><span class="o">.</span><span class="n">get_best_model_file_name</span><span class="p">(</span><span class="n">best_model_dir</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">best_model</span><span class="p">:</span>
+            <span class="n">learner</span><span class="o">.</span><span class="n">load_model</span><span class="p">(</span><span class="s2">&quot;tmp/&quot;</span> <span class="o">+</span> <span class="n">best_model</span><span class="p">)</span>
+            <span class="c1"># remove temp folder</span>
+            <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">best_model_dir</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;best model could not be loaded&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TorchHelper.evaluate_model"><a class="viewcode-back" href="../../../../seqgra.learner.torch.torchhelper.html#seqgra.learner.torch.torchhelper.TorchHelper.evaluate_model">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">evaluate_model</span><span class="p">(</span><span class="n">learner</span><span class="p">:</span> <span class="n">Learner</span><span class="p">,</span> <span class="n">dataset</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">Dataset</span><span class="p">,</span>
+                       <span class="n">output_layer_activation_function</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="n">data_loader</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span>
+            <span class="n">dataset</span><span class="p">,</span>
+            <span class="n">batch_size</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span>
+                <span class="n">learner</span><span class="o">.</span><span class="n">definition</span><span class="o">.</span><span class="n">training_process_hyperparameters</span><span class="p">[</span><span class="s2">&quot;batch_size&quot;</span><span class="p">]),</span>
+            <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="n">learner</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">learner</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">learner</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+
+        <span class="n">running_loss</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="n">running_correct</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">num_examples</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="n">learner</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+        <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">data_loader</span><span class="p">:</span>
+                <span class="c1"># transfer to device</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">learner</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+                <span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">learner</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+
+                <span class="n">y_hat</span> <span class="o">=</span> <span class="n">learner</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+                <span class="n">loss</span> <span class="o">=</span> <span class="n">learner</span><span class="o">.</span><span class="n">criterion</span><span class="p">(</span><span class="n">y_hat</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">output_layer_activation_function</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">output_layer_activation_function</span> <span class="o">==</span> <span class="s2">&quot;softmax&quot;</span><span class="p">:</span>
+                        <span class="n">y_hat</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">softmax</span><span class="p">(</span><span class="n">y_hat</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                    <span class="k">elif</span> <span class="n">output_layer_activation_function</span> <span class="o">==</span> <span class="s2">&quot;sigmoid&quot;</span><span class="p">:</span>
+                        <span class="n">y_hat</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sigmoid</span><span class="p">(</span><span class="n">y_hat</span><span class="p">)</span>
+
+                <span class="c1"># binarize y_hat</span>
+                <span class="k">if</span> <span class="n">learner</span><span class="o">.</span><span class="n">definition</span><span class="o">.</span><span class="n">task</span> <span class="o">==</span> <span class="n">c</span><span class="o">.</span><span class="n">TaskType</span><span class="o">.</span><span class="n">MULTI_CLASS_CLASSIFICATION</span><span class="p">:</span>
+                    <span class="n">indices</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">y_hat</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                    <span class="n">correct</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="n">indices</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">learner</span><span class="o">.</span><span class="n">definition</span><span class="o">.</span><span class="n">task</span> <span class="o">==</span> <span class="n">c</span><span class="o">.</span><span class="n">TaskType</span><span class="o">.</span><span class="n">MULTI_LABEL_CLASSIFICATION</span><span class="p">:</span>
+                    <span class="n">y_hat</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">gt</span><span class="p">(</span><span class="n">y_hat</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+                    <span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">type_as</span><span class="p">(</span><span class="n">y_hat</span><span class="p">)</span>
+
+                    <span class="n">correct</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">y</span> <span class="o">==</span> <span class="n">y_hat</span><span class="p">,</span> <span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+
+                <span class="n">running_correct</span> <span class="o">+=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">correct</span><span class="p">)</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+                <span class="n">running_loss</span> <span class="o">+=</span> <span class="n">loss</span><span class="o">.</span><span class="n">item</span><span class="p">()</span> <span class="o">*</span> <span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+                <span class="n">num_examples</span> <span class="o">+=</span> <span class="n">correct</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="n">overall_loss</span> <span class="o">=</span> <span class="n">running_loss</span> <span class="o">/</span> <span class="n">num_examples</span>
+        <span class="n">overall_accuracy</span> <span class="o">=</span> <span class="n">running_correct</span> <span class="o">/</span> <span class="n">num_examples</span>
+
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;loss&quot;</span><span class="p">:</span> <span class="n">overall_loss</span><span class="p">,</span> <span class="s2">&quot;accuracy&quot;</span><span class="p">:</span> <span class="n">overall_accuracy</span><span class="p">}</span></div>
+
+<div class="viewcode-block" id="TorchHelper.predict"><a class="viewcode-back" href="../../../../seqgra.learner.torch.torchhelper.html#seqgra.learner.torch.torchhelper.TorchHelper.predict">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="n">learner</span><span class="p">:</span> <span class="n">Learner</span><span class="p">,</span> <span class="n">dataset</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">Dataset</span><span class="p">,</span>
+                <span class="n">output_layer_activation_function</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; This is the forward calculation from x to y</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            softmax_linear: Output tensor with the computed logits.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">data_loader</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span>
+            <span class="n">dataset</span><span class="p">,</span>
+            <span class="n">batch_size</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span>
+                <span class="n">learner</span><span class="o">.</span><span class="n">definition</span><span class="o">.</span><span class="n">training_process_hyperparameters</span><span class="p">[</span><span class="s2">&quot;batch_size&quot;</span><span class="p">]),</span>
+            <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="n">learner</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">learner</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">learner</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+
+        <span class="n">y_hat</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">learner</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+        <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">data_loader</span><span class="p">:</span>
+                <span class="c1"># transfer to device</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">learner</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+
+                <span class="n">raw_logits</span> <span class="o">=</span> <span class="n">learner</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">output_layer_activation_function</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">y_hat</span> <span class="o">+=</span> <span class="n">raw_logits</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+                <span class="k">elif</span> <span class="n">output_layer_activation_function</span> <span class="o">==</span> <span class="s2">&quot;softmax&quot;</span><span class="p">:</span>
+                    <span class="n">y_hat</span> <span class="o">+=</span> \
+                        <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">softmax</span><span class="p">(</span><span class="n">raw_logits</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+                <span class="k">elif</span> <span class="n">output_layer_activation_function</span> <span class="o">==</span> <span class="s2">&quot;sigmoid&quot;</span><span class="p">:</span>
+                    <span class="n">y_hat</span> <span class="o">+=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sigmoid</span><span class="p">(</span><span class="n">raw_logits</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y_hat</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TorchHelper.get_best_model_file_name"><a class="viewcode-back" href="../../../../seqgra.learner.torch.torchhelper.html#seqgra.learner.torch.torchhelper.TorchHelper.get_best_model_file_name">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_best_model_file_name</span><span class="p">(</span><span class="n">best_model_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">model_files</span> <span class="o">=</span> <span class="p">[</span><span class="n">model_file</span>
+                       <span class="k">for</span> <span class="n">model_file</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">best_model_dir</span><span class="p">)</span>
+                       <span class="k">if</span> <span class="n">model_file</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.pth&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">model_file</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.pt&quot;</span><span class="p">)]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">model_files</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">model_files</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span></div>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_format_metrics_output</span><span class="p">(</span><span class="n">metrics</span><span class="p">,</span> <span class="n">set_label</span><span class="p">):</span>
+        <span class="n">message</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">set_label</span> <span class="o">+</span> <span class="s2">&quot; metrics:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">]</span>
+        <span class="n">message</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot; - &quot;</span> <span class="o">+</span> <span class="n">metric</span> <span class="o">+</span> <span class="s2">&quot;: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">metrics</span><span class="p">[</span><span class="n">metric</span><span class="p">])</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+                    <span class="k">for</span> <span class="n">metric</span> <span class="ow">in</span> <span class="n">metrics</span><span class="p">]</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">message</span><span class="p">)</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span>
+
+<div class="viewcode-block" id="TorchHelper.train_model_basic"><a class="viewcode-back" href="../../../../seqgra.learner.torch.torchhelper.html#seqgra.learner.torch.torchhelper.TorchHelper.train_model_basic">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">train_model_basic</span><span class="p">(</span>
+            <span class="n">learner</span><span class="p">:</span> <span class="n">Learner</span><span class="p">,</span>
+            <span class="n">training_dataset</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">Dataset</span><span class="p">,</span>
+            <span class="n">validation_dataset</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">Dataset</span><span class="p">,</span>
+            <span class="n">output_layer_activation_function</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">silent</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">silent</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;LOGLEVEL&quot;</span><span class="p">,</span> <span class="s2">&quot;WARNING&quot;</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">learner</span><span class="o">.</span><span class="n">model</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">learner</span><span class="o">.</span><span class="n">create_model</span><span class="p">()</span>
+
+        <span class="n">batch_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span>
+            <span class="n">learner</span><span class="o">.</span><span class="n">definition</span><span class="o">.</span><span class="n">training_process_hyperparameters</span><span class="p">[</span><span class="s2">&quot;batch_size&quot;</span><span class="p">])</span>
+
+        <span class="c1"># init data loaders</span>
+        <span class="n">training_loader</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span>
+            <span class="n">training_dataset</span><span class="p">,</span>
+            <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span>
+            <span class="n">shuffle</span><span class="o">=</span><span class="nb">bool</span><span class="p">(</span><span class="n">strtobool</span><span class="p">(</span>
+                <span class="n">learner</span><span class="o">.</span><span class="n">definition</span><span class="o">.</span><span class="n">training_process_hyperparameters</span><span class="p">[</span><span class="s2">&quot;shuffle&quot;</span><span class="p">])))</span>
+
+        <span class="n">validation_loader</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span>
+            <span class="n">validation_dataset</span><span class="p">,</span>
+            <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span>
+            <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="c1"># GPU or CPU?</span>
+        <span class="n">learner</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">learner</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">learner</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;using device: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">learner</span><span class="o">.</span><span class="n">device_label</span><span class="p">)</span>
+
+        <span class="c1"># training loop</span>
+        <span class="n">num_epochs</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span>
+            <span class="n">learner</span><span class="o">.</span><span class="n">definition</span><span class="o">.</span><span class="n">training_process_hyperparameters</span><span class="p">[</span><span class="s2">&quot;epochs&quot;</span><span class="p">])</span>
+
+        <span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_epochs</span><span class="p">):</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;epoch </span><span class="si">{}</span><span class="s2">/</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">epoch</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">num_epochs</span><span class="p">))</span>
+
+            <span class="k">for</span> <span class="n">phase</span> <span class="ow">in</span> <span class="p">[</span><span class="n">c</span><span class="o">.</span><span class="n">DataSet</span><span class="o">.</span><span class="n">TRAINING</span><span class="p">,</span> <span class="n">c</span><span class="o">.</span><span class="n">DataSet</span><span class="o">.</span><span class="n">VALIDATION</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="n">phase</span> <span class="o">==</span> <span class="n">c</span><span class="o">.</span><span class="n">DataSet</span><span class="o">.</span><span class="n">TRAINING</span><span class="p">:</span>
+                    <span class="n">learner</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+                    <span class="n">data_loader</span> <span class="o">=</span> <span class="n">training_loader</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">learner</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+                    <span class="n">data_loader</span> <span class="o">=</span> <span class="n">validation_loader</span>
+
+                <span class="n">running_loss</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
+                <span class="n">running_correct</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+
+                <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">data_loader</span><span class="p">:</span>
+                    <span class="c1"># transfer to device</span>
+                    <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">learner</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+                    <span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">learner</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+
+                    <span class="c1"># zero the parameter gradients</span>
+                    <span class="n">learner</span><span class="o">.</span><span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+
+                    <span class="c1"># forward</span>
+                    <span class="c1"># track history if only in train</span>
+                    <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">set_grad_enabled</span><span class="p">(</span><span class="n">phase</span> <span class="o">==</span> <span class="n">c</span><span class="o">.</span><span class="n">DataSet</span><span class="o">.</span><span class="n">TRAINING</span><span class="p">):</span>
+                        <span class="n">y_hat</span> <span class="o">=</span> <span class="n">learner</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+                        <span class="n">loss</span> <span class="o">=</span> <span class="n">learner</span><span class="o">.</span><span class="n">criterion</span><span class="p">(</span><span class="n">y_hat</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+                        <span class="c1"># backward + optimize only if in training phase</span>
+                        <span class="k">if</span> <span class="n">phase</span> <span class="o">==</span> <span class="n">c</span><span class="o">.</span><span class="n">DataSet</span><span class="o">.</span><span class="n">TRAINING</span><span class="p">:</span>
+                            <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+                            <span class="n">learner</span><span class="o">.</span><span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+
+                        <span class="k">if</span> <span class="n">output_layer_activation_function</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="n">output_layer_activation_function</span> <span class="o">==</span> <span class="s2">&quot;softmax&quot;</span><span class="p">:</span>
+                                <span class="n">y_hat</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">softmax</span><span class="p">(</span>
+                                    <span class="n">y_hat</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                            <span class="k">elif</span> <span class="n">output_layer_activation_function</span> <span class="o">==</span> <span class="s2">&quot;sigmoid&quot;</span><span class="p">:</span>
+                                <span class="n">y_hat</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sigmoid</span><span class="p">(</span><span class="n">y_hat</span><span class="p">)</span>
+
+                        <span class="c1"># statistics</span>
+                        <span class="k">if</span> <span class="n">learner</span><span class="o">.</span><span class="n">definition</span><span class="o">.</span><span class="n">task</span> <span class="o">==</span> <span class="n">c</span><span class="o">.</span><span class="n">TaskType</span><span class="o">.</span><span class="n">MULTI_CLASS_CLASSIFICATION</span><span class="p">:</span>
+                            <span class="n">indices</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">y_hat</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                            <span class="n">correct</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="n">indices</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+                        <span class="k">elif</span> <span class="n">learner</span><span class="o">.</span><span class="n">definition</span><span class="o">.</span><span class="n">task</span> <span class="o">==</span> <span class="n">c</span><span class="o">.</span><span class="n">TaskType</span><span class="o">.</span><span class="n">MULTI_LABEL_CLASSIFICATION</span><span class="p">:</span>
+                            <span class="c1"># binarize y_hat</span>
+                            <span class="n">y_hat</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">gt</span><span class="p">(</span><span class="n">y_hat</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+                            <span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">type_as</span><span class="p">(</span><span class="n">y_hat</span><span class="p">)</span>
+
+                            <span class="n">correct</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">y</span> <span class="o">==</span> <span class="n">y_hat</span><span class="p">,</span> <span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+
+                        <span class="n">running_correct</span> <span class="o">+=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">correct</span><span class="p">)</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+                        <span class="n">running_loss</span> <span class="o">+=</span> <span class="n">loss</span><span class="o">.</span><span class="n">item</span><span class="p">()</span> <span class="o">*</span> <span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+                <span class="n">epoch_loss</span> <span class="o">=</span> <span class="n">running_loss</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">data_loader</span><span class="o">.</span><span class="n">dataset</span><span class="p">)</span>
+                <span class="n">epoch_acc</span> <span class="o">=</span> <span class="n">running_correct</span><span class="o">.</span><span class="n">float</span><span class="p">()</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">data_loader</span><span class="o">.</span><span class="n">dataset</span><span class="p">)</span>
+
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> - loss: </span><span class="si">{:.3f}</span><span class="s2">, accuracy: </span><span class="si">{:.3f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="n">phase</span><span class="p">,</span> <span class="n">epoch_loss</span><span class="p">,</span> <span class="n">epoch_acc</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="TorchHelper.save_model"><a class="viewcode-back" href="../../../../seqgra.learner.torch.torchhelper.html#seqgra.learner.torch.torchhelper.TorchHelper.save_model">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">save_model</span><span class="p">(</span><span class="n">learner</span><span class="p">:</span> <span class="n">Learner</span><span class="p">,</span> <span class="n">file_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">file_name</span><span class="p">:</span>
+            <span class="n">file_name</span> <span class="o">=</span> <span class="s2">&quot;saved_model.pth&quot;</span>
+
+            <span class="c1"># save session info</span>
+            <span class="n">learner</span><span class="o">.</span><span class="n">write_session_info</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">file_name</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">learner</span><span class="o">.</span><span class="n">output_dir</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">file_name</span><span class="p">))</span>
+
+        <span class="n">torch</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">learner</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">state_dict</span><span class="p">(),</span> <span class="n">learner</span><span class="o">.</span><span class="n">output_dir</span> <span class="o">+</span> <span class="n">file_name</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TorchHelper.write_session_info"><a class="viewcode-back" href="../../../../seqgra.learner.torch.torchhelper.html#seqgra.learner.torch.torchhelper.TorchHelper.write_session_info">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">write_session_info</span><span class="p">(</span><span class="n">learner</span><span class="p">:</span> <span class="n">Learner</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">learner</span><span class="o">.</span><span class="n">output_dir</span> <span class="o">+</span> <span class="s2">&quot;session-info.txt&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">session_file</span><span class="p">:</span>
+            <span class="n">session_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;seqgra package version: &quot;</span> <span class="o">+</span>
+                               <span class="n">pkg_resources</span><span class="o">.</span><span class="n">require</span><span class="p">(</span><span class="s2">&quot;seqgra&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">version</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">session_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;PyTorch version: &quot;</span> <span class="o">+</span> <span class="n">torch</span><span class="o">.</span><span class="n">__version__</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">session_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;NumPy version: &quot;</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">version</span><span class="o">.</span><span class="n">version</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">session_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;Python version: &quot;</span> <span class="o">+</span> <span class="n">sys</span><span class="o">.</span><span class="n">version</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TorchHelper.load_model"><a class="viewcode-back" href="../../../../seqgra.learner.torch.torchhelper.html#seqgra.learner.torch.torchhelper.TorchHelper.load_model">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">load_model</span><span class="p">(</span><span class="n">learner</span><span class="p">:</span> <span class="n">Learner</span><span class="p">,</span> <span class="n">file_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">file_name</span><span class="p">:</span>
+            <span class="n">file_name</span> <span class="o">=</span> <span class="s2">&quot;saved_model.pth&quot;</span>
+
+        <span class="n">TorchHelper</span><span class="o">.</span><span class="n">create_model</span><span class="p">(</span><span class="n">learner</span><span class="p">)</span>
+        <span class="n">learner</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">learner</span><span class="o">.</span><span class="n">output_dir</span> <span class="o">+</span>
+                                                 <span class="n">file_name</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="TorchHelper.get_num_params"><a class="viewcode-back" href="../../../../seqgra.learner.torch.torchhelper.html#seqgra.learner.torch.torchhelper.TorchHelper.get_num_params">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_num_params</span><span class="p">(</span><span class="n">learner</span><span class="p">:</span> <span class="n">Learner</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ModelSize</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">learner</span><span class="o">.</span><span class="n">model</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">learner</span><span class="o">.</span><span class="n">create_model</span><span class="p">()</span>
+        <span class="n">num_trainable_params</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">param</span><span class="o">.</span><span class="n">numel</span><span class="p">()</span>
+                                        <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">learner</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">()</span>
+                                        <span class="k">if</span> <span class="n">param</span><span class="o">.</span><span class="n">requires_grad</span><span class="p">)</span>
+        <span class="n">num_all_params</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">param</span><span class="o">.</span><span class="n">numel</span><span class="p">()</span>
+                                  <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">learner</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">ModelSize</span><span class="p">(</span><span class="n">num_trainable_params</span><span class="p">,</span>
+                         <span class="n">num_all_params</span> <span class="o">-</span> <span class="n">num_trainable_params</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TorchHelper.get_optimizer"><a class="viewcode-back" href="../../../../seqgra.learner.torch.torchhelper.html#seqgra.learner.torch.torchhelper.TorchHelper.get_optimizer">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_optimizer</span><span class="p">(</span><span class="n">optimizer_hyperparameters</span><span class="p">,</span> <span class="n">model_parameters</span><span class="p">):</span>
+        <span class="k">if</span> <span class="s2">&quot;optimizer&quot;</span> <span class="ow">in</span> <span class="n">optimizer_hyperparameters</span><span class="p">:</span>
+            <span class="n">optimizer</span> <span class="o">=</span> \
+                <span class="n">optimizer_hyperparameters</span><span class="p">[</span><span class="s2">&quot;optimizer&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="s2">&quot;learning_rate&quot;</span> <span class="ow">in</span> <span class="n">optimizer_hyperparameters</span><span class="p">:</span>
+                <span class="n">learning_rate</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span>
+                    <span class="n">optimizer_hyperparameters</span><span class="p">[</span><span class="s2">&quot;learning_rate&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">learning_rate</span> <span class="o">=</span> <span class="mf">0.001</span>
+
+            <span class="k">if</span> <span class="s2">&quot;rho&quot;</span> <span class="ow">in</span> <span class="n">optimizer_hyperparameters</span><span class="p">:</span>
+                <span class="n">rho</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span>
+                    <span class="n">optimizer_hyperparameters</span><span class="p">[</span><span class="s2">&quot;rho&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">rho</span> <span class="o">=</span> <span class="mf">0.9</span>
+
+            <span class="k">if</span> <span class="s2">&quot;eps&quot;</span> <span class="ow">in</span> <span class="n">optimizer_hyperparameters</span><span class="p">:</span>
+                <span class="n">eps</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span>
+                    <span class="n">optimizer_hyperparameters</span><span class="p">[</span><span class="s2">&quot;eps&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">eps</span> <span class="o">=</span> <span class="mf">1e-08</span>
+
+            <span class="k">if</span> <span class="s2">&quot;weight_decay&quot;</span> <span class="ow">in</span> <span class="n">optimizer_hyperparameters</span><span class="p">:</span>
+                <span class="n">weight_decay</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span>
+                    <span class="n">optimizer_hyperparameters</span><span class="p">[</span><span class="s2">&quot;weight_decay&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">weight_decay</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+            <span class="k">if</span> <span class="s2">&quot;momentum&quot;</span> <span class="ow">in</span> <span class="n">optimizer_hyperparameters</span><span class="p">:</span>
+                <span class="n">momentum</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span>
+                    <span class="n">optimizer_hyperparameters</span><span class="p">[</span><span class="s2">&quot;momentum&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">momentum</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+            <span class="k">if</span> <span class="s2">&quot;lr_decay&quot;</span> <span class="ow">in</span> <span class="n">optimizer_hyperparameters</span><span class="p">:</span>
+                <span class="n">lr_decay</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span>
+                    <span class="n">optimizer_hyperparameters</span><span class="p">[</span><span class="s2">&quot;lr_decay&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">lr_decay</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+            <span class="k">if</span> <span class="s2">&quot;initial_accumulator_value&quot;</span> <span class="ow">in</span> <span class="n">optimizer_hyperparameters</span><span class="p">:</span>
+                <span class="n">initial_accumulator_value</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span>
+                    <span class="n">optimizer_hyperparameters</span><span class="p">[</span><span class="s2">&quot;initial_accumulator_value&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">initial_accumulator_value</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+            <span class="k">if</span> <span class="s2">&quot;betas&quot;</span> <span class="ow">in</span> <span class="n">optimizer_hyperparameters</span><span class="p">:</span>
+                <span class="n">betas</span> <span class="o">=</span> <span class="n">literal_eval</span><span class="p">(</span>
+                    <span class="n">optimizer_hyperparameters</span><span class="p">[</span><span class="s2">&quot;betas&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">betas</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.999</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="s2">&quot;amsgrad&quot;</span> <span class="ow">in</span> <span class="n">optimizer_hyperparameters</span><span class="p">:</span>
+                <span class="n">amsgrad</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">strtobool</span><span class="p">(</span>
+                    <span class="n">optimizer_hyperparameters</span><span class="p">[</span><span class="s2">&quot;amsgrad&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">amsgrad</span> <span class="o">=</span> <span class="kc">False</span>
+
+            <span class="k">if</span> <span class="s2">&quot;lambd&quot;</span> <span class="ow">in</span> <span class="n">optimizer_hyperparameters</span><span class="p">:</span>
+                <span class="n">lambd</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span>
+                    <span class="n">optimizer_hyperparameters</span><span class="p">[</span><span class="s2">&quot;lambd&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">lambd</span> <span class="o">=</span> <span class="mf">0.0001</span>
+
+            <span class="k">if</span> <span class="s2">&quot;alpha&quot;</span> <span class="ow">in</span> <span class="n">optimizer_hyperparameters</span><span class="p">:</span>
+                <span class="n">alpha</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span>
+                    <span class="n">optimizer_hyperparameters</span><span class="p">[</span><span class="s2">&quot;alpha&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.75</span>
+
+            <span class="k">if</span> <span class="s2">&quot;t0&quot;</span> <span class="ow">in</span> <span class="n">optimizer_hyperparameters</span><span class="p">:</span>
+                <span class="n">t0</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span>
+                    <span class="n">optimizer_hyperparameters</span><span class="p">[</span><span class="s2">&quot;t0&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">t0</span> <span class="o">=</span> <span class="mf">1000000.0</span>
+
+            <span class="k">if</span> <span class="s2">&quot;max_iter&quot;</span> <span class="ow">in</span> <span class="n">optimizer_hyperparameters</span><span class="p">:</span>
+                <span class="n">max_iter</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span>
+                    <span class="n">optimizer_hyperparameters</span><span class="p">[</span><span class="s2">&quot;max_iter&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">max_iter</span> <span class="o">=</span> <span class="mi">20</span>
+
+            <span class="k">if</span> <span class="s2">&quot;max_eval&quot;</span> <span class="ow">in</span> <span class="n">optimizer_hyperparameters</span><span class="p">:</span>
+                <span class="n">max_eval</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span>
+                    <span class="n">optimizer_hyperparameters</span><span class="p">[</span><span class="s2">&quot;max_eval&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">max_eval</span> <span class="o">=</span> <span class="kc">None</span>
+
+            <span class="k">if</span> <span class="s2">&quot;tolerance_grad&quot;</span> <span class="ow">in</span> <span class="n">optimizer_hyperparameters</span><span class="p">:</span>
+                <span class="n">tolerance_grad</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span>
+                    <span class="n">optimizer_hyperparameters</span><span class="p">[</span><span class="s2">&quot;tolerance_grad&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">tolerance_grad</span> <span class="o">=</span> <span class="mf">1e-07</span>
+
+            <span class="k">if</span> <span class="s2">&quot;tolerance_change&quot;</span> <span class="ow">in</span> <span class="n">optimizer_hyperparameters</span><span class="p">:</span>
+                <span class="n">tolerance_change</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span>
+                    <span class="n">optimizer_hyperparameters</span><span class="p">[</span><span class="s2">&quot;tolerance_change&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">tolerance_change</span> <span class="o">=</span> <span class="mf">1e-09</span>
+
+            <span class="k">if</span> <span class="s2">&quot;history_size&quot;</span> <span class="ow">in</span> <span class="n">optimizer_hyperparameters</span><span class="p">:</span>
+                <span class="n">history_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span>
+                    <span class="n">optimizer_hyperparameters</span><span class="p">[</span><span class="s2">&quot;history_size&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">history_size</span> <span class="o">=</span> <span class="mi">100</span>
+
+            <span class="k">if</span> <span class="s2">&quot;line_search_fn&quot;</span> <span class="ow">in</span> <span class="n">optimizer_hyperparameters</span><span class="p">:</span>
+                <span class="n">line_search_fn</span> <span class="o">=</span> \
+                    <span class="n">optimizer_hyperparameters</span><span class="p">[</span><span class="s2">&quot;line_search_fn&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">line_search_fn</span> <span class="o">=</span> <span class="kc">None</span>
+
+            <span class="k">if</span> <span class="s2">&quot;centered&quot;</span> <span class="ow">in</span> <span class="n">optimizer_hyperparameters</span><span class="p">:</span>
+                <span class="n">centered</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">strtobool</span><span class="p">(</span>
+                    <span class="n">optimizer_hyperparameters</span><span class="p">[</span><span class="s2">&quot;centered&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">centered</span> <span class="o">=</span> <span class="kc">False</span>
+
+            <span class="k">if</span> <span class="s2">&quot;etas&quot;</span> <span class="ow">in</span> <span class="n">optimizer_hyperparameters</span><span class="p">:</span>
+                <span class="n">etas</span> <span class="o">=</span> <span class="n">literal_eval</span><span class="p">(</span><span class="n">optimizer_hyperparameters</span><span class="p">[</span><span class="s2">&quot;etas&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">etas</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="s2">&quot;step_sizes&quot;</span> <span class="ow">in</span> <span class="n">optimizer_hyperparameters</span><span class="p">:</span>
+                <span class="n">step_sizes</span> <span class="o">=</span> <span class="n">literal_eval</span><span class="p">(</span>
+                    <span class="n">optimizer_hyperparameters</span><span class="p">[</span><span class="s2">&quot;step_sizes&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">step_sizes</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1e-06</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="s2">&quot;dampening&quot;</span> <span class="ow">in</span> <span class="n">optimizer_hyperparameters</span><span class="p">:</span>
+                <span class="n">dampening</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span>
+                    <span class="n">optimizer_hyperparameters</span><span class="p">[</span><span class="s2">&quot;dampening&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">dampening</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+            <span class="k">if</span> <span class="s2">&quot;nesterov&quot;</span> <span class="ow">in</span> <span class="n">optimizer_hyperparameters</span><span class="p">:</span>
+                <span class="n">nesterov</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">strtobool</span><span class="p">(</span>
+                    <span class="n">optimizer_hyperparameters</span><span class="p">[</span><span class="s2">&quot;nesterov&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">nesterov</span> <span class="o">=</span> <span class="kc">False</span>
+
+            <span class="k">if</span> <span class="n">optimizer</span> <span class="o">==</span> <span class="s2">&quot;adadelta&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="s2">&quot;eps&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">optimizer_hyperparameters</span><span class="p">:</span>
+                    <span class="n">eps</span> <span class="o">=</span> <span class="mf">1e-06</span>
+                <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adadelta</span><span class="p">(</span>
+                    <span class="n">model_parameters</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="n">learning_rate</span><span class="p">,</span> <span class="n">rho</span><span class="o">=</span><span class="n">rho</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="n">eps</span><span class="p">,</span>
+                    <span class="n">weight_decay</span><span class="o">=</span><span class="n">weight_decay</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">optimizer</span> <span class="o">==</span> <span class="s2">&quot;adagrad&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="s2">&quot;learning_rate&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">optimizer_hyperparameters</span><span class="p">:</span>
+                    <span class="n">learning_rate</span> <span class="o">=</span> <span class="mf">0.01</span>
+                <span class="k">if</span> <span class="s2">&quot;eps&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">optimizer_hyperparameters</span><span class="p">:</span>
+                    <span class="n">eps</span> <span class="o">=</span> <span class="mf">1e-10</span>
+
+                <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adagrad</span><span class="p">(</span>
+                    <span class="n">model_parameters</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="n">learning_rate</span><span class="p">,</span> <span class="n">lr_decay</span><span class="o">=</span><span class="n">lr_decay</span><span class="p">,</span>
+                    <span class="n">weight_decay</span><span class="o">=</span><span class="n">weight_decay</span><span class="p">,</span>
+                    <span class="n">initial_accumulator_value</span><span class="o">=</span><span class="n">initial_accumulator_value</span><span class="p">,</span>
+                    <span class="n">eps</span><span class="o">=</span><span class="n">eps</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">optimizer</span> <span class="o">==</span> <span class="s2">&quot;adam&quot;</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span>
+                    <span class="n">model_parameters</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="n">learning_rate</span><span class="p">,</span> <span class="n">betas</span><span class="o">=</span><span class="n">betas</span><span class="p">,</span>
+                    <span class="n">eps</span><span class="o">=</span><span class="n">eps</span><span class="p">,</span> <span class="n">weight_decay</span><span class="o">=</span><span class="n">weight_decay</span><span class="p">,</span> <span class="n">amsgrad</span><span class="o">=</span><span class="n">amsgrad</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">optimizer</span> <span class="o">==</span> <span class="s2">&quot;adamw&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="s2">&quot;weight_decay&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">optimizer_hyperparameters</span><span class="p">:</span>
+                    <span class="n">weight_decay</span> <span class="o">=</span> <span class="mf">0.01</span>
+
+                <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">AdamW</span><span class="p">(</span>
+                    <span class="n">model_parameters</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="n">learning_rate</span><span class="p">,</span> <span class="n">betas</span><span class="o">=</span><span class="n">betas</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="n">eps</span><span class="p">,</span>
+                    <span class="n">weight_decay</span><span class="o">=</span><span class="n">weight_decay</span><span class="p">,</span> <span class="n">amsgrad</span><span class="o">=</span><span class="n">amsgrad</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">optimizer</span> <span class="o">==</span> <span class="s2">&quot;sparseadam&quot;</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">SparseAdam</span><span class="p">(</span>
+                    <span class="n">model_parameters</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="n">learning_rate</span><span class="p">,</span> <span class="n">betas</span><span class="o">=</span><span class="n">betas</span><span class="p">,</span>
+                    <span class="n">eps</span><span class="o">=</span><span class="n">eps</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">optimizer</span> <span class="o">==</span> <span class="s2">&quot;adamax&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="s2">&quot;learning_rate&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">optimizer_hyperparameters</span><span class="p">:</span>
+                    <span class="n">learning_rate</span> <span class="o">=</span> <span class="mf">0.002</span>
+
+                <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adamax</span><span class="p">(</span>
+                    <span class="n">model_parameters</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="n">learning_rate</span><span class="p">,</span> <span class="n">betas</span><span class="o">=</span><span class="n">betas</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="n">eps</span><span class="p">,</span>
+                    <span class="n">weight_decay</span><span class="o">=</span><span class="n">weight_decay</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">optimizer</span> <span class="o">==</span> <span class="s2">&quot;asgd&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="s2">&quot;learning_rate&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">optimizer_hyperparameters</span><span class="p">:</span>
+                    <span class="n">learning_rate</span> <span class="o">=</span> <span class="mf">0.01</span>
+
+                <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">ASGD</span><span class="p">(</span>
+                    <span class="n">model_parameters</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="n">learning_rate</span><span class="p">,</span> <span class="n">lambd</span><span class="o">=</span><span class="n">lambd</span><span class="p">,</span>
+                    <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span> <span class="n">t0</span><span class="o">=</span><span class="n">t0</span><span class="p">,</span> <span class="n">weight_decay</span><span class="o">=</span><span class="n">weight_decay</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">optimizer</span> <span class="o">==</span> <span class="s2">&quot;lbfgs&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="s2">&quot;learning_rate&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">optimizer_hyperparameters</span><span class="p">:</span>
+                    <span class="n">learning_rate</span> <span class="o">=</span> <span class="mf">1.0</span>
+
+                <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">LBFGS</span><span class="p">(</span>
+                    <span class="n">model_parameters</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="n">learning_rate</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="n">max_iter</span><span class="p">,</span>
+                    <span class="n">max_eval</span><span class="o">=</span><span class="n">max_eval</span><span class="p">,</span> <span class="n">tolerance_grad</span><span class="o">=</span><span class="n">tolerance_grad</span><span class="p">,</span>
+                    <span class="n">tolerance_change</span><span class="o">=</span><span class="n">tolerance_change</span><span class="p">,</span>
+                    <span class="n">history_size</span><span class="o">=</span><span class="n">history_size</span><span class="p">,</span> <span class="n">line_search_fn</span><span class="o">=</span><span class="n">line_search_fn</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">optimizer</span> <span class="o">==</span> <span class="s2">&quot;rmsprop&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="s2">&quot;learning_rate&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">optimizer_hyperparameters</span><span class="p">:</span>
+                    <span class="n">learning_rate</span> <span class="o">=</span> <span class="mf">0.01</span>
+                <span class="k">if</span> <span class="s2">&quot;alpha&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">optimizer_hyperparameters</span><span class="p">:</span>
+                    <span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.99</span>
+
+                <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">RMSprop</span><span class="p">(</span>
+                    <span class="n">model_parameters</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="n">learning_rate</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="n">eps</span><span class="p">,</span>
+                    <span class="n">weight_decay</span><span class="o">=</span><span class="n">weight_decay</span><span class="p">,</span> <span class="n">momentum</span><span class="o">=</span><span class="n">momentum</span><span class="p">,</span>
+                    <span class="n">centered</span><span class="o">=</span><span class="n">centered</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">optimizer</span> <span class="o">==</span> <span class="s2">&quot;rprop&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="s2">&quot;learning_rate&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">optimizer_hyperparameters</span><span class="p">:</span>
+                    <span class="n">learning_rate</span> <span class="o">=</span> <span class="mf">0.01</span>
+
+                <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Rprop</span><span class="p">(</span>
+                    <span class="n">model_parameters</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="n">learning_rate</span><span class="p">,</span> <span class="n">etas</span><span class="o">=</span><span class="n">etas</span><span class="p">,</span>
+                    <span class="n">step_sizes</span><span class="o">=</span><span class="n">step_sizes</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">optimizer</span> <span class="o">==</span> <span class="s2">&quot;rprop&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="s2">&quot;learning_rate&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">optimizer_hyperparameters</span><span class="p">:</span>
+                    <span class="n">learning_rate</span> <span class="o">=</span> <span class="mf">0.01</span>
+
+                <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Rprop</span><span class="p">(</span>
+                    <span class="n">model_parameters</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="n">learning_rate</span><span class="p">,</span> <span class="n">etas</span><span class="o">=</span><span class="n">etas</span><span class="p">,</span>
+                    <span class="n">step_sizes</span><span class="o">=</span><span class="n">step_sizes</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">optimizer</span> <span class="o">==</span> <span class="s2">&quot;sgd&quot;</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">SGD</span><span class="p">(</span>
+                    <span class="n">model_parameters</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="n">learning_rate</span><span class="p">,</span> <span class="n">momentum</span><span class="o">=</span><span class="n">momentum</span><span class="p">,</span>
+                    <span class="n">dampening</span><span class="o">=</span><span class="n">dampening</span><span class="p">,</span> <span class="n">weight_decay</span><span class="o">=</span><span class="n">weight_decay</span><span class="p">,</span>
+                    <span class="n">nesterov</span><span class="o">=</span><span class="n">nesterov</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;unknown optimizer specified: &quot;</span> <span class="o">+</span> <span class="n">optimizer</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;no optimizer specified&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TorchHelper.get_loss"><a class="viewcode-back" href="../../../../seqgra.learner.torch.torchhelper.html#seqgra.learner.torch.torchhelper.TorchHelper.get_loss">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_loss</span><span class="p">(</span><span class="n">loss_hyperparameters</span><span class="p">):</span>
+        <span class="k">if</span> <span class="s2">&quot;loss&quot;</span> <span class="ow">in</span> <span class="n">loss_hyperparameters</span><span class="p">:</span>
+            <span class="n">loss</span> <span class="o">=</span> <span class="n">loss_hyperparameters</span><span class="p">[</span><span class="s2">&quot;loss&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
+                <span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">loss</span> <span class="o">==</span> <span class="s2">&quot;crossentropyloss&quot;</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">CrossEntropyLoss</span><span class="p">()</span>
+            <span class="k">elif</span> <span class="n">loss</span> <span class="o">==</span> <span class="s2">&quot;nllloss&quot;</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">NLLLoss</span><span class="p">()</span>
+            <span class="k">elif</span> <span class="n">loss</span> <span class="o">==</span> <span class="s2">&quot;bceloss&quot;</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">BCELoss</span><span class="p">()</span>
+            <span class="k">elif</span> <span class="n">loss</span> <span class="o">==</span> <span class="s2">&quot;bcewithlogitsloss&quot;</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">BCEWithLogitsLoss</span><span class="p">()</span>
+            <span class="k">elif</span> <span class="n">loss</span> <span class="o">==</span> <span class="s2">&quot;l1loss&quot;</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">L1Loss</span><span class="p">()</span>
+            <span class="k">elif</span> <span class="n">loss</span> <span class="o">==</span> <span class="s2">&quot;mseloss&quot;</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">MSELoss</span><span class="p">()</span>
+            <span class="k">elif</span> <span class="n">loss</span> <span class="o">==</span> <span class="s2">&quot;smoothl1loss&quot;</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">SmoothL1Loss</span><span class="p">()</span>
+            <span class="k">elif</span> <span class="n">loss</span> <span class="o">==</span> <span class="s2">&quot;kldivloss&quot;</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">KLDivLoss</span><span class="p">()</span>
+            <span class="k">elif</span> <span class="n">loss</span> <span class="o">==</span> <span class="s2">&quot;marginrankingloss&quot;</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">MarginRankingLoss</span><span class="p">()</span>
+            <span class="k">elif</span> <span class="n">loss</span> <span class="o">==</span> <span class="s2">&quot;hingeembeddingloss&quot;</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">HingeEmbeddingLoss</span><span class="p">()</span>
+            <span class="k">elif</span> <span class="n">loss</span> <span class="o">==</span> <span class="s2">&quot;cosineembeddingloss&quot;</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">CosineEmbeddingLoss</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;unknown loss specified: &quot;</span> <span class="o">+</span> <span class="n">loss</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;no loss specified&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TorchHelper.get_metrics"><a class="viewcode-back" href="../../../../seqgra.learner.torch.torchhelper.html#seqgra.learner.torch.torchhelper.TorchHelper.get_metrics">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_metrics</span><span class="p">(</span><span class="n">learner</span><span class="p">:</span> <span class="n">Learner</span><span class="p">,</span>
+                    <span class="n">output_layer_activation_function</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">thresholded_output_transform</span><span class="p">(</span><span class="n">output</span><span class="p">):</span>
+            <span class="n">y_hat</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">output</span>
+            <span class="n">y_hat</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">y_hat</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">y_hat</span><span class="p">,</span> <span class="n">y</span>
+
+        <span class="k">def</span> <span class="nf">softmax_thresholded_output_transform</span><span class="p">(</span><span class="n">output</span><span class="p">):</span>
+            <span class="n">y_hat</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">output</span>
+            <span class="n">y_hat</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">softmax</span><span class="p">(</span><span class="n">y_hat</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">y_hat</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">y_hat</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">y_hat</span><span class="p">,</span> <span class="n">y</span>
+
+        <span class="k">def</span> <span class="nf">sigmoid_thresholded_output_transform</span><span class="p">(</span><span class="n">output</span><span class="p">):</span>
+            <span class="n">y_hat</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">output</span>
+            <span class="n">y_hat</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sigmoid</span><span class="p">(</span><span class="n">y_hat</span><span class="p">)</span>
+            <span class="n">y_hat</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">y_hat</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">y_hat</span><span class="p">,</span> <span class="n">y</span>
+
+        <span class="n">is_multilabel</span> <span class="o">=</span> <span class="n">learner</span><span class="o">.</span><span class="n">definition</span><span class="o">.</span><span class="n">task</span> <span class="o">==</span> <span class="n">c</span><span class="o">.</span><span class="n">TaskType</span><span class="o">.</span><span class="n">MULTI_LABEL_CLASSIFICATION</span>
+        <span class="n">metrics_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">metric</span> <span class="ow">in</span> <span class="n">learner</span><span class="o">.</span><span class="n">metrics</span><span class="p">:</span>
+            <span class="n">metric</span> <span class="o">=</span> <span class="n">metric</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">metric</span> <span class="o">==</span> <span class="s2">&quot;loss&quot;</span><span class="p">:</span>
+                <span class="n">metrics_dict</span><span class="p">[</span><span class="n">metric</span><span class="p">]</span> <span class="o">=</span> <span class="n">Loss</span><span class="p">(</span><span class="n">learner</span><span class="o">.</span><span class="n">criterion</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">metric</span> <span class="o">==</span> <span class="s2">&quot;accuracy&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">is_multilabel</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">output_layer_activation_function</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="n">metrics_dict</span><span class="p">[</span><span class="n">metric</span><span class="p">]</span> <span class="o">=</span> <span class="n">Accuracy</span><span class="p">(</span>
+                            <span class="n">thresholded_output_transform</span><span class="p">,</span>
+                            <span class="n">is_multilabel</span><span class="o">=</span><span class="n">is_multilabel</span><span class="p">)</span>
+                    <span class="k">elif</span> <span class="n">output_layer_activation_function</span> <span class="o">==</span> <span class="s2">&quot;softmax&quot;</span><span class="p">:</span>
+                        <span class="n">metrics_dict</span><span class="p">[</span><span class="n">metric</span><span class="p">]</span> <span class="o">=</span> <span class="n">Accuracy</span><span class="p">(</span>
+                            <span class="n">softmax_thresholded_output_transform</span><span class="p">,</span>
+                            <span class="n">is_multilabel</span><span class="o">=</span><span class="n">is_multilabel</span><span class="p">)</span>
+                    <span class="k">elif</span> <span class="n">output_layer_activation_function</span> <span class="o">==</span> <span class="s2">&quot;sigmoid&quot;</span><span class="p">:</span>
+                        <span class="n">metrics_dict</span><span class="p">[</span><span class="n">metric</span><span class="p">]</span> <span class="o">=</span> <span class="n">Accuracy</span><span class="p">(</span>
+                            <span class="n">sigmoid_thresholded_output_transform</span><span class="p">,</span>
+                            <span class="n">is_multilabel</span><span class="o">=</span><span class="n">is_multilabel</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">metrics_dict</span><span class="p">[</span><span class="n">metric</span><span class="p">]</span> <span class="o">=</span> <span class="n">Accuracy</span><span class="p">(</span>
+                        <span class="n">is_multilabel</span><span class="o">=</span><span class="n">is_multilabel</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;unknown metric: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">metric</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">metrics_dict</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Konstantin Krismer.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

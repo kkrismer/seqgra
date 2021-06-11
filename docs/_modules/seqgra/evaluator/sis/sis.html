@@ -1,0 +1,847 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>seqgra.evaluator.sis.sis &mdash; seqgra 0.0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script src="https://www.googletagmanager.com/gtag/js?id=G-SPQK9JRC9T"></script>
+        <script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-SPQK9JRC9T');
+</script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> seqgra
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">About seqgra</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../intro.html">Introduction</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Main Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../examples.html">Usage examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../cmd.html">Command line utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../dd.html">Data definition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../md.html">Model definition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../slec.html">Simulators, Learners, Evaluators, Comparators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../ids.html">ID conventions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../structure.html"><code class="docutils literal notranslate"><span class="pre">output</span></code> folder structure</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Advanced features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../seqgra.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../py-modindex.html">Python module index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../genindex.html">Index</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">seqgra</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>seqgra.evaluator.sis.sis</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for seqgra.evaluator.sis.sis</h1><div class="highlight"><pre>
+<span></span><span class="c1"># coding=utf-8</span>
+<span class="c1"># Copyright 2019 The Google Research Authors.</span>
+<span class="c1">#</span>
+<span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1"># you may not use this file except in compliance with the License.</span>
+<span class="c1"># You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#     http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1"># Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1"># distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1"># See the License for the specific language governing permissions and</span>
+<span class="c1"># limitations under the License.</span>
+
+<span class="sd">&quot;&quot;&quot;Finds sufficient input subsets for an input and black-box function.</span>
+
+<span class="sd">This module implements the sufficient input subsets (SIS) procedure published</span>
+<span class="sd">in [1]. The goal of this procedure is to interpret black-box functions by</span>
+<span class="sd">identifying minimal sets of input features whose observed values alone suffice</span>
+<span class="sd">for the same decision to be reached, even with all other input values missing.</span>
+
+<span class="sd">More precisely, presuming the function&#39;s value at an input x exceeds a</span>
+<span class="sd">pre-specified threshold (f(x) &gt;= threshold), this procedure identifies a</span>
+<span class="sd">collection of sparse subsets of features in x,</span>
+<span class="sd">SIS-collection = [sis_1, sis_2, ...] where each sis_i satisfies</span>
+<span class="sd">f(x_sis_i) &gt;= threshold, and x_sis_i is a variant of x where all positions</span>
+<span class="sd">except for those in the SIS are masked.</span>
+
+<span class="sd">The authors of the SIS paper [1] recommend that the threshold be selected based</span>
+<span class="sd">on the application, e.g. by precision/recall considerations in the case f is a</span>
+<span class="sd">classifier. Note that as the threshold is increased, the SIS become larger.</span>
+<span class="sd">The mask is likewise pre-specified and also highly application-dependent.</span>
+<span class="sd">In the SIS paper, the authors mask values by using a mean feature value (e.g.</span>
+<span class="sd">a mean word embedding in natural language applications, or a mean pixel value</span>
+<span class="sd">in image classification). Other possible masking values could include &lt;UNK&gt;</span>
+<span class="sd">tokens or zero values. Regardless of choice, one should check that the</span>
+<span class="sd">function&#39;s prediction on the fully-masked input is uninformative.</span>
+
+<span class="sd">Note: this procedure allows for interpreting of any arbitrary function, not</span>
+<span class="sd">just those stemming from machine learning applications!</span>
+
+
+<span class="sd">Typical usage example:</span>
+
+<span class="sd">In this example, suppose f returns the L_2 norm of its inputs. With a</span>
+<span class="sd">threshold of 1, the two SIS identified are [1] and [2] (where the 1 and 2</span>
+<span class="sd">are indices into the original input), such that if we select just these</span>
+<span class="sd">values (and mask all others, with the supplied all-zero mask), we have</span>
+<span class="sd">f([0, 10, 0]) &gt;= 1 and f([0, 0, 5]) &gt;= 1.</span>
+
+<span class="sd">f_l2 = lambda batch_coords: np.linalg.norm(batch_coords, ord=2, axis=-1)</span>
+<span class="sd">threshold = 1.0</span>
+<span class="sd">initial_input = np.array([0.1, 10, 5])</span>
+<span class="sd">fully_masked_input = np.array([0, 0, 0])</span>
+<span class="sd">collection = sis_collection(f_l2, threshold, initial_input, fully_masked_input)</span>
+
+
+<span class="sd">See docstring of sis_collection for more-detailed usage information.</span>
+<span class="sd">Additional usage examples can be found in tests for sis_collection.</span>
+
+
+<span class="sd">References:</span>
+
+<span class="sd">[1] Carter, B., Mueller, J., Jain, S., &amp; Gifford, D. (2018). What made you do</span>
+<span class="sd">    this? Understanding black-box decisions with sufficient input subsets.</span>
+<span class="sd">    arXiv preprint arXiv:1810.03805. https://arxiv.org/abs/1810.03805</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
+
+<span class="kn">import</span> <span class="nn">collections</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+
+<div class="viewcode-block" id="SISResult"><a class="viewcode-back" href="../../../../seqgra.evaluator.sis.sis.html#seqgra.evaluator.sis.sis.SISResult">[docs]</a><span class="k">class</span> <span class="nc">SISResult</span><span class="p">(</span>
+        <span class="n">collections</span><span class="o">.</span><span class="n">namedtuple</span><span class="p">(</span>
+            <span class="s1">&#39;SISResult&#39;</span><span class="p">,</span>
+            <span class="p">[</span>
+                <span class="s1">&#39;sis&#39;</span><span class="p">,</span> <span class="s1">&#39;ordering_over_entire_backselect&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;values_over_entire_backselect&#39;</span><span class="p">,</span> <span class="s1">&#39;mask&#39;</span>
+            <span class="p">],</span>
+        <span class="p">)):</span>
+    <span class="sd">&quot;&quot;&quot;Specifies a single SIS identified by the find_sis procedure.</span>
+
+<span class="sd">    Fields:</span>
+<span class="sd">      sis: Array of idxs into the mask which define the sufficient input subset.</span>
+<span class="sd">        These idxs describe the *unmasked positions* in the input. This array</span>
+<span class="sd">        has shape (k x idx.shape), where k is the length of the SIS</span>
+<span class="sd">        and idx is an idx into the mask. Note that in case of any ties between</span>
+<span class="sd">        elements during backward selection, lower indices appear later in this</span>
+<span class="sd">        array (see docstring for find_sis).</span>
+<span class="sd">      ordering_over_entire_backselect: Array of shape (m x idx.shape), containing</span>
+<span class="sd">        the order of idxs masked during backward selection while identifying this</span>
+<span class="sd">        SIS, where 1 &lt;= m &lt;= d (and d is the max number of maskable positions).</span>
+<span class="sd">        Later elements in this list were masked later during backward selection.</span>
+<span class="sd">        If this is the first SIS extracted for this input, the m = d.</span>
+<span class="sd">        Otherwise, m &lt; d (as elements in earlier SIS are not considered again when</span>
+<span class="sd">        extracting additional SIS in the sis_collection procedure).</span>
+<span class="sd">        In particular, m + the total number of elements in all previous SIS = d.</span>
+<span class="sd">      values_over_entire_backselect: Array of floats of shape (m,) containing the</span>
+<span class="sd">        values found during backward selection, corresponding to the idxs in</span>
+<span class="sd">        ordering_over_entire_backselect. At each position, the value is the value</span>
+<span class="sd">        of f *after* that corresponding position is masked. The length m is</span>
+<span class="sd">        defined in the same way as in ordering_over_entire_backselect.</span>
+<span class="sd">      mask: Boolean array of shape M that corresponds to this SIS. Applying this</span>
+<span class="sd">        mask to the original input produces a version of the input where all</span>
+<span class="sd">        values are masked except for those in the SIS. The mask and input may have</span>
+<span class="sd">        different shape, as long as the mask is broadcastable over the input (see</span>
+<span class="sd">        docstring of sis_collection for details/example).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">()</span>
+
+    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Defines len of SISResult as number of elements in the SIS.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">sis</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="fm">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">NotImplemented</span>
+
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Checks equality between this SISResult and another SISResult.</span>
+
+<span class="sd">        Check that all fields are the exactly equal (including orderings).</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">          other: A SISResult instance.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">          True if self and other are equal, and False otherwise.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">SISResult</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">return</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array_equal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sis</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">sis</span><span class="p">)</span> <span class="ow">and</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">array_equal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ordering_over_entire_backselect</span><span class="p">,</span>
+                               <span class="n">other</span><span class="o">.</span><span class="n">ordering_over_entire_backselect</span><span class="p">)</span> <span class="ow">and</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">array_equal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">values_over_entire_backselect</span><span class="p">,</span>
+                               <span class="n">other</span><span class="o">.</span><span class="n">values_over_entire_backselect</span><span class="p">)</span> <span class="ow">and</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">array_equal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mask</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">mask</span><span class="p">))</span>
+
+<div class="viewcode-block" id="SISResult.approx_equal"><a class="viewcode-back" href="../../../../seqgra.evaluator.sis.sis.html#seqgra.evaluator.sis.sis.SISResult.approx_equal">[docs]</a>    <span class="k">def</span> <span class="nf">approx_equal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">1e-05</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">1e-08</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Checks that this SISResult and another SISResult are approximately equal.</span>
+
+<span class="sd">        SISResult.{sis, mask, ordering_over_entire_backselect} are compared exactly,</span>
+<span class="sd">        while SISResult.values_over_entire_backselect are compared with slight</span>
+<span class="sd">        tolerance (using np.allclose with provided rtol and atol). This is intended</span>
+<span class="sd">        to check equality allowing for small differences due to floating point</span>
+<span class="sd">        representations.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">          other: A SISResult instance.</span>
+<span class="sd">          rtol: Float, the relative tolerance parameter used when comparing</span>
+<span class="sd">          `values_over_entire_backselect` (see documentation for np.allclose).</span>
+<span class="sd">          atol: Float, the absolute tolerance parameter used when comparing</span>
+<span class="sd">          `values_over_entire_backselect` (see documentation for np.allclose).</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">          True if self and other are approximately equal, and False otherwise.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">SISResult</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="c1"># SISResult.{sis, ordering_over_entire_backselect, mask} compared exactly.</span>
+        <span class="c1"># SISResult.values_over_entire_backselect compared with slight tolerance.</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array_equal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sis</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">sis</span><span class="p">)</span> <span class="ow">and</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">array_equal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ordering_over_entire_backselect</span><span class="p">,</span>
+                               <span class="n">other</span><span class="o">.</span><span class="n">ordering_over_entire_backselect</span><span class="p">)</span> <span class="ow">and</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">values_over_entire_backselect</span><span class="p">,</span>
+                    <span class="n">other</span><span class="o">.</span><span class="n">values_over_entire_backselect</span><span class="p">,</span>
+                    <span class="n">rtol</span><span class="o">=</span><span class="n">rtol</span><span class="p">,</span>
+                    <span class="n">atol</span><span class="o">=</span><span class="n">atol</span><span class="p">)</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">array_equal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mask</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">mask</span><span class="p">))</span></div>
+
+    <span class="k">def</span> <span class="fm">__ne__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="ow">not</span> <span class="bp">self</span> <span class="o">==</span> <span class="n">other</span></div>
+
+
+<div class="viewcode-block" id="make_empty_boolean_mask"><a class="viewcode-back" href="../../../../seqgra.evaluator.sis.sis.html#seqgra.evaluator.sis.sis.make_empty_boolean_mask">[docs]</a><span class="k">def</span> <span class="nf">make_empty_boolean_mask</span><span class="p">(</span><span class="n">shape</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Creates empty boolean mask (no values are masked) given shape.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">      shape: A tuple of array dimensions (as in numpy.ndarray.shape).</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">      ndarray of given shape and boolean type, all values are True (not masked).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">bool</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="make_empty_boolean_mask_broadcast_over_axis"><a class="viewcode-back" href="../../../../seqgra.evaluator.sis.sis.html#seqgra.evaluator.sis.sis.make_empty_boolean_mask_broadcast_over_axis">[docs]</a><span class="k">def</span> <span class="nf">make_empty_boolean_mask_broadcast_over_axis</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">axis</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Creates empty boolean mask that is broadcastable over specified axes.</span>
+
+<span class="sd">    Usage example:</span>
+
+<span class="sd">      Given an input of shape (2, 3):</span>
+
+<span class="sd">      - A broadcastable mask over columns (to mask entire columns at a time</span>
+<span class="sd">        during the SIS procedure) has shape (1, 3) and is created using</span>
+<span class="sd">        make_empty_boolean_mask_broadcast_over_axis((2, 3), 0).</span>
+<span class="sd">      - A broadcastable mask over rows (to mask entire rows at a time during</span>
+<span class="sd">        SIS) has shape (2, 1) and is created using</span>
+<span class="sd">        make_empty_boolean_mask_broadcast_over_axis((2, 3), 1).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">      shape: Shape (a tuple of array dimensions, as in numpy.ndarray.shape) of the</span>
+<span class="sd">        underlying input to be masked.</span>
+<span class="sd">      axis: An integer, or tuple of integers, specifying the axis (or axes) to</span>
+<span class="sd">        broadcast over.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">      ndarray of boolean type (all values are True) and shape S, where S is the</span>
+<span class="sd">        same as the provided shape, but with value 1 along each of the provided</span>
+<span class="sd">        axes (see usage example above).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">new_shape</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span>
+    <span class="n">new_shape</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">axis</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">make_empty_boolean_mask</span><span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="n">new_shape</span><span class="p">))</span></div>
+
+
+<span class="k">def</span> <span class="nf">_assert_sis_collection_disjoint</span><span class="p">(</span><span class="n">collection</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Asserts that all SIS in a SIS-collection are disjoint.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">      collection: A list of SISResult objects representing a SIS-collection.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">      AssertionError if any of the sis attributes of the SISResults contains the</span>
+<span class="sd">        same element as some other sis attribute in the collection.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">all_seen_idxs</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">sis_result</span> <span class="ow">in</span> <span class="n">collection</span><span class="p">:</span>
+        <span class="n">sis_idxs</span> <span class="o">=</span> <span class="nb">set</span><span class="p">((</span><span class="nb">tuple</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span> <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">sis_result</span><span class="o">.</span><span class="n">sis</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">all_seen_idxs</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">sis_idxs</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span>
+                <span class="s1">&#39;SIS-collection is not disjoint. Got: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">collection</span><span class="p">)))</span>
+        <span class="n">all_seen_idxs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">sis_idxs</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_transform_index_array_into_indexer</span><span class="p">(</span><span class="n">idx_array</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Transforms an array of index arrays into tuple for index those elements.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">idx_array</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_transform_next_masks_index_array_into_tuple</span><span class="p">(</span><span class="n">idx_array</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Transforms array of mask idxs into tuple of column arrays for indexing.</span>
+
+<span class="sd">    This transformation is needed in _produce_next_masks for indexing into</span>
+<span class="sd">    next_masks, where one position in each of the next_masks is modified.</span>
+
+<span class="sd">    For example, if idx_array is [[0, 1], [1, 1], [1, 2]] (contains three indices</span>
+<span class="sd">    into a 2-dimensional mask), this function first augments the indices with</span>
+<span class="sd">    an additional column of 0-indexed increasing integers (corresponding to which</span>
+<span class="sd">    of the next_masks will be modified at the specified index) to produce:</span>
+<span class="sd">    [[0, 0, 1], [1, 1, 1], [2, 1, 2]]. Then, to use this as a valid index into</span>
+<span class="sd">    next_masks (as in _produce_next_masks), this array is sliced by column and</span>
+<span class="sd">    cast as a tuple.</span>
+
+<span class="sd">    See tests for additional examples.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">      idx_array: Array of shape (B x C) containing B coordinates, each of shape C.</span>
+<span class="sd">        B and C must be &gt;= 1 (i.e. the input array cannot be flat).</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">      A tuple of the row-augmented transformed indices. The tuple contains C+1</span>
+<span class="sd">      arrays, each of shape (B,). The first element of the tuple is np.arange(B),</span>
+<span class="sd">      and elements 1, ..., C+1 are column slices along each column of idx_array.</span>
+<span class="sd">      If idx_array is empty,</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">      TypeError if idx_array is not 2-dimensional.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">idx_array</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;idx_array must be 2-dimensional.&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">_transform_index_array_into_indexer</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">idx_array</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="mi">1</span><span class="p">),</span> <span class="n">idx_array</span><span class="p">)))</span>
+
+
+<span class="k">def</span> <span class="nf">_produce_next_masks</span><span class="p">(</span><span class="n">current_mask</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Produces all possible next masks starting from the current_mask.</span>
+
+<span class="sd">    Each possible next mask is defined by masking a single unmasked position in</span>
+<span class="sd">    the current mask. A position is considered masked when its value in the mask</span>
+<span class="sd">    is False, and unmasked when the value in the mask in True.</span>
+
+<span class="sd">    For example, if current_mask is [False, True, True], the two possible next</span>
+<span class="sd">      masks are [False, False, True], and [False, True, False].</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">      current_mask: Array of shape D containing the current mask. D may be</span>
+<span class="sd">        multi-dimensional.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">      Tuple containing (next_masks, masked_indices), where:</span>
+
+<span class="sd">      next_masks is an array of all possible next masks, with shape (B x D), or an</span>
+<span class="sd">        empty array ([]) if all positions are already masked (i.e. all values in</span>
+<span class="sd">        current_mask are False), where B is the number of possible next masks</span>
+<span class="sd">        (i.e. the number of True values in current_mask), and D is the dimension</span>
+<span class="sd">        of the mask.</span>
+
+<span class="sd">      next_masks_idxs is an array with shape (B x len(D.shape)), where each</span>
+<span class="sd">        element is an index into to the position masked in each of the</span>
+<span class="sd">        corresponding next_masks, or an empty array ([]) if no possible next mask.</span>
+<span class="sd">        The idxs always appear in increasing (or in the multi-dimensional case,</span>
+<span class="sd">        row-major) order.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">current_mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">current_mask</span><span class="p">)</span>
+
+    <span class="n">next_masks_idxs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">current_mask</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">next_masks_idxs</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
+        <span class="n">next_masks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
+        <span class="n">next_masks_idxs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">next_masks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">current_mask</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+            <span class="n">next_masks_idxs</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">next_masks</span><span class="p">[</span><span class="n">_transform_next_masks_index_array_into_tuple</span><span class="p">(</span>
+            <span class="n">next_masks_idxs</span><span class="p">)]</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">return</span> <span class="n">next_masks</span><span class="p">,</span> <span class="n">next_masks_idxs</span>
+
+
+<div class="viewcode-block" id="produce_masked_inputs"><a class="viewcode-back" href="../../../../seqgra.evaluator.sis.sis.html#seqgra.evaluator.sis.sis.produce_masked_inputs">[docs]</a><span class="k">def</span> <span class="nf">produce_masked_inputs</span><span class="p">(</span><span class="n">input_to_mask</span><span class="p">,</span> <span class="n">fully_masked_input</span><span class="p">,</span> <span class="n">batch_of_masks</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Applies masks to an input to produce the corresponding masked inputs.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">      input_to_mask: Array of shape D to be masked. Note that D may be</span>
+<span class="sd">        multi-dimensional.</span>
+<span class="sd">      fully_masked_input: The fully masked version of input_to_mask, also an array</span>
+<span class="sd">        of shape D.</span>
+<span class="sd">      batch_of_masks: Array of shape (B x D), a batch of masks to apply to</span>
+<span class="sd">        input_to_mask, and B is at least 1.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">      An array of masked inputs of shape (B x D), where each mask in</span>
+<span class="sd">        batch_of_masks is applied to input_to_mask, and the masked values are</span>
+<span class="sd">        taken from fully_masked_input.</span>
+
+<span class="sd">      The order of masked inputs in the output corresponds to the order of masks</span>
+<span class="sd">        in batch_of_masks.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">      TypeError if shape of batch_of_masks does not have 1 more dimension than</span>
+<span class="sd">        shape of input_to_mask.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">input_to_mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">input_to_mask</span><span class="p">)</span>
+    <span class="n">fully_masked_input</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">fully_masked_input</span><span class="p">)</span>
+    <span class="n">batch_of_masks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">batch_of_masks</span><span class="p">)</span>
+
+    <span class="c1"># Check that batch_of_masks includes batch dimension.</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">batch_of_masks</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">input_to_mask</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;batch_of_masks must include batch dimension.&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">batch_of_masks</span><span class="p">,</span> <span class="n">input_to_mask</span><span class="p">,</span> <span class="n">fully_masked_input</span><span class="p">)</span></div>
+
+
+<span class="k">def</span> <span class="nf">_backselect</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">current_input</span><span class="p">,</span> <span class="n">current_mask</span><span class="p">,</span> <span class="n">fully_masked_input</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Applies backward selection to a given input.</span>
+
+<span class="sd">    Implements the BackSelect procedure in the SIS paper [1].</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">      f: A function mapping an array of shape (B x D), containing a batch of B</span>
+<span class="sd">        D-dimensional inputs to an array of scalar values with shape (B,).</span>
+<span class="sd">      current_input: Array of shape D on which to apply the SIS procedure. D may</span>
+<span class="sd">        be multi-dimensional. If any positions are already masked, these must be</span>
+<span class="sd">        specified in current_mask.</span>
+<span class="sd">      current_mask: Boolean array of shape M corresponding to already-masked</span>
+<span class="sd">        positions in current_input. If no values are masked, this is an empty mask</span>
+<span class="sd">        (i.e. all values in the mask == True).</span>
+<span class="sd">      fully_masked_input: Array of shape D (same as current_input), in which all</span>
+<span class="sd">        positions hold their masked value. If the mask and input are not the same</span>
+<span class="sd">        shape (M != D), the mask must be broadcastable over the input. This</span>
+<span class="sd">        enables masking entire rows or columns at a time. For example, for an</span>
+<span class="sd">        input of shape (2, 3), using a mask of shape (1, 3) will mask entire</span>
+<span class="sd">        columns at the same time during backward selection, and a mask of shape</span>
+<span class="sd">        (2, 1) will mask entire rows at a time.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">      List containing (idx, value) tuples, where idx is an array of shape</span>
+<span class="sd">        (len(M.shape),) that indexes into the mask to identify the position</span>
+<span class="sd">        masked, and value is the corresponding value with that position</span>
+<span class="sd">        additionally masked during backward selection. Later tuples in the list</span>
+<span class="sd">        correspond to positions masked later during backward selection.</span>
+<span class="sd">      Note that if masking multiple positions leads to the same optimal value</span>
+<span class="sd">        at any step during backward selection, the tie is broken by masking the</span>
+<span class="sd">        lowest index first.</span>
+<span class="sd">      If there are no more positions that can be masked from current_mask, returns</span>
+<span class="sd">        empty list.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">backselect_stack</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># List of (idx, value) tuples during backselect.</span>
+    <span class="n">next_masks</span><span class="p">,</span> <span class="n">next_masks_idxs</span> <span class="o">=</span> <span class="n">_produce_next_masks</span><span class="p">(</span><span class="n">current_mask</span><span class="p">)</span>
+
+    <span class="k">while</span> <span class="n">next_masks_idxs</span><span class="o">.</span><span class="n">size</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">next_masked_inputs</span> <span class="o">=</span> <span class="n">produce_masked_inputs</span><span class="p">(</span><span class="n">current_input</span><span class="p">,</span>
+                                                   <span class="n">fully_masked_input</span><span class="p">,</span> <span class="n">next_masks</span><span class="p">)</span>
+        <span class="n">next_masked_values</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">next_masked_inputs</span><span class="p">)</span>
+        <span class="n">optimal_batch_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">next_masked_values</span><span class="p">)</span>
+        <span class="n">optimal_value</span> <span class="o">=</span> <span class="n">next_masked_values</span><span class="p">[</span><span class="n">optimal_batch_idx</span><span class="p">]</span>
+        <span class="n">optimal_idx_to_mask</span> <span class="o">=</span> <span class="n">next_masks_idxs</span><span class="p">[</span><span class="n">optimal_batch_idx</span><span class="p">]</span>
+
+        <span class="n">backselect_stack</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">optimal_idx_to_mask</span><span class="p">,</span> <span class="n">optimal_value</span><span class="p">))</span>
+
+        <span class="n">current_mask</span> <span class="o">=</span> <span class="n">next_masks</span><span class="p">[</span><span class="n">optimal_batch_idx</span><span class="p">]</span>
+        <span class="n">next_masks</span><span class="p">,</span> <span class="n">next_masks_idxs</span> <span class="o">=</span> <span class="n">_produce_next_masks</span><span class="p">(</span><span class="n">current_mask</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">backselect_stack</span>
+
+
+<span class="k">def</span> <span class="nf">_find_sis_from_backselect</span><span class="p">(</span><span class="n">backselect_stack</span><span class="p">,</span> <span class="n">threshold</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Constructs SIS using result of backward selection.</span>
+
+<span class="sd">    Implements the FindSIS procedure in the SIS paper [1].</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">      backselect_stack: List containing (idx, value) tuples, where idx identifies</span>
+<span class="sd">        a position masked during backward selection (an array type), and value is</span>
+<span class="sd">        the corresponding value after that position is masked. Later tuples in the</span>
+<span class="sd">        list correspond to idxs masked later during backward selection. (This list</span>
+<span class="sd">        is usually the output of _backselect.)</span>
+<span class="sd">      threshold: A scalar, the threshold to use for identifying a SIS. Assumes</span>
+<span class="sd">        that a SIS exists in the backselect_stack (i.e. some value exceeds the</span>
+<span class="sd">        threshold).</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">      List containing SIS elements (defined by idx in backselect_stack tuples).</span>
+<span class="sd">        These elements are ordered such that elements toward the top of the</span>
+<span class="sd">        backselect_stack (added later to stack) appear earlier, i.e. the final</span>
+<span class="sd">        element added to the backselect stack corresponds to the first position in</span>
+<span class="sd">        the returned list.</span>
+
+<span class="sd">      Assumes that there exists a SIS. Since the backselect_stack contains values</span>
+<span class="sd">        after each position is masked, it cannot be certain that the prediction on</span>
+<span class="sd">        all features is &gt;= threshold. If there is no value in the backselect_stack</span>
+<span class="sd">        that is &gt;= threshold, then the SIS contains all idxs in the stack.</span>
+
+<span class="sd">      If the value at the top of the backselect_stack is &gt;= threshold, returns</span>
+<span class="sd">        empty list (since value &gt;= threshold with all positions masked).</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">      ValueError, if backselect_stack is empty, i.e. there is no valid SIS.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">backselect_stack</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;backselect_stack cannot be empty.&#39;</span><span class="p">)</span>
+
+    <span class="n">sis</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">stack_iter</span> <span class="o">=</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">backselect_stack</span><span class="p">)</span>
+    <span class="n">i</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">stack_iter</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">value</span> <span class="o">&lt;</span> <span class="n">threshold</span><span class="p">:</span>
+        <span class="n">sis</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">stack_iter</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="o">&gt;=</span> <span class="n">threshold</span><span class="p">:</span>
+            <span class="k">break</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">sis</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">sis</span>
+
+
+<div class="viewcode-block" id="find_sis"><a class="viewcode-back" href="../../../../seqgra.evaluator.sis.sis.html#seqgra.evaluator.sis.sis.find_sis">[docs]</a><span class="k">def</span> <span class="nf">find_sis</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">threshold</span><span class="p">,</span> <span class="n">current_input</span><span class="p">,</span> <span class="n">current_mask</span><span class="p">,</span> <span class="n">fully_masked_input</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Returns a single SIS from one (possibly partially-masked) input.</span>
+
+<span class="sd">    This method combines both the BackSelect and FindSIS procedures as defined</span>
+<span class="sd">    in the SIS paper [1].</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">      f: A function mapping an array of shape (B x D), containing a batch of B</span>
+<span class="sd">        D-dimensional inputs to an array of scalar values with shape (B,).</span>
+<span class="sd">      threshold: A scalar, used as threshold in SIS procedure. Corresponds to tau</span>
+<span class="sd">        in the SIS paper [1].</span>
+<span class="sd">      current_input: Array (or type convertible to array) of shape D on which to</span>
+<span class="sd">        apply the SIS procedure. D may be multi-dimensional. If any positions are</span>
+<span class="sd">        already masked, these must be specified in current_mask.</span>
+<span class="sd">      current_mask: Boolean array (or type convertible to array) of shape M</span>
+<span class="sd">        corresponding to already-masked positions in current_input. If no values</span>
+<span class="sd">        are masked, this is an empty mask (i.e. all values in the mask == True).</span>
+<span class="sd">      fully_masked_input: Array (or type convertible to array) of shape D (same as</span>
+<span class="sd">        current_input), in which all positions hold their masked value. If the</span>
+<span class="sd">        mask and input are not the same shape (M != D), the mask must be</span>
+<span class="sd">        broadcastable over the input. This enables masking entire rows or columns</span>
+<span class="sd">        at a time. For example, for an input of shape (2, 3), using a mask of</span>
+<span class="sd">        shape (1, 3) will mask entire columns at the same time during backward</span>
+<span class="sd">        selection, and a mask of shape (2, 1) will mask entire rows at a time.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">      A SISResult corresponding to the identified SIS (see docstring for</span>
+<span class="sd">        SISResult), or None if no SIS is identified, which occurs only when the</span>
+<span class="sd">        prediction on the initially provided input is below the threshold, i.e.</span>
+<span class="sd">        f(current_input) &lt; threshold, or if all positions are given as masked in</span>
+<span class="sd">        current_mask.</span>
+
+<span class="sd">      The SIS values are sorted so that the earlier elements in the SIS were</span>
+<span class="sd">        masked later during backward selection (see docstring of SISResult).</span>
+
+<span class="sd">      Note that in the case of value ties during backward selection, the first of</span>
+<span class="sd">        the positions is masked first (see docstring for _backselect). This means</span>
+<span class="sd">        that if both elements end up in the SIS, the one with the larger index</span>
+<span class="sd">        appears first in the SIS (since the SIS is built by adding elements from</span>
+<span class="sd">        the backselect_stack in reverse order).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">current_input</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">current_input</span><span class="p">)</span>
+    <span class="n">current_mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">current_mask</span><span class="p">)</span>
+    <span class="n">fully_masked_input</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">fully_masked_input</span><span class="p">)</span>
+
+    <span class="n">starting_prediction</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">current_input</span><span class="p">]))</span>
+
+    <span class="k">if</span> <span class="n">starting_prediction</span> <span class="o">&lt;</span> <span class="n">threshold</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="c1"># Backward selection of unmasked inputs (BackSelect)</span>
+    <span class="n">backselect_stack</span> <span class="o">=</span> <span class="n">_backselect</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">current_input</span><span class="p">,</span> <span class="n">current_mask</span><span class="p">,</span>
+                                   <span class="n">fully_masked_input</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">backselect_stack</span><span class="p">:</span>  <span class="c1"># all positions masked in current_mask</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="c1"># Find minimal SIS after backward selection (FindSIS)</span>
+    <span class="n">sis_idxs</span> <span class="o">=</span> <span class="n">_find_sis_from_backselect</span><span class="p">(</span><span class="n">backselect_stack</span><span class="p">,</span> <span class="n">threshold</span><span class="p">)</span>
+
+    <span class="n">ordering_over_entire_backselect</span><span class="p">,</span> <span class="n">values_over_entire_backselect</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span>
+        <span class="o">*</span><span class="n">backselect_stack</span><span class="p">)</span>
+
+    <span class="c1"># Create mask that selects only SIS elements</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="o">~</span><span class="p">(</span><span class="n">make_empty_boolean_mask</span><span class="p">(</span><span class="n">current_mask</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
+    <span class="n">mask</span><span class="p">[</span><span class="n">_transform_index_array_into_indexer</span><span class="p">(</span><span class="n">sis_idxs</span><span class="p">)]</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="n">sis_result</span> <span class="o">=</span> <span class="n">SISResult</span><span class="p">(</span>
+        <span class="n">sis</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">sis_idxs</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int_</span><span class="p">),</span>
+        <span class="n">ordering_over_entire_backselect</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+            <span class="n">ordering_over_entire_backselect</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int_</span><span class="p">),</span>
+        <span class="n">values_over_entire_backselect</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+            <span class="n">values_over_entire_backselect</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float_</span><span class="p">),</span>
+        <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">sis_result</span></div>
+
+
+<div class="viewcode-block" id="sis_collection"><a class="viewcode-back" href="../../../../seqgra.evaluator.sis.sis.html#seqgra.evaluator.sis.sis.sis_collection">[docs]</a><span class="k">def</span> <span class="nf">sis_collection</span><span class="p">(</span><span class="n">f</span><span class="p">,</span>
+                   <span class="n">threshold</span><span class="p">,</span>
+                   <span class="n">initial_input</span><span class="p">,</span>
+                   <span class="n">fully_masked_input</span><span class="p">,</span>
+                   <span class="n">initial_mask</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Identifies the entire collection of SIS for an input.</span>
+
+<span class="sd">    Implements the SIScollection procedure in the SIS paper [1].</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">      f: A function mapping an array of shape (B x D), containing a batch of B</span>
+<span class="sd">        D-dimensional inputs to an array of scalar values with shape (B,).</span>
+<span class="sd">      threshold: A scalar, used as threshold in SIS procedure. Corresponds to tau</span>
+<span class="sd">        in the SIS paper [1].</span>
+<span class="sd">      initial_input: Array of shape D (or type convertible to array) on which to</span>
+<span class="sd">        apply the SIS procedure. D may be multi-dimensional.</span>
+<span class="sd">      fully_masked_input: Array (or type convertible to array) of shape D (same</span>
+<span class="sd">        shape as initial_input), in which all positions hold their masked value.</span>
+<span class="sd">      initial_mask: Optional. Boolean array (or type convertible to array) of</span>
+<span class="sd">        shape M to define how input is masked. Default value is None, in which</span>
+<span class="sd">        case a mask is created with the same shape as initial_input. If the mask</span>
+<span class="sd">        and input are not the same shape (M != D), the mask must be broadcastable</span>
+<span class="sd">        over the input. This enables masking entire rows or columns at a time. For</span>
+<span class="sd">        example, for an input of shape (2, 3), using a mask of shape (1, 3) will</span>
+<span class="sd">        mask entire columns at the same time during backward selection, and a mask</span>
+<span class="sd">        of shape (2, 1) will mask entire rows at a time. (See</span>
+<span class="sd">        make_empty_boolean_mask_broadcast_over_axis, which can construct</span>
+<span class="sd">        broadcastable masks.)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">      A list of SISResult objects, containing the entire SIS-collection for the</span>
+<span class="sd">        initial_input. If no SIS exists (i.e. f(initial_input) &lt; threshold),</span>
+<span class="sd">        returns an empty list.</span>
+
+<span class="sd">      Note that we follow the convention in the SIS paper [1], where a SIS only</span>
+<span class="sd">        exists if f(initial_input) &gt;= threshold. If f(initial_input) &lt; threshold,</span>
+<span class="sd">        but there exists a subset of features on which f(subset) &gt;= threshold, we</span>
+<span class="sd">        do not consider this a valid SIS.</span>
+
+<span class="sd">      The order of SISResults in this list corresponds to the order of the SIS as</span>
+<span class="sd">        they are found -- the first element is the first SIS found, and so on.</span>
+<span class="sd">        Earlier SIS are masked while finding later SIS, so all the SIS in the</span>
+<span class="sd">        SIS-collection are disjoint (as in the SIS paper [1]).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">fully_masked_input</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">fully_masked_input</span><span class="p">)</span>
+
+    <span class="n">current_input</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">initial_input</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">initial_mask</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">current_mask</span> <span class="o">=</span> <span class="n">make_empty_boolean_mask</span><span class="p">(</span><span class="n">initial_input</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">current_mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">initial_mask</span><span class="p">)</span>
+
+    <span class="n">all_sis</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">sis_result</span> <span class="o">=</span> <span class="n">find_sis</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">threshold</span><span class="p">,</span> <span class="n">current_input</span><span class="p">,</span> <span class="n">current_mask</span><span class="p">,</span>
+                              <span class="n">fully_masked_input</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">sis_result</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">break</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">all_sis</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sis_result</span><span class="p">)</span>
+            <span class="n">current_input</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span>
+                <span class="n">produce_masked_inputs</span><span class="p">(</span><span class="n">current_input</span><span class="p">,</span> <span class="n">fully_masked_input</span><span class="p">,</span>
+                                      <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="o">~</span><span class="n">sis_result</span><span class="o">.</span><span class="n">mask</span><span class="p">]))[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="c1"># Update mask by AND with NOT SIS mask.</span>
+            <span class="n">current_mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">current_mask</span><span class="p">,</span> <span class="o">~</span><span class="n">sis_result</span><span class="o">.</span><span class="n">mask</span><span class="p">)</span>
+
+    <span class="n">_assert_sis_collection_disjoint</span><span class="p">(</span><span class="n">all_sis</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">all_sis</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Konstantin Krismer.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
