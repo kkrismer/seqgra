@@ -97,9 +97,9 @@ GOOGLE_ANALYTICS_TAG = """
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
 
-  gtag('config', 'G-SPQK9JRC9T');
+  gtag('config', 'G-0TESVPJ2C2');
 """
 
 def setup(app):
-    app.add_js_file("https://www.googletagmanager.com/gtag/js?id=G-SPQK9JRC9T")
+    app.add_js_file("https://www.googletagmanager.com/gtag/js?id=G-0TESVPJ2C2")
     app.add_js_file(None, body=GOOGLE_ANALYTICS_TAG)
