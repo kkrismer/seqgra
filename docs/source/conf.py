@@ -78,6 +78,7 @@ modindex_common_prefix = ["seqgra."]
 html_theme = "sphinx_rtd_theme"
 
 html_theme_options = {
+    "analytics_id": "G-SPQK9JRC9T",
     "navigation_depth": 5
 }
 
