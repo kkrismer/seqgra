@@ -78,7 +78,6 @@ modindex_common_prefix = ["seqgra."]
 html_theme = "sphinx_rtd_theme"
 
 html_theme_options = {
-    "analytics_id": "G-SPQK9JRC9T",
     "navigation_depth": 5
 }
 
@@ -90,3 +89,15 @@ html_show_sourcelink = False
 html_static_path = ["_static"]
 
 html_css_files = ["custom.css"]
+
+GOOGLE_ANALYTICS_TAG = """
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-SPQK9JRC9T');
+"""
+
+def setup(app):
+    app.add_js_file("https://www.googletagmanager.com/gtag/js?id=G-SPQK9JRC9T")
+    app.add_js_file(None, body=GOOGLE_ANALYTICS_TAG)
