@@ -8,19 +8,43 @@
 
 https://kkrismer.github.io/seqgra/
 
+## What is seqgra?
+
+Sequence models based on deep neural networks have achieved state-of-the-art 
+performance on regulatory genomics prediction tasks, such as chromatin 
+accessibility and transcription factor binding. But despite their high 
+accuracy, their contributions to a mechanistic understanding of the biology 
+of regulatory elements is often hindered by the complexity of the predictive 
+model and thus poor interpretability of its decision boundaries. To address 
+this, we introduce seqgra, a deep learning pipeline that incorporates the 
+rule-based simulation of biological sequence data and the training and 
+evaluation of models, whose decision boundaries mirror the rules from the 
+simulation process. The method can be used to (1) generate data under the 
+assumption of a hypothesized model of genome regulation, (2) identify neural 
+network architectures capable of recovering the rules of said model, and (3) 
+analyze a model's predictive performance as a function of training set size, 
+noise level, and the complexity of the rules behind the simulated data.
+
 ## Installation
 
-Ultimately, seqgra will be available on the Python Package Index (PyPI) and 
-can be installed with pip:
+seqgra is a Python package that is part of both 
+[conda-forge](https://anaconda.org/conda-forge) and [PyPI](https://pypi.org/), 
+the package repositories behind [conda](https://docs.conda.io/en/latest/) and 
+[pip](https://pip.pypa.io/en/stable/), respectively.
 
+To install seqgra with conda, run:
+```
+conda install -c conda-forge seqgra
+```
+
+To install seqgra with pip, run:
 ```
 pip install seqgra
 ```
 
-For now, install seqgra from this repository directly:
-
+To install seqgra directly from this repository, run:
 ```
-git clone https://github.com/kkrismer/seqgra
+git clone https://github.com/gifford-lab/seqgra
 cd seqgra
 pip install .
 ```
@@ -33,166 +57,48 @@ pip install .
     - *R package `gridExtra` 2.3 (or higher)*
     - *R package `scales` 1.1.0 (or higher)*
 
-R is used to create the grammar-model-agreement plots and grammar heatmaps 
-and if not available, these plots will be skipped.
 
-### Python package dependencies
+The ``tensorflow`` package is only required if TensorFlow models are used 
+and will not be automatically installed by ``pip install seqgra``. Same is 
+true for packages ``torch`` and ``pytorch-ignite``, which are only 
+required if PyTorch models are used.
 
-- Cython>=0.29
-- lxml>=4.4.1
-- matplotlib>=3.1
-- numpy>=1.14
-- pandas>=0.25
-- PyYAML>=5.3
-- scikit-image>=0.16
-- scikit-learn>=0.21
-- scipy>=1.3
-- setuptools>=41.6
-- ushuffle>=1.1.2
-- *tensorflow>=2.0.0 (NOT automatically installed by pip)*
-- *torch>=1.4.0 (NOT automatically installed by pip)*
-- *pytorch-ignite>=0.3.0 (NOT automatically installed by pip)*
+R is a soft dependency, in the sense that it is used to create a number 
+of plots (grammar-model-agreement plots, 
+grammar heatmaps, and motif similarity matrix plots) and if not available, 
+these plots will be skipped.
 
-The `tensorflow` package is only required if TensorFlow models are used and
-will not be automatically installed by `pip install seqgra`. Same is true for
-packages `torch` and `pytorch-ignite`, which are only required if PyTorch 
-models are used.
+seqgra depends upon the Python package [lxml](https://lxml.de/), which in turn 
+depends on system libraries that are not always present. On a 
+Debian/Ubuntu machine you can satisfy those requirements using:
+```
+sudo apt-get install libxml2-dev libxslt-dev
+```
 
 ## Usage
 
-```
-seqgra -h
-usage: seqgra [-h]
-              [-v]
-              (-d DATA_CONFIG_FILE | -f DATA_FOLDER)
-              [-m MODEL_CONFIG_FILE]
-              [-e EVALUATORS [EVALUATORS ...]]
-              -o OUTPUT_DIR
-              [-i]
-              [-p]
-              [-s]
-              [-r]
-              [-g GPU]
-              [--no-checks]
-              [--eval-sets EVAL_SETS [EVAL_SETS ...]]
-              [--eval-n EVAL_N]
-              [--eval-n-per-label EVAL_N_PER_LABEL]
-              [--eval-suppress-plots]
-              [--eval-fi-predict-threshold EVAL_FI_PREDICT_THRESHOLD]
-              [--eval-sis-predict-threshold EVAL_SIS_PREDICT_THRESHOLD]
-              [--eval-grad-importance-threshold EVAL_GRAD_IMPORTANCE_THRESHOLD]
+Check out the following help pages:
 
-Generate synthetic data based on grammar, train model on synthetic data, 
-evaluate model
+* [Usage examples](https://kkrismer.github.io/seqgra/examples.html): seqgra example analyses with data definitions and model definitions
+* [Command line utilities](https://kkrismer.github.io/seqgra/cmd.html): argument descriptions for `seqgra`, `seqgras`, `seqgrae`, and `seqgraa` commands
+* [Data definition](https://kkrismer.github.io/seqgra/dd.html): detailed description of the data definition language that is used to formalize grammars
+* [Model definition](https://kkrismer.github.io/seqgra/md.html): detailed description of the model definition language that is used to describe neural network architectures and hyperparameters for the optimizer, the loss, and the training process
+* [Simulators, Learners, Evaluators, Comparators](https://kkrismer.github.io/seqgra/slec.html): brief descriptions of the most important classes
+* [seqgra API reference](https://kkrismer.github.io/seqgra/seqgra.html): detailed description of the seqgra API
 
-optional arguments:
-  -h, --help            show this help message and exit
-  -v, --version         show program's version number and exit
-  -d DATA_CONFIG_FILE, --data-config-file DATA_CONFIG_FILE
-                        path to the segra XML data configuration file. Use 
-                        this option to generate synthetic data based on a 
-                        seqgra grammar (specify either -d or -f, not both)
-  -f DATA_FOLDER, --data-folder DATA_FOLDER
-                        experimental data folder name inside outputdir/input. 
-                        Use this option to train the model on experimental or 
-                        externally synthesized data (specify either -f or -d, 
-                        not both)
-  -m MODEL_CONFIG_FILE, --model-config-file MODEL_CONFIG_FILE
-                        path to the seqgra XML model configuration file
-  -e EVALUATORS [EVALUATORS ...], --evaluators EVALUATORS [EVALUATORS ...]
-                        evaluator ID or IDs: IDs of conventional evaluators 
-                        include metrics, pr, predict, roc; IDs of feature 
-                        importance evaluators include 
-                        contrastive-excitation-backprop, deconv, deep-lift, 
-                        excitation-backprop, feedback, grad-cam, gradient, 
-                        gradient-x-input, guided-backprop, 
-                        integrated-gradients, 
-                        nonlinear-integrated-gradients, saliency, sis, 
-                        smooth-grad
-  -o OUTPUT_DIR, --output-dir OUTPUT_DIR
-                        output directory, subdirectories are created for 
-                        generated data, trained model, and model evaluation
-  -i, --in-memory       if this flag is set, training and validation data 
-                        will be stored in-memory instead of loaded in chunks
-  -p, --print           if this flag is set, data definition, model 
-                        definition, and model summary are printed
-  -s, --silent          if this flag is set, only warnings and errors are 
-                        printed
-  -r, --remove          if this flag is set, previously stored data for this 
-                        grammar - model combination will be removed prior to 
-                        the analysis run. This includes the folders 
-                        input/[grammar ID], models/[grammar ID]/[model ID], 
-                        and evaluation/[grammar ID]/[model ID].
-  -g GPU, --gpu GPU     ID of GPU used by TensorFlow and PyTorch (defaults to 
-                        GPU ID 0); CPU is used if no GPU is available or
-                        GPU ID is set to -1
-  --no-checks            if this flag is set, examples and example annotations 
-                        will not be validated before training, e.g., that DNA 
-                        sequences only contain A, C, G, T, N
-  --eval-sets EVAL_SETS [EVAL_SETS ...]
-                        either one or more of the following: training, 
-                        validation, test; selects data set for evaluation; 
-                        this evaluator argument will be passed to all 
-                        evaluators
-  --eval-n EVAL_N       maximum number of examples to be evaluated per set 
-                        (defaults to the total number of examples); this 
-                        evaluator argument will be passed to all evaluators
-  --eval-n-per-label EVAL_N_PER_LABEL
-                        maximum number of examples to be evaluated for each 
-                        label and set (defaults to the total number of 
-                        examples unless eval-n is set, overrules eval-n); 
-                        this evaluator argument will be passed to all 
-                        evaluators
-  --eval-suppress-plots
-                        if this flag is set, plots are suppressed globally; 
-                        this evaluator argument will be passed to all 
-                        evaluators
-  --eval-fi-predict-threshold EVAL_FI_PREDICT_THRESHOLD
-                        prediction threshold used to select examples for 
-                        evaluation, only examples with predict(x) > threshold 
-                        will be passed on to evaluators (defaults to 0.5); 
-                        this evaluator argument will be passed to feature 
-                        importance evaluators only
-  --eval-sis-predict-threshold EVAL_SIS_PREDICT_THRESHOLD
-                        prediction threshold for Sufficient Input Subsets; 
-                        this evaluator argument is only visible to the SIS 
-                        evaluator
-  --eval-grad-importance-threshold EVAL_GRAD_IMPORTANCE_THRESHOLD
-                        feature importance threshold for gradient-based 
-                        feature importance evaluators; this parameter only 
-                        affects thresholded grammar agreement plots, not the 
-                        feature importance measures themselves; this evaluator 
-                        argument is only visible to gradient-based feature     
-                        importance evaluators (defaults to 0.01)
-```
+## Citation
 
-## Commonly used suite of seqgra commands
+If you use seqgra in your work, please cite:
 
-```
-seqgra -d DATA_CONFIG_FILE \
-       -m MODEL_CONFIG_FILE \
-       -o OUTPUT_DIR
-seqgra -d DATA_CONFIG_FILE \
-       -m MODEL_CONFIG_FILE
-       -o OUTPUT_DIR
-       -e metrics roc pr predict
-       --eval-sets training validation test
-seqgra -d DATA_CONFIG_FILE
-       -m MODEL_CONFIG_FILE
-       -o OUTPUT_DIR
-       -e sis
-       --eval-n-per-label 20
-seqgra -d DATA_CONFIG_FILE
-       -m MODEL_CONFIG_FILE
-       -o OUTPUT_DIR
-       -e gradient saliency gradient-x-input integrated-gradients
-       --eval-n-per-label 50
-```
+| **Identifying Neural Network Architectures for Genomics Prediction Tasks Using Sequence Grammar Based Simulations**
+| Konstantin Krismer, Jennifer Hammelman, and David K. Gifford  
+| journal name TODO, Volume TODO, Issue TODO, date TODO, Page TODO; DOI: https://doi.org/TODO
 
-1. generate synthetic data and train model on it
-2. load previously trained model, call conventional evaluators (`metrics`, `roc`, `pr`, and `predict`) on all examples of training, validation, and test set
-3. load previously trained model, call SIS evaluator on 20 test set examples per label (SIS is the most computationally expensive evaluator)
-4. load previously trained model, call gradient-based evaluators (`gradient`, `saliency`, `gradient-x-input`, and `integrated-gradients`) on 50 test set examples per label
+## Funding
+
+We gratefully acknowledge funding from NIH grants 1R01HG008754 and 
+1R01NS109217.
+
 
 ## Examples of seqgra analyses
 
@@ -501,7 +407,3 @@ Generated files and folders (pre-existing folders and files in italics):
 </pre>
 
 \* model files are library-dependent
-
-## Citation
-
-## Funding
