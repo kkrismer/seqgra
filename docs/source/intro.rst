@@ -49,7 +49,7 @@ System requirements
 
 .. note::
     The ``tensorflow`` package is only required if TensorFlow models are used 
-    and will not be automatically installed by pip install seqgra. Same is 
+    and will not be automatically installed by ``pip install seqgra``. Same is 
     true for packages ``torch`` and ``pytorch-ignite``, which are only 
     required if PyTorch models are used.
 

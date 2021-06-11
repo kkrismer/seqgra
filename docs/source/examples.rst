@@ -24,9 +24,10 @@ Most use cases are covered by the seqgra CLI commands ``seqgra``, ``seqgras``,
 
 The following schematic shows various seqgra analyses with inputs, outputs, 
 and corresponding commands:
+
 .. image:: _static/seqgra-variants.svg
-  :width: 100%
-  :alt: seqgra variants
+    :width: 100%
+    :alt: seqgra variants
 
 For a detailed description of the four seqgra commands and all its parameters,
 see :doc:`cmd`.
@@ -55,7 +56,15 @@ Commonly used suite of seqgra commands
         -e gradient saliency gradient-x-input integrated-gradients
         --eval-n-per-label 50
 
-#. generate synthetic data as defined in ``DATA_DEFINITION_FILE`` and create model as defined in ``MODEL_DEFINITION_FILE`` and train it on synthetic data
-#. load previously trained model, call conventional evaluators (metrics, roc, pr, and predict) on all examples of training, validation, and test set
-#. load previously trained model, call SIS evaluator on 20 test set examples per label (SIS is the most computationally expensive evaluator)
-#. load previously trained model, call gradient-based evaluators (gradient, saliency, gradient-x-input, and integrated-gradients) on 50 test set examples per label
+#. ``seqgra`` call: generate synthetic data as defined in 
+   ``DATA_DEFINITION_FILE`` and create model as defined in 
+   ``MODEL_DEFINITION_FILE`` and train it on synthetic data
+#. ``seqgra`` call: load previously trained model, call conventional 
+   evaluators (metrics, roc, pr, and predict) on all examples of training, 
+   validation, and test set
+#. ``seqgra`` call: load previously trained model, call SIS evaluator on 20 
+   test set examples per label (SIS is the most computationally expensive 
+   evaluator)
+#. ``seqgra`` call: load previously trained model, call gradient-based 
+   evaluators (gradient, saliency, gradient-x-input, and 
+   integrated-gradients) on 50 test set examples per label
