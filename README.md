@@ -1,4 +1,4 @@
-# seqgra: Synthetic rule-based biological sequence data generation for architecture evaluation and search
+# seqgra: Principled Selection of Neural Network Architectures for Genomics Prediction Tasks
 
 [![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT) [![Travis build status](https://travis-ci.com/kkrismer/seqgra.svg?branch=master)](https://travis-ci.com/kkrismer/seqgra)
 
@@ -90,9 +90,9 @@ Check out the following help pages:
 
 If you use seqgra in your work, please cite:
 
-| **Identifying Neural Network Architectures for Genomics Prediction Tasks Using Sequence Grammar Based Simulations**
-| Konstantin Krismer, Jennifer Hammelman, and David K. Gifford  
-| journal name TODO, Volume TODO, Issue TODO, date TODO, Page TODO; DOI: https://doi.org/TODO
+**seqgra: Principled Selection of Neural Network Architectures for Genomics Prediction Tasks**  
+Konstantin Krismer, Jennifer Hammelman, and David K. Gifford  
+journal name TODO, Volume TODO, Issue TODO, date TODO, Page TODO; DOI: https://doi.org/TODO
 
 ## Funding
 
