@@ -257,6 +257,30 @@ integrated-gradients) on 50 test set examples per label</p></li>
 <h2>seqgra use cases<a class="headerlink" href="#seqgra-use-cases" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="generate-synthetic-data-only">
 <h3>Generate synthetic data only<a class="headerlink" href="#generate-synthetic-data-only" title="Permalink to this headline">¶</a></h3>
+<p><strong>Command:</strong></p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>seqgra -d DATA_CONFIG_FILE <span class="se">\</span>
+    -o OUTPUT_DIR
+</pre></div>
+</div>
+<p><strong>Generated files and folders:</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="n">OUTPUT_DIR</span><span class="p">}</span>
+<span class="o">+--</span> <span class="nb">input</span>
+    <span class="o">+--</span> <span class="p">{</span><span class="n">GRAMMAR</span> <span class="n">ID</span><span class="p">}</span>
+        <span class="o">|--</span> <span class="n">session</span><span class="o">-</span><span class="n">info</span><span class="o">.</span><span class="n">txt</span>
+        <span class="o">|--</span> <span class="n">training</span><span class="o">.</span><span class="n">txt</span>
+        <span class="o">|--</span> <span class="n">training</span><span class="o">-</span><span class="n">annotation</span><span class="o">.</span><span class="n">txt</span>
+        <span class="o">|--</span> <span class="n">training</span><span class="o">-</span><span class="n">grammar</span><span class="o">-</span><span class="n">heatmap</span><span class="o">.</span><span class="n">txt</span>
+        <span class="o">|--</span> <span class="n">training</span><span class="o">-</span><span class="n">grammar</span><span class="o">-</span><span class="n">heatmap</span><span class="o">.</span><span class="n">pdf</span>
+        <span class="o">|--</span> <span class="n">validation</span><span class="o">.</span><span class="n">txt</span>
+        <span class="o">|--</span> <span class="n">validation</span><span class="o">-</span><span class="n">annotation</span><span class="o">.</span><span class="n">txt</span>
+        <span class="o">|--</span> <span class="n">validation</span><span class="o">-</span><span class="n">grammar</span><span class="o">-</span><span class="n">heatmap</span><span class="o">.</span><span class="n">txt</span>
+        <span class="o">|--</span> <span class="n">validation</span><span class="o">-</span><span class="n">grammar</span><span class="o">-</span><span class="n">heatmap</span><span class="o">.</span><span class="n">pdf</span>
+        <span class="o">|--</span> <span class="n">test</span><span class="o">.</span><span class="n">txt</span>
+        <span class="o">|--</span> <span class="n">test</span><span class="o">-</span><span class="n">annotation</span><span class="o">.</span><span class="n">txt</span>
+        <span class="o">|--</span> <span class="n">test</span><span class="o">-</span><span class="n">grammar</span><span class="o">-</span><span class="n">heatmap</span><span class="o">.</span><span class="n">txt</span>
+        <span class="o">+--</span> <span class="n">test</span><span class="o">-</span><span class="n">grammar</span><span class="o">-</span><span class="n">heatmap</span><span class="o">.</span><span class="n">pdf</span>
+</pre></div>
+</div>
 </div>
 </div>
 </div>

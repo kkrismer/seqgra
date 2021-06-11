@@ -75,3 +75,30 @@ seqgra use cases
 Generate synthetic data only
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+**Command:**
+
+.. code-block:: shell
+
+    seqgra -d DATA_CONFIG_FILE \
+        -o OUTPUT_DIR
+
+**Generated files and folders:**
+
+.. code-block::
+
+    {OUTPUT_DIR}
+    +-- input
+        +-- {GRAMMAR ID}
+            |-- session-info.txt
+            |-- training.txt
+            |-- training-annotation.txt
+            |-- training-grammar-heatmap.txt
+            |-- training-grammar-heatmap.pdf
+            |-- validation.txt
+            |-- validation-annotation.txt
+            |-- validation-grammar-heatmap.txt
+            |-- validation-grammar-heatmap.pdf
+            |-- test.txt
+            |-- test-annotation.txt
+            |-- test-grammar-heatmap.txt
+            +-- test-grammar-heatmap.pdf
