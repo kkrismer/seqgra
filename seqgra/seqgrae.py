@@ -341,18 +341,18 @@ def run_seqgra_ensemble(analysis_id: str,
     analysis_id = MiscHelper.sanitize_id(analysis_id)
     output_dir = MiscHelper.format_output_dir(output_dir.strip())
     model_def_dir: str = MiscHelper.prepare_path(
-        output_dir + "configs/model", allow_exists=True, allow_non_empty=True)
+        output_dir + "defs/model", allow_exists=True, allow_non_empty=True)
 
     if not seed_grid and len(d_seeds) != len(m_seeds):
         raise Exception("number of simulation seeds must equal number of "
                         "model seeds when seed-grid is disabled")
 
     if data_def_file:
-        data_configs_dir: str = MiscHelper.prepare_path(
-            output_dir + "configs/data", allow_exists=True,
+        data_defs_dir: str = MiscHelper.prepare_path(
+            output_dir + "defs/data", allow_exists=True,
             allow_non_empty=True)
         data_file_names: List[List[str]] = write_data_definition_files(
-            data_def_file, data_configs_dir, ds_sizes, d_seeds)
+            data_def_file, data_defs_dir, ds_sizes, d_seeds)
         data_folders: List[List[str]] = None
     else:
         input_data_dir: str = MiscHelper.prepare_path(
@@ -423,7 +423,7 @@ def create_parser(default_ds_sizes: List[int] = [10000, 20000, 40000, 80000,
         type=str,
         required=True,
         help="output directory, subdirectories are created for generated "
-        "data and model configs, input data, trained models, and model "
+        "data and model definitions, input data, trained models, and model "
         "evaluations"
     )
     parser.add_argument(
