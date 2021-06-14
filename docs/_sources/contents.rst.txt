@@ -28,7 +28,7 @@ Version |version|
 
 .. toctree::
    :maxdepth: 4
-   :caption: Advanced features
+   :caption: Reference
 
    API reference<seqgra>
    Python module index<py-modindex>
