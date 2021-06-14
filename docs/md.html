@@ -109,12 +109,19 @@
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Usage examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cmd.html">Command line utilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dd.html">Data definition</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Model definition</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Model definition</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#general-information">General information</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#architecture">Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#loss">Loss</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#optimizer">Optimizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#training-process">Training process</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="slec.html">Simulators, Learners, Evaluators, Comparators</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ids.html">ID conventions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="structure.html"><code class="docutils literal notranslate"><span class="pre">output</span></code> folder structure</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Advanced features</span></p>
+<p class="caption"><span class="caption-text">Reference</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="seqgra.html">API reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="py-modindex.html">Python module index</a></li>
@@ -186,7 +193,207 @@
             
   <div class="section" id="model-definition">
 <h1>Model definition<a class="headerlink" href="#model-definition" title="Permalink to this headline">¶</a></h1>
-<p>TODO</p>
+<p>The seqgra model definition language is an XML-based specification of the
+model creation and training process. Each model definition XML file contains a
+complete description for the seqgra learner to create and train a neural
+network architecture.</p>
+<a class="reference internal image-reference" href="_images/md.svg"><img alt="seqgra model definition schematic" src="_images/md.svg" width="50%" /></a>
+<p>The language is defined using XML schema
+(<a class="reference external" href="https://kkrismer.github.io/seqgra/model-config.xsd">model definition XML schema file</a>).</p>
+<p>This document describes the sections of a valid seqgra model definition.
+For valid examples of model definitions, see the <a class="reference external" href="https://github.com/kkrismer/seqgra/tree/master/docsrc/defs/md">model definitions folder on GitHub</a></p>
+<div class="section" id="general-information">
+<h2>General information<a class="headerlink" href="#general-information" title="Permalink to this headline">¶</a></h2>
+<p>This section contains meta-info about the model.</p>
+<p><strong>Example 1 - PyTorch binary classification model on 150bp DNA sequence window:</strong></p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;general</span> <span class="na">id=</span><span class="s">&quot;torch-mc2-dna150-conv1-gmp-fc5-s1&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;name&gt;</span>1 conv layer with 1 11-nt wide filters, global max pooling, 1 fully connected layer with 5 units<span class="nt">&lt;/name&gt;</span>
+    <span class="nt">&lt;description&gt;&lt;/description&gt;</span>
+    <span class="nt">&lt;task&gt;</span>multi-class classification<span class="nt">&lt;/task&gt;</span>
+    <span class="nt">&lt;sequencespace&gt;</span>DNA<span class="nt">&lt;/sequencespace&gt;</span>
+    <span class="nt">&lt;library&gt;</span>PyTorch<span class="nt">&lt;/library&gt;</span>
+    <span class="nt">&lt;inputencoding&gt;</span>1D<span class="nt">&lt;/inputencoding&gt;</span>
+    <span class="nt">&lt;labels&gt;</span>
+        <span class="nt">&lt;label&gt;</span>c1<span class="nt">&lt;/label&gt;</span>
+        <span class="nt">&lt;label&gt;</span>c2<span class="nt">&lt;/label&gt;</span>
+    <span class="nt">&lt;/labels&gt;</span>
+    <span class="nt">&lt;seed&gt;</span>1<span class="nt">&lt;/seed&gt;</span>
+<span class="nt">&lt;/general&gt;</span>
+</pre></div>
+</div>
+<p><strong>Example 2 - TensorFlow multi-label classification model on 1000bp DNA sequence window:</strong></p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;general</span> <span class="na">id=</span><span class="s">&quot;tf-ml10-dna1000-conv10w-conv10w-gmp-fc10-s1&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;name&gt;</span>conv layer with 10 21-nt wide filters, conv layer with 10 21-nt wide filters, global max pooling, fully connected layer with 10 units<span class="nt">&lt;/name&gt;</span>
+    <span class="nt">&lt;description&gt;&lt;/description&gt;</span>
+    <span class="nt">&lt;task&gt;</span>multi-label classification<span class="nt">&lt;/task&gt;</span>
+    <span class="nt">&lt;sequencespace&gt;</span>DNA<span class="nt">&lt;/sequencespace&gt;</span>
+    <span class="nt">&lt;library&gt;</span>TensorFlow<span class="nt">&lt;/library&gt;</span>
+    <span class="nt">&lt;labels&gt;</span>
+        <span class="nt">&lt;pattern</span> <span class="na">prefix=</span><span class="s">&quot;c&quot;</span> <span class="na">postfix=</span><span class="s">&quot;&quot;</span> <span class="na">min=</span><span class="s">&quot;1&quot;</span> <span class="na">max=</span><span class="s">&quot;10&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;/labels&gt;</span>
+    <span class="nt">&lt;seed&gt;</span>1<span class="nt">&lt;/seed&gt;</span>
+<span class="nt">&lt;/general&gt;</span>
+</pre></div>
+</div>
+<p><strong>Example 3 - Bayes Optimal Classifier binary classification model on 1000bp DNA sequence window:</strong></p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;general</span> <span class="na">id=</span><span class="s">&quot;boc-mc2-dna1000-homer-s1&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;name&gt;</span>Bayes optimal classifier for mc2-dna1000-homer<span class="nt">&lt;/name&gt;</span>
+    <span class="nt">&lt;description&gt;</span>using the same PWMs that were used to generate the data<span class="nt">&lt;/description&gt;</span>
+    <span class="nt">&lt;task&gt;</span>multi-class classification<span class="nt">&lt;/task&gt;</span>
+    <span class="nt">&lt;sequencespace&gt;</span>DNA<span class="nt">&lt;/sequencespace&gt;</span>
+    <span class="nt">&lt;library&gt;</span>BayesOptimalClassifier<span class="nt">&lt;/library&gt;</span>
+    <span class="nt">&lt;labels&gt;</span>
+        <span class="nt">&lt;pattern</span> <span class="na">prefix=</span><span class="s">&quot;c&quot;</span> <span class="na">postfix=</span><span class="s">&quot;&quot;</span> <span class="na">min=</span><span class="s">&quot;1&quot;</span> <span class="na">max=</span><span class="s">&quot;2&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;/labels&gt;</span>
+    <span class="nt">&lt;seed&gt;</span>1<span class="nt">&lt;/seed&gt;</span>
+<span class="nt">&lt;/general&gt;</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>a valid model ID can only contain <code class="docutils literal notranslate"><span class="pre">[A-Za-z0-9_-]+</span></code></p></li>
+<li><p>model name and description can be left empty</p></li>
+<li><p>task can be either <em>multi-class classification</em> or <em>multi-label classification</em></p></li>
+<li><p>sequence space can be one of the following: <em>DNA</em>, <em>RNA</em>, <em>protein</em></p></li>
+<li><p>library can be one of the following: <em>PyTorch</em>, <em>TensorFlow</em>, <em>BayesOptimalClassifier</em></p></li>
+<li><p>seed is the model seed, which affects weight initialization and SGD (integer)</p></li>
+</ul>
+</div>
+<div class="section" id="architecture">
+<h2>Architecture<a class="headerlink" href="#architecture" title="Permalink to this headline">¶</a></h2>
+<p>Defines the neural network architecture. For PyTorch, architecture is defined
+externally with <code class="docutils literal notranslate"><span class="pre">torch.nn.Module</span></code> derived class. For TensorFlow, Keras
+architecture can be embedded in XML. For Bayes Optimal Classifier, architecture
+is defined by reference to data definition file.</p>
+<p><strong>Example 1 - PyTorch:</strong></p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;architecture&gt;</span>
+    <span class="nt">&lt;external</span> <span class="na">format=</span><span class="s">&quot;pytorch-module&quot;</span> <span class="na">classname=</span><span class="s">&quot;TorchModel&quot;</span><span class="nt">&gt;</span>PyTorch/o2-dna150-conv10-do03-conv10-fc5-do03.py<span class="nt">&lt;/external&gt;</span>
+<span class="nt">&lt;/architecture&gt;</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">math</span>
+
+<span class="kn">import</span> <span class="nn">torch</span>
+
+<span class="k">class</span> <span class="nc">TorchModel</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="n">INPUT_CHANNELS</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span>
+        <span class="n">CONV1_NUM_FILTERS</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span>
+        <span class="n">CONV2_NUM_FILTERS</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span>
+        <span class="n">CONV_FILTER_WIDTH</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">11</span>
+        <span class="n">FC_NUM_UNITS</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span>
+        <span class="n">OUTPUT_UNITS</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">conv</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
+            <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Conv1d</span><span class="p">(</span><span class="n">INPUT_CHANNELS</span><span class="p">,</span>
+                            <span class="n">CONV1_NUM_FILTERS</span><span class="p">,</span>
+                            <span class="n">CONV_FILTER_WIDTH</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>
+                            <span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">CONV_FILTER_WIDTH</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)),</span>
+            <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(),</span>
+            <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Dropout</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="mf">0.3</span><span class="p">),</span>
+            <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Conv1d</span><span class="p">(</span><span class="n">CONV1_NUM_FILTERS</span><span class="p">,</span>
+                            <span class="n">CONV2_NUM_FILTERS</span><span class="p">,</span>
+                            <span class="n">CONV_FILTER_WIDTH</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>
+                            <span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">CONV_FILTER_WIDTH</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)),</span>
+            <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(),</span>
+            <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">AdaptiveMaxPool1d</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">fc</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
+            <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">CONV2_NUM_FILTERS</span><span class="p">,</span> <span class="n">FC_NUM_UNITS</span><span class="p">),</span>
+            <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(),</span>
+            <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Dropout</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="mf">0.3</span><span class="p">),</span>
+            <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">FC_NUM_UNITS</span><span class="p">,</span> <span class="n">OUTPUT_UNITS</span><span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="n">batch_size</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conv</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fc</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">x</span>
+</pre></div>
+</div>
+<p><strong>Example 2 - TensorFlow:</strong></p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;architecture&gt;</span>
+    <span class="nt">&lt;sequential&gt;</span>
+        <span class="nt">&lt;operation</span> <span class="na">input_shape=</span><span class="s">&quot;(1000, 4)&quot;</span> <span class="na">kernel_size=</span><span class="s">&quot;21&quot;</span> <span class="na">filters=</span><span class="s">&quot;10&quot;</span> <span class="na">activation=</span><span class="s">&quot;relu&quot;</span><span class="nt">&gt;</span>Conv1D<span class="nt">&lt;/operation&gt;</span>
+        <span class="nt">&lt;operation</span> <span class="na">kernel_size=</span><span class="s">&quot;21&quot;</span> <span class="na">filters=</span><span class="s">&quot;10&quot;</span> <span class="na">activation=</span><span class="s">&quot;relu&quot;</span><span class="nt">&gt;</span>Conv1D<span class="nt">&lt;/operation&gt;</span>
+        <span class="nt">&lt;operation&gt;</span>GlobalMaxPool1D<span class="nt">&lt;/operation&gt;</span>
+        <span class="nt">&lt;operation</span> <span class="na">units=</span><span class="s">&quot;10&quot;</span> <span class="na">activation=</span><span class="s">&quot;relu&quot;</span><span class="nt">&gt;</span>Dense<span class="nt">&lt;/operation&gt;</span>
+        <span class="nt">&lt;operation</span> <span class="na">units=</span><span class="s">&quot;10&quot;</span> <span class="na">activation=</span><span class="s">&quot;softmax&quot;</span><span class="nt">&gt;</span>Dense<span class="nt">&lt;/operation&gt;</span>
+    <span class="nt">&lt;/sequential&gt;</span>
+<span class="nt">&lt;/architecture&gt;</span>
+</pre></div>
+</div>
+<p><strong>Example 3 - Bayes Optimal Classifier:</strong></p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;architecture&gt;</span>
+    <span class="nt">&lt;external</span> <span class="na">format=</span><span class="s">&quot;data-definition&quot;</span><span class="nt">&gt;</span>defs/data/mc2-dna1000-homer-interaction-spacing-100k-s1.xml<span class="nt">&lt;/external&gt;</span>
+<span class="nt">&lt;/architecture&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="loss">
+<h2>Loss<a class="headerlink" href="#loss" title="Permalink to this headline">¶</a></h2>
+<p>This section defines hyperparameters pertaining to the loss function.</p>
+<p><strong>Example 1 - PyTorch multi-class classification:</strong></p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;loss&gt;</span>
+    <span class="nt">&lt;hyperparameter</span> <span class="na">name=</span><span class="s">&quot;loss&quot;</span><span class="nt">&gt;</span>CrossEntropyLoss<span class="nt">&lt;/hyperparameter&gt;</span>
+<span class="nt">&lt;/loss&gt;</span>
+</pre></div>
+</div>
+<p><strong>Example 2 - PyTorch multi-label classification:</strong></p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;loss&gt;</span>
+    <span class="nt">&lt;hyperparameter</span> <span class="na">name=</span><span class="s">&quot;loss&quot;</span><span class="nt">&gt;</span>BCEWithLogitsLoss<span class="nt">&lt;/hyperparameter&gt;</span>
+<span class="nt">&lt;/loss&gt;</span>
+</pre></div>
+</div>
+<p><strong>Example 3 - TensorFlow multi-class classification:</strong></p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;loss&gt;</span>
+    <span class="nt">&lt;hyperparameter</span> <span class="na">name=</span><span class="s">&quot;loss&quot;</span><span class="nt">&gt;</span>categorical_crossentropy<span class="nt">&lt;/hyperparameter&gt;</span>
+<span class="nt">&lt;/loss&gt;</span>
+</pre></div>
+</div>
+<p><strong>Example 4 - TensorFlow multi-label classification:</strong></p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;loss&gt;</span>
+    <span class="nt">&lt;hyperparameter</span> <span class="na">name=</span><span class="s">&quot;loss&quot;</span><span class="nt">&gt;</span>binary_crossentropy<span class="nt">&lt;/hyperparameter&gt;</span>
+<span class="nt">&lt;/loss&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="optimizer">
+<h2>Optimizer<a class="headerlink" href="#optimizer" title="Permalink to this headline">¶</a></h2>
+<p>This section defines hyperparameters pertaining to the optimizer.</p>
+<p><strong>Example 1 - PyTorch with Adam:</strong></p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;optimizer&gt;</span>
+    <span class="nt">&lt;hyperparameter</span> <span class="na">name=</span><span class="s">&quot;optimizer&quot;</span><span class="nt">&gt;</span>Adam<span class="nt">&lt;/hyperparameter&gt;</span>
+    <span class="nt">&lt;hyperparameter</span> <span class="na">name=</span><span class="s">&quot;learning_rate&quot;</span><span class="nt">&gt;</span>0.0001<span class="nt">&lt;/hyperparameter&gt;</span>
+    <span class="nt">&lt;hyperparameter</span> <span class="na">name=</span><span class="s">&quot;clipnorm&quot;</span><span class="nt">&gt;</span>0.5<span class="nt">&lt;/hyperparameter&gt;</span>
+<span class="nt">&lt;/optimizer&gt;</span>
+</pre></div>
+</div>
+<p><strong>Example 2 - TensorFlow with SGD:</strong></p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;optimizer&gt;</span>
+    <span class="nt">&lt;hyperparameter</span> <span class="na">name=</span><span class="s">&quot;optimizer&quot;</span><span class="nt">&gt;</span>SGD<span class="nt">&lt;/hyperparameter&gt;</span>
+    <span class="nt">&lt;hyperparameter</span> <span class="na">name=</span><span class="s">&quot;learning_rate&quot;</span><span class="nt">&gt;</span>0.001<span class="nt">&lt;/hyperparameter&gt;</span>
+    <span class="nt">&lt;hyperparameter</span> <span class="na">name=</span><span class="s">&quot;momentum&quot;</span><span class="nt">&gt;</span>0.9<span class="nt">&lt;/hyperparameter&gt;</span>
+<span class="nt">&lt;/optimizer&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="training-process">
+<h2>Training process<a class="headerlink" href="#training-process" title="Permalink to this headline">¶</a></h2>
+<p>This section defines hyperparameters pertaining to the training process.</p>
+<p><strong>Example:</strong></p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;trainingprocess&gt;</span>
+    <span class="nt">&lt;hyperparameter</span> <span class="na">name=</span><span class="s">&quot;batch_size&quot;</span><span class="nt">&gt;</span>100<span class="nt">&lt;/hyperparameter&gt;</span>
+    <span class="nt">&lt;hyperparameter</span> <span class="na">name=</span><span class="s">&quot;epochs&quot;</span><span class="nt">&gt;</span>100<span class="nt">&lt;/hyperparameter&gt;</span>
+    <span class="nt">&lt;hyperparameter</span> <span class="na">name=</span><span class="s">&quot;early_stopping&quot;</span><span class="nt">&gt;</span>True<span class="nt">&lt;/hyperparameter&gt;</span>
+    <span class="nt">&lt;hyperparameter</span> <span class="na">name=</span><span class="s">&quot;shuffle&quot;</span><span class="nt">&gt;</span>True<span class="nt">&lt;/hyperparameter&gt;</span>
+<span class="nt">&lt;/trainingprocess&gt;</span>
+</pre></div>
+</div>
+</div>
 </div>
 
 
