@@ -21,7 +21,7 @@ setuptools.setup(
     url="https://kkrismer.github.io/seqgra/",
     packages=setuptools.find_packages(),
     classifiers=[
-        "Development Status :: 2 - Pre-Alpha",
+        "Development Status :: 4 - Beta",
         "Environment :: Console",
         "Intended Audience :: Science/Research",
         "License :: OSI Approved :: MIT License",
