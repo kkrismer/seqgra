@@ -515,6 +515,128 @@ Generate synthetic data, train model on it, and evaluate model using various gra
 - ``DATA_DEFINITION_FILE``
 - ``MODEL_DEFINITION_FILE``
 
+Generate collection of data definitions and model definitions derived from root definitions
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. image:: _static/seqgra-variants-seqgrae.svg
+    :width: 100%
+    :alt: seqgra variant - seqgrae
+
+This command is used to generate data definitions with various simulation 
+seeds and data set sizes and model definition with various model seeds.
+
+**Command:**
+
+.. code-block:: shell
+
+    seqgrae -a ANALYSIS_ID \
+        -d DATA_DEFINITION_FILE
+        -m MODEL_DEFINITION_FILE_1 MODEL_DEFINITION_FILE_2
+        -o OUTPUT_DIR
+
+**Generated folders and files:**
+
+.. code-block:: text
+
+    {OUTPUT_DIR}
+    |-- defs
+    |   |-- data
+    |   |   |-- DATA_DEFINITION_FILE-10k-s1.xml
+    |   |   |-- DATA_DEFINITION_FILE-10k-s2.xml
+    |   |   |-- DATA_DEFINITION_FILE-10k-s3.xml
+    |   |   |-- DATA_DEFINITION_FILE-20k-s1.xml
+    |   |   |-- DATA_DEFINITION_FILE-20k-s2.xml
+    |   |   |-- DATA_DEFINITION_FILE-20k-s3.xml
+    |   |   |-- DATA_DEFINITION_FILE-40k-s1.xml
+    |   |   |-- DATA_DEFINITION_FILE-40k-s2.xml
+    |   |   |-- DATA_DEFINITION_FILE-40k-s3.xml
+    |   |   |-- DATA_DEFINITION_FILE-80k-s1.xml
+    |   |   |-- DATA_DEFINITION_FILE-80k-s2.xml
+    |   |   |-- DATA_DEFINITION_FILE-80k-s3.xml
+    |   |   |-- DATA_DEFINITION_FILE-160k-s1.xml
+    |   |   |-- DATA_DEFINITION_FILE-160k-s2.xml
+    |   |   |-- DATA_DEFINITION_FILE-160k-s3.xml
+    |   |   |-- DATA_DEFINITION_FILE-320k-s1.xml
+    |   |   |-- DATA_DEFINITION_FILE-320k-s2.xml
+    |   |   |-- DATA_DEFINITION_FILE-320k-s3.xml
+    |   |   |-- DATA_DEFINITION_FILE-640k-s1.xml
+    |   |   |-- DATA_DEFINITION_FILE-640k-s2.xml
+    |   |   |-- DATA_DEFINITION_FILE-640k-s3.xml
+    |   |   |-- DATA_DEFINITION_FILE-1280k-s1.xml
+    |   |   |-- DATA_DEFINITION_FILE-1280k-s2.xml
+    |   |   |-- DATA_DEFINITION_FILE-1280k-s3.xml
+    |   +-- model
+    |       |-- MODEL_DEFINITION_FILE_1-s1.xml
+    |       |-- MODEL_DEFINITION_FILE_1-s2.xml
+    |       |-- MODEL_DEFINITION_FILE_1-s3.xml
+    |       |-- MODEL_DEFINITION_FILE_2-s1.xml
+    |       |-- MODEL_DEFINITION_FILE_2-s2.xml
+    |       +-- MODEL_DEFINITION_FILE_2-s3.xml
+    +-- analyses
+        +-- {ANALYSIS ID}.sh
+
+**Pre-existing folders and files:**
+
+- ``DATA_DEFINITION_FILE``
+- ``MODEL_DEFINITION_FILE_1``
+- ``MODEL_DEFINITION_FILE_2``
+
+Subsample experimental data and generate collection of model definitions derived from root definition
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. image:: _static/seqgra-variants-seqgrae-exp.svg
+    :width: 100%
+    :alt: seqgra variant - seqgrae on experimental data
+
+This command is used to subsample experimental data and generate model 
+definition with various model seeds.
+
+**Command:**
+
+.. code-block:: shell
+
+    seqgrae -a ANALYSIS_ID \
+        -f DATA_FOLDER \
+        -m MODEL_DEFINITION_FILE \
+        -o OUTPUT_DIR
+
+**Generated folders and files:**
+
+.. code-block:: text
+
+    {OUTPUT_DIR}
+    |-- defs
+    |   +-- model
+    |       |-- MODEL_DEFINITION_FILE-s1.xml
+    |       |-- MODEL_DEFINITION_FILE-s2.xml
+    |       |-- MODEL_DEFINITION_FILE-s3.xml
+    |-- inputs
+    |   |-- DATA_FOLDER-0.05-s1.xml
+    |   |-- DATA_FOLDER-0.05-s2.xml
+    |   |-- DATA_FOLDER-0.05-s3.xml
+    |   |-- DATA_FOLDER-0.1-s1.xml
+    |   |-- DATA_FOLDER-0.1-s2.xml
+    |   |-- DATA_FOLDER-0.1-s3.xml
+    |   |-- DATA_FOLDER-0.2-s1.xml
+    |   |-- DATA_FOLDER-0.2-s2.xml
+    |   |-- DATA_FOLDER-0.2-s3.xml
+    |   |-- DATA_FOLDER-0.4-s1.xml
+    |   |-- DATA_FOLDER-0.4-s2.xml
+    |   |-- DATA_FOLDER-0.4-s3.xml
+    |   |-- DATA_FOLDER-0.8-s1.xml
+    |   |-- DATA_FOLDER-0.8-s2.xml
+    |   |-- DATA_FOLDER-0.8-s3.xml
+    |   |-- DATA_FOLDER-1.0-s1.xml
+    |   |-- DATA_FOLDER-1.0-s2.xml
+    |   |-- DATA_FOLDER-1.0-s3.xml
+    +-- analyses
+        +-- {ANALYSIS ID}.sh
+
+**Pre-existing folders and files:**
+
+- ``DATA_FOLDER``
+- ``MODEL_DEFINITION_FILE``
+
 Summarize results across multiple grammars using comparators ``roc`` and ``pr``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -641,7 +763,6 @@ Summarize results across multiple grammars using comparators ``table``, ``curve-
       by their IDs (see :doc:`slec` for a table of all comparator IDs)
     - the ``-g`` argument is used to specify all grammar IDs / data folders
     - the ``-m`` argument is used to specify all model IDs
-    - the ``-l`` argument is used to label the curves for ROC/PR comparators
 
 **Generated folders and files:**
 

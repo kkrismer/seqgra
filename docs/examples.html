@@ -116,6 +116,8 @@
 <li class="toctree-l3"><a class="reference internal" href="#run-metrics-predict-roc-and-pr-evaluators-on-model-that-was-previously-trained-on-synthesized-data">Run <code class="docutils literal notranslate"><span class="pre">metrics</span></code>, <code class="docutils literal notranslate"><span class="pre">predict</span></code>, <code class="docutils literal notranslate"><span class="pre">roc</span></code>, and <code class="docutils literal notranslate"><span class="pre">pr</span></code> evaluators on model that was previously trained on synthesized data</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#run-sis-evaluator-on-model-that-was-previously-trained-on-experimental-data">Run SIS evaluator on model that was previously trained on experimental data</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#generate-synthetic-data-train-model-on-it-and-evaluate-model-using-various-gradient-based-feature-importance-evaluators">Generate synthetic data, train model on it, and evaluate model using various gradient-based feature importance evaluators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#generate-collection-of-data-definitions-and-model-definitions-derived-from-root-definitions">Generate collection of data definitions and model definitions derived from root definitions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#subsample-experimental-data-and-generate-collection-of-model-definitions-derived-from-root-definition">Subsample experimental data and generate collection of model definitions derived from root definition</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#summarize-results-across-multiple-grammars-using-comparators-roc-and-pr">Summarize results across multiple grammars using comparators <code class="docutils literal notranslate"><span class="pre">roc</span></code> and <code class="docutils literal notranslate"><span class="pre">pr</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#summarize-results-across-multiple-grammars-using-comparators-table-curve-table-and-fi-eval-table">Summarize results across multiple grammars using comparators <code class="docutils literal notranslate"><span class="pre">table</span></code>, <code class="docutils literal notranslate"><span class="pre">curve-table</span></code>, and <code class="docutils literal notranslate"><span class="pre">fi-eval-table</span></code></a></li>
 </ul>
@@ -665,6 +667,112 @@ per label.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">MODEL_DEFINITION_FILE</span></code></p></li>
 </ul>
 </div>
+<div class="section" id="generate-collection-of-data-definitions-and-model-definitions-derived-from-root-definitions">
+<h3>Generate collection of data definitions and model definitions derived from root definitions<a class="headerlink" href="#generate-collection-of-data-definitions-and-model-definitions-derived-from-root-definitions" title="Permalink to this headline">¶</a></h3>
+<a class="reference internal image-reference" href="_images/seqgra-variants-seqgrae.svg"><img alt="seqgra variant - seqgrae" src="_images/seqgra-variants-seqgrae.svg" width="100%" /></a>
+<p>This command is used to generate data definitions with various simulation
+seeds and data set sizes and model definition with various model seeds.</p>
+<p><strong>Command:</strong></p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>seqgrae -a ANALYSIS_ID <span class="se">\</span>
+    -d DATA_DEFINITION_FILE
+    -m MODEL_DEFINITION_FILE_1 MODEL_DEFINITION_FILE_2
+    -o OUTPUT_DIR
+</pre></div>
+</div>
+<p><strong>Generated folders and files:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>{OUTPUT_DIR}
+|-- defs
+|   |-- data
+|   |   |-- DATA_DEFINITION_FILE-10k-s1.xml
+|   |   |-- DATA_DEFINITION_FILE-10k-s2.xml
+|   |   |-- DATA_DEFINITION_FILE-10k-s3.xml
+|   |   |-- DATA_DEFINITION_FILE-20k-s1.xml
+|   |   |-- DATA_DEFINITION_FILE-20k-s2.xml
+|   |   |-- DATA_DEFINITION_FILE-20k-s3.xml
+|   |   |-- DATA_DEFINITION_FILE-40k-s1.xml
+|   |   |-- DATA_DEFINITION_FILE-40k-s2.xml
+|   |   |-- DATA_DEFINITION_FILE-40k-s3.xml
+|   |   |-- DATA_DEFINITION_FILE-80k-s1.xml
+|   |   |-- DATA_DEFINITION_FILE-80k-s2.xml
+|   |   |-- DATA_DEFINITION_FILE-80k-s3.xml
+|   |   |-- DATA_DEFINITION_FILE-160k-s1.xml
+|   |   |-- DATA_DEFINITION_FILE-160k-s2.xml
+|   |   |-- DATA_DEFINITION_FILE-160k-s3.xml
+|   |   |-- DATA_DEFINITION_FILE-320k-s1.xml
+|   |   |-- DATA_DEFINITION_FILE-320k-s2.xml
+|   |   |-- DATA_DEFINITION_FILE-320k-s3.xml
+|   |   |-- DATA_DEFINITION_FILE-640k-s1.xml
+|   |   |-- DATA_DEFINITION_FILE-640k-s2.xml
+|   |   |-- DATA_DEFINITION_FILE-640k-s3.xml
+|   |   |-- DATA_DEFINITION_FILE-1280k-s1.xml
+|   |   |-- DATA_DEFINITION_FILE-1280k-s2.xml
+|   |   |-- DATA_DEFINITION_FILE-1280k-s3.xml
+|   +-- model
+|       |-- MODEL_DEFINITION_FILE_1-s1.xml
+|       |-- MODEL_DEFINITION_FILE_1-s2.xml
+|       |-- MODEL_DEFINITION_FILE_1-s3.xml
+|       |-- MODEL_DEFINITION_FILE_2-s1.xml
+|       |-- MODEL_DEFINITION_FILE_2-s2.xml
+|       +-- MODEL_DEFINITION_FILE_2-s3.xml
++-- analyses
+    +-- {ANALYSIS ID}.sh
+</pre></div>
+</div>
+<p><strong>Pre-existing folders and files:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">DATA_DEFINITION_FILE</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MODEL_DEFINITION_FILE_1</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MODEL_DEFINITION_FILE_2</span></code></p></li>
+</ul>
+</div>
+<div class="section" id="subsample-experimental-data-and-generate-collection-of-model-definitions-derived-from-root-definition">
+<h3>Subsample experimental data and generate collection of model definitions derived from root definition<a class="headerlink" href="#subsample-experimental-data-and-generate-collection-of-model-definitions-derived-from-root-definition" title="Permalink to this headline">¶</a></h3>
+<a class="reference internal image-reference" href="_images/seqgra-variants-seqgrae-exp.svg"><img alt="seqgra variant - seqgrae on experimental data" src="_images/seqgra-variants-seqgrae-exp.svg" width="100%" /></a>
+<p>This command is used to subsample experimental data and generate model
+definition with various model seeds.</p>
+<p><strong>Command:</strong></p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>seqgrae -a ANALYSIS_ID <span class="se">\</span>
+    -f DATA_FOLDER <span class="se">\</span>
+    -m MODEL_DEFINITION_FILE <span class="se">\</span>
+    -o OUTPUT_DIR
+</pre></div>
+</div>
+<p><strong>Generated folders and files:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>{OUTPUT_DIR}
+|-- defs
+|   +-- model
+|       |-- MODEL_DEFINITION_FILE-s1.xml
+|       |-- MODEL_DEFINITION_FILE-s2.xml
+|       |-- MODEL_DEFINITION_FILE-s3.xml
+|-- inputs
+|   |-- DATA_FOLDER-0.05-s1.xml
+|   |-- DATA_FOLDER-0.05-s2.xml
+|   |-- DATA_FOLDER-0.05-s3.xml
+|   |-- DATA_FOLDER-0.1-s1.xml
+|   |-- DATA_FOLDER-0.1-s2.xml
+|   |-- DATA_FOLDER-0.1-s3.xml
+|   |-- DATA_FOLDER-0.2-s1.xml
+|   |-- DATA_FOLDER-0.2-s2.xml
+|   |-- DATA_FOLDER-0.2-s3.xml
+|   |-- DATA_FOLDER-0.4-s1.xml
+|   |-- DATA_FOLDER-0.4-s2.xml
+|   |-- DATA_FOLDER-0.4-s3.xml
+|   |-- DATA_FOLDER-0.8-s1.xml
+|   |-- DATA_FOLDER-0.8-s2.xml
+|   |-- DATA_FOLDER-0.8-s3.xml
+|   |-- DATA_FOLDER-1.0-s1.xml
+|   |-- DATA_FOLDER-1.0-s2.xml
+|   |-- DATA_FOLDER-1.0-s3.xml
++-- analyses
+    +-- {ANALYSIS ID}.sh
+</pre></div>
+</div>
+<p><strong>Pre-existing folders and files:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">DATA_FOLDER</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MODEL_DEFINITION_FILE</span></code></p></li>
+</ul>
+</div>
 <div class="section" id="summarize-results-across-multiple-grammars-using-comparators-roc-and-pr">
 <h3>Summarize results across multiple grammars using comparators <code class="docutils literal notranslate"><span class="pre">roc</span></code> and <code class="docutils literal notranslate"><span class="pre">pr</span></code><a class="headerlink" href="#summarize-results-across-multiple-grammars-using-comparators-roc-and-pr" title="Permalink to this headline">¶</a></h3>
 <a class="reference internal image-reference" href="_images/seqgra-variants-seqgras.svg"><img alt="seqgra variant - seqgras ROC, PR" src="_images/seqgra-variants-seqgras.svg" width="100%" /></a>
@@ -783,7 +891,6 @@ by their IDs (see <a class="reference internal" href="slec.html"><span class="do
 by their IDs (see <a class="reference internal" href="slec.html"><span class="doc">Simulators, Learners, Evaluators, Comparators</span></a> for a table of all comparator IDs)</p></li>
 <li><p>the <code class="docutils literal notranslate"><span class="pre">-g</span></code> argument is used to specify all grammar IDs / data folders</p></li>
 <li><p>the <code class="docutils literal notranslate"><span class="pre">-m</span></code> argument is used to specify all model IDs</p></li>
-<li><p>the <code class="docutils literal notranslate"><span class="pre">-l</span></code> argument is used to label the curves for ROC/PR comparators</p></li>
 </ul>
 </div>
 <p><strong>Generated folders and files:</strong></p>
