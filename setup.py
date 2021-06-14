@@ -18,7 +18,7 @@ setuptools.setup(
     description="Synthetic rule-based biological sequence data generation for architecture evaluation and search",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/kkrismer/seqgra",
+    url="https://kkrismer.github.io/seqgra/",
     packages=setuptools.find_packages(),
     classifiers=[
         "Development Status :: 2 - Pre-Alpha",

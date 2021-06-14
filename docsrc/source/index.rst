@@ -89,6 +89,7 @@ Check out the following help pages:
   optimizer, the loss, and the training process
 * :doc:`slec`: brief descriptions of the most important classes
 * :doc:`API reference<seqgra>`: detailed description of the seqgra API
+* `Source code <https://github.com/gifford-lab/seqgra>`_: seqgra source code repository on GitHub 
 
 Citation
 --------
