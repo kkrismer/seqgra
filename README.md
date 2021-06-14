@@ -27,15 +27,8 @@ noise level, and the complexity of the rules behind the simulated data.
 
 ## Installation
 
-seqgra is a Python package that is part of both 
-[conda-forge](https://anaconda.org/conda-forge) and [PyPI](https://pypi.org/), 
-the package repositories behind [conda](https://docs.conda.io/en/latest/) and 
-[pip](https://pip.pypa.io/en/stable/), respectively.
-
-To install seqgra with conda, run:
-```
-conda install -c conda-forge seqgra
-```
+seqgra is a Python package that is part of [PyPI](https://pypi.org/), 
+the package repositories behind [pip](https://pip.pypa.io/en/stable/).
 
 To install seqgra with pip, run:
 ```
