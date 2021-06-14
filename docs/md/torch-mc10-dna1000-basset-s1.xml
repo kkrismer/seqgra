@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<seqgramodel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://kkrismer.github.io/seqgra/model-config.xsd">
+	<general id="torch-mc10-dna1000-basset-s1">
+		<name>Basset architecture</name>
+		<description>1000 bp DNA sequence window, 3 convolutional layers, 2 fully connected layer</description>
+		<task>multi-class classification</task>
+		<sequencespace>DNA</sequencespace>
+		<library>PyTorch</library>
+		<inputencoding>1D</inputencoding>
+		<labels>
+			<pattern prefix="c" postfix="" min="1" max="10"/>
+		</labels>
+		<seed>1</seed>
+	</general>
+	<architecture>
+		<external format="pytorch-module" classname="TorchModel">PyTorch/o10-dna1000-basset.py</external>
+	</architecture>
+	<loss>
+		<hyperparameter name="loss">CrossEntropyLoss</hyperparameter>
+	</loss>
+	<optimizer>
+		<hyperparameter name="optimizer">Adam</hyperparameter>
+		<hyperparameter name="learning_rate">0.0001</hyperparameter>
+		<hyperparameter name="clipnorm">0.5</hyperparameter>
+	</optimizer>
+	<trainingprocess>
+		<hyperparameter name="batch_size">100</hyperparameter>
+		<hyperparameter name="epochs">100</hyperparameter>
+		<hyperparameter name="early_stopping">True</hyperparameter>
+		<hyperparameter name="shuffle">True</hyperparameter>
+	</trainingprocess>
+</seqgramodel>

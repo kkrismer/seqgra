@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<seqgramodel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://kkrismer.github.io/seqgra/model-config.xsd">
+	<general id="torch-ml2-dna1000-deepsea-s1">
+		<name>DeepSEA architecture</name>
+		<description>1000 bp DNA sequence window, 3 convolutional layers, 1 fully connected layer</description>
+		<task>multi-label classification</task>
+		<sequencespace>DNA</sequencespace>
+		<library>PyTorch</library>
+		<labels>
+			<label>c1</label>
+			<label>c2</label>
+		</labels>
+		<seed>1</seed>
+	</general>
+	<architecture>
+		<external format="pytorch-module" classname="TorchModel">PyTorch/o2-dna1000-deepsea.py</external>
+	</architecture>
+	<loss>
+		<hyperparameter name="loss">BCEWithLogitsLoss</hyperparameter>
+	</loss>
+	<optimizer>
+		<hyperparameter name="optimizer">SGD</hyperparameter>
+		<hyperparameter name="learning_rate">0.01</hyperparameter>
+		<hyperparameter name="momentum">0.9</hyperparameter>
+	</optimizer>
+	<trainingprocess>
+		<hyperparameter name="batch_size">100</hyperparameter>
+		<hyperparameter name="epochs">100</hyperparameter>
+		<hyperparameter name="early_stopping">True</hyperparameter>
+		<hyperparameter name="shuffle">True</hyperparameter>
+	</trainingprocess>
+</seqgramodel>

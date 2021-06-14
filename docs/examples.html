@@ -110,6 +110,14 @@
 <li class="toctree-l2"><a class="reference internal" href="#commonly-used-suite-of-seqgra-commands">Commonly used suite of seqgra commands</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#seqgra-use-cases">seqgra use cases</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#generate-synthetic-data-only">Generate synthetic data only</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#generate-synthetic-data-and-train-model-on-it">Generate synthetic data and train model on it</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#train-model-on-previously-synthesized-data">Train model on previously synthesized data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#train-model-on-experimental-or-externally-synthesized-data">Train model on experimental or externally synthesized data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#run-metrics-predict-roc-and-pr-evaluators-on-model-that-was-previously-trained-on-synthesized-data">Run <code class="docutils literal notranslate"><span class="pre">metrics</span></code>, <code class="docutils literal notranslate"><span class="pre">predict</span></code>, <code class="docutils literal notranslate"><span class="pre">roc</span></code>, and <code class="docutils literal notranslate"><span class="pre">pr</span></code> evaluators on model that was previously trained on synthesized data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#run-sis-evaluator-on-model-that-was-previously-trained-on-experimental-data">Run SIS evaluator on model that was previously trained on experimental data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#generate-synthetic-data-train-model-on-it-and-evaluate-model-using-various-gradient-based-feature-importance-evaluators">Generate synthetic data, train model on it, and evaluate model using various gradient-based feature importance evaluators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#summarize-results-across-multiple-grammars-using-comparators-roc-and-pr">Summarize results across multiple grammars using comparators <code class="docutils literal notranslate"><span class="pre">roc</span></code> and <code class="docutils literal notranslate"><span class="pre">pr</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#summarize-results-across-multiple-grammars-using-comparators-table-curve-table-and-fi-eval-table">Summarize results across multiple grammars using comparators <code class="docutils literal notranslate"><span class="pre">table</span></code>, <code class="docutils literal notranslate"><span class="pre">curve-table</span></code>, and <code class="docutils literal notranslate"><span class="pre">fi-eval-table</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -214,7 +222,7 @@ models, evaluators</p>
 <p>The following schematic shows various seqgra analyses with inputs, outputs,
 and corresponding commands:</p>
 <a class="reference internal image-reference" href="_images/seqgra-variants.svg"><img alt="seqgra variants" src="_images/seqgra-variants.svg" width="100%" /></a>
-<p>For a detailed description of the four seqgra commands and all its parameters,
+<p>For a detailed description of the four seqgra commands and all arguments,
 see <a class="reference internal" href="cmd.html"><span class="doc">Command line utilities</span></a>.</p>
 <div class="section" id="commonly-used-suite-of-seqgra-commands">
 <h2>Commonly used suite of seqgra commands<a class="headerlink" href="#commonly-used-suite-of-seqgra-commands" title="Permalink to this headline">¶</a></h2>
@@ -255,19 +263,56 @@ integrated-gradients) on 50 test set examples per label</p></li>
 </div>
 <div class="section" id="seqgra-use-cases">
 <h2>seqgra use cases<a class="headerlink" href="#seqgra-use-cases" title="Permalink to this headline">¶</a></h2>
+<p><strong>Input placeholders:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">DATA_DEFINITION_FILE</span></code>: path to data definition XML file (see <a class="reference internal" href="dd.html"><span class="doc">Data definition</span></a>
+for a detailed description of the data definition language and <a class="reference external" href="https://github.com/kkrismer/seqgra/tree/master/docsrc/defs/dd">dd-folder</a>
+for examples of data definitions.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MODEL_DEFINITION_FILE</span></code>: path to model definition XML file (see <a class="reference internal" href="md.html"><span class="doc">Model definition</span></a>
+for a detailed description of the model definition language and <a class="reference external" href="https://github.com/kkrismer/seqgra/tree/master/docsrc/defs/md">md-folder</a>
+for examples of model definitions.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">OUTPUT</span></code>: output folder name</p></li>
+</ul>
+<p>For a detailed description of the arguments, see <a class="reference internal" href="cmd.html"><span class="doc">Command line utilities</span></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Not all data definition / model definition pairs are valid (i.e.,
+not all architectures can be trained on all data sets): The sequence
+window (<code class="docutils literal notranslate"><span class="pre">x</span></code>) and the labels/classes (<code class="docutils literal notranslate"><span class="pre">y</span></code>) of the data
+definition have to be compatible with the model definition. E.g.,
+data definitions of task <em>multi-class classification</em> can only be paired
+with model definitions of the same task. Likewise, the number of
+labels/classes and the sequence window width must match between data
+definition and model definition.</p>
+</div>
 <div class="section" id="generate-synthetic-data-only">
 <h3>Generate synthetic data only<a class="headerlink" href="#generate-synthetic-data-only" title="Permalink to this headline">¶</a></h3>
-<a class="reference internal image-reference" href="_images/seqgra-variants-2.svg"><img alt="seqgra variant - synthetic data only" src="_images/seqgra-variants-2.svg" width="100%" /></a>
+<a class="reference internal image-reference" href="_images/seqgra-variants-s.svg"><img alt="seqgra variant - synthetic data only" src="_images/seqgra-variants-s.svg" width="100%" /></a>
 <p><strong>Command:</strong></p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>seqgra -d DATA_CONFIG_FILE <span class="se">\</span>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>seqgra -d DATA_DEFINITION_FILE <span class="se">\</span>
     -o OUTPUT_DIR
 </pre></div>
 </div>
-<p><strong>Generated files and folders:</strong></p>
+<p><strong>Generated folders and files:</strong></p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>{OUTPUT_DIR}
 +-- input
     +-- {GRAMMAR ID}
+        |-- motif-ess-matrix.pdf
+        |-- motif-ess-matrix.txt
+        |-- motif-ess-se1-violin.pdf
+        |-- motif-ess-se2-violin.pdf
+        |-- motif-ess-statistics.txt
+        |-- motif-info.txt
+        |-- motif-kld-matrix.pdf
+        |-- motif-kld-matrix.txt
+        |-- motif-kld-se1-violin.pdf
+        |-- motif-kld-se2-violin.pdf
+        |-- motif-kld-statistics.txt
         |-- session-info.txt
+        |-- test.txt
+        |-- test-annotation.txt
+        |-- test-grammar-heatmap.txt
+        |-- test-grammar-heatmap.pdf
         |-- training.txt
         |-- training-annotation.txt
         |-- training-grammar-heatmap.txt
@@ -275,13 +320,492 @@ integrated-gradients) on 50 test set examples per label</p></li>
         |-- validation.txt
         |-- validation-annotation.txt
         |-- validation-grammar-heatmap.txt
-        |-- validation-grammar-heatmap.pdf
-        |-- test.txt
-        |-- test-annotation.txt
-        |-- test-grammar-heatmap.txt
-        +-- test-grammar-heatmap.pdf
+        +-- validation-grammar-heatmap.pdf
 </pre></div>
 </div>
+<p><strong>Pre-existing folders and files:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">DATA_DEFINITION_FILE</span></code></p></li>
+</ul>
+</div>
+<div class="section" id="generate-synthetic-data-and-train-model-on-it">
+<h3>Generate synthetic data and train model on it<a class="headerlink" href="#generate-synthetic-data-and-train-model-on-it" title="Permalink to this headline">¶</a></h3>
+<a class="reference internal image-reference" href="_images/seqgra-variants-sl.svg"><img alt="seqgra variant - generate synthetic data, train model on it" src="_images/seqgra-variants-sl.svg" width="100%" /></a>
+<p><strong>Command:</strong></p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>seqgra -d DATA_DEFINITION_FILE <span class="se">\</span>
+    -m MODEL_DEFINITION_FILE <span class="se">\</span>
+    -o OUTPUT_DIR
+</pre></div>
+</div>
+<p><strong>Generated folders and files:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>{OUTPUT_DIR}
+|-- input
+|   +-- {GRAMMAR ID}
+|       |-- motif-ess-matrix.pdf
+|       |-- motif-ess-matrix.txt
+|       |-- motif-ess-se1-violin.pdf
+|       |-- motif-ess-se2-violin.pdf
+|       |-- motif-ess-statistics.txt
+|       |-- motif-info.txt
+|       |-- motif-kld-matrix.pdf
+|       |-- motif-kld-matrix.txt
+|       |-- motif-kld-se1-violin.pdf
+|       |-- motif-kld-se2-violin.pdf
+|       |-- motif-kld-statistics.txt
+|       |-- session-info.txt
+|       |-- test.txt
+|       |-- test-annotation.txt
+|       |-- test-grammar-heatmap.txt
+|       |-- test-grammar-heatmap.pdf
+|       |-- training.txt
+|       |-- training-annotation.txt
+|       |-- training-grammar-heatmap.txt
+|       |-- training-grammar-heatmap.pdf
+|       |-- validation.txt
+|       |-- validation-annotation.txt
+|       |-- validation-grammar-heatmap.txt
+|       +-- validation-grammar-heatmap.pdf
++-- models
+    +-- {GRAMMAR ID}
+        +-- {MODEL ID}
+            |-- last-epoch-completed.txt
+            |-- num-model-parameters.txt
+            |-- saved_model†
+            +-- session-info.txt
+</pre></div>
+</div>
+<p><strong>Pre-existing folders and files:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">DATA_DEFINITION_FILE</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MODEL_DEFINITION_FILE</span></code></p></li>
+</ul>
+</div>
+<div class="section" id="train-model-on-previously-synthesized-data">
+<h3>Train model on previously synthesized data<a class="headerlink" href="#train-model-on-previously-synthesized-data" title="Permalink to this headline">¶</a></h3>
+<a class="reference internal image-reference" href="_images/seqgra-variants-l.svg"><img alt="seqgra variant - train model on previously synthesized data" src="_images/seqgra-variants-l.svg" width="100%" /></a>
+<p><strong>Command:</strong></p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>seqgra -d DATA_DEFINITION_FILE <span class="se">\</span>
+    -m MODEL_DEFINITION_FILE <span class="se">\</span>
+    -o OUTPUT_DIR
+</pre></div>
+</div>
+<p><strong>Generated folders and files:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>{OUTPUT_DIR}
++-- models
+    +-- {GRAMMAR ID}
+        +-- {MODEL ID}
+            |-- last-epoch-completed.txt
+            |-- num-model-parameters.txt
+            |-- saved_model†
+            +-- session-info.txt
+</pre></div>
+</div>
+<p><strong>Pre-existing folders and files:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">DATA_DEFINITION_FILE</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MODEL_DEFINITION_FILE</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">{OUTPUT_DIR}/input/{GRAMMAR</span> <span class="pre">ID}/*</span></code></p></li>
+</ul>
+</div>
+<div class="section" id="train-model-on-experimental-or-externally-synthesized-data">
+<h3>Train model on experimental or externally synthesized data<a class="headerlink" href="#train-model-on-experimental-or-externally-synthesized-data" title="Permalink to this headline">¶</a></h3>
+<a class="reference internal image-reference" href="_images/seqgra-variants-el.svg"><img alt="seqgra variant - train model on experimental data" src="_images/seqgra-variants-el.svg" width="100%" /></a>
+<p><strong>Command:</strong></p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>seqgra -f DATA_FOLDER <span class="se">\</span>
+    -m MODEL_DEFINITION_FILE <span class="se">\</span>
+    -o OUTPUT_DIR
+</pre></div>
+</div>
+<p>where experimental or externally synthesized data is in the
+<code class="docutils literal notranslate"><span class="pre">{OUTPUT_DIR}/input/{DATA_FOLDER}</span></code> folder.</p>
+<p><strong>Generated folders and files:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>{OUTPUT_DIR}
++-- models
+    +-- {DATA_FOLDER}
+        +-- {MODEL ID}
+            |-- last-epoch-completed.txt
+            |-- num-model-parameters.txt
+            |-- saved_model†
+            +-- session-info.txt
+</pre></div>
+</div>
+<p><strong>Pre-existing folders and files:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">MODEL_DEFINITION_FILE</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">{OUTPUT_DIR}/input/{DATA_FOLDER}/test.txt</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">{OUTPUT_DIR}/input/{DATA_FOLDER}/test-annotation.txt</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">{OUTPUT_DIR}/input/{DATA_FOLDER}/training.txt</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">{OUTPUT_DIR}/input/{DATA_FOLDER}/training-annotation.txt</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">{OUTPUT_DIR}/input/{DATA_FOLDER}/validation.txt</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">{OUTPUT_DIR}/input/{DATA_FOLDER}/validation-annotation.txt</span></code></p></li>
+</ul>
+</div>
+<div class="section" id="run-metrics-predict-roc-and-pr-evaluators-on-model-that-was-previously-trained-on-synthesized-data">
+<h3>Run <code class="docutils literal notranslate"><span class="pre">metrics</span></code>, <code class="docutils literal notranslate"><span class="pre">predict</span></code>, <code class="docutils literal notranslate"><span class="pre">roc</span></code>, and <code class="docutils literal notranslate"><span class="pre">pr</span></code> evaluators on model that was previously trained on synthesized data<a class="headerlink" href="#run-metrics-predict-roc-and-pr-evaluators-on-model-that-was-previously-trained-on-synthesized-data" title="Permalink to this headline">¶</a></h3>
+<a class="reference internal image-reference" href="_images/seqgra-variants-e.svg"><img alt="seqgra variant - conventional evaluators" src="_images/seqgra-variants-e.svg" width="100%" /></a>
+<p><strong>Command:</strong></p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>seqgra -d DATA_DEFINITION_FILE <span class="se">\</span>
+    -m MODEL_DEFINITION_FILE <span class="se">\</span>
+    -e metrics predict roc pr <span class="se">\</span>
+    -o OUTPUT_DIR
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>the <code class="docutils literal notranslate"><span class="pre">-e</span></code> argument is used to specify a list of evaluators
+by their IDs (see <a class="reference internal" href="slec.html"><span class="doc">Simulators, Learners, Evaluators, Comparators</span></a> for a table of all evaluator IDs)</p></li>
+</ul>
+</div>
+<p><strong>Generated folders and files:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>{OUTPUT_DIR}
++-- evaluation
+    +-- {GRAMMAR ID}
+        +-- {MODEL ID}
+            |-- metrics
+            |   +-- test-metrics.txt
+            |-- pr
+            |   +-- test-pr-curve.pdf
+            |-- predict
+            |   +-- test-y-hat.txt
+            +-- roc
+                +-- test-roc-curve.pdf
+</pre></div>
+</div>
+<p><strong>Pre-existing folders and files:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">DATA_DEFINITION_FILE</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MODEL_DEFINITION_FILE</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">{OUTPUT_DIR}/input/{GRAMMAR</span> <span class="pre">ID}/*</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">{OUTPUT_DIR}/models/{GRAMMAR</span> <span class="pre">ID}/{MODEL</span> <span class="pre">ID}/*</span></code></p></li>
+</ul>
+</div>
+<div class="section" id="run-sis-evaluator-on-model-that-was-previously-trained-on-experimental-data">
+<h3>Run SIS evaluator on model that was previously trained on experimental data<a class="headerlink" href="#run-sis-evaluator-on-model-that-was-previously-trained-on-experimental-data" title="Permalink to this headline">¶</a></h3>
+<a class="reference internal image-reference" href="_images/seqgra-variants-sis.svg"><img alt="seqgra variant - SIS evaluator" src="_images/seqgra-variants-sis.svg" width="100%" /></a>
+<p><strong>Command:</strong></p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>seqgra -f DATA_FOLDER <span class="se">\</span>
+    -m MODEL_DEFINITION_FILE <span class="se">\</span>
+    -e sis <span class="se">\</span>
+    -o OUTPUT_DIR <span class="se">\</span>
+    --eval-n-per-label <span class="m">30</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>the <code class="docutils literal notranslate"><span class="pre">-e</span></code> argument is used to specify a list of evaluators
+by their IDs (see <a class="reference internal" href="slec.html"><span class="doc">Simulators, Learners, Evaluators, Comparators</span></a> for a table of all evaluator IDs)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--eval-n-per-label</span> <span class="pre">30</span></code> restricts the number of examples that are
+evaluated with SIS to 30 per label. Otherwise sufficient input subsets
+will be identified for all examples in the test set, which might take a
+long time.</p></li>
+</ul>
+</div>
+<p><strong>Generated folders and files:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>{OUTPUT_DIR}
++-- evaluation
+    +-- {DATA_FOLDER}
+        +-- {MODEL ID}
+            +-- sis
+                |-- test-df.txt
+                |-- test-grammar-agreement-thresholded.pdf
+                |-- test-grammar-agreement-thresholded-df.txt
+                +-- test-statistics-thresholded.txt
+</pre></div>
+</div>
+<p><strong>Pre-existing folders and files:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">MODEL_DEFINITION_FILE</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">{OUTPUT_DIR}/input/{DATA_FOLDER}/test.txt</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">{OUTPUT_DIR}/input/{DATA_FOLDER}/test-annotation.txt</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">{OUTPUT_DIR}/input/{DATA_FOLDER}/training.txt</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">{OUTPUT_DIR}/input/{DATA_FOLDER}/training-annotation.txt</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">{OUTPUT_DIR}/input/{DATA_FOLDER}/validation.txt</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">{OUTPUT_DIR}/input/{DATA_FOLDER}/validation-annotation.txt</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">{OUTPUT_DIR}/models/{DATA_FOLDER}/{MODEL</span> <span class="pre">ID}/*</span></code></p></li>
+</ul>
+</div>
+<div class="section" id="generate-synthetic-data-train-model-on-it-and-evaluate-model-using-various-gradient-based-feature-importance-evaluators">
+<h3>Generate synthetic data, train model on it, and evaluate model using various gradient-based feature importance evaluators<a class="headerlink" href="#generate-synthetic-data-train-model-on-it-and-evaluate-model-using-various-gradient-based-feature-importance-evaluators" title="Permalink to this headline">¶</a></h3>
+<a class="reference internal image-reference" href="_images/seqgra-variants-slfie.svg"><img alt="seqgra variant - FIE evaluators" src="_images/seqgra-variants-slfie.svg" width="100%" /></a>
+<p><strong>Command:</strong></p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>seqgra -d DATA_DEFINITION_FILE <span class="se">\</span>
+    -m MODEL_DEFINITION_FILE <span class="se">\</span>
+    -e gradient gradient-x-input integrated-gradients saliency <span class="se">\</span>
+    -o OUTPUT_DIR <span class="se">\</span>
+    --eval-sets validation <span class="nb">test</span> <span class="se">\</span>
+    --eval-n-per-label <span class="m">500</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>the <code class="docutils literal notranslate"><span class="pre">-e</span></code> argument is used to specify a list of evaluators
+by their IDs (see <a class="reference internal" href="slec.html"><span class="doc">Simulators, Learners, Evaluators, Comparators</span></a> for a table of all evaluator IDs)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--eval-sets</span></code> selects training, validation or test set for evaluation.
+Here we run evaluators on both validation and test set examples,
+default value is test set only.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--eval-n-per-label</span></code> restricts the number of examples that
+the evaluators see. Here we evaluate 500 randomly select examples
+per label.</p></li>
+</ul>
+</div>
+<p><strong>Generated folders and files:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>{OUTPUT_DIR}
+|-- input
+|   +-- {GRAMMAR ID}
+|       |-- motif-ess-matrix.pdf
+|       |-- motif-ess-matrix.txt
+|       |-- motif-ess-se1-violin.pdf
+|       |-- motif-ess-se2-violin.pdf
+|       |-- motif-ess-statistics.txt
+|       |-- motif-info.txt
+|       |-- motif-kld-matrix.pdf
+|       |-- motif-kld-matrix.txt
+|       |-- motif-kld-se1-violin.pdf
+|       |-- motif-kld-se2-violin.pdf
+|       |-- motif-kld-statistics.txt
+|       |-- session-info.txt
+|       |-- test.txt
+|       |-- test-annotation.txt
+|       |-- test-grammar-heatmap.txt
+|       |-- test-grammar-heatmap.pdf
+|       |-- training.txt
+|       |-- training-annotation.txt
+|       |-- training-grammar-heatmap.txt
+|       |-- training-grammar-heatmap.pdf
+|       |-- validation.txt
+|       |-- validation-annotation.txt
+|       |-- validation-grammar-heatmap.txt
+|       +-- validation-grammar-heatmap.pdf
+|-- models
+|   +-- {GRAMMAR ID}
+|       +-- {MODEL ID}
+|           |-- last-epoch-completed.txt
+|           |-- num-model-parameters.txt
+|           |-- saved_model†
+|           +-- session-info.txt
++-- evaluation
+    +-- {GRAMMAR ID}
+        +-- {MODEL ID}
+            |-- gradient
+            |   |-- test-df.txt
+            |   |-- test-feature-importance-matrix.npy
+            |   |-- test-grammar-agreement.pdf
+            |   |-- test-grammar-agreement-df.txt
+            |   |-- test-grammar-agreement-thresholded.pdf
+            |   |-- test-grammar-agreement-thresholded-df.txt
+            |   |-- test-statistics.txt
+            |   |-- test-statistics-thresholded.txt
+            |   |-- validation-df.txt
+            |   |-- validation-feature-importance-matrix.npy
+            |   |-- validation-grammar-agreement.pdf
+            |   |-- validation-grammar-agreement-df.txt
+            |   |-- validation-grammar-agreement-thresholded.pdf
+            |   |-- validation-grammar-agreement-thresholded-df.txt
+            |   |-- validation-statistics.txt
+            |   +-- validation-statistics-thresholded.txt
+            |-- gradient-x-input
+            |   |-- test-df.txt
+            |   |-- test-feature-importance-matrix.npy
+            |   |-- test-grammar-agreement.pdf
+            |   |-- test-grammar-agreement-df.txt
+            |   |-- test-grammar-agreement-thresholded.pdf
+            |   |-- test-grammar-agreement-thresholded-df.txt
+            |   |-- test-statistics.txt
+            |   |-- test-statistics-thresholded.txt
+            |   |-- validation-df.txt
+            |   |-- validation-feature-importance-matrix.npy
+            |   |-- validation-grammar-agreement.pdf
+            |   |-- validation-grammar-agreement-df.txt
+            |   |-- validation-grammar-agreement-thresholded.pdf
+            |   |-- validation-grammar-agreement-thresholded-df.txt
+            |   |-- validation-statistics.txt
+            |   +-- validation-statistics-thresholded.txt
+            |-- integrated-gradients
+            |   |-- test-df.txt
+            |   |-- test-feature-importance-matrix.npy
+            |   |-- test-grammar-agreement.pdf
+            |   |-- test-grammar-agreement-df.txt
+            |   |-- test-grammar-agreement-thresholded.pdf
+            |   |-- test-grammar-agreement-thresholded-df.txt
+            |   |-- test-statistics.txt
+            |   |-- test-statistics-thresholded.txt
+            |   |-- validation-df.txt
+            |   |-- validation-feature-importance-matrix.npy
+            |   |-- validation-grammar-agreement.pdf
+            |   |-- validation-grammar-agreement-df.txt
+            |   |-- validation-grammar-agreement-thresholded.pdf
+            |   |-- validation-grammar-agreement-thresholded-df.txt
+            |   |-- validation-statistics.txt
+            |   +-- validation-statistics-thresholded.txt
+            +-- saliency
+                |-- test-df.txt
+                |-- test-feature-importance-matrix.npy
+                |-- test-grammar-agreement.pdf
+                |-- test-grammar-agreement-df.txt
+                |-- test-grammar-agreement-thresholded.pdf
+                |-- test-grammar-agreement-thresholded-df.txt
+                |-- test-statistics.txt
+                |-- test-statistics-thresholded.txt
+                |-- validation-df.txt
+                |-- validation-feature-importance-matrix.npy
+                |-- validation-grammar-agreement.pdf
+                |-- validation-grammar-agreement-df.txt
+                |-- validation-grammar-agreement-thresholded.pdf
+                |-- validation-grammar-agreement-thresholded-df.txt
+                |-- validation-statistics.txt
+                +-- validation-statistics-thresholded.txt
+</pre></div>
+</div>
+<p><strong>Pre-existing folders and files:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">DATA_DEFINITION_FILE</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MODEL_DEFINITION_FILE</span></code></p></li>
+</ul>
+</div>
+<div class="section" id="summarize-results-across-multiple-grammars-using-comparators-roc-and-pr">
+<h3>Summarize results across multiple grammars using comparators <code class="docutils literal notranslate"><span class="pre">roc</span></code> and <code class="docutils literal notranslate"><span class="pre">pr</span></code><a class="headerlink" href="#summarize-results-across-multiple-grammars-using-comparators-roc-and-pr" title="Permalink to this headline">¶</a></h3>
+<a class="reference internal image-reference" href="_images/seqgra-variants-seqgras.svg"><img alt="seqgra variant - seqgras ROC, PR" src="_images/seqgra-variants-seqgras.svg" width="100%" /></a>
+<p><strong>Command:</strong></p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>seqgras -a sim-basic-mc2-tf-mc2-dna1000-conv10-fc5 <span class="se">\</span>
+    -c roc pr <span class="se">\</span>
+    -o data <span class="se">\</span>
+    -g mc2-dna1000-homer-10k-s1 mc2-dna1000-homer-20k-s1 mc2-dna1000-homer-30k-s1 <span class="se">\</span>
+        mc2-dna1000-homer-40k-s1 mc2-dna1000-homer-50k-s1 mc2-dna1000-homer-60k-s1 <span class="se">\</span>
+        mc2-dna1000-homer-70k-s1 mc2-dna1000-homer-80k-s1 mc2-dna1000-homer-90k-s1 <span class="se">\</span>
+        mc2-dna1000-homer-100k-s1 mc2-dna1000-homer-110k-s1 mc2-dna1000-homer-120k-s1 <span class="se">\</span>
+        mc2-dna1000-homer-130k-s1 mc2-dna1000-homer-140k-s1 mc2-dna1000-homer-150k-s1 <span class="se">\</span>
+        mc2-dna1000-homer-200k-s1 mc2-dna1000-homer-500k-s1 mc2-dna1000-homer-1000k-s1 <span class="se">\</span>
+        mc2-dna1000-homer-2000k-s1 <span class="se">\</span>
+    -m tf-mc2-dna1000-conv10-fc5 <span class="se">\</span>
+    -l <span class="s1">&#39;10,000 examples&#39;</span> <span class="s1">&#39;20,000 examples&#39;</span> <span class="s1">&#39;30,000 examples&#39;</span> <span class="s1">&#39;40,000 examples&#39;</span> <span class="se">\</span>
+        <span class="s1">&#39;50,000 examples&#39;</span> <span class="s1">&#39;60,000 examples&#39;</span> <span class="s1">&#39;70,000 examples&#39;</span> <span class="s1">&#39;80,000 examples&#39;</span> <span class="se">\</span>
+        <span class="s1">&#39;90,000 examples&#39;</span> <span class="s1">&#39;100,000 examples&#39;</span> <span class="s1">&#39;110,000 examples&#39;</span> <span class="s1">&#39;120,000 examples&#39;</span> <span class="se">\</span>
+        <span class="s1">&#39;130,000 examples&#39;</span> <span class="s1">&#39;140,000 examples&#39;</span> <span class="s1">&#39;150,000 examples&#39;</span> <span class="s1">&#39;200,000 examples&#39;</span> <span class="se">\</span>
+        <span class="s1">&#39;500,000 examples&#39;</span> <span class="s1">&#39;1,000,000 examples&#39;</span> <span class="s1">&#39;2,000,000 examples&#39;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>the <code class="docutils literal notranslate"><span class="pre">-c</span></code> argument is used to specify a list of comparators
+by their IDs (see <a class="reference internal" href="slec.html"><span class="doc">Simulators, Learners, Evaluators, Comparators</span></a> for a table of all comparator IDs)</p></li>
+<li><p>the <code class="docutils literal notranslate"><span class="pre">-g</span></code> argument is used to specify all grammar IDs / data folders</p></li>
+<li><p>the <code class="docutils literal notranslate"><span class="pre">-m</span></code> argument is used to specify all model IDs</p></li>
+<li><p>the <code class="docutils literal notranslate"><span class="pre">-l</span></code> argument is used to label the curves for ROC/PR comparators</p></li>
+</ul>
+</div>
+<p><strong>Generated folders and files:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>{OUTPUT_DIR}
++-- model-comparisons
+    +-- sim-basic-mc2-tf-mc2-dna1000-conv10-fc5
+        |-- test-pr-curve.pdf
+        +-- test-roc-curve.pdf
+</pre></div>
+</div>
+<p><strong>Pre-existing folders and files:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">{OUTPUT_DIR}/input/{mc2-dna1000-homer-10k}/*</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">{OUTPUT_DIR}/models/{mc2-dna1000-homer-10k}/{tf-mc2-dna1000-conv10-fc5}/*</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">{OUTPUT_DIR}/evaluation/{mc2-dna1000-homer-10k}/{tf-mc2-dna1000-conv10-fc5}/*</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">{OUTPUT_DIR}/input/{mc2-dna1000-homer-20k}/*</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">{OUTPUT_DIR}/models/{mc2-dna1000-homer-20k}/{tf-mc2-dna1000-conv10-fc5}/*</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">{OUTPUT_DIR}/evaluation/{mc2-dna1000-homer-20k}/{tf-mc2-dna1000-conv10-fc5}/*</span></code></p></li>
+<li><p>…</p></li>
+</ul>
+</div>
+<div class="section" id="summarize-results-across-multiple-grammars-using-comparators-table-curve-table-and-fi-eval-table">
+<h3>Summarize results across multiple grammars using comparators <code class="docutils literal notranslate"><span class="pre">table</span></code>, <code class="docutils literal notranslate"><span class="pre">curve-table</span></code>, and <code class="docutils literal notranslate"><span class="pre">fi-eval-table</span></code><a class="headerlink" href="#summarize-results-across-multiple-grammars-using-comparators-table-curve-table-and-fi-eval-table" title="Permalink to this headline">¶</a></h3>
+<a class="reference internal image-reference" href="_images/seqgra-variants-seqgras.svg"><img alt="seqgra variant - seqgras Table/Curve-Table/FIE-Table" src="_images/seqgra-variants-seqgras.svg" width="100%" /></a>
+<p><strong>Command:</strong></p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>seqgras -a sim-basic-mc10-interaction-spacing-torch-mc10-dna1000-conv10w-gmp-fc10
+    -c table curve-table <span class="k">fi</span>-eval-table
+    -o data
+    -g mc10-dna1000-homer-interaction-spacing-10k <span class="se">\</span>
+        mc10-dna1000-homer-interaction-spacing-10k-1 <span class="se">\</span>
+        mc10-dna1000-homer-interaction-spacing-10k-2 <span class="se">\</span>
+        mc10-dna1000-homer-interaction-spacing-10k-3 <span class="se">\</span>
+        mc10-dna1000-homer-interaction-spacing-10k-4 <span class="se">\</span>
+        mc10-dna1000-homer-interaction-spacing-20k <span class="se">\</span>
+        mc10-dna1000-homer-interaction-spacing-20k-1 <span class="se">\</span>
+        mc10-dna1000-homer-interaction-spacing-20k-2 <span class="se">\</span>
+        mc10-dna1000-homer-interaction-spacing-20k-3 <span class="se">\</span>
+        mc10-dna1000-homer-interaction-spacing-20k-4 <span class="se">\</span>
+        mc10-dna1000-homer-interaction-spacing-30k <span class="se">\</span>
+        mc10-dna1000-homer-interaction-spacing-30k-1 <span class="se">\</span>
+        mc10-dna1000-homer-interaction-spacing-30k-2 <span class="se">\</span>
+        mc10-dna1000-homer-interaction-spacing-30k-3 <span class="se">\</span>
+        mc10-dna1000-homer-interaction-spacing-30k-4 <span class="se">\</span>
+        mc10-dna1000-homer-interaction-spacing-40k <span class="se">\</span>
+        mc10-dna1000-homer-interaction-spacing-40k-1 <span class="se">\</span>
+        mc10-dna1000-homer-interaction-spacing-40k-2 <span class="se">\</span>
+        mc10-dna1000-homer-interaction-spacing-40k-3 <span class="se">\</span>
+        mc10-dna1000-homer-interaction-spacing-40k-4 <span class="se">\</span>
+        mc10-dna1000-homer-interaction-spacing-50k <span class="se">\</span>
+        mc10-dna1000-homer-interaction-spacing-50k-1 <span class="se">\</span>
+        mc10-dna1000-homer-interaction-spacing-50k-2 <span class="se">\</span>
+        mc10-dna1000-homer-interaction-spacing-50k-3 <span class="se">\</span>
+        mc10-dna1000-homer-interaction-spacing-50k-4 <span class="se">\</span>
+        mc10-dna1000-homer-interaction-spacing-60k <span class="se">\</span>
+        mc10-dna1000-homer-interaction-spacing-60k-1 <span class="se">\</span>
+        mc10-dna1000-homer-interaction-spacing-60k-2 <span class="se">\</span>
+        mc10-dna1000-homer-interaction-spacing-60k-3 <span class="se">\</span>
+        mc10-dna1000-homer-interaction-spacing-60k-4 <span class="se">\</span>
+        mc10-dna1000-homer-interaction-spacing-70k <span class="se">\</span>
+        mc10-dna1000-homer-interaction-spacing-70k-1 <span class="se">\</span>
+        mc10-dna1000-homer-interaction-spacing-70k-2 <span class="se">\</span>
+        mc10-dna1000-homer-interaction-spacing-70k-3 <span class="se">\</span>
+        mc10-dna1000-homer-interaction-spacing-70k-4 <span class="se">\</span>
+        mc10-dna1000-homer-interaction-spacing-80k <span class="se">\</span>
+        mc10-dna1000-homer-interaction-spacing-80k-1 <span class="se">\</span>
+        mc10-dna1000-homer-interaction-spacing-80k-2 <span class="se">\</span>
+        mc10-dna1000-homer-interaction-spacing-80k-3 <span class="se">\</span>
+        mc10-dna1000-homer-interaction-spacing-80k-4 <span class="se">\</span>
+        mc10-dna1000-homer-interaction-spacing-90k <span class="se">\</span>
+        mc10-dna1000-homer-interaction-spacing-90k-1 <span class="se">\</span>
+        mc10-dna1000-homer-interaction-spacing-90k-2 <span class="se">\</span>
+        mc10-dna1000-homer-interaction-spacing-90k-3 <span class="se">\</span>
+        mc10-dna1000-homer-interaction-spacing-90k-4 <span class="se">\</span>
+        mc10-dna1000-homer-interaction-spacing-100k <span class="se">\</span>
+        mc10-dna1000-homer-interaction-spacing-100k-1 <span class="se">\</span>
+        mc10-dna1000-homer-interaction-spacing-100k-2 <span class="se">\</span>
+        mc10-dna1000-homer-interaction-spacing-100k-3 <span class="se">\</span>
+        mc10-dna1000-homer-interaction-spacing-100k-4 <span class="se">\</span>
+    -m torch-mc10-dna1000-conv10w-gmp-fc10
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>the <code class="docutils literal notranslate"><span class="pre">-c</span></code> argument is used to specify a list of comparators
+by their IDs (see <a class="reference internal" href="slec.html"><span class="doc">Simulators, Learners, Evaluators, Comparators</span></a> for a table of all comparator IDs)</p></li>
+<li><p>the <code class="docutils literal notranslate"><span class="pre">-g</span></code> argument is used to specify all grammar IDs / data folders</p></li>
+<li><p>the <code class="docutils literal notranslate"><span class="pre">-m</span></code> argument is used to specify all model IDs</p></li>
+<li><p>the <code class="docutils literal notranslate"><span class="pre">-l</span></code> argument is used to label the curves for ROC/PR comparators</p></li>
+</ul>
+</div>
+<p><strong>Generated folders and files:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>{OUTPUT_DIR}
++-- model-comparisons
+    +-- sim-basic-mc10-interaction-spacing-torch-mc10-dna1000-conv10w-gmp-fc10
+        |-- curve-table.txt
+        |-- fie-table.txt
+        +-- table.txt
+</pre></div>
+</div>
+<p><strong>Pre-existing folders and files:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">{OUTPUT_DIR}/input/{mc10-dna1000-homer-interaction-spacing-10k}/*</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">{OUTPUT_DIR}/models/{mc10-dna1000-homer-interaction-spacing-10k}/{torch-mc10-dna1000-conv10w-gmp-fc10}/*</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">{OUTPUT_DIR}/evaluation/{mc10-dna1000-homer-interaction-spacing-10k}/{torch-mc10-dna1000-conv10w-gmp-fc10}/*</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">{OUTPUT_DIR}/input/{mc10-dna1000-homer-interaction-spacing-10k-1}/*</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">{OUTPUT_DIR}/models/{mc10-dna1000-homer-interaction-spacing-10k-1}/{torch-mc10-dna1000-conv10w-gmp-fc10}/*</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">{OUTPUT_DIR}/evaluation/{mc10-dna1000-homer-interaction-spacing-10k-1}/{torch-mc10-dna1000-conv10w-gmp-fc10}/*</span></code></p></li>
+<li><p>…</p></li>
+</ul>
+<p>† model files are library-dependent</p>
 </div>
 </div>
 </div>

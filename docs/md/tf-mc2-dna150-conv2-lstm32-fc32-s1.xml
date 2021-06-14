@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<seqgramodel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://kkrismer.github.io/seqgra/model-config.xsd">
+	<general id="tf-mc2-dna150-conv2-lstm32-fc32-s1">
+		<name>convolutation layer with 2 filter, LSTM layer with 32 units, fully connected layer with 32 nodes, two conditions</name>
+		<description></description>
+		<task>multi-class classification</task>
+		<sequencespace>DNA</sequencespace>
+		<library>TensorFlow</library>
+		<labels>
+			<label>c1</label>
+			<label>c2</label>
+		</labels>
+		<seed>1</seed>
+	</general>
+	<architecture>
+		<sequential>
+			<operation input_shape="(150, 4)" kernel_size="5" filters="2" activation="relu" padding="same">Conv1D</operation>
+			<operation target_shape="(150, 2)">Reshape</operation>
+			<operation units="32">LSTM</operation>
+			<operation units="32" activation="relu">Dense</operation>
+			<operation units="2" activation="softmax">Dense</operation>
+		</sequential>
+	</architecture>
+	<loss>
+		<hyperparameter name="loss">categorical_crossentropy</hyperparameter>
+	</loss>
+	<optimizer>
+		<hyperparameter name="optimizer">Adam</hyperparameter>
+		<hyperparameter name="learning_rate">0.001</hyperparameter>
+	</optimizer>
+	<trainingprocess>
+		<hyperparameter name="batch_size">32</hyperparameter>
+		<hyperparameter name="epochs">100</hyperparameter>
+		<hyperparameter name="early_stopping">True</hyperparameter>
+		<hyperparameter name="shuffle">True</hyperparameter>
+	</trainingprocess>
+</seqgramodel>

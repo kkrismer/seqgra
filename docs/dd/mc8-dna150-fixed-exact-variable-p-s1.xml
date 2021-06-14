@@ -1,0 +1,1209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<seqgradata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://kkrismer.github.io/seqgra/data-config.xsd">
+	<general id="mc8-dna150-fixed-exact-variable-p-s1">
+		<name>grammar level 0</name>
+		<description>eight conditions, one fixed sequence element specific to each, same position, various insertion probabilities</description>
+		<task>multi-class classification</task>
+		<sequencespace>DNA</sequencespace>
+		<seed>1</seed>
+	</general>
+
+	<background>
+		<minlength>150</minlength>
+		<maxlength>150</maxlength>
+		<alphabetdistributions>
+			<alphabetdistribution>
+				<letter probability="0.25">A</letter>
+				<letter probability="0.25">C</letter>
+				<letter probability="0.25">G</letter>
+				<letter probability="0.25">T</letter>
+			</alphabetdistribution>
+		</alphabetdistributions>
+	</background>
+
+	<datageneration>
+		<sets>
+			<set name="training">
+				<example samples="10000">
+					<conditionref cid="c1"/>
+				</example>
+				<example samples="10000">
+					<conditionref cid="c2"/>
+				</example>
+				<example samples="10000">
+					<conditionref cid="c3"/>
+				</example>
+				<example samples="10000">
+					<conditionref cid="c4"/>
+				</example>
+				<example samples="10000">
+					<conditionref cid="c5"/>
+				</example>
+				<example samples="10000">
+					<conditionref cid="c6"/>
+				</example>
+				<example samples="10000">
+					<conditionref cid="c7"/>
+				</example>
+				<example samples="10000">
+					<conditionref cid="c8"/>
+				</example>
+			</set>
+			<set name="validation">
+				<example samples="1000">
+					<conditionref cid="c1"/>
+				</example>
+				<example samples="1000">
+					<conditionref cid="c2"/>
+				</example>
+				<example samples="1000">
+					<conditionref cid="c3"/>
+				</example>
+				<example samples="1000">
+					<conditionref cid="c4"/>
+				</example>
+				<example samples="1000">
+					<conditionref cid="c5"/>
+				</example>
+				<example samples="1000">
+					<conditionref cid="c6"/>
+				</example>
+				<example samples="1000">
+					<conditionref cid="c7"/>
+				</example>
+				<example samples="1000">
+					<conditionref cid="c8"/>
+				</example>
+			</set>
+			<set name="test">
+				<example samples="5000">
+					<conditionref cid="c1"/>
+				</example>
+				<example samples="5000">
+					<conditionref cid="c2"/>
+				</example>
+				<example samples="5000">
+					<conditionref cid="c3"/>
+				</example>
+				<example samples="5000">
+					<conditionref cid="c4"/>
+				</example>
+				<example samples="5000">
+					<conditionref cid="c5"/>
+				</example>
+				<example samples="5000">
+					<conditionref cid="c6"/>
+				</example>
+				<example samples="5000">
+					<conditionref cid="c7"/>
+				</example>
+				<example samples="5000">
+					<conditionref cid="c8"/>
+				</example>
+			</set>
+		</sets>
+	</datageneration>
+
+	<conditions>
+		<condition id="c1">
+			<label>condition 1 - p = 1.0</label>
+			<description></description>
+			<grammar>
+				<rule>
+					<position>65</position>
+					<probability>1.0</probability>
+					<sequenceelementrefs>
+						<sequenceelementref sid="se1"/>
+					</sequenceelementrefs>
+				</rule>
+			</grammar>
+		</condition>
+		<condition id="c2">
+			<label>condition 2 - p = 0.8</label>
+			<description></description>
+			<grammar>
+				<rule>
+					<position>65</position>
+					<probability>0.8</probability>
+					<sequenceelementrefs>
+						<sequenceelementref sid="se2"/>
+					</sequenceelementrefs>
+				</rule>
+			</grammar>
+		</condition>
+		<condition id="c3">
+			<label>condition 3 - p = 0.6</label>
+			<description></description>
+			<grammar>
+				<rule>
+					<position>65</position>
+					<probability>0.6</probability>
+					<sequenceelementrefs>
+						<sequenceelementref sid="se3"/>
+					</sequenceelementrefs>
+				</rule>
+			</grammar>
+		</condition>
+		<condition id="c4">
+			<label>condition 4 - p = 0.4</label>
+			<description></description>
+			<grammar>
+				<rule>
+					<position>65</position>
+					<probability>0.4</probability>
+					<sequenceelementrefs>
+						<sequenceelementref sid="se4"/>
+					</sequenceelementrefs>
+				</rule>
+			</grammar>
+		</condition>
+		<condition id="c5">
+			<label>condition 5 - p = 0.2</label>
+			<description></description>
+			<grammar>
+				<rule>
+					<position>65</position>
+					<probability>0.2</probability>
+					<sequenceelementrefs>
+						<sequenceelementref sid="se5"/>
+					</sequenceelementrefs>
+				</rule>
+			</grammar>
+		</condition>
+		<condition id="c6">
+			<label>condition 6 - p = 0.1</label>
+			<description></description>
+			<grammar>
+				<rule>
+					<position>65</position>
+					<probability>0.1</probability>
+					<sequenceelementrefs>
+						<sequenceelementref sid="se6"/>
+					</sequenceelementrefs>
+				</rule>
+			</grammar>
+		</condition>
+		<condition id="c7">
+			<label>condition 7 - p = 0.05</label>
+			<description></description>
+			<grammar>
+				<rule>
+					<position>65</position>
+					<probability>0.05</probability>
+					<sequenceelementrefs>
+						<sequenceelementref sid="se7"/>
+					</sequenceelementrefs>
+				</rule>
+			</grammar>
+		</condition>
+		<condition id="c8">
+			<label>condition 8 - p = 0.01</label>
+			<description></description>
+			<grammar>
+				<rule>
+					<position>65</position>
+					<probability>0.01</probability>
+					<sequenceelementrefs>
+						<sequenceelementref sid="se8"/>
+					</sequenceelementrefs>
+				</rule>
+			</grammar>
+		</condition>
+	</conditions>
+
+	<sequenceelements>
+		<sequenceelement id="se1">
+			<matrixbased>
+				<position>
+					<letter probability="1.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="1.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="1.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="1.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="1.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="1.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="1.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="1.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="1.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="1.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="1.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="1.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="1.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="1.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="1.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="1.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="1.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="1.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="1.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="1.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+			</matrixbased>
+		</sequenceelement>
+		<sequenceelement id="se2">
+			<matrixbased>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="1.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="1.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="1.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="1.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="1.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="1.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="1.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="1.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="1.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="1.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="1.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="1.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="1.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="1.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="1.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="1.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="1.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="1.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="1.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="1.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+			</matrixbased>
+		</sequenceelement>
+		<sequenceelement id="se3">
+			<matrixbased>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="1.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="1.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="1.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="1.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="1.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="1.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="1.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="1.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="1.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="1.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="1.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="1.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="1.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="1.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="1.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="1.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="1.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="1.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="1.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="1.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+			</matrixbased>
+		</sequenceelement>
+		<sequenceelement id="se4">
+			<matrixbased>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="1.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="1.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="1.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="1.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="1.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="1.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="1.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="1.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="1.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="1.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="1.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="1.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="1.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="1.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="1.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="1.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="1.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="1.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="1.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="1.0">T</letter>
+				</position>
+			</matrixbased>
+		</sequenceelement>
+		<sequenceelement id="se5">
+			<matrixbased>
+				<position>
+					<letter probability="1.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="1.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="1.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="1.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="1.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="1.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="1.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="1.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="1.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="1.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="1.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="1.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="1.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="1.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="1.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="1.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="1.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="1.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="1.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="1.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+			</matrixbased>
+		</sequenceelement>
+		<sequenceelement id="se6">
+			<matrixbased>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="1.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="1.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="1.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="1.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="1.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="1.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="1.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="1.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="1.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="1.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="1.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="1.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="1.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="1.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="1.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="1.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="1.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="1.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="1.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="1.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+			</matrixbased>
+		</sequenceelement>
+		<sequenceelement id="se7">
+			<matrixbased>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="1.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="1.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="1.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="1.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="1.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="1.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="1.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="1.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="1.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="1.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="1.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="1.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="1.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="1.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="1.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="1.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="1.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="1.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="1.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="1.0">T</letter>
+				</position>
+			</matrixbased>
+		</sequenceelement>
+		<sequenceelement id="se8">
+			<matrixbased>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="1.0">T</letter>
+				</position>
+				<position>
+					<letter probability="1.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="1.0">T</letter>
+				</position>
+				<position>
+					<letter probability="1.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="1.0">T</letter>
+				</position>
+				<position>
+					<letter probability="1.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="1.0">T</letter>
+				</position>
+				<position>
+					<letter probability="1.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="1.0">T</letter>
+				</position>
+				<position>
+					<letter probability="1.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="1.0">T</letter>
+				</position>
+				<position>
+					<letter probability="1.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="1.0">T</letter>
+				</position>
+				<position>
+					<letter probability="1.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="1.0">T</letter>
+				</position>
+				<position>
+					<letter probability="1.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="1.0">T</letter>
+				</position>
+				<position>
+					<letter probability="1.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+				<position>
+					<letter probability="0.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="1.0">T</letter>
+				</position>
+				<position>
+					<letter probability="1.0">A</letter>
+					<letter probability="0.0">C</letter>
+					<letter probability="0.0">G</letter>
+					<letter probability="0.0">T</letter>
+				</position>
+			</matrixbased>
+		</sequenceelement>
+	</sequenceelements>
+</seqgradata>

@@ -1,0 +1,280 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<seqgradata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://kkrismer.github.io/seqgra/data-config.xsd">
+  <general id="mc2-dna1000-homer-500k-s1">
+    <name>default grammar name</name>
+    <description>default grammar description</description>
+    <task>multi-class classification</task>
+    <sequencespace>DNA</sequencespace>
+    <seed>1</seed>
+  </general>
+  <background>
+    <minlength>1000</minlength>
+    <maxlength>1000</maxlength>
+    <alphabetdistributions>
+      <alphabetdistribution>
+        <letter probability="0.29565">A</letter>
+        <letter probability="0.20435">C</letter>
+        <letter probability="0.20435">G</letter>
+        <letter probability="0.29565">T</letter>
+      </alphabetdistribution>
+    </alphabetdistributions>
+  </background>
+  <datageneration>
+    <sets>
+      <set name="training">
+        <example samples="175000">
+          <conditionref cid="c1"/>
+        </example>
+        <example samples="175000">
+          <conditionref cid="c2"/>
+        </example>
+      </set>
+      <set name="validation">
+        <example samples="25000">
+          <conditionref cid="c1"/>
+        </example>
+        <example samples="25000">
+          <conditionref cid="c2"/>
+        </example>
+      </set>
+      <set name="test">
+        <example samples="50000">
+          <conditionref cid="c1"/>
+        </example>
+        <example samples="50000">
+          <conditionref cid="c2"/>
+        </example>
+      </set>
+    </sets>
+  </datageneration>
+  <conditions>
+    <condition id="c1">
+      <label>AGTAAACAAAAAAGAACANA</label>
+      <description>FOXA1:AR(Forkhead,NR)/LNCAP-AR-ChIP-Seq(GSE27824)/Homer</description>
+      <grammar>
+        <rule>
+          <position>random</position>
+          <probability>1.0</probability>
+          <sequenceelementrefs>
+            <sequenceelementref sid="se1"/>
+          </sequenceelementrefs>
+        </rule>
+      </grammar>
+    </condition>
+    <condition id="c2">
+      <label>TYTGACCASWRG</label>
+      <description>Bcl11a(Zf)/HSPC-BCL11A-ChIP-Seq(GSE104676)/Homer</description>
+      <grammar>
+        <rule>
+          <position>random</position>
+          <probability>1.0</probability>
+          <sequenceelementrefs>
+            <sequenceelementref sid="se2"/>
+          </sequenceelementrefs>
+        </rule>
+      </grammar>
+    </condition>
+  </conditions>
+  <sequenceelements>
+    <sequenceelement id="se1">
+      <matrixbased>
+        <position>
+          <letter probability="0.571">A</letter>
+          <letter probability="0.008">C</letter>
+          <letter probability="0.138">G</letter>
+          <letter probability="0.283">T</letter>
+        </position>
+        <position>
+          <letter probability="0.343">A</letter>
+          <letter probability="0.028">C</letter>
+          <letter probability="0.598">G</letter>
+          <letter probability="0.031">T</letter>
+        </position>
+        <position>
+          <letter probability="0.023">A</letter>
+          <letter probability="0.405">C</letter>
+          <letter probability="0.001">G</letter>
+          <letter probability="0.571">T</letter>
+        </position>
+        <position>
+          <letter probability="0.951">A</letter>
+          <letter probability="0.047">C</letter>
+          <letter probability="0.001">G</letter>
+          <letter probability="0.001">T</letter>
+        </position>
+        <position>
+          <letter probability="0.977">A</letter>
+          <letter probability="0.021">C</letter>
+          <letter probability="0.001">G</letter>
+          <letter probability="0.001">T</letter>
+        </position>
+        <position>
+          <letter probability="0.997">A</letter>
+          <letter probability="0.001">C</letter>
+          <letter probability="0.001">G</letter>
+          <letter probability="0.001">T</letter>
+        </position>
+        <position>
+          <letter probability="0.000999000999000999">A</letter>
+          <letter probability="0.6633366633366633">C</letter>
+          <letter probability="0.0029970029970029966">G</letter>
+          <letter probability="0.33266733266733267">T</letter>
+        </position>
+        <position>
+          <letter probability="0.946">A</letter>
+          <letter probability="0.003">C</letter>
+          <letter probability="0.01">G</letter>
+          <letter probability="0.041">T</letter>
+        </position>
+        <position>
+          <letter probability="0.498">A</letter>
+          <letter probability="0.164">C</letter>
+          <letter probability="0.182">G</letter>
+          <letter probability="0.156">T</letter>
+        </position>
+        <position>
+          <letter probability="0.5034965034965035">A</letter>
+          <letter probability="0.16383616383616387">C</letter>
+          <letter probability="0.17682317682317683">G</letter>
+          <letter probability="0.15584415584415587">T</letter>
+        </position>
+        <position>
+          <letter probability="0.509">A</letter>
+          <letter probability="0.166">C</letter>
+          <letter probability="0.179">G</letter>
+          <letter probability="0.146">T</letter>
+        </position>
+        <position>
+          <letter probability="0.6126126126126126">A</letter>
+          <letter probability="0.10710710710710711">C</letter>
+          <letter probability="0.11411411411411412">G</letter>
+          <letter probability="0.16616616616616617">T</letter>
+        </position>
+        <position>
+          <letter probability="0.672">A</letter>
+          <letter probability="0.001">C</letter>
+          <letter probability="0.27">G</letter>
+          <letter probability="0.057">T</letter>
+        </position>
+        <position>
+          <letter probability="0.151">A</letter>
+          <letter probability="0.001">C</letter>
+          <letter probability="0.778">G</letter>
+          <letter probability="0.07">T</letter>
+        </position>
+        <position>
+          <letter probability="0.483">A</letter>
+          <letter probability="0.153">C</letter>
+          <letter probability="0.099">G</letter>
+          <letter probability="0.265">T</letter>
+        </position>
+        <position>
+          <letter probability="0.968">A</letter>
+          <letter probability="0.001">C</letter>
+          <letter probability="0.005">G</letter>
+          <letter probability="0.026">T</letter>
+        </position>
+        <position>
+          <letter probability="0.003">A</letter>
+          <letter probability="0.991">C</letter>
+          <letter probability="0.005">G</letter>
+          <letter probability="0.001">T</letter>
+        </position>
+        <position>
+          <letter probability="0.887">A</letter>
+          <letter probability="0.001">C</letter>
+          <letter probability="0.001">G</letter>
+          <letter probability="0.111">T</letter>
+        </position>
+        <position>
+          <letter probability="0.254">A</letter>
+          <letter probability="0.213">C</letter>
+          <letter probability="0.221">G</letter>
+          <letter probability="0.312">T</letter>
+        </position>
+        <position>
+          <letter probability="0.3533533533533534">A</letter>
+          <letter probability="0.08808808808808809">C</letter>
+          <letter probability="0.23423423423423428">G</letter>
+          <letter probability="0.3243243243243244">T</letter>
+        </position>
+      </matrixbased>
+    </sequenceelement>
+    <sequenceelement id="se2">
+      <matrixbased>
+        <position>
+          <letter probability="0.113">A</letter>
+          <letter probability="0.191">C</letter>
+          <letter probability="0.055">G</letter>
+          <letter probability="0.641">T</letter>
+        </position>
+        <position>
+          <letter probability="0.041">A</letter>
+          <letter probability="0.453">C</letter>
+          <letter probability="0.095">G</letter>
+          <letter probability="0.411">T</letter>
+        </position>
+        <position>
+          <letter probability="0.004">A</letter>
+          <letter probability="0.001">C</letter>
+          <letter probability="0.001">G</letter>
+          <letter probability="0.994">T</letter>
+        </position>
+        <position>
+          <letter probability="0.027000000000000003">A</letter>
+          <letter probability="0.05500000000000001">C</letter>
+          <letter probability="0.8410000000000001">G</letter>
+          <letter probability="0.07700000000000001">T</letter>
+        </position>
+        <position>
+          <letter probability="0.545">A</letter>
+          <letter probability="0.032">C</letter>
+          <letter probability="0.338">G</letter>
+          <letter probability="0.085">T</letter>
+        </position>
+        <position>
+          <letter probability="0.048">A</letter>
+          <letter probability="0.91">C</letter>
+          <letter probability="0.031">G</letter>
+          <letter probability="0.011">T</letter>
+        </position>
+        <position>
+          <letter probability="0.006">A</letter>
+          <letter probability="0.992">C</letter>
+          <letter probability="0.001">G</letter>
+          <letter probability="0.001">T</letter>
+        </position>
+        <position>
+          <letter probability="0.893">A</letter>
+          <letter probability="0.001">C</letter>
+          <letter probability="0.001">G</letter>
+          <letter probability="0.105">T</letter>
+        </position>
+        <position>
+          <letter probability="0.027">A</letter>
+          <letter probability="0.378">C</letter>
+          <letter probability="0.494">G</letter>
+          <letter probability="0.101">T</letter>
+        </position>
+        <position>
+          <letter probability="0.303">A</letter>
+          <letter probability="0.224">C</letter>
+          <letter probability="0.083">G</letter>
+          <letter probability="0.39">T</letter>
+        </position>
+        <position>
+          <letter probability="0.47347347347347346">A</letter>
+          <letter probability="0.016016016016016016">C</letter>
+          <letter probability="0.35735735735735735">G</letter>
+          <letter probability="0.15315315315315314">T</letter>
+        </position>
+        <position>
+          <letter probability="0.12100000000000001">A</letter>
+          <letter probability="0.059000000000000004">C</letter>
+          <letter probability="0.7380000000000001">G</letter>
+          <letter probability="0.08200000000000002">T</letter>
+        </position>
+      </matrixbased>
+    </sequenceelement>
+  </sequenceelements>
+</seqgradata>

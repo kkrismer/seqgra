@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<seqgramodel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://kkrismer.github.io/seqgra/model-config.xsd">
+	<general id="tf-mc10-dna1000-conv10w-conv10w-gmp-fc10-s1">
+		<name>conv layer with 10 21-nt wide filters, conv layer with 10 21-nt wide filters, global max pooling, fully connected layer with 10 units</name>
+		<description></description>
+		<task>multi-class classification</task>
+		<sequencespace>DNA</sequencespace>
+		<library>TensorFlow</library>
+		<labels>
+			<pattern prefix="c" postfix="" min="1" max="10"/>
+		</labels>
+		<seed>1</seed>
+	</general>
+	<architecture>
+		<sequential>
+			<operation input_shape="(1000, 4)" kernel_size="21" filters="10" activation="relu">Conv1D</operation>
+			<operation kernel_size="21" filters="10" activation="relu">Conv1D</operation>
+			<operation>GlobalMaxPool1D</operation>
+			<operation units="10" activation="relu">Dense</operation>
+			<operation units="10" activation="softmax">Dense</operation>
+		</sequential>
+	</architecture>
+	<loss>
+		<hyperparameter name="loss">categorical_crossentropy</hyperparameter>
+	</loss>
+	<optimizer>
+		<hyperparameter name="optimizer">SGD</hyperparameter>
+		<hyperparameter name="learning_rate">0.001</hyperparameter>
+		<hyperparameter name="momentum">0.9</hyperparameter>
+	</optimizer>
+	<trainingprocess>
+		<hyperparameter name="batch_size">32</hyperparameter>
+		<hyperparameter name="epochs">100</hyperparameter>
+		<hyperparameter name="early_stopping">True</hyperparameter>
+		<hyperparameter name="shuffle">True</hyperparameter>
+	</trainingprocess>
+</seqgramodel>

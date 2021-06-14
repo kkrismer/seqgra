@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<seqgramodel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://kkrismer.github.io/seqgra/model-config.xsd">
+	<general id="torch-ml2-dna150-conv10-conv10-fc5-s2">
+		<name>conv layer with 10 11-nt wide filters, conv layer with 10 11-nt wide filters, fully connected layer with 5 units</name>
+		<description></description>
+		<task>multi-label classification</task>
+		<sequencespace>DNA</sequencespace>
+		<library>PyTorch</library>
+		<inputencoding>1D</inputencoding>
+		<labels>
+			<label>c1</label>
+			<label>c2</label>
+		</labels>
+		<seed>2</seed>
+	</general>
+	<architecture>
+		<external format="pytorch-module" classname="TorchModel">PyTorch/o2-dna150-conv10-conv10-fc5.py</external>
+	</architecture>
+	<loss>
+		<hyperparameter name="loss">BCEWithLogitsLoss</hyperparameter>
+	</loss>
+	<optimizer>
+		<hyperparameter name="optimizer">SGD</hyperparameter>
+		<hyperparameter name="learning_rate">0.001</hyperparameter>
+		<hyperparameter name="momentum">0.9</hyperparameter>
+	</optimizer>
+	<trainingprocess>
+		<hyperparameter name="batch_size">32</hyperparameter>
+		<hyperparameter name="epochs">100</hyperparameter>
+		<hyperparameter name="early_stopping">True</hyperparameter>
+		<hyperparameter name="shuffle">True</hyperparameter>
+	</trainingprocess>
+</seqgramodel>

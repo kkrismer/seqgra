@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="seqgramodel">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="general">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="name" type="xs:string"/>
+              <xs:element name="description" type="xs:string"/>
+              <xs:element name="task" type="xs:string"/>
+              <xs:element name="sequencespace" type="xs:string"/>
+              <xs:element name="library" type="xs:string"/>
+              <xs:element name="implementation" type="xs:string" minOccurs="0" maxOccurs="1"/>
+              <xs:element name="inputencoding" minOccurs="0" maxOccurs="1">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:pattern value="1D|2D"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="labels">
+                <xs:complexType>
+                  <xs:choice>
+                    <xs:sequence>
+                      <xs:element name="label" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                    <xs:element name="pattern">
+                      <xs:complexType>
+                        <xs:simpleContent>
+                          <xs:extension base="xs:string">
+                            <xs:attribute name="prefix" type="xs:string" use="optional"/>
+                            <xs:attribute name="postfix" type="xs:string" use="optional"/>
+                            <xs:attribute name="min" type="xs:long" use="optional"/>
+                            <xs:attribute name="max" type="xs:long" use="required"/>
+                          </xs:extension>
+                        </xs:simpleContent>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:choice>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="seed" type="xs:long"/>
+            </xs:sequence>
+            <xs:attribute name="id" use="required">
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:pattern value="[A-Za-z0-9_-]+"/>
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:attribute>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="architecture">
+          <xs:complexType>
+            <xs:choice>
+              <xs:sequence>
+                <xs:element name="sequential" minOccurs="0" maxOccurs="1">
+                  <xs:complexType>
+                    <xs:sequence>
+                      <xs:element name="operation" minOccurs="0" maxOccurs="unbounded">
+                        <xs:complexType>
+                          <xs:simpleContent>
+                            <xs:extension base="xs:string">
+                              <xs:anyAttribute processContents="lax"/>
+                            </xs:extension>
+                          </xs:simpleContent>
+                        </xs:complexType>
+                      </xs:element>
+                    </xs:sequence>
+                  </xs:complexType>
+                </xs:element>
+                <xs:element name="hyperparameters" type="hyperparametersType" minOccurs="0" maxOccurs="1"/>
+              </xs:sequence>
+              <xs:element name="external">
+                <xs:complexType>
+                  <xs:simpleContent>
+                    <xs:extension base="xs:string">
+                      <xs:attribute name="format" type="xs:string" use="required"/>
+                      <xs:attribute name="classname" type="xs:string" use="optional"/>
+                    </xs:extension>
+                  </xs:simpleContent>
+                </xs:complexType>
+              </xs:element>
+            </xs:choice>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="loss" type="hyperparametersType" minOccurs="0" maxOccurs="1"/>
+        <xs:element name="optimizer" type="hyperparametersType" minOccurs="0" maxOccurs="1"/>
+        <xs:element name="trainingprocess" type="hyperparametersType" minOccurs="0" maxOccurs="1"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:complexType name="hyperparametersType">
+    <xs:sequence>
+      <xs:element name="hyperparameter" minOccurs="0" maxOccurs="unbounded">
+        <xs:complexType>
+          <xs:simpleContent>
+            <xs:extension base="xs:string">
+              <xs:attribute name="name" type="xs:string" use="required"/>
+            </xs:extension>
+          </xs:simpleContent>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

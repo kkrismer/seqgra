@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:simpleType name="setType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="training" />
+      <xs:enumeration value="validation" />
+      <xs:enumeration value="test" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:element name="seqgradata">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="general" type="generalType"/>
+        <xs:element name="background" type="backgroundType"/>
+        <xs:element name="datageneration" type="datagenerationType"/>
+        <xs:element name="conditions" type="conditionsType"/>
+        <xs:element name="sequenceelements" type="sequenceelementsType"/>
+      </xs:sequence>
+    </xs:complexType>
+    <xs:key name="setKey">
+      <xs:selector xpath="./datageneration/sets/set"/>
+      <xs:field xpath="@name"/>
+    </xs:key>
+    <xs:key name="conditionKey">
+      <xs:selector xpath="./conditions/condition"/>
+      <xs:field xpath="@id"/>
+    </xs:key>
+    <xs:key name="sequenceelementKey">
+      <xs:selector xpath="./sequenceelements/sequenceelement"/>
+      <xs:field xpath="@id"/>
+    </xs:key>
+    <xs:keyref name="alphabetdistributionSetRef" refer="setKey">
+      <xs:selector xpath="./background/alphabetdistributions/alphabetdistribution"/>
+      <xs:field xpath="@setname"/>
+    </xs:keyref>
+    <xs:keyref name="alphabetdistributionConditionRef" refer="conditionKey">
+      <xs:selector xpath="./background/alphabetdistributions/alphabetdistribution"/>
+      <xs:field xpath="@cid"/>
+    </xs:keyref>
+    <xs:keyref name="datagenerationConditionRef" refer="conditionKey">
+      <xs:selector xpath="./datageneration/example/conditionref"/>
+      <xs:field xpath="@cid"/>
+    </xs:keyref>
+    <xs:keyref name="conditionsSequenceElementRef" refer="sequenceelementKey">
+      <xs:selector xpath="./conditions/condition/grammar/rule/sequenceelementrefs/sequenceelementref"/>
+      <xs:field xpath="@sid"/>
+    </xs:keyref>
+    <xs:keyref name="conditionsSpacingConstraintSequenceElementRef1" refer="sequenceelementKey">
+      <xs:selector xpath="./conditions/condition/grammar/rule/spacingconstraints/spacingconstraint"/>
+      <xs:field xpath="@sid1"/>
+    </xs:keyref>
+    <xs:keyref name="conditionsSpacingConstraintSequenceElementRef2" refer="sequenceelementKey">
+      <xs:selector xpath="./conditions/condition/grammar/rule/spacingconstraints/spacingconstraint"/>
+      <xs:field xpath="@sid2"/>
+    </xs:keyref>
+  </xs:element>
+
+  <xs:complexType name="generalType">
+    <xs:sequence>
+      <xs:element name="name" type="xs:string"/>
+      <xs:element name="description" type="xs:string"/>
+      <xs:element name="task" type="xs:string"/>
+      <xs:element name="sequencespace" type="xs:string"/>
+      <xs:element name="seed" type="xs:long"/>
+    </xs:sequence>
+    <xs:attribute name="id" use="required">
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:pattern value="[A-Za-z0-9_-]+"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+  </xs:complexType>
+
+  <xs:complexType name="backgroundType">
+    <xs:sequence>
+      <xs:element name="minlength">
+        <xs:simpleType>
+          <xs:restriction base="xs:int">
+            <xs:minInclusive value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="maxlength">
+        <xs:simpleType>
+          <xs:restriction base="xs:int">
+            <xs:minInclusive value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="alphabetdistributions">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="alphabetdistribution" minOccurs="1" maxOccurs="unbounded">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="letter" type="probabilityType" minOccurs="1" maxOccurs="unbounded"/>
+                </xs:sequence>
+                <xs:attribute name="setname" use="optional">
+                  <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                      <xs:pattern value="[A-Za-z0-9_-]+"/>
+                    </xs:restriction>
+                  </xs:simpleType>
+                </xs:attribute>
+                <xs:attribute name="cid" use="optional">
+                  <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                      <xs:pattern value="[A-Za-z0-9_-]+"/>
+                    </xs:restriction>
+                  </xs:simpleType>
+                </xs:attribute>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="datagenerationType">
+    <xs:sequence>
+      <xs:element name="sets">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="set" minOccurs="3" maxOccurs="3">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="example" minOccurs="1" maxOccurs="unbounded">
+                    <xs:complexType>
+                      <xs:sequence>
+                        <xs:element name="conditionref" minOccurs="0" maxOccurs="unbounded">
+                          <xs:complexType>
+                            <xs:attribute name="cid" use="required">
+                              <xs:simpleType>
+                                <xs:restriction base="xs:string">
+                                  <xs:pattern value="[A-Za-z0-9_-]+"/>
+                                </xs:restriction>
+                              </xs:simpleType>
+                            </xs:attribute>
+                          </xs:complexType>
+                        </xs:element>
+                      </xs:sequence>
+                      <xs:attribute name="samples" use="required">
+                        <xs:simpleType>
+                          <xs:restriction base="xs:long">
+                            <xs:minInclusive value="1"/>
+                          </xs:restriction>
+                        </xs:simpleType>
+                      </xs:attribute>
+                    </xs:complexType>
+                  </xs:element>
+                </xs:sequence>
+                <xs:attribute name="name" type="setType" use="required"/>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="postprocessing" minOccurs="0" maxOccurs="1">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="operation" minOccurs="1" maxOccurs="unbounded">
+              <xs:complexType>
+                <xs:simpleContent>
+                  <xs:extension base="xs:string">
+                    <xs:attribute name="labels" type="xs:string" use="required"/>
+                    <xs:anyAttribute processContents="lax" />
+                  </xs:extension>
+                </xs:simpleContent>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="conditionsType">
+    <xs:sequence>
+      <xs:element name="condition" minOccurs="1" maxOccurs="unbounded">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="label" type="xs:string"/>
+            <xs:element name="description" type="xs:string"/>
+            <xs:element name="mode" minOccurs="0" maxOccurs="1">
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:pattern value="sequential|mutually exclusive"/>
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:element>
+            <xs:element name="grammar">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="rule" minOccurs="1" maxOccurs="unbounded">
+                    <xs:complexType>
+                      <xs:sequence>
+                        <xs:element name="position">
+                          <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                              <xs:pattern value="random|start|center|end|[0-9]*"/>
+                            </xs:restriction>
+                          </xs:simpleType>
+                        </xs:element>
+                        <xs:element name="probability">
+                          <xs:simpleType>
+                            <xs:restriction base="xs:float">
+                              <xs:minExclusive value="0.0"/>
+                              <xs:maxInclusive value="1.0"/>
+                            </xs:restriction>
+                          </xs:simpleType>
+                        </xs:element>
+                        <xs:element name="sequenceelementrefs">
+                          <xs:complexType>
+                            <xs:sequence>
+                              <xs:element name="sequenceelementref" minOccurs="1" maxOccurs="unbounded">
+                                <xs:complexType>
+                                  <xs:attribute name="sid" use="required">
+                                    <xs:simpleType>
+                                      <xs:restriction base="xs:string">
+                                        <xs:pattern value="[A-Za-z0-9_-]+"/>
+                                      </xs:restriction>
+                                    </xs:simpleType>
+                                  </xs:attribute>
+                                </xs:complexType>
+                              </xs:element>
+                            </xs:sequence>
+                          </xs:complexType>
+                        </xs:element>
+                        <xs:element name="spacingconstraints" minOccurs="0" maxOccurs="1">
+                          <xs:complexType>
+                            <xs:sequence>
+                              <xs:element name="spacingconstraint" minOccurs="1" maxOccurs="unbounded">
+                                <xs:complexType>
+                                  <xs:attribute name="sid1" use="required">
+                                    <xs:simpleType>
+                                      <xs:restriction base="xs:string">
+                                        <xs:pattern value="[A-Za-z0-9_-]+"/>
+                                      </xs:restriction>
+                                    </xs:simpleType>
+                                  </xs:attribute>
+                                  <xs:attribute name="sid2" use="required">
+                                    <xs:simpleType>
+                                      <xs:restriction base="xs:string">
+                                        <xs:pattern value="[A-Za-z0-9_-]+"/>
+                                      </xs:restriction>
+                                    </xs:simpleType>
+                                  </xs:attribute>
+                                  <xs:attribute name="mindistance" use="required">
+                                    <xs:simpleType>
+                                      <xs:restriction base="xs:int">
+                                        <xs:minInclusive value="0"/>
+                                      </xs:restriction>
+                                    </xs:simpleType>
+                                  </xs:attribute>
+                                  <xs:attribute name="maxdistance" use="required">
+                                    <xs:simpleType>
+                                      <xs:restriction base="xs:int">
+                                        <xs:minInclusive value="0"/>
+                                      </xs:restriction>
+                                    </xs:simpleType>
+                                  </xs:attribute>
+                                  <xs:attribute name="order" use="required">
+                                    <xs:simpleType>
+                                      <xs:restriction base="xs:string">
+                                        <xs:enumeration value="random"/>
+                                        <xs:enumeration value="in-order"/>
+                                      </xs:restriction>
+                                    </xs:simpleType>
+                                  </xs:attribute>
+                                </xs:complexType>
+                              </xs:element>
+                            </xs:sequence>
+                          </xs:complexType>
+                        </xs:element>
+                      </xs:sequence>
+                    </xs:complexType>
+                  </xs:element>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+          <xs:attribute name="id" use="required">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:pattern value="[A-Za-z0-9_-]+"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="sequenceelementsType">
+    <xs:sequence>
+      <xs:element name="sequenceelement" minOccurs="1" maxOccurs="unbounded">
+        <xs:complexType>
+          <xs:choice>
+            <xs:element name="kmerbased">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="kmer" type="probabilityType" minOccurs="1" maxOccurs="unbounded"/>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="matrixbased">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="position" minOccurs="1" maxOccurs="unbounded">
+                    <xs:complexType>
+                      <xs:sequence>
+                        <xs:element name="letter" type="probabilityType" minOccurs="1" maxOccurs="unbounded"/>
+                      </xs:sequence>
+                    </xs:complexType>
+                  </xs:element>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+          </xs:choice>
+          <xs:attribute name="id" use="required">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:pattern value="[A-Za-z0-9_-]+"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="probabilityType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute name="probability" use="required">
+          <xs:simpleType>
+            <xs:restriction base="xs:float">
+              <xs:minInclusive value="0.0"/>
+              <xs:maxInclusive value="1.0"/>
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:attribute>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+</xs:schema>

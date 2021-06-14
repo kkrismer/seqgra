@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<seqgramodel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://kkrismer.github.io/seqgra/model-config.xsd">
+	<general id="boc-mc10-dna1000-homer-interaction-spacing-s1">
+		<name>Bayes optimal classifier for mc10-dna1000-homer-interaction-spacing</name>
+		<description>using the same PWMs that were used to generate the data</description>
+		<task>multi-class classification</task>
+		<sequencespace>DNA</sequencespace>
+		<library>BayesOptimalClassifier</library>
+		<labels>
+			<pattern prefix="c" postfix="" min="1" max="10"/>
+		</labels>
+		<seed>1</seed>
+	</general>
+	<architecture>
+		<external format="data-definition">configs/data/mc10-dna1000-homer-interaction-spacing-100k.xml</external>
+	</architecture>
+</seqgramodel>
