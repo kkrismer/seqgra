@@ -1,4 +1,8 @@
-"""Abstract base class for all comparators
+"""
+Contains abstract base class for all comparators.
+
+Classes:
+    - :class:`Comparator`: abstract base class for all comparators
 """
 from abc import ABC, abstractmethod
 from itertools import compress

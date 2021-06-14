@@ -1,4 +1,5 @@
-"""Contains abstract classes for all learners.
+"""
+Contains abstract classes for all learners.
 
 Classes:
     - :class:`Learner`: abstract base class for all learners

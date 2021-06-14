@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>seqgra.seqgrae &mdash; seqgra 0.0.1 documentation</title>
+  <title>seqgra.seqgrae &mdash; seqgra 0.0.2 documentation</title>
   
 
   
@@ -73,7 +73,7 @@
             
             
               <div class="version">
-                0.0.1
+                0.0.2
               </div>
             
           
@@ -526,18 +526,18 @@
     <span class="n">analysis_id</span> <span class="o">=</span> <span class="n">MiscHelper</span><span class="o">.</span><span class="n">sanitize_id</span><span class="p">(</span><span class="n">analysis_id</span><span class="p">)</span>
     <span class="n">output_dir</span> <span class="o">=</span> <span class="n">MiscHelper</span><span class="o">.</span><span class="n">format_output_dir</span><span class="p">(</span><span class="n">output_dir</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
     <span class="n">model_def_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">MiscHelper</span><span class="o">.</span><span class="n">prepare_path</span><span class="p">(</span>
-        <span class="n">output_dir</span> <span class="o">+</span> <span class="s2">&quot;configs/model&quot;</span><span class="p">,</span> <span class="n">allow_exists</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">allow_non_empty</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">output_dir</span> <span class="o">+</span> <span class="s2">&quot;defs/model&quot;</span><span class="p">,</span> <span class="n">allow_exists</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">allow_non_empty</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">seed_grid</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">d_seeds</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">m_seeds</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;number of simulation seeds must equal number of &quot;</span>
                         <span class="s2">&quot;model seeds when seed-grid is disabled&quot;</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">data_def_file</span><span class="p">:</span>
-        <span class="n">data_configs_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">MiscHelper</span><span class="o">.</span><span class="n">prepare_path</span><span class="p">(</span>
-            <span class="n">output_dir</span> <span class="o">+</span> <span class="s2">&quot;configs/data&quot;</span><span class="p">,</span> <span class="n">allow_exists</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">data_defs_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">MiscHelper</span><span class="o">.</span><span class="n">prepare_path</span><span class="p">(</span>
+            <span class="n">output_dir</span> <span class="o">+</span> <span class="s2">&quot;defs/data&quot;</span><span class="p">,</span> <span class="n">allow_exists</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="n">allow_non_empty</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="n">data_file_names</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="n">write_data_definition_files</span><span class="p">(</span>
-            <span class="n">data_def_file</span><span class="p">,</span> <span class="n">data_configs_dir</span><span class="p">,</span> <span class="n">ds_sizes</span><span class="p">,</span> <span class="n">d_seeds</span><span class="p">)</span>
+            <span class="n">data_def_file</span><span class="p">,</span> <span class="n">data_defs_dir</span><span class="p">,</span> <span class="n">ds_sizes</span><span class="p">,</span> <span class="n">d_seeds</span><span class="p">)</span>
         <span class="n">data_folders</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">input_data_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">MiscHelper</span><span class="o">.</span><span class="n">prepare_path</span><span class="p">(</span>
@@ -608,7 +608,7 @@
         <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
         <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">help</span><span class="o">=</span><span class="s2">&quot;output directory, subdirectories are created for generated &quot;</span>
-        <span class="s2">&quot;data and model configs, input data, trained models, and model &quot;</span>
+        <span class="s2">&quot;data and model definitions, input data, trained models, and model &quot;</span>
         <span class="s2">&quot;evaluations&quot;</span>
     <span class="p">)</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
