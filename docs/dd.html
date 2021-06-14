@@ -108,13 +108,20 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Usage examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cmd.html">Command line utilities</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Data definition</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Data definition</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#general-information">General information</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#background">Background</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#data-generation">Data generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#conditions">Conditions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#sequence-elements">Sequence elements</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="md.html">Model definition</a></li>
 <li class="toctree-l1"><a class="reference internal" href="slec.html">Simulators, Learners, Evaluators, Comparators</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ids.html">ID conventions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="structure.html"><code class="docutils literal notranslate"><span class="pre">output</span></code> folder structure</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Advanced features</span></p>
+<p class="caption"><span class="caption-text">Reference</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="seqgra.html">API reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="py-modindex.html">Python module index</a></li>
@@ -186,7 +193,449 @@
             
   <div class="section" id="data-definition">
 <h1>Data definition<a class="headerlink" href="#data-definition" title="Permalink to this headline">¶</a></h1>
-<p>TODO</p>
+<p>The seqgra data definition language is an XML-based specification of the
+data simulation process. Each data definition XML file contains a complete
+description for the seqgra simulator to synthesize the data set.</p>
+<a class="reference internal image-reference" href="_images/dd.svg"><img alt="seqgra data definition schematic" src="_images/dd.svg" width="100%" /></a>
+<p>The language is defined using XML schema (<a class="reference external" href="https://kkrismer.github.io/seqgra/data-config.xsd">data definition XML schema file</a>).</p>
+<p>This document describes the sections of a valid seqgra data definition.
+For valid examples of data definitions, see the <a class="reference external" href="https://github.com/kkrismer/seqgra/tree/master/docsrc/defs/dd">data definitions folder on GitHub</a></p>
+<div class="section" id="general-information">
+<h2>General information<a class="headerlink" href="#general-information" title="Permalink to this headline">¶</a></h2>
+<p>This section contains meta-info about the grammar.</p>
+<p><strong>Example 1 - binary classification on DNA sequences:</strong></p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;general</span> <span class="na">id=</span><span class="s">&quot;mc2-dna1000-homer-100k-s1&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;name&gt;</span>binary classification with HOMER motifs and 1000 bp sequence window<span class="nt">&lt;/name&gt;</span>
+    <span class="nt">&lt;description&gt;&lt;/description&gt;</span>
+    <span class="nt">&lt;task&gt;</span>multi-class classification<span class="nt">&lt;/task&gt;</span>
+    <span class="nt">&lt;sequencespace&gt;</span>DNA<span class="nt">&lt;/sequencespace&gt;</span>
+    <span class="nt">&lt;seed&gt;</span>1<span class="nt">&lt;/seed&gt;</span>
+<span class="nt">&lt;/general&gt;</span>
+</pre></div>
+</div>
+<p><strong>Example 2 - multi-label classification with 50 labels on DNA sequences:</strong></p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;general</span> <span class="na">id=</span><span class="s">&quot;ml50-dna1000-homer-1000k-s5&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;name&gt;</span>multi-label classification with 50 labels, HOMER motifs and 1000 bp sequence window<span class="nt">&lt;/name&gt;</span>
+    <span class="nt">&lt;description&gt;&lt;/description&gt;</span>
+    <span class="nt">&lt;task&gt;</span>multi-label classification<span class="nt">&lt;/task&gt;</span>
+    <span class="nt">&lt;sequencespace&gt;</span>DNA<span class="nt">&lt;/sequencespace&gt;</span>
+    <span class="nt">&lt;seed&gt;</span>5<span class="nt">&lt;/seed&gt;</span>
+<span class="nt">&lt;/general&gt;</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>a valid grammar ID can only contain <code class="docutils literal notranslate"><span class="pre">[A-Za-z0-9_-]+</span></code></p></li>
+<li><p>grammar name and description can be left empty</p></li>
+<li><p>task can be either <em>multi-class classification</em> or <em>multi-label classification</em></p></li>
+<li><p>sequence space can be one of the following: <em>DNA</em>, <em>RNA</em>, <em>protein</em></p></li>
+<li><p>seed is the simulation seed (integer)</p></li>
+</ul>
+</div>
+<div class="section" id="background">
+<h2>Background<a class="headerlink" href="#background" title="Permalink to this headline">¶</a></h2>
+<p>This section contains information about the background distribution, i.e.,
+positions in the sequence window that are not part of the grammar.</p>
+<p><strong>Example 1 - 1000-bp sequence window with uniform, condition-independent background distribution:</strong></p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;background&gt;</span>
+    <span class="nt">&lt;minlength&gt;</span>1000<span class="nt">&lt;/minlength&gt;</span>
+    <span class="nt">&lt;maxlength&gt;</span>1000<span class="nt">&lt;/maxlength&gt;</span>
+    <span class="nt">&lt;alphabetdistributions&gt;</span>
+        <span class="nt">&lt;alphabetdistribution&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.25&quot;</span><span class="nt">&gt;</span>A<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.25&quot;</span><span class="nt">&gt;</span>C<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.25&quot;</span><span class="nt">&gt;</span>G<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.25&quot;</span><span class="nt">&gt;</span>T<span class="nt">&lt;/letter&gt;</span>
+        <span class="nt">&lt;/alphabetdistribution&gt;</span>
+    <span class="nt">&lt;/alphabetdistributions&gt;</span>
+<span class="nt">&lt;/background&gt;</span>
+</pre></div>
+</div>
+<p><strong>Example 2 - variable-length sequence window with condition-dependent background distributions:</strong></p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span>    <span class="nt">&lt;background&gt;</span>
+    <span class="nt">&lt;minlength&gt;</span>100<span class="nt">&lt;/minlength&gt;</span>
+    <span class="nt">&lt;maxlength&gt;</span>10000<span class="nt">&lt;/maxlength&gt;</span>
+    <span class="nt">&lt;alphabetdistributions&gt;</span>
+        <span class="nt">&lt;alphabetdistribution</span> <span class="na">cid=</span><span class="s">&quot;c1&quot;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.10&quot;</span><span class="nt">&gt;</span>A<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.40&quot;</span><span class="nt">&gt;</span>C<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.40&quot;</span><span class="nt">&gt;</span>G<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.10&quot;</span><span class="nt">&gt;</span>T<span class="nt">&lt;/letter&gt;</span>
+        <span class="nt">&lt;/alphabetdistribution&gt;</span>
+        <span class="nt">&lt;alphabetdistribution</span> <span class="na">cid=</span><span class="s">&quot;c2&quot;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.20&quot;</span><span class="nt">&gt;</span>A<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.30&quot;</span><span class="nt">&gt;</span>C<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.30&quot;</span><span class="nt">&gt;</span>G<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.20&quot;</span><span class="nt">&gt;</span>T<span class="nt">&lt;/letter&gt;</span>
+        <span class="nt">&lt;/alphabetdistribution&gt;</span>
+        <span class="nt">&lt;alphabetdistribution</span> <span class="na">cid=</span><span class="s">&quot;c3&quot;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.29565&quot;</span><span class="nt">&gt;</span>A<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.20435&quot;</span><span class="nt">&gt;</span>C<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.20435&quot;</span><span class="nt">&gt;</span>G<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.29565&quot;</span><span class="nt">&gt;</span>T<span class="nt">&lt;/letter&gt;</span>
+        <span class="nt">&lt;/alphabetdistribution&gt;</span>
+        <span class="nt">&lt;alphabetdistribution</span> <span class="na">cid=</span><span class="s">&quot;c4&quot;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.25&quot;</span><span class="nt">&gt;</span>A<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.25&quot;</span><span class="nt">&gt;</span>C<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.25&quot;</span><span class="nt">&gt;</span>G<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.25&quot;</span><span class="nt">&gt;</span>T<span class="nt">&lt;/letter&gt;</span>
+        <span class="nt">&lt;/alphabetdistribution&gt;</span>
+    <span class="nt">&lt;/alphabetdistributions&gt;</span>
+<span class="nt">&lt;/background&gt;</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>minimum and maximum length of sequence window, in nucleotides
+(or amino acids), both integer-valued, non-zero</p></li>
+<li><p>one (condition-independent) or multiple (condition-dependent) background
+alphabet distributions</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cid</span></code> refers to condition IDs (see <a class="reference internal" href="#conditions"><span class="std std-ref">Conditions</span></a>)</p></li>
+</ul>
+</div>
+<div class="section" id="data-generation">
+<h2>Data generation<a class="headerlink" href="#data-generation" title="Permalink to this headline">¶</a></h2>
+<p>This section defines how many examples are generated per class/label and set
+(training, validation, test).</p>
+<p><strong>Example 1 - perfectly balanced binary classification data set with 100,000 examples and 7-1-2 split:</strong></p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;datageneration&gt;</span>
+    <span class="nt">&lt;sets&gt;</span>
+        <span class="nt">&lt;set</span> <span class="na">name=</span><span class="s">&quot;training&quot;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;example</span> <span class="na">samples=</span><span class="s">&quot;35000&quot;</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;conditionref</span> <span class="na">cid=</span><span class="s">&quot;c1&quot;</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;/example&gt;</span>
+            <span class="nt">&lt;example</span> <span class="na">samples=</span><span class="s">&quot;35000&quot;</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;conditionref</span> <span class="na">cid=</span><span class="s">&quot;c2&quot;</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;/example&gt;</span>
+        <span class="nt">&lt;/set&gt;</span>
+        <span class="nt">&lt;set</span> <span class="na">name=</span><span class="s">&quot;validation&quot;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;example</span> <span class="na">samples=</span><span class="s">&quot;5000&quot;</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;conditionref</span> <span class="na">cid=</span><span class="s">&quot;c1&quot;</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;/example&gt;</span>
+            <span class="nt">&lt;example</span> <span class="na">samples=</span><span class="s">&quot;5000&quot;</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;conditionref</span> <span class="na">cid=</span><span class="s">&quot;c2&quot;</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;/example&gt;</span>
+        <span class="nt">&lt;/set&gt;</span>
+        <span class="nt">&lt;set</span> <span class="na">name=</span><span class="s">&quot;test&quot;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;example</span> <span class="na">samples=</span><span class="s">&quot;10000&quot;</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;conditionref</span> <span class="na">cid=</span><span class="s">&quot;c1&quot;</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;/example&gt;</span>
+            <span class="nt">&lt;example</span> <span class="na">samples=</span><span class="s">&quot;10000&quot;</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;conditionref</span> <span class="na">cid=</span><span class="s">&quot;c2&quot;</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;/example&gt;</span>
+        <span class="nt">&lt;/set&gt;</span>
+    <span class="nt">&lt;/sets&gt;</span>
+<span class="nt">&lt;/datageneration&gt;</span>
+</pre></div>
+</div>
+<p><strong>Example 2 - imbalanced multi-label classification data set post-processing operation:</strong></p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;datageneration&gt;</span>
+    <span class="nt">&lt;sets&gt;</span>
+        <span class="nt">&lt;set</span> <span class="na">name=</span><span class="s">&quot;training&quot;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;example</span> <span class="na">samples=</span><span class="s">&quot;30000&quot;</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;conditionref</span> <span class="na">cid=</span><span class="s">&quot;c1&quot;</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;/example&gt;</span>
+            <span class="nt">&lt;example</span> <span class="na">samples=</span><span class="s">&quot;10000&quot;</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;conditionref</span> <span class="na">cid=</span><span class="s">&quot;c2&quot;</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;/example&gt;</span>
+            <span class="nt">&lt;example</span> <span class="na">samples=</span><span class="s">&quot;10000&quot;</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;conditionref</span> <span class="na">cid=</span><span class="s">&quot;c1&quot;</span><span class="nt">/&gt;</span>
+                <span class="nt">&lt;conditionref</span> <span class="na">cid=</span><span class="s">&quot;c2&quot;</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;/example&gt;</span>
+            <span class="nt">&lt;example</span> <span class="na">samples=</span><span class="s">&quot;10000&quot;</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;/set&gt;</span>
+        <span class="nt">&lt;set</span> <span class="na">name=</span><span class="s">&quot;validation&quot;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;example</span> <span class="na">samples=</span><span class="s">&quot;3000&quot;</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;conditionref</span> <span class="na">cid=</span><span class="s">&quot;c1&quot;</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;/example&gt;</span>
+            <span class="nt">&lt;example</span> <span class="na">samples=</span><span class="s">&quot;1000&quot;</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;conditionref</span> <span class="na">cid=</span><span class="s">&quot;c2&quot;</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;/example&gt;</span>
+            <span class="nt">&lt;example</span> <span class="na">samples=</span><span class="s">&quot;1000&quot;</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;conditionref</span> <span class="na">cid=</span><span class="s">&quot;c1&quot;</span><span class="nt">/&gt;</span>
+                <span class="nt">&lt;conditionref</span> <span class="na">cid=</span><span class="s">&quot;c2&quot;</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;/example&gt;</span>
+            <span class="nt">&lt;example</span> <span class="na">samples=</span><span class="s">&quot;1000&quot;</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;/set&gt;</span>
+        <span class="nt">&lt;set</span> <span class="na">name=</span><span class="s">&quot;test&quot;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;example</span> <span class="na">samples=</span><span class="s">&quot;15000&quot;</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;conditionref</span> <span class="na">cid=</span><span class="s">&quot;c1&quot;</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;/example&gt;</span>
+            <span class="nt">&lt;example</span> <span class="na">samples=</span><span class="s">&quot;5000&quot;</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;conditionref</span> <span class="na">cid=</span><span class="s">&quot;c2&quot;</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;/example&gt;</span>
+            <span class="nt">&lt;example</span> <span class="na">samples=</span><span class="s">&quot;5000&quot;</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;conditionref</span> <span class="na">cid=</span><span class="s">&quot;c1&quot;</span><span class="nt">/&gt;</span>
+                <span class="nt">&lt;conditionref</span> <span class="na">cid=</span><span class="s">&quot;c2&quot;</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;/example&gt;</span>
+            <span class="nt">&lt;example</span> <span class="na">samples=</span><span class="s">&quot;5000&quot;</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;/set&gt;</span>
+    <span class="nt">&lt;/sets&gt;</span>
+    <span class="nt">&lt;postprocessing&gt;</span>
+        <span class="nt">&lt;operation</span> <span class="na">labels=</span><span class="s">&quot;&quot;</span> <span class="na">k=</span><span class="s">&quot;3&quot;</span><span class="nt">&gt;</span>kmer-frequency-preserving-shuffle<span class="nt">&lt;/operation&gt;</span>
+    <span class="nt">&lt;/postprocessing&gt;</span>
+<span class="nt">&lt;/datageneration&gt;</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>each example can be part of one or more conditions (in the case of
+multi-label classification) or is part of one and only one condition (in the
+case of multi-class classification)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cid</span></code> refers to condition IDs (see <a class="reference internal" href="#conditions"><span class="std std-ref">Conditions</span></a>)</p></li>
+<li><p>seqgra supports <em>k</em>-mer frequency preserving shuffle, where <em>k</em> is 1, 2, 3,
+<em>n</em>. In this case, for each set (training, validation, test) all examples
+shuffled in a way that dimer frequencies are preserved and those shuffled
+examples are added to the data set with the empty label.</p></li>
+</ul>
+</div>
+<div class="section" id="conditions">
+<h2>Conditions<a class="headerlink" href="#conditions" title="Permalink to this headline">¶</a></h2>
+<p>This section defines the rules that encode condition-specific information
+(i.e., information specific to classes/labels).</p>
+<p><strong>Example 1 - two conditions with one randomly placed sequence element specific to each:</strong></p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;conditions&gt;</span>
+    <span class="nt">&lt;condition</span> <span class="na">id=</span><span class="s">&quot;c1&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;label&gt;</span>AGTAAACAAAAAAGAACANA<span class="nt">&lt;/label&gt;</span>
+        <span class="nt">&lt;description&gt;</span>FOXA1:AR(Forkhead,NR)/LNCAP-AR-ChIP-Seq(GSE27824)/Homer<span class="nt">&lt;/description&gt;</span>
+        <span class="nt">&lt;grammar&gt;</span>
+            <span class="nt">&lt;rule&gt;</span>
+                <span class="nt">&lt;position&gt;</span>random<span class="nt">&lt;/position&gt;</span>
+                <span class="nt">&lt;probability&gt;</span>1.0<span class="nt">&lt;/probability&gt;</span>
+                <span class="nt">&lt;sequenceelementrefs&gt;</span>
+                    <span class="nt">&lt;sequenceelementref</span> <span class="na">sid=</span><span class="s">&quot;se1&quot;</span><span class="nt">/&gt;</span>
+                <span class="nt">&lt;/sequenceelementrefs&gt;</span>
+            <span class="nt">&lt;/rule&gt;</span>
+        <span class="nt">&lt;/grammar&gt;</span>
+    <span class="nt">&lt;/condition&gt;</span>
+    <span class="nt">&lt;condition</span> <span class="na">id=</span><span class="s">&quot;c2&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;label&gt;</span>TYTGACCASWRG<span class="nt">&lt;/label&gt;</span>
+        <span class="nt">&lt;description&gt;</span>Bcl11a(Zf)/HSPC-BCL11A-ChIP-Seq(GSE104676)/Homer<span class="nt">&lt;/description&gt;</span>
+        <span class="nt">&lt;grammar&gt;</span>
+            <span class="nt">&lt;rule&gt;</span>
+                <span class="nt">&lt;position&gt;</span>random<span class="nt">&lt;/position&gt;</span>
+                <span class="nt">&lt;probability&gt;</span>1.0<span class="nt">&lt;/probability&gt;</span>
+                <span class="nt">&lt;sequenceelementrefs&gt;</span>
+                    <span class="nt">&lt;sequenceelementref</span> <span class="na">sid=</span><span class="s">&quot;se2&quot;</span><span class="nt">/&gt;</span>
+                <span class="nt">&lt;/sequenceelementrefs&gt;</span>
+            <span class="nt">&lt;/rule&gt;</span>
+        <span class="nt">&lt;/grammar&gt;</span>
+    <span class="nt">&lt;/condition&gt;</span>
+<span class="nt">&lt;/conditions&gt;</span>
+</pre></div>
+</div>
+<p><strong>Example 2 - condition with two randomly placed, ordered sequence elements with a 0 - 1000 nt gap between them:</strong></p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;condition</span> <span class="na">id=</span><span class="s">&quot;c2&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;label&gt;</span>TYTGACCASWRG and AGTAAACAAAAAAGAACANA<span class="nt">&lt;/label&gt;</span>
+    <span class="nt">&lt;description&gt;</span>Bcl11a(Zf)/HSPC-BCL11A-ChIP-Seq(GSE104676)/Homer and FOXA1:AR(Forkhead,NR)/LNCAP-AR-ChIP-Seq(GSE27824)/Homer<span class="nt">&lt;/description&gt;</span>
+    <span class="nt">&lt;grammar&gt;</span>
+        <span class="nt">&lt;rule&gt;</span>
+            <span class="nt">&lt;position&gt;</span>random<span class="nt">&lt;/position&gt;</span>
+            <span class="nt">&lt;probability&gt;</span>1.0<span class="nt">&lt;/probability&gt;</span>
+            <span class="nt">&lt;sequenceelementrefs&gt;</span>
+                <span class="nt">&lt;sequenceelementref</span> <span class="na">sid=</span><span class="s">&quot;se1&quot;</span><span class="nt">/&gt;</span>
+                <span class="nt">&lt;sequenceelementref</span> <span class="na">sid=</span><span class="s">&quot;se2&quot;</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;/sequenceelementrefs&gt;</span>
+            <span class="nt">&lt;spacingconstraints&gt;</span>
+                <span class="nt">&lt;spacingconstraint</span> <span class="na">sid1=</span><span class="s">&quot;se2&quot;</span> <span class="na">sid2=</span><span class="s">&quot;se1&quot;</span> <span class="na">mindistance=</span><span class="s">&quot;0&quot;</span> <span class="na">maxdistance=</span><span class="s">&quot;1000&quot;</span> <span class="na">order=</span><span class="s">&quot;in-order&quot;</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;/spacingconstraints&gt;</span>
+        <span class="nt">&lt;/rule&gt;</span>
+    <span class="nt">&lt;/grammar&gt;</span>
+<span class="nt">&lt;/condition&gt;</span>
+</pre></div>
+</div>
+<p><strong>Example 3 - condition with two randomly placed, unordered sequence elements with a 0 - 1000 nt gap between them:</strong></p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;condition</span> <span class="na">id=</span><span class="s">&quot;c9&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;label&gt;</span>ATTGCATCAT and NTNATGCAAYMNNHTGMAAY<span class="nt">&lt;/label&gt;</span>
+    <span class="nt">&lt;description&gt;</span>Chop(bZIP)/MEF-Chop-ChIP-Seq(GSE35681)/Homer and CEBP:CEBP(bZIP)/MEF-Chop-ChIP-Seq(GSE35681)/Homer<span class="nt">&lt;/description&gt;</span>
+    <span class="nt">&lt;grammar&gt;</span>
+        <span class="nt">&lt;rule&gt;</span>
+            <span class="nt">&lt;position&gt;</span>random<span class="nt">&lt;/position&gt;</span>
+            <span class="nt">&lt;probability&gt;</span>1.0<span class="nt">&lt;/probability&gt;</span>
+            <span class="nt">&lt;sequenceelementrefs&gt;</span>
+                <span class="nt">&lt;sequenceelementref</span> <span class="na">sid=</span><span class="s">&quot;se4&quot;</span><span class="nt">/&gt;</span>
+                <span class="nt">&lt;sequenceelementref</span> <span class="na">sid=</span><span class="s">&quot;se5&quot;</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;/sequenceelementrefs&gt;</span>
+            <span class="nt">&lt;spacingconstraints&gt;</span>
+                <span class="nt">&lt;spacingconstraint</span> <span class="na">sid1=</span><span class="s">&quot;se4&quot;</span> <span class="na">sid2=</span><span class="s">&quot;se5&quot;</span> <span class="na">mindistance=</span><span class="s">&quot;500&quot;</span> <span class="na">maxdistance=</span><span class="s">&quot;1000&quot;</span> <span class="na">order=</span><span class="s">&quot;random&quot;</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;/spacingconstraints&gt;</span>
+        <span class="nt">&lt;/rule&gt;</span>
+    <span class="nt">&lt;/grammar&gt;</span>
+<span class="nt">&lt;/condition&gt;</span>
+</pre></div>
+</div>
+<p><strong>Example 4 - condition with two mutually exclusive rules:</strong></p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;condition</span> <span class="na">id=</span><span class="s">&quot;c23&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;label&gt;</span>condition 23<span class="nt">&lt;/label&gt;</span>
+    <span class="nt">&lt;description&gt;&lt;/description&gt;</span>
+    <span class="nt">&lt;mode&gt;</span>mutually exclusive<span class="nt">&lt;/mode&gt;</span>
+    <span class="nt">&lt;grammar&gt;</span>
+        <span class="nt">&lt;rule&gt;</span>
+            <span class="nt">&lt;position&gt;</span>random<span class="nt">&lt;/position&gt;</span>
+            <span class="nt">&lt;probability&gt;</span>0.7<span class="nt">&lt;/probability&gt;</span>
+            <span class="nt">&lt;sequenceelementrefs&gt;</span>
+                <span class="nt">&lt;sequenceelementref</span> <span class="na">sid=</span><span class="s">&quot;se51&quot;</span><span class="nt">/&gt;</span>
+                <span class="nt">&lt;sequenceelementref</span> <span class="na">sid=</span><span class="s">&quot;se52&quot;</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;/sequenceelementrefs&gt;</span>
+            <span class="nt">&lt;spacingconstraints&gt;</span>
+                <span class="nt">&lt;spacingconstraint</span> <span class="na">sid1=</span><span class="s">&quot;se51&quot;</span> <span class="na">sid2=</span><span class="s">&quot;se52&quot;</span> <span class="na">mindistance=</span><span class="s">&quot;500&quot;</span> <span class="na">maxdistance=</span><span class="s">&quot;1000&quot;</span> <span class="na">order=</span><span class="s">&quot;in-order&quot;</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;/spacingconstraints&gt;</span>
+        <span class="nt">&lt;/rule&gt;</span>
+        <span class="nt">&lt;rule&gt;</span>
+            <span class="nt">&lt;position&gt;</span>random<span class="nt">&lt;/position&gt;</span>
+            <span class="nt">&lt;probability&gt;</span>0.3<span class="nt">&lt;/probability&gt;</span>
+            <span class="nt">&lt;sequenceelementrefs&gt;</span>
+                <span class="nt">&lt;sequenceelementref</span> <span class="na">sid=</span><span class="s">&quot;se51&quot;</span><span class="nt">/&gt;</span>
+                <span class="nt">&lt;sequenceelementref</span> <span class="na">sid=</span><span class="s">&quot;se52&quot;</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;/sequenceelementrefs&gt;</span>
+            <span class="nt">&lt;spacingconstraints&gt;</span>
+                <span class="nt">&lt;spacingconstraint</span> <span class="na">sid1=</span><span class="s">&quot;se51&quot;</span> <span class="na">sid2=</span><span class="s">&quot;se52&quot;</span> <span class="na">mindistance=</span><span class="s">&quot;1500&quot;</span> <span class="na">maxdistance=</span><span class="s">&quot;2000&quot;</span> <span class="na">order=</span><span class="s">&quot;random&quot;</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;/spacingconstraints&gt;</span>
+        <span class="nt">&lt;/rule&gt;</span>
+    <span class="nt">&lt;/grammar&gt;</span>
+<span class="nt">&lt;/condition&gt;</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>rules place sequence elements</p>
+<ul>
+<li><p>at random positions (<code class="docutils literal notranslate"><span class="pre">&lt;position&gt;random&lt;/position&gt;</span></code>),</p></li>
+<li><p>at the beginning (<code class="docutils literal notranslate"><span class="pre">&lt;position&gt;start&lt;/position&gt;</span></code>),</p></li>
+<li><p>center (<code class="docutils literal notranslate"><span class="pre">&lt;position&gt;center&lt;/position&gt;</span></code>)</p></li>
+<li><p>or end (<code class="docutils literal notranslate"><span class="pre">&lt;position&gt;end&lt;/position&gt;</span></code>) of the sequence window,</p></li>
+<li><p>or at a specific position (<code class="docutils literal notranslate"><span class="pre">&lt;position&gt;123&lt;/position&gt;</span></code>)</p></li>
+</ul>
+</li>
+<li><p>rules place sequence elements with a specific probability (e.g.,
+<code class="docutils literal notranslate"><span class="pre">&lt;probability&gt;0.33&lt;/probability&gt;</span></code>)</p></li>
+<li><p>grammars can have one or more rules</p></li>
+<li><p>rules can be sequentially applied to condition (<code class="docutils literal notranslate"><span class="pre">&lt;mode&gt;sequential&lt;/mode&gt;</span></code>)
+or can be mutually exclusive (<code class="docutils literal notranslate"><span class="pre">&lt;mode&gt;mutually</span> <span class="pre">exclusive&lt;/mode&gt;</span></code>), in
+which case the sum of all rule probabilities must not exceed 1.0</p></li>
+<li><p>spacing constraints between two sequence elements can be <code class="docutils literal notranslate"><span class="pre">in-order</span></code>
+(sequence element 1 always appears before sequence element 2) or <code class="docutils literal notranslate"><span class="pre">random</span></code></p></li>
+<li><p>spacing constraints have a minimum and maximum distance</p></li>
+</ul>
+</div>
+<div class="section" id="sequence-elements">
+<h2>Sequence elements<a class="headerlink" href="#sequence-elements" title="Permalink to this headline">¶</a></h2>
+<p>Sequence elements are the core building blocks of a grammar. Two
+representations are supported, matrix-based sequence elements (position
+probability matrices) or lists of <em>k</em>-mers with associated probabilities.</p>
+<p><strong>Example 1 - two matrix-based sequence elements of widths 5 nt and 6 nt:</strong></p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;sequenceelements&gt;</span>
+    <span class="nt">&lt;sequenceelement</span> <span class="na">id=</span><span class="s">&quot;se1&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;matrixbased&gt;</span>
+            <span class="nt">&lt;position&gt;</span>
+                <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.571&quot;</span><span class="nt">&gt;</span>A<span class="nt">&lt;/letter&gt;</span>
+                <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.008&quot;</span><span class="nt">&gt;</span>C<span class="nt">&lt;/letter&gt;</span>
+                <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.138&quot;</span><span class="nt">&gt;</span>G<span class="nt">&lt;/letter&gt;</span>
+                <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.283&quot;</span><span class="nt">&gt;</span>T<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;/position&gt;</span>
+            <span class="nt">&lt;position&gt;</span>
+                <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.343&quot;</span><span class="nt">&gt;</span>A<span class="nt">&lt;/letter&gt;</span>
+                <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.028&quot;</span><span class="nt">&gt;</span>C<span class="nt">&lt;/letter&gt;</span>
+                <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.598&quot;</span><span class="nt">&gt;</span>G<span class="nt">&lt;/letter&gt;</span>
+                <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.031&quot;</span><span class="nt">&gt;</span>T<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;/position&gt;</span>
+            <span class="nt">&lt;position&gt;</span>
+                <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.023&quot;</span><span class="nt">&gt;</span>A<span class="nt">&lt;/letter&gt;</span>
+                <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.405&quot;</span><span class="nt">&gt;</span>C<span class="nt">&lt;/letter&gt;</span>
+                <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.001&quot;</span><span class="nt">&gt;</span>G<span class="nt">&lt;/letter&gt;</span>
+                <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.571&quot;</span><span class="nt">&gt;</span>T<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;/position&gt;</span>
+            <span class="nt">&lt;position&gt;</span>
+                <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.951&quot;</span><span class="nt">&gt;</span>A<span class="nt">&lt;/letter&gt;</span>
+                <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.047&quot;</span><span class="nt">&gt;</span>C<span class="nt">&lt;/letter&gt;</span>
+                <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.001&quot;</span><span class="nt">&gt;</span>G<span class="nt">&lt;/letter&gt;</span>
+                <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.001&quot;</span><span class="nt">&gt;</span>T<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;/position&gt;</span>
+            <span class="nt">&lt;position&gt;</span>
+                <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.977&quot;</span><span class="nt">&gt;</span>A<span class="nt">&lt;/letter&gt;</span>
+                <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.021&quot;</span><span class="nt">&gt;</span>C<span class="nt">&lt;/letter&gt;</span>
+                <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.001&quot;</span><span class="nt">&gt;</span>G<span class="nt">&lt;/letter&gt;</span>
+                <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.001&quot;</span><span class="nt">&gt;</span>T<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;/position&gt;</span>
+        <span class="nt">&lt;/matrixbased&gt;</span>
+    <span class="nt">&lt;/sequenceelement&gt;</span>
+    <span class="nt">&lt;sequenceelement</span> <span class="na">id=</span><span class="s">&quot;se2&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;matrixbased&gt;</span>
+            <span class="nt">&lt;position&gt;</span>
+                <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.113&quot;</span><span class="nt">&gt;</span>A<span class="nt">&lt;/letter&gt;</span>
+                <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.191&quot;</span><span class="nt">&gt;</span>C<span class="nt">&lt;/letter&gt;</span>
+                <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.055&quot;</span><span class="nt">&gt;</span>G<span class="nt">&lt;/letter&gt;</span>
+                <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.641&quot;</span><span class="nt">&gt;</span>T<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;/position&gt;</span>
+            <span class="nt">&lt;position&gt;</span>
+                <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.041&quot;</span><span class="nt">&gt;</span>A<span class="nt">&lt;/letter&gt;</span>
+                <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.453&quot;</span><span class="nt">&gt;</span>C<span class="nt">&lt;/letter&gt;</span>
+                <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.095&quot;</span><span class="nt">&gt;</span>G<span class="nt">&lt;/letter&gt;</span>
+                <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.411&quot;</span><span class="nt">&gt;</span>T<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;/position&gt;</span>
+            <span class="nt">&lt;position&gt;</span>
+                <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.004&quot;</span><span class="nt">&gt;</span>A<span class="nt">&lt;/letter&gt;</span>
+                <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.001&quot;</span><span class="nt">&gt;</span>C<span class="nt">&lt;/letter&gt;</span>
+                <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.001&quot;</span><span class="nt">&gt;</span>G<span class="nt">&lt;/letter&gt;</span>
+                <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.994&quot;</span><span class="nt">&gt;</span>T<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;/position&gt;</span>
+            <span class="nt">&lt;position&gt;</span>
+                <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.545&quot;</span><span class="nt">&gt;</span>A<span class="nt">&lt;/letter&gt;</span>
+                <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.032&quot;</span><span class="nt">&gt;</span>C<span class="nt">&lt;/letter&gt;</span>
+                <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.338&quot;</span><span class="nt">&gt;</span>G<span class="nt">&lt;/letter&gt;</span>
+                <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.085&quot;</span><span class="nt">&gt;</span>T<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;/position&gt;</span>
+            <span class="nt">&lt;position&gt;</span>
+                <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.048&quot;</span><span class="nt">&gt;</span>A<span class="nt">&lt;/letter&gt;</span>
+                <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.91&quot;</span><span class="nt">&gt;</span>C<span class="nt">&lt;/letter&gt;</span>
+                <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.031&quot;</span><span class="nt">&gt;</span>G<span class="nt">&lt;/letter&gt;</span>
+                <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.011&quot;</span><span class="nt">&gt;</span>T<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;/position&gt;</span>
+            <span class="nt">&lt;position&gt;</span>
+                <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.006&quot;</span><span class="nt">&gt;</span>A<span class="nt">&lt;/letter&gt;</span>
+                <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.992&quot;</span><span class="nt">&gt;</span>C<span class="nt">&lt;/letter&gt;</span>
+                <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.001&quot;</span><span class="nt">&gt;</span>G<span class="nt">&lt;/letter&gt;</span>
+                <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.001&quot;</span><span class="nt">&gt;</span>T<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;/position&gt;</span>
+        <span class="nt">&lt;/matrixbased&gt;</span>
+    <span class="nt">&lt;/sequenceelement&gt;</span>
+<span class="nt">&lt;/sequenceelements&gt;</span>
+</pre></div>
+</div>
+<p><strong>Example 2 - four k-mer-based sequence elements:</strong></p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;sequenceelements&gt;</span>
+    <span class="nt">&lt;sequenceelement</span> <span class="na">id=</span><span class="s">&quot;se1&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;kmerbased&gt;</span>
+            <span class="nt">&lt;kmer</span> <span class="na">probability=</span><span class="s">&quot;0.4&quot;</span><span class="nt">&gt;</span>ACGTACGT<span class="nt">&lt;/kmer&gt;</span>
+            <span class="nt">&lt;kmer</span> <span class="na">probability=</span><span class="s">&quot;0.4&quot;</span><span class="nt">&gt;</span>ACGTACGG<span class="nt">&lt;/kmer&gt;</span>
+            <span class="nt">&lt;kmer</span> <span class="na">probability=</span><span class="s">&quot;0.1&quot;</span><span class="nt">&gt;</span>ACGTAGGT<span class="nt">&lt;/kmer&gt;</span>
+            <span class="nt">&lt;kmer</span> <span class="na">probability=</span><span class="s">&quot;0.1&quot;</span><span class="nt">&gt;</span>AGGTACGT<span class="nt">&lt;/kmer&gt;</span>
+        <span class="nt">&lt;/kmerbased&gt;</span>
+    <span class="nt">&lt;/sequenceelement&gt;</span>
+    <span class="nt">&lt;sequenceelement</span> <span class="na">id=</span><span class="s">&quot;se2&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;kmerbased&gt;</span>
+            <span class="nt">&lt;kmer</span> <span class="na">probability=</span><span class="s">&quot;0.25&quot;</span><span class="nt">&gt;</span>GGCCAAGG<span class="nt">&lt;/kmer&gt;</span>
+            <span class="nt">&lt;kmer</span> <span class="na">probability=</span><span class="s">&quot;0.25&quot;</span><span class="nt">&gt;</span>GGGCAAGG<span class="nt">&lt;/kmer&gt;</span>
+            <span class="nt">&lt;kmer</span> <span class="na">probability=</span><span class="s">&quot;0.25&quot;</span><span class="nt">&gt;</span>GGTCAAGG<span class="nt">&lt;/kmer&gt;</span>
+            <span class="nt">&lt;kmer</span> <span class="na">probability=</span><span class="s">&quot;0.25&quot;</span><span class="nt">&gt;</span>GGACAAGG<span class="nt">&lt;/kmer&gt;</span>
+        <span class="nt">&lt;/kmerbased&gt;</span>
+    <span class="nt">&lt;/sequenceelement&gt;</span>
+    <span class="nt">&lt;sequenceelement</span> <span class="na">id=</span><span class="s">&quot;se3&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;kmerbased&gt;</span>
+            <span class="nt">&lt;kmer</span> <span class="na">probability=</span><span class="s">&quot;0.7&quot;</span><span class="nt">&gt;</span>TTTCACAT<span class="nt">&lt;/kmer&gt;</span>
+            <span class="nt">&lt;kmer</span> <span class="na">probability=</span><span class="s">&quot;0.2&quot;</span><span class="nt">&gt;</span>TTTCACAA<span class="nt">&lt;/kmer&gt;</span>
+            <span class="nt">&lt;kmer</span> <span class="na">probability=</span><span class="s">&quot;0.05&quot;</span><span class="nt">&gt;</span>TTTCACTT<span class="nt">&lt;/kmer&gt;</span>
+            <span class="nt">&lt;kmer</span> <span class="na">probability=</span><span class="s">&quot;0.05&quot;</span><span class="nt">&gt;</span>TTTCACAC<span class="nt">&lt;/kmer&gt;</span>
+        <span class="nt">&lt;/kmerbased&gt;</span>
+    <span class="nt">&lt;/sequenceelement&gt;</span>
+    <span class="nt">&lt;sequenceelement</span> <span class="na">id=</span><span class="s">&quot;se4&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;kmerbased&gt;</span>
+            <span class="nt">&lt;kmer</span> <span class="na">probability=</span><span class="s">&quot;0.8&quot;</span><span class="nt">&gt;</span>GTCCCAGT<span class="nt">&lt;/kmer&gt;</span>
+            <span class="nt">&lt;kmer</span> <span class="na">probability=</span><span class="s">&quot;0.1&quot;</span><span class="nt">&gt;</span>GTCCCAGG<span class="nt">&lt;/kmer&gt;</span>
+            <span class="nt">&lt;kmer</span> <span class="na">probability=</span><span class="s">&quot;0.05&quot;</span><span class="nt">&gt;</span>GTTCCAGT<span class="nt">&lt;/kmer&gt;</span>
+            <span class="nt">&lt;kmer</span> <span class="na">probability=</span><span class="s">&quot;0.05&quot;</span><span class="nt">&gt;</span>TTCCCAGT<span class="nt">&lt;/kmer&gt;</span>
+        <span class="nt">&lt;/kmerbased&gt;</span>
+    <span class="nt">&lt;/sequenceelement&gt;</span>
+<span class="nt">&lt;/sequenceelements&gt;</span>
+</pre></div>
+</div>
+</div>
 </div>
 
 
