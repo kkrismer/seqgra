@@ -85,7 +85,7 @@ Check out the following help pages:
 * [Model definition](https://kkrismer.github.io/seqgra/md.html): detailed description of the model definition language that is used to describe neural network architectures and hyperparameters for the optimizer, the loss, and the training process
 * [Simulators, Learners, Evaluators, Comparators](https://kkrismer.github.io/seqgra/slec.html): brief descriptions of the most important classes
 * [seqgra API reference](https://kkrismer.github.io/seqgra/seqgra.html): detailed description of the seqgra API
-* [Source code](https://github.com/gifford-lab/seqgra>): seqgra source code repository on GitHub 
+* [Source code](https://github.com/gifford-lab/seqgra): seqgra source code repository on GitHub 
 
 ## Citation
 
