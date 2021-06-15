@@ -1,3 +1,20 @@
+"""
+Elements of data definition
+
+Classes:
+    - :class:`~seqgra.model.data.alphabetdistribution.AlphabetDistribution`: background alphabet distribution
+    - :class:`~seqgra.model.data.background.Background`: background section of data definition
+    - :class:`~seqgra.model.data.condition.Condition`: condition section of data definition
+    - :class:`~seqgra.model.data.datageneration.DataGeneration`: data generation section of data definition
+    - :class:`~seqgra.model.data.datageneration.DataGenerationSet`: data generation set
+    - :class:`~seqgra.model.data.datageneration.DataGenerationExample`: data generation example
+    - :class:`~seqgra.model.data.operation.PostprocessingOperation`: k-mer frequency preserving shuffle
+    - :class:`~seqgra.model.data.rule.Rule`: grammar rule
+    - :class:`~seqgra.model.data.sequenceelement.SequenceElement`: generic sequence element
+    - :class:`~seqgra.model.data.sequenceelement.KmerBasedSequenceElement`: k-mer-based sequence element
+    - :class:`~seqgra.model.data.sequenceelement.MatrixBasedSequenceElement`: matrix-based sequence element
+    - :class:`~seqgra.model.data.spacingconstraint.SpacingConstraint`: spacing constraint
+"""
 from seqgra.model.data.sequenceelement import SequenceElement
 from seqgra.model.data.sequenceelement import KmerBasedSequenceElement
 from seqgra.model.data.sequenceelement import MatrixBasedSequenceElement

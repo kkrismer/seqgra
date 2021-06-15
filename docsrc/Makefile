@@ -15,6 +15,7 @@ help:
 .PHONY: help Makefile
 
 github:
+	@pip install ../.
 	@make clean html
 	@rm -r ../docs/
 	@mkdir ../docs
