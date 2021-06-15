@@ -1,8 +1,6 @@
 # seqgra: Principled Selection of Neural Network Architectures for Genomics Prediction Tasks
 
-[![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT) [![DOI](https://img.shields.io/badge/DOI-10.1101%2F2021.06.14.448415-blue.svg)](https://doi.org/10.1101/2021.06.14.448415) [![Travis build status](https://travis-ci.com/kkrismer/seqgra.svg?branch=master)](https://travis-ci.com/kkrismer/seqgra)
-
-*PyPI version badge placeholder*
+[![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT) [![DOI](https://img.shields.io/badge/DOI-10.1101%2F2021.06.14.448415-blue.svg)](https://doi.org/10.1101/2021.06.14.448415) [![PyPI version](https://badge.fury.io/py/seqgra.svg)](https://badge.fury.io/py/seqgra) [![Travis build status](https://travis-ci.com/kkrismer/seqgra.svg?branch=master)](https://travis-ci.com/kkrismer/seqgra)
 
 https://kkrismer.github.io/seqgra/
 
