@@ -1,10 +1,8 @@
 # seqgra: Principled Selection of Neural Network Architectures for Genomics Prediction Tasks
 
-[![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT) [![Travis build status](https://travis-ci.com/kkrismer/seqgra.svg?branch=master)](https://travis-ci.com/kkrismer/seqgra)
+[![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT) [![DOI](https://img.shields.io/badge/DOI-10.1101%2F2021.06.14.448415-blue.svg)](https://doi.org/10.1101/2021.06.14.448415) [![Travis build status](https://travis-ci.com/kkrismer/seqgra.svg?branch=master)](https://travis-ci.com/kkrismer/seqgra)
 
 *PyPI version badge placeholder*
-
-*DOI badge placeholder*
 
 https://kkrismer.github.io/seqgra/
 
@@ -86,7 +84,7 @@ If you use seqgra in your work, please cite:
 
 **seqgra: Principled Selection of Neural Network Architectures for Genomics Prediction Tasks**  
 Konstantin Krismer, Jennifer Hammelman, and David K. Gifford  
-journal name TODO, Volume TODO, Issue TODO, date TODO, Page TODO; DOI: https://doi.org/TODO
+bioRxiv 2021.06.14.448415; DOI: https://doi.org/10.1101/2021.06.14.448415
 
 ## Funding
 

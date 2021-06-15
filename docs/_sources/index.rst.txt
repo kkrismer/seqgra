@@ -91,7 +91,7 @@ If you use seqgra in your work, please cite:
 
 | **seqgra: Principled Selection of Neural Network Architectures for Genomics Prediction Tasks**
 | Konstantin Krismer, Jennifer Hammelman, and David K. Gifford  
-| journal name TODO, Volume TODO, Issue TODO, date TODO, Page TODO; DOI: https://doi.org/TODO
+| bioRxiv 2021.06.14.448415; DOI: https://doi.org/10.1101/2021.06.14.448415
 
 Funding
 -------
