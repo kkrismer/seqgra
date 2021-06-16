@@ -1,5 +1,8 @@
 """
-MIT - CSAIL - Gifford Lab - seqgra
+Table Comparator for grammar and model information
+
+Classes:
+    - :class:`~seqgra.comparator.tablecomparator.TableComparator`: collects grammar and model information in text file
 """
 from typing import List, Optional, Tuple
 import os

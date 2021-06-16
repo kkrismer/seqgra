@@ -1,9 +1,8 @@
 """
-MIT - CSAIL - Gifford Lab - seqgra
+Creates PR curves of different models
 
-ROC comparator: creates ROC curves of different models
-
-@author: Konstantin Krismer
+Classes:
+    - :class:`~seqgra.comparator.prcomparator.PRComparator`: creates PR curves from various grammars and architectures
 """
 from typing import List, Optional
 import os

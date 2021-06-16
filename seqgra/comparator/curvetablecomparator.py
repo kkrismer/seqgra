@@ -1,5 +1,8 @@
 """
-MIT - CSAIL - Gifford Lab - seqgra
+Curve Table Comparator for PR and ROC curve information
+
+Classes:
+    - :class:`~seqgra.comparator.curvetablecomparator.CurveTableComparator`: collects PR and ROC curve information in text file
 """
 from typing import List, Optional
 import os

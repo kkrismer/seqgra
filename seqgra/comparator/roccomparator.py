@@ -1,9 +1,8 @@
 """
-MIT - CSAIL - Gifford Lab - seqgra
+Creates ROC curves of different models
 
-ROC comparator: creates ROC curves of different models
-
-@author: Konstantin Krismer
+Classes:
+    - :class:`~seqgra.comparator.roccomparator.ROCComparator`: creates ROC curves from various grammars and architectures
 """
 from typing import List, Optional
 import os

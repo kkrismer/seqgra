@@ -1,5 +1,8 @@
 """
-MIT - CSAIL - Gifford Lab - seqgra
+Feature Importance Evaluator Table Comparator for feature importance measures
+
+Classes:
+    - :class:`~seqgra.comparator.fietablecomparator.FIETableComparator`: collects feature importance evaluator information in text file
 """
 from typing import List, Optional
 import os
