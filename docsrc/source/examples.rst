@@ -253,7 +253,8 @@ Train model on experimental or externally synthesized data
         -o OUTPUT_DIR
 
 where experimental or externally synthesized data is in the 
-``{OUTPUT_DIR}/input/{DATA_FOLDER}`` folder.
+``{OUTPUT_DIR}/input/{DATA_FOLDER}`` folder. For a description of the data 
+format, see :doc:`input`.
 
 **Generated folders and files:**
 

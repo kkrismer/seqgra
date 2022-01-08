@@ -24,6 +24,7 @@ Version |version|
    md
    slec
    ids
+   input
    structure
 
 .. toctree::
