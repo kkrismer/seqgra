@@ -83,9 +83,11 @@ Architecture
 ------------
 
 Defines the neural network architecture. For PyTorch, architecture is defined 
-externally with ``torch.nn.Module`` derived class. For TensorFlow, Keras 
-architecture can be embedded in XML. For Bayes Optimal Classifier, architecture 
-is defined by reference to data definition file.
+externally with ``torch.nn.Module`` derived class. For TensorFlow, 
+tf.keras.Sequential architectures can be embedded in XML, while external 
+architectures can be loaded for more expressivity. For Bayes Optimal 
+Classifier, architecture 
+is defined by reference to a data definition file.
 
 **Example 1 - PyTorch:**
 
@@ -140,7 +142,7 @@ is defined by reference to data definition file.
             x = self.fc(x)
             return x
 
-**Example 2 - TensorFlow:**
+**Example 2 - TensorFlow (embedded, tf.keras.Sequential model):**
 
 .. code-block:: xml
 
@@ -154,7 +156,48 @@ is defined by reference to data definition file.
         </sequential>
     </architecture>
 
-**Example 3 - Bayes Optimal Classifier:**
+**Example 3 - TensorFlow (external, arbitrary model, SavedModel format):**
+
+.. code-block:: xml
+
+    <architecture>
+        <external format="keras-tf-whole-model">TensorFlow/basic-model</external>
+    </architecture>
+
+.. code-block:: python
+
+    import tensorflow as tf
+    
+    inputs = tf.keras.Input(shape=(32,))
+    outputs = tf.keras.layers.Dense(1)(inputs)
+    model = tf.keras.Model(inputs, outputs)
+    model.compile(optimizer="adam", loss="mean_squared_error")
+    model.save("TensorFlow/basic-model")
+
+**Example 4 - TensorFlow (external, arbitrary model, H5 format):**
+
+.. code-block:: xml
+
+    <architecture>
+        <external format="keras-h5-whole-model">TensorFlow/basic-model.h5</external>
+    </architecture>
+
+.. code-block:: python
+
+    import tensorflow as tf
+    
+    inputs = tf.keras.Input(shape=(32,))
+    outputs = tf.keras.layers.Dense(1)(inputs)
+    model = tf.keras.Model(inputs, outputs)
+    model.compile(optimizer="adam", loss="mean_squared_error")
+
+    test_input = np.random.random((128, 32))
+    test_target = np.random.random((128, 1))
+    model.fit(test_input, test_target)
+
+    model.save("TensorFlow/basic-model.h5", save_format="h5")
+
+**Example 5 - Bayes Optimal Classifier:**
 
 .. code-block:: xml
 

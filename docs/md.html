@@ -119,6 +119,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="slec.html">Simulators, Learners, Evaluators, Comparators</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ids.html">ID conventions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="input.html">Format of input data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="structure.html"><code class="docutils literal notranslate"><span class="pre">output</span></code> folder structure</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Reference</span></p>
@@ -261,9 +262,11 @@ For valid examples of model definitions, see the <a class="reference external" h
 <div class="section" id="architecture">
 <h2>Architecture<a class="headerlink" href="#architecture" title="Permalink to this headline">¶</a></h2>
 <p>Defines the neural network architecture. For PyTorch, architecture is defined
-externally with <code class="docutils literal notranslate"><span class="pre">torch.nn.Module</span></code> derived class. For TensorFlow, Keras
-architecture can be embedded in XML. For Bayes Optimal Classifier, architecture
-is defined by reference to data definition file.</p>
+externally with <code class="docutils literal notranslate"><span class="pre">torch.nn.Module</span></code> derived class. For TensorFlow,
+tf.keras.Sequential architectures can be embedded in XML, while external
+architectures can be loaded for more expressivity. For Bayes Optimal
+Classifier, architecture
+is defined by reference to a data definition file.</p>
 <p><strong>Example 1 - PyTorch:</strong></p>
 <div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;architecture&gt;</span>
     <span class="nt">&lt;external</span> <span class="na">format=</span><span class="s">&quot;pytorch-module&quot;</span> <span class="na">classname=</span><span class="s">&quot;TorchModel&quot;</span><span class="nt">&gt;</span>PyTorch/o2-dna150-conv10-do03-conv10-fc5-do03.py<span class="nt">&lt;/external&gt;</span>
@@ -314,7 +317,7 @@ is defined by reference to data definition file.</p>
         <span class="k">return</span> <span class="n">x</span>
 </pre></div>
 </div>
-<p><strong>Example 2 - TensorFlow:</strong></p>
+<p><strong>Example 2 - TensorFlow (embedded, tf.keras.Sequential model):</strong></p>
 <div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;architecture&gt;</span>
     <span class="nt">&lt;sequential&gt;</span>
         <span class="nt">&lt;operation</span> <span class="na">input_shape=</span><span class="s">&quot;(1000, 4)&quot;</span> <span class="na">kernel_size=</span><span class="s">&quot;21&quot;</span> <span class="na">filters=</span><span class="s">&quot;10&quot;</span> <span class="na">activation=</span><span class="s">&quot;relu&quot;</span><span class="nt">&gt;</span>Conv1D<span class="nt">&lt;/operation&gt;</span>
@@ -326,7 +329,42 @@ is defined by reference to data definition file.</p>
 <span class="nt">&lt;/architecture&gt;</span>
 </pre></div>
 </div>
-<p><strong>Example 3 - Bayes Optimal Classifier:</strong></p>
+<p><strong>Example 3 - TensorFlow (external, arbitrary model, SavedModel format):</strong></p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;architecture&gt;</span>
+    <span class="nt">&lt;external</span> <span class="na">format=</span><span class="s">&quot;keras-tf-whole-model&quot;</span><span class="nt">&gt;</span>TensorFlow/basic-model<span class="nt">&lt;/external&gt;</span>
+<span class="nt">&lt;/architecture&gt;</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
+
+<span class="n">inputs</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">32</span><span class="p">,))</span>
+<span class="n">outputs</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">1</span><span class="p">)(</span><span class="n">inputs</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">optimizer</span><span class="o">=</span><span class="s2">&quot;adam&quot;</span><span class="p">,</span> <span class="n">loss</span><span class="o">=</span><span class="s2">&quot;mean_squared_error&quot;</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">&quot;TensorFlow/basic-model&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Example 4 - TensorFlow (external, arbitrary model, H5 format):</strong></p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;architecture&gt;</span>
+    <span class="nt">&lt;external</span> <span class="na">format=</span><span class="s">&quot;keras-h5-whole-model&quot;</span><span class="nt">&gt;</span>TensorFlow/basic-model.h5<span class="nt">&lt;/external&gt;</span>
+<span class="nt">&lt;/architecture&gt;</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
+
+<span class="n">inputs</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">32</span><span class="p">,))</span>
+<span class="n">outputs</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">1</span><span class="p">)(</span><span class="n">inputs</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">optimizer</span><span class="o">=</span><span class="s2">&quot;adam&quot;</span><span class="p">,</span> <span class="n">loss</span><span class="o">=</span><span class="s2">&quot;mean_squared_error&quot;</span><span class="p">)</span>
+
+<span class="n">test_input</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">((</span><span class="mi">128</span><span class="p">,</span> <span class="mi">32</span><span class="p">))</span>
+<span class="n">test_target</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">((</span><span class="mi">128</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">test_input</span><span class="p">,</span> <span class="n">test_target</span><span class="p">)</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">&quot;TensorFlow/basic-model.h5&quot;</span><span class="p">,</span> <span class="n">save_format</span><span class="o">=</span><span class="s2">&quot;h5&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Example 5 - Bayes Optimal Classifier:</strong></p>
 <div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;architecture&gt;</span>
     <span class="nt">&lt;external</span> <span class="na">format=</span><span class="s">&quot;data-definition&quot;</span><span class="nt">&gt;</span>defs/data/mc2-dna1000-homer-interaction-spacing-100k-s1.xml<span class="nt">&lt;/external&gt;</span>
 <span class="nt">&lt;/architecture&gt;</span>
