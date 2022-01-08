@@ -92,20 +92,11 @@ class KerasHelper:
                                 json_config)
                     else:
                         raise Exception(".json file does not exist: " + path)
-                elif arch.external_model_format == "keras-yaml-architecture-only":
-                    if os.path.isfile(path):
-                        with open(path, "r") as yaml_config_file:
-                            yaml_config = yaml_config_file.read()
-                            learner.model = tf.keras.models.model_from_yaml(
-                                yaml_config)
-                    else:
-                        raise Exception(".yaml file does not exist: " + path)
             else:
                 raise Exception("neither internal nor external architecture "
                                 "definition provided")
 
             if arch.external_model_format is None or \
-                    arch.external_model_format == "keras-yaml-architecture-only" or \
                     arch.external_model_format == "keras-json-architecture-only":
                 if learner.definition.optimizer_hyperparameters is not None and \
                         learner.definition.loss_hyperparameters is not None and \
@@ -280,12 +271,6 @@ class KerasHelper:
         # save whole model (HDF5)
         learner.model.save(learner.output_dir + file_name + "/saved_model.h5",
                            save_format="h5")
-
-        # save architecture only (YAML)
-        yaml_model = learner.model.to_yaml()
-        with open(learner.output_dir + file_name +
-                  "/model-architecture.yaml", "w") as yaml_file:
-            yaml_file.write(yaml_model)
 
         # save architecture only (JSON)
         json_model = learner.model.to_json()
