@@ -15,7 +15,10 @@ The language is defined using XML schema
 (`model definition XML schema file <https://kkrismer.github.io/seqgra/model-config.xsd>`_).
 
 This document describes the sections of a valid seqgra model definition. 
-For valid examples of model definitions, see the `model definitions folder on GitHub <https://github.com/kkrismer/seqgra/tree/master/docsrc/defs/md>`_
+For examples of model definitions, see the 
+`model definitions folder on GitHub <https://github.com/kkrismer/seqgra/tree/master/docsrc/defs/md>`_ 
+and the section about common model architectures 
+(see :doc:`common-architectures`), including Basset, ChromDragoNN, and DeepSEA.
 
 General information
 -------------------

@@ -108,6 +108,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../cmd.html">Command line utilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../dd.html">Data definition</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../md.html">Model definition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../common-architectures.html">Model definitions of common deep learning architectures</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../slec.html">Simulators, Learners, Evaluators, Comparators</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../ids.html">ID conventions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../input.html">Format of input data</a></li>
@@ -278,20 +279,11 @@
                                 <span class="n">json_config</span><span class="p">)</span>
                     <span class="k">else</span><span class="p">:</span>
                         <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;.json file does not exist: &quot;</span> <span class="o">+</span> <span class="n">path</span><span class="p">)</span>
-                <span class="k">elif</span> <span class="n">arch</span><span class="o">.</span><span class="n">external_model_format</span> <span class="o">==</span> <span class="s2">&quot;keras-yaml-architecture-only&quot;</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
-                        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">yaml_config_file</span><span class="p">:</span>
-                            <span class="n">yaml_config</span> <span class="o">=</span> <span class="n">yaml_config_file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-                            <span class="n">learner</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">model_from_yaml</span><span class="p">(</span>
-                                <span class="n">yaml_config</span><span class="p">)</span>
-                    <span class="k">else</span><span class="p">:</span>
-                        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;.yaml file does not exist: &quot;</span> <span class="o">+</span> <span class="n">path</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;neither internal nor external architecture &quot;</span>
                                 <span class="s2">&quot;definition provided&quot;</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="n">arch</span><span class="o">.</span><span class="n">external_model_format</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> \
-                    <span class="n">arch</span><span class="o">.</span><span class="n">external_model_format</span> <span class="o">==</span> <span class="s2">&quot;keras-yaml-architecture-only&quot;</span> <span class="ow">or</span> \
                     <span class="n">arch</span><span class="o">.</span><span class="n">external_model_format</span> <span class="o">==</span> <span class="s2">&quot;keras-json-architecture-only&quot;</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">learner</span><span class="o">.</span><span class="n">definition</span><span class="o">.</span><span class="n">optimizer_hyperparameters</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> \
                         <span class="n">learner</span><span class="o">.</span><span class="n">definition</span><span class="o">.</span><span class="n">loss_hyperparameters</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> \
@@ -466,12 +458,6 @@
         <span class="c1"># save whole model (HDF5)</span>
         <span class="n">learner</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">learner</span><span class="o">.</span><span class="n">output_dir</span> <span class="o">+</span> <span class="n">file_name</span> <span class="o">+</span> <span class="s2">&quot;/saved_model.h5&quot;</span><span class="p">,</span>
                            <span class="n">save_format</span><span class="o">=</span><span class="s2">&quot;h5&quot;</span><span class="p">)</span>
-
-        <span class="c1"># save architecture only (YAML)</span>
-        <span class="n">yaml_model</span> <span class="o">=</span> <span class="n">learner</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">to_yaml</span><span class="p">()</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">learner</span><span class="o">.</span><span class="n">output_dir</span> <span class="o">+</span> <span class="n">file_name</span> <span class="o">+</span>
-                  <span class="s2">&quot;/model-architecture.yaml&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">yaml_file</span><span class="p">:</span>
-            <span class="n">yaml_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">yaml_model</span><span class="p">)</span>
 
         <span class="c1"># save architecture only (JSON)</span>
         <span class="n">json_model</span> <span class="o">=</span> <span class="n">learner</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">to_json</span><span class="p">()</span>

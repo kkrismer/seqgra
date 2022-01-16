@@ -22,6 +22,7 @@ Version |version|
    cmd
    dd
    md
+   common-architectures
    slec
    ids
    input

@@ -12,7 +12,8 @@ description for the seqgra simulator to synthesize the data set.
 The language is defined using XML schema (`data definition XML schema file <https://kkrismer.github.io/seqgra/data-config.xsd>`_).
 
 This document describes the sections of a valid seqgra data definition. 
-For valid examples of data definitions, see the `data definitions folder on GitHub <https://github.com/kkrismer/seqgra/tree/master/docsrc/defs/dd>`_
+For examples of data definitions, see the 
+`data definitions folder on GitHub <https://github.com/kkrismer/seqgra/tree/master/docsrc/defs/dd>`_.
 
 General information
 -------------------

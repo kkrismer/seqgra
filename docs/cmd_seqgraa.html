@@ -119,6 +119,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="dd.html">Data definition</a></li>
 <li class="toctree-l1"><a class="reference internal" href="md.html">Model definition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common-architectures.html">Model definitions of common deep learning architectures</a></li>
 <li class="toctree-l1"><a class="reference internal" href="slec.html">Simulators, Learners, Evaluators, Comparators</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ids.html">ID conventions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="input.html">Format of input data</a></li>
@@ -232,7 +233,7 @@
 </dd>
 <dt><kbd>-e, --evaluators</kbd></dt>
 <dd><p>feature importance evaluator ID or IDs: contrastive-excitation-backprop, deconv, deep-lift, excitation-backprop, feedback, grad-cam, gradient, gradient-x-input, guided-backprop, integrated-gradients, nonlinear-integrated-gradients, saliency, sis, smooth-grad</p>
-<p>Default: frozenset({‘saliency’, ‘integrated-gradients’, ‘gradient’, ‘deconv’, ‘guided-backprop’, ‘gradient-x-input’, ‘deep-lift’})</p>
+<p>Default: frozenset({‘gradient-x-input’, ‘deconv’, ‘gradient’, ‘integrated-gradients’, ‘guided-backprop’, ‘saliency’, ‘deep-lift’})</p>
 </dd>
 <dt><kbd>-t, --target</kbd></dt>
 <dd><p>target label for which evidence/attribution should be generated, either ‘y’ for ground truth label or ‘y-hat’ for predicted label, defaults to ‘y’</p>
