@@ -92,7 +92,7 @@ plot_agreement <- function(input_file_name, output_file_name, title,
     p <- ggplot(df, aes(x = position, y = example, fill = value)) + 
       scale_fill_gradient2(low = muted("red"), mid = "white",
                            high = muted("green"), midpoint = 0,
-                           limits = c(-1, 1), guide = FALSE)
+                           limits = c(-1, 1), guide = "none")
   }
   
   p <- p + geom_tile() + 
