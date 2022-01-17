@@ -254,6 +254,22 @@ and the section about common model architectures
 <span class="nt">&lt;/general&gt;</span>
 </pre></div>
 </div>
+<p><strong>Example 4 - PyTorch binary classification model on 100 amino acid protein sequence window:</strong></p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;general</span> <span class="na">id=</span><span class="s">&quot;torch-mc2-protein100-conv10n-gmp-fc5-s1&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;name&gt;</span>1 conv layer with 10 5-nt wide filters, global max pooling, 1 fully connected layer with 5 units<span class="nt">&lt;/name&gt;</span>
+    <span class="nt">&lt;description&gt;&lt;/description&gt;</span>
+    <span class="nt">&lt;task&gt;</span>multi-class classification<span class="nt">&lt;/task&gt;</span>
+    <span class="nt">&lt;sequencespace&gt;</span>protein<span class="nt">&lt;/sequencespace&gt;</span>
+    <span class="nt">&lt;library&gt;</span>PyTorch<span class="nt">&lt;/library&gt;</span>
+    <span class="nt">&lt;inputencoding&gt;</span>1D<span class="nt">&lt;/inputencoding&gt;</span>
+    <span class="nt">&lt;labels&gt;</span>
+        <span class="nt">&lt;label&gt;</span>c1<span class="nt">&lt;/label&gt;</span>
+        <span class="nt">&lt;label&gt;</span>c2<span class="nt">&lt;/label&gt;</span>
+    <span class="nt">&lt;/labels&gt;</span>
+    <span class="nt">&lt;seed&gt;</span>1<span class="nt">&lt;/seed&gt;</span>
+<span class="nt">&lt;/general&gt;</span>
+</pre></div>
+</div>
 <ul class="simple">
 <li><p>a valid model ID can only contain <code class="docutils literal notranslate"><span class="pre">[A-Za-z0-9_-]+</span></code></p></li>
 <li><p>model name and description can be left empty</p></li>

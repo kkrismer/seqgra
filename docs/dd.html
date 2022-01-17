@@ -226,6 +226,16 @@ For examples of data definitions, see the
 <span class="nt">&lt;/general&gt;</span>
 </pre></div>
 </div>
+<p><strong>Example 3 - binary classification on protein sequences:</strong></p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;general</span> <span class="na">id=</span><span class="s">&quot;mc2-protein100-psp-200k-s1&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;name&gt;</span>default grammar name<span class="nt">&lt;/name&gt;</span>
+    <span class="nt">&lt;description&gt;</span>default grammar description<span class="nt">&lt;/description&gt;</span>
+    <span class="nt">&lt;task&gt;</span>multi-class classification<span class="nt">&lt;/task&gt;</span>
+    <span class="nt">&lt;sequencespace&gt;</span>protein<span class="nt">&lt;/sequencespace&gt;</span>
+    <span class="nt">&lt;seed&gt;</span>1<span class="nt">&lt;/seed&gt;</span>
+<span class="nt">&lt;/general&gt;</span>
+</pre></div>
+</div>
 <ul class="simple">
 <li><p>a valid grammar ID can only contain <code class="docutils literal notranslate"><span class="pre">[A-Za-z0-9_-]+</span></code></p></li>
 <li><p>grammar name and description can be left empty</p></li>
@@ -281,6 +291,37 @@ positions in the sequence window that are not part of the grammar.</p>
             <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.25&quot;</span><span class="nt">&gt;</span>C<span class="nt">&lt;/letter&gt;</span>
             <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.25&quot;</span><span class="nt">&gt;</span>G<span class="nt">&lt;/letter&gt;</span>
             <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.25&quot;</span><span class="nt">&gt;</span>T<span class="nt">&lt;/letter&gt;</span>
+        <span class="nt">&lt;/alphabetdistribution&gt;</span>
+    <span class="nt">&lt;/alphabetdistributions&gt;</span>
+<span class="nt">&lt;/background&gt;</span>
+</pre></div>
+</div>
+<p><strong>Example 3 - 100 amino acid protein sequence window with condition-independent natural (human proteome) background distribution:</strong></p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;background&gt;</span>
+    <span class="nt">&lt;minlength&gt;</span>100<span class="nt">&lt;/minlength&gt;</span>
+    <span class="nt">&lt;maxlength&gt;</span>100<span class="nt">&lt;/maxlength&gt;</span>
+    <span class="nt">&lt;alphabetdistributions&gt;</span>
+        <span class="nt">&lt;alphabetdistribution&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.06994481&quot;</span><span class="nt">&gt;</span>A<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.02318113&quot;</span><span class="nt">&gt;</span>C<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.04716508&quot;</span><span class="nt">&gt;</span>D<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.06864024&quot;</span><span class="nt">&gt;</span>E<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.03803312&quot;</span><span class="nt">&gt;</span>F<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.06623181&quot;</span><span class="nt">&gt;</span>G<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.02599097&quot;</span><span class="nt">&gt;</span>H<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.04435524&quot;</span><span class="nt">&gt;</span>I<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.05639739&quot;</span><span class="nt">&gt;</span>K<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.1005519&quot;</span><span class="nt">&gt;</span>L<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.02217762&quot;</span><span class="nt">&gt;</span>M<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.03612644&quot;</span><span class="nt">&gt;</span>N<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.0613146&quot;</span><span class="nt">&gt;</span>P<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.04656297&quot;</span><span class="nt">&gt;</span>Q<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.0569995&quot;</span><span class="nt">&gt;</span>R<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.0812845&quot;</span><span class="nt">&gt;</span>S<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.0532865&quot;</span><span class="nt">&gt;</span>T<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.06101355&quot;</span><span class="nt">&gt;</span>V<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.01324636&quot;</span><span class="nt">&gt;</span>W<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.02749624&quot;</span><span class="nt">&gt;</span>Y<span class="nt">&lt;/letter&gt;</span>
         <span class="nt">&lt;/alphabetdistribution&gt;</span>
     <span class="nt">&lt;/alphabetdistributions&gt;</span>
 <span class="nt">&lt;/background&gt;</span>
@@ -634,6 +675,195 @@ probability matrices) or lists of <em>k</em>-mers with associated probabilities.
             <span class="nt">&lt;kmer</span> <span class="na">probability=</span><span class="s">&quot;0.05&quot;</span><span class="nt">&gt;</span>GTTCCAGT<span class="nt">&lt;/kmer&gt;</span>
             <span class="nt">&lt;kmer</span> <span class="na">probability=</span><span class="s">&quot;0.05&quot;</span><span class="nt">&gt;</span>TTCCCAGT<span class="nt">&lt;/kmer&gt;</span>
         <span class="nt">&lt;/kmerbased&gt;</span>
+    <span class="nt">&lt;/sequenceelement&gt;</span>
+<span class="nt">&lt;/sequenceelements&gt;</span>
+</pre></div>
+</div>
+<p><strong>Example 3 - two matrix-based sequence elements of 4 amino acids each:</strong></p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;sequenceelements&gt;</span>
+    <span class="nt">&lt;sequenceelement</span> <span class="na">id=</span><span class="s">&quot;se1&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;matrixbased&gt;</span>
+        <span class="nt">&lt;position&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>A<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>C<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.3333333&quot;</span><span class="nt">&gt;</span>D<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.3333333&quot;</span><span class="nt">&gt;</span>E<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>F<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>G<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>H<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>I<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>K<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>L<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>M<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.3333333&quot;</span><span class="nt">&gt;</span>N<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>P<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>Q<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>R<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>S<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>T<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>V<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>W<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>Y<span class="nt">&lt;/letter&gt;</span>
+        <span class="nt">&lt;/position&gt;</span>
+        <span class="nt">&lt;position&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.06994481&quot;</span><span class="nt">&gt;</span>A<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.02318113&quot;</span><span class="nt">&gt;</span>C<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.04716508&quot;</span><span class="nt">&gt;</span>D<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.06864024&quot;</span><span class="nt">&gt;</span>E<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.03803312&quot;</span><span class="nt">&gt;</span>F<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.06623181&quot;</span><span class="nt">&gt;</span>G<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.02599097&quot;</span><span class="nt">&gt;</span>H<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.04435524&quot;</span><span class="nt">&gt;</span>I<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.05639739&quot;</span><span class="nt">&gt;</span>K<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.1005519&quot;</span><span class="nt">&gt;</span>L<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.02217762&quot;</span><span class="nt">&gt;</span>M<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.03612644&quot;</span><span class="nt">&gt;</span>N<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.0613146&quot;</span><span class="nt">&gt;</span>P<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.04656297&quot;</span><span class="nt">&gt;</span>Q<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.0569995&quot;</span><span class="nt">&gt;</span>R<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.0812845&quot;</span><span class="nt">&gt;</span>S<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.0532865&quot;</span><span class="nt">&gt;</span>T<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.06101355&quot;</span><span class="nt">&gt;</span>V<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.01324636&quot;</span><span class="nt">&gt;</span>W<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.02749624&quot;</span><span class="nt">&gt;</span>Y<span class="nt">&lt;/letter&gt;</span>
+        <span class="nt">&lt;/position&gt;</span>
+        <span class="nt">&lt;position&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>A<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>C<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>D<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>E<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>F<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>G<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>H<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>I<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>K<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>L<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>M<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>N<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>P<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>Q<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>R<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.5&quot;</span><span class="nt">&gt;</span>S<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.5&quot;</span><span class="nt">&gt;</span>T<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>V<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>W<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>Y<span class="nt">&lt;/letter&gt;</span>
+        <span class="nt">&lt;/position&gt;</span>
+        <span class="nt">&lt;position&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>A<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>C<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>D<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>E<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.1666667&quot;</span><span class="nt">&gt;</span>F<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>G<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>H<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.1666667&quot;</span><span class="nt">&gt;</span>I<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>K<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.1666667&quot;</span><span class="nt">&gt;</span>L<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.1666667&quot;</span><span class="nt">&gt;</span>M<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>N<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>P<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>Q<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>R<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>S<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>T<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>V<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.1666667&quot;</span><span class="nt">&gt;</span>W<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.1666667&quot;</span><span class="nt">&gt;</span>Y<span class="nt">&lt;/letter&gt;</span>
+        <span class="nt">&lt;/position&gt;</span>
+        <span class="nt">&lt;/matrixbased&gt;</span>
+    <span class="nt">&lt;/sequenceelement&gt;</span>
+    <span class="nt">&lt;sequenceelement</span> <span class="na">id=</span><span class="s">&quot;se2&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;matrixbased&gt;</span>
+        <span class="nt">&lt;position&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>A<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>C<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>D<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>E<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>F<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>G<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>H<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>I<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>K<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>L<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>M<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>N<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>P<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>Q<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>R<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.5&quot;</span><span class="nt">&gt;</span>S<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.5&quot;</span><span class="nt">&gt;</span>T<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>V<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>W<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>Y<span class="nt">&lt;/letter&gt;</span>
+        <span class="nt">&lt;/position&gt;</span>
+        <span class="nt">&lt;position&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>A<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>C<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>D<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>E<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>F<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>G<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>H<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>I<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>K<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>L<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>M<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>N<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;1.0&quot;</span><span class="nt">&gt;</span>P<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>Q<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>R<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>S<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>T<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>V<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>W<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>Y<span class="nt">&lt;/letter&gt;</span>
+        <span class="nt">&lt;/position&gt;</span>
+        <span class="nt">&lt;position&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.06994481&quot;</span><span class="nt">&gt;</span>A<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.02318113&quot;</span><span class="nt">&gt;</span>C<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.04716508&quot;</span><span class="nt">&gt;</span>D<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.06864024&quot;</span><span class="nt">&gt;</span>E<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.03803312&quot;</span><span class="nt">&gt;</span>F<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.06623181&quot;</span><span class="nt">&gt;</span>G<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.02599097&quot;</span><span class="nt">&gt;</span>H<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.04435524&quot;</span><span class="nt">&gt;</span>I<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.05639739&quot;</span><span class="nt">&gt;</span>K<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.1005519&quot;</span><span class="nt">&gt;</span>L<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.02217762&quot;</span><span class="nt">&gt;</span>M<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.03612644&quot;</span><span class="nt">&gt;</span>N<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.0613146&quot;</span><span class="nt">&gt;</span>P<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.04656297&quot;</span><span class="nt">&gt;</span>Q<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.0569995&quot;</span><span class="nt">&gt;</span>R<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.0812845&quot;</span><span class="nt">&gt;</span>S<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.0532865&quot;</span><span class="nt">&gt;</span>T<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.06101355&quot;</span><span class="nt">&gt;</span>V<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.01324636&quot;</span><span class="nt">&gt;</span>W<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.02749624&quot;</span><span class="nt">&gt;</span>Y<span class="nt">&lt;/letter&gt;</span>
+        <span class="nt">&lt;/position&gt;</span>
+        <span class="nt">&lt;position&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>A<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>C<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>D<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>E<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>F<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>G<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>H<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>I<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.45&quot;</span><span class="nt">&gt;</span>K<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>L<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>M<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>N<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>P<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>Q<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.45&quot;</span><span class="nt">&gt;</span>R<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.05&quot;</span><span class="nt">&gt;</span>S<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0.05&quot;</span><span class="nt">&gt;</span>T<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>V<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>W<span class="nt">&lt;/letter&gt;</span>
+            <span class="nt">&lt;letter</span> <span class="na">probability=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>Y<span class="nt">&lt;/letter&gt;</span>
+        <span class="nt">&lt;/position&gt;</span>
+        <span class="nt">&lt;/matrixbased&gt;</span>
     <span class="nt">&lt;/sequenceelement&gt;</span>
 <span class="nt">&lt;/sequenceelements&gt;</span>
 </pre></div>

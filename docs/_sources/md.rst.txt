@@ -75,6 +75,24 @@ This section contains meta-info about the model.
         <seed>1</seed>
     </general>
 
+**Example 4 - PyTorch binary classification model on 100 amino acid protein sequence window:**
+
+.. code-block:: xml
+
+    <general id="torch-mc2-protein100-conv10n-gmp-fc5-s1">
+        <name>1 conv layer with 10 5-nt wide filters, global max pooling, 1 fully connected layer with 5 units</name>
+        <description></description>
+        <task>multi-class classification</task>
+        <sequencespace>protein</sequencespace>
+        <library>PyTorch</library>
+        <inputencoding>1D</inputencoding>
+        <labels>
+            <label>c1</label>
+            <label>c2</label>
+        </labels>
+        <seed>1</seed>
+    </general>
+
 - a valid model ID can only contain ``[A-Za-z0-9_-]+``
 - model name and description can be left empty
 - task can be either *multi-class classification* or *multi-label classification*

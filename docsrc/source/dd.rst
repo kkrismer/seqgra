@@ -44,6 +44,18 @@ This section contains meta-info about the grammar.
         <seed>5</seed>
     </general>
 
+**Example 3 - binary classification on protein sequences:**
+
+.. code-block:: xml
+
+    <general id="mc2-protein100-psp-200k-s1">
+        <name>default grammar name</name>
+        <description>default grammar description</description>
+        <task>multi-class classification</task>
+        <sequencespace>protein</sequencespace>
+        <seed>1</seed>
+    </general>
+
 - a valid grammar ID can only contain ``[A-Za-z0-9_-]+``
 - grammar name and description can be left empty
 - task can be either *multi-class classification* or *multi-label classification*
@@ -104,6 +116,39 @@ positions in the sequence window that are not part of the grammar.
                 <letter probability="0.25">C</letter>
                 <letter probability="0.25">G</letter>
                 <letter probability="0.25">T</letter>
+            </alphabetdistribution>
+        </alphabetdistributions>
+    </background>
+
+**Example 3 - 100 amino acid protein sequence window with condition-independent natural (human proteome) background distribution:**
+
+.. code-block:: xml
+
+    <background>
+        <minlength>100</minlength>
+        <maxlength>100</maxlength>
+        <alphabetdistributions>
+            <alphabetdistribution>
+                <letter probability="0.06994481">A</letter>
+                <letter probability="0.02318113">C</letter>
+                <letter probability="0.04716508">D</letter>
+                <letter probability="0.06864024">E</letter>
+                <letter probability="0.03803312">F</letter>
+                <letter probability="0.06623181">G</letter>
+                <letter probability="0.02599097">H</letter>
+                <letter probability="0.04435524">I</letter>
+                <letter probability="0.05639739">K</letter>
+                <letter probability="0.1005519">L</letter>
+                <letter probability="0.02217762">M</letter>
+                <letter probability="0.03612644">N</letter>
+                <letter probability="0.0613146">P</letter>
+                <letter probability="0.04656297">Q</letter>
+                <letter probability="0.0569995">R</letter>
+                <letter probability="0.0812845">S</letter>
+                <letter probability="0.0532865">T</letter>
+                <letter probability="0.06101355">V</letter>
+                <letter probability="0.01324636">W</letter>
+                <letter probability="0.02749624">Y</letter>
             </alphabetdistribution>
         </alphabetdistributions>
     </background>
@@ -472,5 +517,196 @@ probability matrices) or lists of *k*-mers with associated probabilities.
                 <kmer probability="0.05">GTTCCAGT</kmer>
                 <kmer probability="0.05">TTCCCAGT</kmer>
             </kmerbased>
+        </sequenceelement>
+    </sequenceelements>
+
+**Example 3 - two matrix-based sequence elements of 4 amino acids each:**
+
+.. code-block:: xml
+
+    <sequenceelements>
+        <sequenceelement id="se1">
+            <matrixbased>
+            <position>
+                <letter probability="0">A</letter>
+                <letter probability="0">C</letter>
+                <letter probability="0.3333333">D</letter>
+                <letter probability="0.3333333">E</letter>
+                <letter probability="0">F</letter>
+                <letter probability="0">G</letter>
+                <letter probability="0">H</letter>
+                <letter probability="0">I</letter>
+                <letter probability="0">K</letter>
+                <letter probability="0">L</letter>
+                <letter probability="0">M</letter>
+                <letter probability="0.3333333">N</letter>
+                <letter probability="0">P</letter>
+                <letter probability="0">Q</letter>
+                <letter probability="0">R</letter>
+                <letter probability="0">S</letter>
+                <letter probability="0">T</letter>
+                <letter probability="0">V</letter>
+                <letter probability="0">W</letter>
+                <letter probability="0">Y</letter>
+            </position>
+            <position>
+                <letter probability="0.06994481">A</letter>
+                <letter probability="0.02318113">C</letter>
+                <letter probability="0.04716508">D</letter>
+                <letter probability="0.06864024">E</letter>
+                <letter probability="0.03803312">F</letter>
+                <letter probability="0.06623181">G</letter>
+                <letter probability="0.02599097">H</letter>
+                <letter probability="0.04435524">I</letter>
+                <letter probability="0.05639739">K</letter>
+                <letter probability="0.1005519">L</letter>
+                <letter probability="0.02217762">M</letter>
+                <letter probability="0.03612644">N</letter>
+                <letter probability="0.0613146">P</letter>
+                <letter probability="0.04656297">Q</letter>
+                <letter probability="0.0569995">R</letter>
+                <letter probability="0.0812845">S</letter>
+                <letter probability="0.0532865">T</letter>
+                <letter probability="0.06101355">V</letter>
+                <letter probability="0.01324636">W</letter>
+                <letter probability="0.02749624">Y</letter>
+            </position>
+            <position>
+                <letter probability="0">A</letter>
+                <letter probability="0">C</letter>
+                <letter probability="0">D</letter>
+                <letter probability="0">E</letter>
+                <letter probability="0">F</letter>
+                <letter probability="0">G</letter>
+                <letter probability="0">H</letter>
+                <letter probability="0">I</letter>
+                <letter probability="0">K</letter>
+                <letter probability="0">L</letter>
+                <letter probability="0">M</letter>
+                <letter probability="0">N</letter>
+                <letter probability="0">P</letter>
+                <letter probability="0">Q</letter>
+                <letter probability="0">R</letter>
+                <letter probability="0.5">S</letter>
+                <letter probability="0.5">T</letter>
+                <letter probability="0">V</letter>
+                <letter probability="0">W</letter>
+                <letter probability="0">Y</letter>
+            </position>
+            <position>
+                <letter probability="0">A</letter>
+                <letter probability="0">C</letter>
+                <letter probability="0">D</letter>
+                <letter probability="0">E</letter>
+                <letter probability="0.1666667">F</letter>
+                <letter probability="0">G</letter>
+                <letter probability="0">H</letter>
+                <letter probability="0.1666667">I</letter>
+                <letter probability="0">K</letter>
+                <letter probability="0.1666667">L</letter>
+                <letter probability="0.1666667">M</letter>
+                <letter probability="0">N</letter>
+                <letter probability="0">P</letter>
+                <letter probability="0">Q</letter>
+                <letter probability="0">R</letter>
+                <letter probability="0">S</letter>
+                <letter probability="0">T</letter>
+                <letter probability="0">V</letter>
+                <letter probability="0.1666667">W</letter>
+                <letter probability="0.1666667">Y</letter>
+            </position>
+            </matrixbased>
+        </sequenceelement>
+        <sequenceelement id="se2">
+            <matrixbased>
+            <position>
+                <letter probability="0">A</letter>
+                <letter probability="0">C</letter>
+                <letter probability="0">D</letter>
+                <letter probability="0">E</letter>
+                <letter probability="0">F</letter>
+                <letter probability="0">G</letter>
+                <letter probability="0">H</letter>
+                <letter probability="0">I</letter>
+                <letter probability="0">K</letter>
+                <letter probability="0">L</letter>
+                <letter probability="0">M</letter>
+                <letter probability="0">N</letter>
+                <letter probability="0">P</letter>
+                <letter probability="0">Q</letter>
+                <letter probability="0">R</letter>
+                <letter probability="0.5">S</letter>
+                <letter probability="0.5">T</letter>
+                <letter probability="0">V</letter>
+                <letter probability="0">W</letter>
+                <letter probability="0">Y</letter>
+            </position>
+            <position>
+                <letter probability="0">A</letter>
+                <letter probability="0">C</letter>
+                <letter probability="0">D</letter>
+                <letter probability="0">E</letter>
+                <letter probability="0">F</letter>
+                <letter probability="0">G</letter>
+                <letter probability="0">H</letter>
+                <letter probability="0">I</letter>
+                <letter probability="0">K</letter>
+                <letter probability="0">L</letter>
+                <letter probability="0">M</letter>
+                <letter probability="0">N</letter>
+                <letter probability="1.0">P</letter>
+                <letter probability="0">Q</letter>
+                <letter probability="0">R</letter>
+                <letter probability="0">S</letter>
+                <letter probability="0">T</letter>
+                <letter probability="0">V</letter>
+                <letter probability="0">W</letter>
+                <letter probability="0">Y</letter>
+            </position>
+            <position>
+                <letter probability="0.06994481">A</letter>
+                <letter probability="0.02318113">C</letter>
+                <letter probability="0.04716508">D</letter>
+                <letter probability="0.06864024">E</letter>
+                <letter probability="0.03803312">F</letter>
+                <letter probability="0.06623181">G</letter>
+                <letter probability="0.02599097">H</letter>
+                <letter probability="0.04435524">I</letter>
+                <letter probability="0.05639739">K</letter>
+                <letter probability="0.1005519">L</letter>
+                <letter probability="0.02217762">M</letter>
+                <letter probability="0.03612644">N</letter>
+                <letter probability="0.0613146">P</letter>
+                <letter probability="0.04656297">Q</letter>
+                <letter probability="0.0569995">R</letter>
+                <letter probability="0.0812845">S</letter>
+                <letter probability="0.0532865">T</letter>
+                <letter probability="0.06101355">V</letter>
+                <letter probability="0.01324636">W</letter>
+                <letter probability="0.02749624">Y</letter>
+            </position>
+            <position>
+                <letter probability="0">A</letter>
+                <letter probability="0">C</letter>
+                <letter probability="0">D</letter>
+                <letter probability="0">E</letter>
+                <letter probability="0">F</letter>
+                <letter probability="0">G</letter>
+                <letter probability="0">H</letter>
+                <letter probability="0">I</letter>
+                <letter probability="0.45">K</letter>
+                <letter probability="0">L</letter>
+                <letter probability="0">M</letter>
+                <letter probability="0">N</letter>
+                <letter probability="0">P</letter>
+                <letter probability="0">Q</letter>
+                <letter probability="0.45">R</letter>
+                <letter probability="0.05">S</letter>
+                <letter probability="0.05">T</letter>
+                <letter probability="0">V</letter>
+                <letter probability="0">W</letter>
+                <letter probability="0">Y</letter>
+            </position>
+            </matrixbased>
         </sequenceelement>
     </sequenceelements>
